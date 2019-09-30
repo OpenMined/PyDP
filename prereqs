@@ -1,5 +1,8 @@
 #! /bin/bash
-#swig_path="/home/simcof/lib/swigtool"
+
+# swig_path="/home/<username>/lib/swigtool"   sensible default
+# use the -swigpath option to specify where you want SWIG installed to
+
 
 while [ "$1" != "" ]; dos
     case $1 in

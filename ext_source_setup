@@ -1,0 +1,10 @@
+#! /bin/bash
+
+echo "Cloning Differential Privacy by Google"
+git clone https://github.com/google/differential-privacy.git
+
+mkdir third_party
+cd third_party
+
+echo "Cloning Abseil - C++ Common Libraries"
+git clone https://github.com/abseil/abseil-cpp.git

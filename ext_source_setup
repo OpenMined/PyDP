@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# fetches latest versio of third party dependencies for Google's Differential Privacy library
+
 echo "Cloning Differential Privacy by Google"
 git clone https://github.com/google/differential-privacy.git
 
@@ -8,3 +10,6 @@ cd third_party
 
 echo "Cloning Abseil - C++ Common Libraries"
 git clone https://github.com/abseil/abseil-cpp.git
+
+echo "Cloning Google Protobuf"
+git clone https://github.com/protocolbuffers/protobuf.git

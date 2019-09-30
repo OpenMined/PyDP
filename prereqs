@@ -1,0 +1,61 @@
+#! /bin/bash
+#swig_path="/home/simcof/lib/swigtool"
+
+while [ "$1" != "" ]; dos
+    case $1 in
+        -s | --swigpath )       shift
+                                swig_path=$1
+                                ;;
+    esac
+    shift
+    
+done
+
+# checking for g++
+dpkg -s g++ &> /dev/null
+if [ $? -eq 0 ]; then
+    echo "g++ is installed, skipping..."
+else
+    echo "Installing g++"
+    sudo apt-get install g++
+fi
+
+# checking for make
+dpkg -s make &> /dev/null
+if [ $? -eq 0 ]; then
+    echo "make is installed, skipping..."
+else
+    echo "Installing make"
+    sudo apt install make
+fi
+
+
+# checking for libpcre3
+dpkg -s libpcre3 &> /dev/null
+if [ $? -eq 0 ]; then
+    echo "libpcre3 is installed, skipping..."
+else
+    echo "Installing libpcre3"
+    sudo apt-get install libpcre3 libpcre3-dev
+fi
+
+
+echo "Downlading SWIG 4.0.1"
+wget http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz
+
+echo "Extracting SWIG 4.0.1"
+chmod 777 swig-4.0.1.tar.gz
+tar -xzvf swig-4.0.1.tar.gz
+
+echo "Configuring SWIG path"
+cd swig-4.0.1/
+./configure --prefix=/home/simcof/lib/swigtool
+
+echo "Building SWIG"
+sudo make
+
+echo "Install SWIG"
+sudo make install
+
+export SWIG_PATH=$SWIG_PATH"/bin"
+export PATH=$SWIG_PATH:$PATH

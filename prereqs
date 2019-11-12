@@ -39,26 +39,21 @@ if [ $? -eq 0 ]; then
     echo "libpcre3 is installed, skipping..."
 else
     echo "Installing libpcre3"
-    sudo apt-get install libpcre3 libpcre3-dev
+    sudo apt-get install libpcre3 libpcre3-dev libreadline-dev
 fi
 
+echo "Install bison"
+sudo apt-get install bison
+sudo apt-get install flex
 
-echo "Downlading SWIG 4.0.1"
-wget http://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz
+echo "Installing pybind11"
+pip3 install pybind11
 
-echo "Extracting SWIG 4.0.1"
-chmod 777 swig-4.0.1.tar.gz
-tar -xzvf swig-4.0.1.tar.gz
-
-echo "Configuring SWIG path"
-cd swig-4.0.1/
-./configure --prefix=/home/simcof/lib/swigtool
-
-echo "Building SWIG"
-sudo make
-
-echo "Install SWIG"
-sudo make install
-
-export SWIG_PATH=$SWIG_PATH"/bin"
-export PATH=$SWIG_PATH:$PATH
+# checking for bazel
+#echo "Installing Bazel dependencies"
+#sudo apt-get install pkg-config zip g++ zlib1g-dev unzip python3
+#echo "Donwloading Bazel 0.29.1"
+#wget https://github.com/bazelbuild/bazel/releases/download/0.29.1/bazel-0.29.1-installer-linux-x86_64.sh
+#chmod +x bazel-0.29.1-installer-linux-x86_64.sh
+#./bazel-0.29.1-installer-linux-x86_64.sh --user
+#export PATH="$PATH:$HOME/bin"

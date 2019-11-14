@@ -1,18 +1,5 @@
 #! /bin/bash
 
-# swig_path="/home/<username>/lib/swigtool"   sensible default
-# use the -swigpath option to specify where you want SWIG installed to
-
-
-while [ "$1" != "" ]; dos
-    case $1 in
-        -s | --swigpath )       shift
-                                swig_path=$1
-                                ;;
-    esac
-    shift
-    
-done
 
 # checking for g++
 dpkg -s g++ &> /dev/null
@@ -45,6 +32,16 @@ fi
 echo "Install bison"
 sudo apt-get install bison
 sudo apt-get install flex
+
+echo "Checking for python3 installation"
+if command -v python3 &>/dev/null; then
+    echo "Python 3 already installed"
+else
+    echo "Installing Python 3 is not installed"
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt-get update
+    sudo apt-get install python3.6
+fi
 
 echo "Installing pybind11"
 pip3 install pybind11

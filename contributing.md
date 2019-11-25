@@ -23,3 +23,7 @@ The following are required before the project can be built:
 
 *To be updated*
 
+### Third Party dependencies
+
+All the dependencies have been checkout to the their most stable version with branch name `pydp-stable`. This is made to ensure that in-case these repos update, they don't break our repo.
+Please ensure that if you update these third party dependecies to there latest version, you make sure to run relevant tests.

@@ -1,5 +1,5 @@
 *.cxx
-third_party/
+#third_party/
 build/
 __pycache__/
 *.py

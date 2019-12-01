@@ -3,3 +3,5 @@
 # Getting the dependecies
 git submodule init
 git submodule update
+
+source third_party/protobuf/setup_protobuf.sh

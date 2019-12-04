@@ -1,6 +1,6 @@
 [submodule "diffrential-privacy"]
 	path = differential-privacy
-	url = https://github.com/google/differential-privacy.git
+	url = https://github.com/chinmayshah99/differential-privacy.git
 [submodule "third_party/abseil-cpp"]
 	path = third_party/abseil-cpp
 	url = https://github.com/abseil/abseil-cpp.git

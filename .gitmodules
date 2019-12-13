@@ -1,6 +1,6 @@
 [submodule "diffrential-privacy"]
-	path = diffrential-privacy
-	url = https://github.com/google/differential-privacy.git
+	path = differential-privacy
+	url = https://github.com/chinmayshah99/differential-privacy.git
 [submodule "third_party/abseil-cpp"]
 	path = third_party/abseil-cpp
 	url = https://github.com/abseil/abseil-cpp.git
@@ -10,3 +10,6 @@
 [submodule "Pybind11"]
 	path = Pybind11
 	url = https://github.com/pybind/pybind11.git
+[submodule "third_party/boringssl"]
+	path = third_party/boringssl
+	url = https://github.com/google/boringssl

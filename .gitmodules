@@ -1,15 +1,9 @@
-[submodule "diffrential-privacy"]
-	path = differential-privacy
-	url = https://github.com/chinmayshah99/differential-privacy.git
-[submodule "third_party/abseil-cpp"]
-	path = third_party/abseil-cpp
-	url = https://github.com/abseil/abseil-cpp.git
-[submodule "third_party/protobuf"]
-	path = third_party/protobuf
-	url = https://github.com/protocolbuffers/protobuf.git
-[submodule "Pybind11"]
-	path = Pybind11
-	url = https://github.com/pybind/pybind11.git
-[submodule "third_party/boringssl"]
-	path = third_party/boringssl
-	url = https://github.com/google/boringssl
+[submodule "third_party/pybind11"]
+	path = third_party/pybind11
+	url = https://github.com/pybind/pybind11
+[submodule "third_party/differential-privacy"]
+	path = third_party/differential-privacy
+	url = https://github.com/google/differential-privacy
+[submodule "third_party/pybind11_bazel"]
+	path = third_party/pybind11_bazel
+	url = https://github.com/pybind/pybind11_bazel

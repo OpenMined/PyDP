@@ -46,6 +46,9 @@ fi
 echo "Installing pybind11"
 pip3 install pybind11
 
+# installting Go
+source installgo.sh
+
 # checking for bazel
 #echo "Installing Bazel dependencies"
 #sudo apt-get install pkg-config zip g++ zlib1g-dev unzip python3

@@ -1,6 +1,5 @@
-*.cxx
-build/
-__pycache__/
-*.py
-!setup.py
 PyDP.so
+bazel-bin/
+bazel-out/
+bazel-PyDP/
+bazel-testlogs/

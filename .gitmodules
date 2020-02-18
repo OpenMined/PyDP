@@ -1,3 +1,9 @@
-[submodule "differential-privacy"]
-	path = differential-privacy
-	url = https://github.com/chinmayshah99/differential-privacy
+[submodule "third_party/pybind11"]
+	path = third_party/pybind11
+	url = https://github.com/pybind/pybind11
+[submodule "third_party/differential-privacy"]
+	path = third_party/differential-privacy
+	url = https://github.com/google/differential-privacy
+[submodule "third_party/pybind11_bazel"]
+	path = third_party/pybind11_bazel
+	url = https://github.com/pybind/pybind11_bazel

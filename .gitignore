@@ -1,6 +1,6 @@
 *.cxx
-third_party/
 build/
 __pycache__/
 *.py
 !setup.py
+PyDP.so

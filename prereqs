@@ -10,29 +10,7 @@ else
     sudo apt-get install g++
 fi
 
-# checking for make
-dpkg -s make &> /dev/null
-if [ $? -eq 0 ]; then
-    echo "make is installed, skipping..."
-else
-    echo "Installing make"
-    sudo apt install make
-fi
-
-
-# checking for libpcre3
-dpkg -s libpcre3 &> /dev/null
-if [ $? -eq 0 ]; then
-    echo "libpcre3 is installed, skipping..."
-else
-    echo "Installing libpcre3"
-    sudo apt-get install libpcre3 libpcre3-dev libreadline-dev
-fi
-
-echo "Install bison"
-sudo apt-get install bison
-sudo apt-get install flex
-
+# python 3.6
 echo "Checking for python3 installation"
 if command -v python3 &>/dev/null; then
     echo "Python 3 already installed"
@@ -43,17 +21,14 @@ else
     sudo apt-get install python3.6
 fi
 
-echo "Installing pybind11"
-pip3 install pybind11
-
-# installting Go
-source installgo.sh
 
 # checking for bazel
-#echo "Installing Bazel dependencies"
-#sudo apt-get install pkg-config zip g++ zlib1g-dev unzip python3
-#echo "Donwloading Bazel 0.29.1"
-#wget https://github.com/bazelbuild/bazel/releases/download/0.29.1/bazel-0.29.1-installer-linux-x86_64.sh
-#chmod +x bazel-0.29.1-installer-linux-x86_64.sh
-#./bazel-0.29.1-installer-linux-x86_64.sh --user
-#export PATH="$PATH:$HOME/bin"
+echo "Installing Bazel dependencies"
+sudo apt-get install pkg-config zip zlib1g-dev unzip
+echo "Donwloading Bazel 2.1.0"
+wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
+
+chmod +x bazel-2.1.0-installer-linux-x86_64.sh
+./bazel-2.1.0-installer-linux-x86_64.sh --user
+export PATH="$PATH:$HOME/bin"
+rm bazel-2.1.0-installer-linux-x86_64.sh

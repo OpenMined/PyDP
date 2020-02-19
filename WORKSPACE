@@ -77,3 +77,11 @@ http_archive(
             strip_prefix = "protobuf-3.8.0",
         )
 
+
+http_archive(
+    name = "boringssl",
+    build_file = "//third_party:boringssl.BUILD",
+    urls = [
+        "https://boringssl.googlesource.com/boringssl/+archive/master-with-bazel.tar.gz"
+    ],
+)

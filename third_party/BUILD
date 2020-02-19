@@ -4,4 +4,5 @@ licenses(["notice"])
 
 exports_files([
     "zlib.BUILD",
+    "boringssl.BUILD"
 ])

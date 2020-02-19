@@ -1,5 +1,6 @@
 #!/bin/bash 
  
 bazel build src/python:bindings_test
-cp ./bazel-bin/src/bindings/PyDP.so .
-python test.py
+rm -f PyDP.so
+cp -f ./bazel-bin/src/bindings/PyDP.so .
+# python test.py

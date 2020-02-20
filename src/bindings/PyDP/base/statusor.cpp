@@ -1,8 +1,9 @@
 #include <string>
 
-#include "pybind11/embed.h"
 #include "differential_privacy/base/status.h"
 #include "differential_privacy/base/statusor.h"
+
+#include "../pydp_lib/casting.hpp" // our caster helper library
 
 namespace py = pybind11;
 

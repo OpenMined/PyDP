@@ -8,7 +8,7 @@ namespace py = pybind11;
 void init_base_statusor(py::module &);
 void init_base_status(py::module &);
 
-PYBIND11_MODULE(PyDP, m) {
+PYBIND11_MODULE(pydp, m) {
 
     m.doc() = "Google Differential Privacy python extension";
 

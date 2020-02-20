@@ -1,6 +1,5 @@
 #!/bin/bash 
 
-
 PARAMS=""
 while (( "$#" )); do
   case "$1" in
@@ -29,7 +28,8 @@ done
 eval set -- "$PARAMS"
 
 
-bazel build src/python:bindings_test
-rm -f PyDP.so
-cp -f ./bazel-bin/src/bindings/PyDP.so .
-# python test.py
+bazel build src/python:bindings_test --verbose_failures
+
+rm -f pydp.so
+cp -f ./bazel-bin/src/bindings/pydp.so .
+python test.py

@@ -1,4 +1,4 @@
-PyDP.so
+pydp.so
 bazel-bin/
 bazel-out/
 bazel-PyDP/

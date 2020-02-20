@@ -42,7 +42,7 @@ pip_repositories()
 
 local_repository(
     name = "google_dp",
-    path = "/home/simcof/repos/PyDP/third_party/differential-privacy",
+    path = "third_party/differential-privacy",
 )
 
 git_repository(

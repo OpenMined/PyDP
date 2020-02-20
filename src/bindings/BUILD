@@ -17,5 +17,6 @@ pybind_extension(
         "@google_dp//differential_privacy/base:status",
         "@google_dp//differential_privacy/base:canonical_errors",
         "@google_dp//differential_privacy/base:statusor"
+        "@google_dp//differential_privacy/algorithms:algorithm",
     ],
 )

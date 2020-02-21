@@ -1,5 +1,4 @@
 #!/bin/bash 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  sed -i '18s/py/third_party/pybind11\_bazel/py/' ./third_party/pybind11_bazel/python_configure.bzl
 
 PARAMS=""
 while (( "$#" )); do
@@ -8,6 +7,7 @@ while (( "$#" )); do
         FARG=$2
         echo "-f option passed"
         shift 2
+        sed -i '18s/py/third_party\/pybind11_bazel\/py/' ./third_party/pybind11_bazel/python_configure.bzl
         sed -i '12iPYBIND11_BAZEL_DIR = "//third_party/pybind11_bazel"' ./third_party/pybind11_bazel/python_configure.bzl
         break
         ;; 
@@ -29,7 +29,7 @@ done
 eval set -- "$PARAMS"
 
 
-bazel build src/python:bindings_test
-rm -f PyDP.so
+bazel build src/python:bindings_test  --verbose_failures
+rm -f pydp.so
 cp -f ./bazel-bin/src/bindings/pydp.so .
 python test.py

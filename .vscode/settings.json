@@ -2,6 +2,7 @@
     "files.associations": {
         "string_view": "cpp",
         "future": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "iosfwd": "cpp"
     }
 }

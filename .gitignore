@@ -1,5 +1,11 @@
-PyDP.so
+pydp.so
 bazel-bin/
 bazel-out/
 bazel-PyDP/
 bazel-testlogs/
+PyDP.so
+bazel-bin
+bazel-out
+bazel-PyDP
+bazel-testlogs
+bazel-genfiles

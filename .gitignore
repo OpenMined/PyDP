@@ -1,8 +1,48 @@
 pydp.so
+# bazel files
 bazel-bin
 bazel-out
 bazel-PyDP
 bazel-testlogs
 bazel-genfiles
+# don't commit any changes to git-submodules
 third_party/
+# we don't want everyone to have our vscode configurations
 .vscode/
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/

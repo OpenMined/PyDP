@@ -14,8 +14,9 @@ namespace dpbase = differential_privacy::base;
 
 void init_base_status(py::module &m) {
 
+    auto msub = m.def_submodule("status");
 
-    py::class_<dpbase::Status>(m, "Status")
+    py::class_<dpbase::Status>(msub, "Status")
         .def(py::init<dpbase::StatusCode &, std::string &>())
         .def("__repr__", &dpbase::Status::ToString, "String representation of status")
         .def("set_payload", &dpbase::Status::SetPayload, "Sets the status payload")
@@ -23,7 +24,7 @@ void init_base_status(py::module &m) {
         .def("erase_payload", &dpbase::Status::ErasePayload, "Erases at target url");
     
 
-    py::enum_<differential_privacy::base::StatusCode>(m,"StatusCode",py::arithmetic())
+    py::enum_<differential_privacy::base::StatusCode>(msub,"StatusCode",py::arithmetic())
         .value("kOk", differential_privacy::base::StatusCode::kOk)
         .value("kCancelled", differential_privacy::base::StatusCode::kCancelled)
         .value("kUnknown", differential_privacy::base::StatusCode::kUnknown)
@@ -44,7 +45,7 @@ void init_base_status(py::module &m) {
         .value("kDoNotUseReservedForFutureExpansionUseDefaultInSwitchInstead_", differential_privacy::base::StatusCode::kDoNotUseReservedForFutureExpansionUseDefaultInSwitchInstead_);
 
 
-    m.def("status_code_to_string", &dpbase::StatusCodeToString, "converts status code to string");
+    msub.def("status_code_to_string", &dpbase::StatusCodeToString, "converts status code to string");
 
 }
 

@@ -1,4 +1,4 @@
-import pydp as pd
+import pydp as dp
 
 print("Successfully imported pydp")
 
@@ -7,7 +7,7 @@ print("Successfully imported pydp")
 # for n in x:
 #     print(pd.StatusCode(n))
 
-s = pd.status.Status(pd.status.StatusCode(3), "New status object")
+s = dp.Status(dp.Status.StatusCode(3), "New status object")
 print(s)
 
 url = "http://test.com"

@@ -1,13 +1,13 @@
-import pydp as pd
+import pydp as dp
 
-print("Successfully Imported pydp")
+print("Successfully imported pydp")
 
 # print("Here are the available Status codes from the Base library")
 # x = range(18)
 # for n in x:
 #     print(pd.StatusCode(n))
 
-s = pd.Status(pd.StatusCode(3), "New status object")
+s = dp.Status(dp.Status.StatusCode(3), "New status object")
 print(s)
 
 url = "http://test.com"

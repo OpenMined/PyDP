@@ -13,6 +13,16 @@ webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
 
+# check for python version
+python_version_full := $(wordlist 2,4,$(subst ., ,$(shell python --version 2>&1)))
+python_version_major := $(word 1,${python_version_full})
+
+ifeq ($(python_version_major), 2):
+	python_var := python3
+else
+	python_var := python
+endif
+
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -51,7 +61,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr .pytest_cache
 
 test: ## run tests quickly with the default Python
-	python setup.py test
+	${python_var} setup.py test
 
 test-all: ## run tests on every Python version with tox
 	tox
@@ -66,9 +76,9 @@ release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	${python_var} setup.py sdist
+	${python_var} setup.py bdist_wheel
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	${python_var} setup.py install

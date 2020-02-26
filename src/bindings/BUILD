@@ -6,6 +6,7 @@ pybind_extension(
     srcs = glob([
         "PyDP/*.cpp",
         "PyDP/base/*.cpp",
+        "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
     ]),
 
@@ -17,6 +18,7 @@ pybind_extension(
         "@google_dp//differential_privacy/base:status",
         "@google_dp//differential_privacy/base:canonical_errors",
         "@google_dp//differential_privacy/base:statusor",
-        "@google_dp//differential_privacy/algorithms:algorithm"
+        "@google_dp//differential_privacy/algorithms:algorithm",
+        "@google_dp//differential_privacy/algorithms:count"
     ],
 )

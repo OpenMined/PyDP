@@ -4,13 +4,29 @@
 
 #include "pybind11/pybind11.h"
 #include "../pydp_lib/casting.hpp" // our caster helper library
+#include "pybind11/operators.h" // for overloading the operators
 
 #include "differential_privacy/base/status.h" // the header file associated with status.cc
 #include "differential_privacy/base/canonical_errors.h" // the header file associated with status.cc
 #include "differential_privacy/base/statusor.h" //header file associated with statusor.cc
 
+using namespace std;
+
 namespace py = pybind11;
+using namespace py::literals;
 namespace dpbase = differential_privacy::base;
+
+
+template<typename T>
+void declareStatusOr(py::module & m, string const & suffix) {
+    py::class_<dpbase::StatusOr<T>> cls(m, ("StatusOr" + suffix).c_str());
+    cls.def(py::init<>());
+    cls.def(py::init<T>(), "value"_a);
+    cls.def(py::init<dpbase::Status>(), "status"_a);
+    cls.def("ok", &dpbase::StatusOr<T>::ok);
+    //cls.def(py::self == dpbase::Status());
+
+}
 
 void init_base_status(py::module &m) {
 
@@ -73,6 +89,8 @@ void init_base_status(py::module &m) {
     // from statusor
     m.def("handle_invalid_status_ctor_arg", &dpbase::statusor_internal::Helper::HandleInvalidStatusCtorArg);
     m.def("crash", &dpbase::statusor_internal::Helper::Crash, "Crash helper function");
+
+    declareStatusOr<double>(m, "D");
 
 }
 

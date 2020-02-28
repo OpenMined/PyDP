@@ -11,12 +11,6 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-def find_version():
-    version_file = read("tenseal/version.py")
-    version_re = r"__version__ = '(?P<version>.+)'"
-    version = re.match(version_re, version_file).group('version')
-    return version
-
 requirements = [ ]
 
 setup_requirements = [ ]

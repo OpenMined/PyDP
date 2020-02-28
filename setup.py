@@ -24,10 +24,10 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(
-    author="Chinmay Shah",
-    author_email='chinmayshah3899@gmail.com',
+    author="Ben Szymkow",
+    author_email='simcof@gmail.com',
     classifiers=[
-        "Programming Language :: C++",
+        "Programming Language :: C++/Python",
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -36,7 +36,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="Wrapper for Google's differential Privacy",
+    description="Python API for Google's Differential Privacy library",
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("README.md"),

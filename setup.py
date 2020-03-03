@@ -38,6 +38,9 @@ setup(
     include_package_data=True,
     keywords='pydp',
     name='pydp',
+    package_data={
+        'pydp': ['pydp.so'],
+    },
     packages=find_packages(include=['pydp']), # need to check this
     setup_requires=setup_requirements,
     test_suite='tests',

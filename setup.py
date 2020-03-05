@@ -34,11 +34,14 @@ setup(
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("README.md"),
-    long_description_content_type="text/markdown",    
+    long_description_content_type="text/markdown",
     include_package_data=True,
     keywords='pydp',
     name='pydp',
-    packages=find_packages(include=['pydp']), # need to check this
+    package_data={
+        'pydp': ['pydp.so'],
+    },
+    packages=find_packages(), # need to check this
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

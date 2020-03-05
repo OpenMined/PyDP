@@ -13,6 +13,11 @@ Two installation scripts are available to help get your environment ready set up
 
 It is worth noting that whilst you can absolutely set up a Windows environment, it is a lot simpler to get started with Linux. For Windows 10 users, we'd highly recommend the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and the very handly [Remote - WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) extension for VS Code.
 
+
+Build python wheel: ```python3 setup.py sdist bdist_wheel```
+
+Install wheel: ```pip install dist/pydp-0.1.0-py2.py3-none-any.whl```
+
 ## Pre-requisites
 
 Nothing in particular, prereqs takes care of everything.

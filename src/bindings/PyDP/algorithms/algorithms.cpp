@@ -1,4 +1,4 @@
-// Provides bindings for base/status and related
+// Provides bindings for algorithms
 
 #include <string>
 
@@ -7,6 +7,7 @@
 
 #include "differential_privacy/algorithms/algorithm.h"
 #include "differential_privacy/algorithms/count.h"
+#include "differential_privacy/algorithms/util.h"
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 
 using namespace std;
@@ -23,6 +24,7 @@ namespace dp = differential_privacy;
         cls.def(py::init<double>(), "epsilon"_a);
     }
 
+    //todo: make these generators work. refer to the statusor implementation for inspiration
     // template<typename T>
     // void declareCount(py::module & m, string const & suffix) {
     //     py::class_<dp::Count<T>> cls(m, ("Count" + suffix).c_str());
@@ -37,8 +39,14 @@ namespace dp = differential_privacy;
 
 void init_algorithms(py::module &m) {
     
+    //todo: this is the implementation of the generators we need to make work.
     // declareCount<double, std::unique_ptr<dp::LaplaceMechanism>>(m, "D");
+    // declareCountBuilder<double>(m, "D");
 
-//    declareCountBuilder<double>(m, "D");
+    //from util
+    m.def("xor_strings", &dp::XorStrings);
+    m.def("default_epsilon", &dp::DefaultEpsilon);
+    m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
+    m.def("qnorm", &dp::Qnorm);
 
 }

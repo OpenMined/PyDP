@@ -3,6 +3,7 @@
 #include <string>
 
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include "../pydp_lib/casting.hpp" // our caster helper library
 #include "pybind11/operators.h" // for overloading the operators
 

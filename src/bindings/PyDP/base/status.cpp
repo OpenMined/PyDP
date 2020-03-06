@@ -64,7 +64,7 @@ void init_base_status(py::module &m) {
 
 
     //converts a status code  to a nice string
-    m.def("status_code_to_string", &dpbase::StatusCodeToString, "converts status code to string");
+    status.def("status_code_to_string", &dpbase::StatusCodeToString, "converts status code to string");
 
 
     // canonical errors

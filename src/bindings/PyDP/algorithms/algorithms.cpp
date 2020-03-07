@@ -1,13 +1,20 @@
-// Provides bindings for base/status and related
+// Provides bindings for algorithms
 
 #include <string>
 
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
+#include "pybind11/complex.h"
+#include "pybind11/functional.h"
 #include "../pydp_lib/casting.hpp" // our caster helper library
 
 #include "differential_privacy/algorithms/algorithm.h"
+#include "differential_privacy/algorithms/bounded-sum.h"
+#include "differential_privacy/algorithms/bounded-algorithm.h"
 #include "differential_privacy/algorithms/count.h"
+#include "differential_privacy/algorithms/util.h"
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
+
 
 using namespace std;
 
@@ -23,6 +30,34 @@ namespace dp = differential_privacy;
         cls.def(py::init<double>(), "epsilon"_a);
     }
 
+   template <typename T, class Algorithm, class Builder>
+   void declareAlgorithmBuilder(py::module & m, string const & suffix) {
+       py::class_<dp::AlgorithmBuilder<T, Algorithm, Builder>> cls(m,("AlgorithmBuilder" + suffix).c_str());
+       cls.def("build", &dp::AlgorithmBuilder<T, Algorithm, Builder>::Build);
+   }
+
+    template <typename T, class Algorithm, class Builder>
+    void declareBoundedAlgorithmBuilder(py::module & m, string const & suffix) {
+        py::class_<dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>> cls(m, ("BoundedAlgorithmBuilder" + suffix).c_str());
+        cls.def("set_lower", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetLower);
+        cls.def("set_upper", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetUpper);
+        cls.def("clear_bounds", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::ClearBounds);
+        //todo: SetApproxBounds produces a "std::__cxx11::string = std::__cxx11::basic_string<char>" issue on compile
+        //which is usually due to different compilers. We need to fix this, potentially with a custom cast? 
+        // cls.def("set_approx_bounds", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetApproxBounds);
+        cls.def("build", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::Build);
+    }
+
+    template <typename T,
+          typename std::enable_if<std::is_integral<T>::value ||
+                                  std::is_floating_point<T>::value>::type* =
+              nullptr>
+    void declareBoundedSum(py::module & m, string const & suffix) {
+        py::class_<dp::BoundedSum<T>> cls(m, ("BoundedSum" + suffix).c_str());
+    }
+
+
+    //todo: make these generators work. refer to the statusor implementation for inspiration
     // template<typename T>
     // void declareCount(py::module & m, string const & suffix) {
     //     py::class_<dp::Count<T>> cls(m, ("Count" + suffix).c_str());
@@ -37,8 +72,19 @@ namespace dp = differential_privacy;
 
 void init_algorithms(py::module &m) {
     
+    //todo: this is the implementation of the generators we need to make work.
     // declareCount<double, std::unique_ptr<dp::LaplaceMechanism>>(m, "D");
+    // declareCountBuilder<double>(m, "D");
 
-//    declareCountBuilder<double>(m, "D");
+    //from util
+    m.def("xor_strings", &dp::XorStrings);
+    m.def("default_epsilon", &dp::DefaultEpsilon);
+    m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
+    m.def("qnorm", &dp::Qnorm);
+
+    // declareAlgorithmBuilder<double, dp::BoundedSum, 
+
+    declareBoundedSum<int>(m,"I");
+    declareBoundedAlgorithmBuilder<int,dp::BoundedSum<int>, typename dp::BoundedSum<int>::Builder>(m,"I");
 
 }

@@ -7,7 +7,9 @@ pybind_extension(
         "PyDP/*.cpp",
         "PyDP/base/*.cpp",
         "PyDP/algorithms/*.cpp",
+        "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
+        "PyDP/proto/*.cpp"
     ]),
 
     visibility = ["//src/python:__pkg__"],
@@ -19,6 +21,8 @@ pybind_extension(
         "@google_dp//differential_privacy/base:canonical_errors",
         "@google_dp//differential_privacy/base:statusor",
         "@google_dp//differential_privacy/algorithms:algorithm",
-        "@google_dp//differential_privacy/algorithms:count"
+        "@google_dp//differential_privacy/algorithms:bounded-sum",
+        "@google_dp//differential_privacy/algorithms:count",
+        "@google_dp//differential_privacy/proto:data_cc_proto"
     ],
 )

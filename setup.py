@@ -21,7 +21,6 @@ setup(
     author="Ben Szymkow",
     author_email='simcof@gmail.com',
     classifiers=[
-        "Programming Language :: C++/Python",
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',

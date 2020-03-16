@@ -1,7 +1,8 @@
 # important to note that python's float type has the same precision as the C++ double
 
-# our privacy library
-import pydp as dp
+
+
+import pydp as dp    # our privacy library
 import pandas as pd
 
  # Creating a class ClassReporter

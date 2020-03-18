@@ -2,7 +2,6 @@ import pytest
 
 import pydp as pd
 
-
 class TestStatus():
     def test_hello(self):
         i =1
@@ -29,7 +28,7 @@ class TestStatus():
             "StatusCode.kUnauthenticated",
         ]
         actual_codes = []
-        
+
         for n in range(17):
             actual_codes.append(str(pd.Status.StatusCode(n)))
         print(actual_codes)

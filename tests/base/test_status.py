@@ -30,8 +30,8 @@ class TestStatus():
         ]
         actual_codes = []
         
-        for n in range(17):
-            actual_codes.append(str(pd.Status.StatusCode(n)))
+        
+        [actual_codes.append(str(pd.Status.StatusCode(n))) for n in range(17)]
         print(actual_codes)
         assert status_code_available == actual_codes
     

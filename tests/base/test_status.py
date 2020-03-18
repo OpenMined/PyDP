@@ -29,8 +29,8 @@ class TestStatus():
             "StatusCode.kUnauthenticated", 
         ]
         actual_codes = []
-        x = range(17)
-        for n in x:
+        
+        for n in range(17):
             actual_codes.append(str(pd.Status.StatusCode(n)))
         print(actual_codes)
         assert status_code_available == actual_codes

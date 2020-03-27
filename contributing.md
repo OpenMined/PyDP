@@ -9,7 +9,7 @@ The project uses [Pybind11](http://pybind11.readthedocs.io) to wrap Google's [Di
 Two installation scripts are available to help get your environment ready set up:
 - ext_source_setup - This clones Google's differential privacy library as well as some other third party dependencies.
 - prereqs - This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list below.
-- Run the command: ```build_PyDP.sh -f```
+- Run the command: ```build_PyDP.sh```
 
 It is worth noting that whilst you can absolutely set up a Windows environment, it is a lot simpler to get started with Linux. For Windows 10 users, we'd highly recommend the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) and the very handly [Remote - WSL](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) extension for VS Code.
 

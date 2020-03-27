@@ -36,7 +36,7 @@ jobs:
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |
-        bash ./build_PyDP.sh -f
+        bash ./build_PyDP.sh
     - name: Run tests
       run: |
          python setup.py test 

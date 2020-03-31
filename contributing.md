@@ -2,7 +2,12 @@
 
 ## About PyDP
 
-The project uses [Pybind11](http://pybind11.readthedocs.io) to wrap Google's [Differential Privacy](https://github.com/google/differential-privacy) library. The library is written in C++, so it is best you have some familiarity with that language before attempting to help out here. You can check out [here](https://www.learncpp.com/) to get your started,
+The project uses [Pybind11](http://pybind11.readthedocs.io) to wrap Google's [Differential Privacy](https://github.com/google/differential-privacy) library. 
+The library is written in C++, so it is best you have some familiarity with that language before attempting to help out here. 
+
+You can check out [here](https://www.learncpp.com/) to get your started about C++.
+
+Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=jQedHfF1Jfw) about it.
 
 ## Setting up your environment
 

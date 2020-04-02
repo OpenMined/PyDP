@@ -6,9 +6,7 @@ ENV HOME /root
 ENV PATH "/root/bin:${PATH}"
 
 # Define working directory.
-WORKDIR /root/PyDP
-
-COPY . /root/PyDP
+WORKDIR /root
 
 # Install.
 RUN \
@@ -21,14 +19,24 @@ RUN \
                        g++ \
                        build-essential \
                        python3-distutils \
+                       pkg-config \
+                       zip \
+                       zlib1g-dev \
                        git && \
-    bash ext_source_setup && \
-    bash prereqs && \
+    wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh && \
+    chmod +x bazel-2.1.0-installer-linux-x86_64.sh && \
+    ./bazel-2.1.0-installer-linux-x86_64.sh --user && \
+    export PATH="$PATH:$HOME/bin" && \
+    rm bazel-2.1.0-installer-linux-x86_64.sh
+
+WORKDIR /root/PyDP
+COPY . /root/PyDP
+
+RUN \
     bash build_PyDP.sh && \
     python3 setup.py sdist bdist_wheel && \
     pip install dist/pydp-0.1.0-py2.py3-none-any.whl && \
     pip install -r requirements_dev.txt
-
 
 # Define default command.
 CMD ["bash"]

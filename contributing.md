@@ -23,6 +23,20 @@ Build python wheel: ```python3 setup.py sdist bdist_wheel```
 
 Install wheel: ```pip install dist/pydp-0.1.0-py2.py3-none-any.whl```
 
+### Docker Support
+
+Dockerfile is added so users on all systems can get involved in development. Windows developers can start contrbiuting with the help of Docker support.
+
+To build the image: ``` docker build -t pydp:test . ```
+To run the image: ``` docker run --rm -it pydp:test ```
+
+Docker Run will allow to interactively with the files. You can type ```make test-all``` to check if your code works perfectly.
+
+To run the code, you can open python interpretor inside the container by typing ```python```. 
+
+
+Note: After each change in your code, you have to run ```docker build```. 
+
 ## Pre-requisites
 
 Nothing in particular, prereqs takes care of everything.

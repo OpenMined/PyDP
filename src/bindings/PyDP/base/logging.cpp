@@ -15,7 +15,7 @@ void init_base_logging(py::module &m) {
 
     auto msub = m.def_submodule("logging");
 
-    msub.def("get_log_directory", &dpbase::get_log_directory), "Get th current logging directory";
-    msub.def("get_vlog_level", &dpbase::get_vlog_level), "Get the current logging verbosity level";
-    msub.def("init_logging", &dpbase::InitLogging), "Begin logging";
+    msub.def("get_log_directory", &dpbase::get_log_directory, "Get the current logging directory");
+    msub.def("get_vlog_level", &dpbase::get_vlog_level, "Get the current logging verbosity level");
+    msub.def("init_logging", &dpbase::InitLogging, "Begin logging");
 }

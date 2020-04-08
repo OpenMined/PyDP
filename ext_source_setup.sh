@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Getting the dependecies
 git submodule init

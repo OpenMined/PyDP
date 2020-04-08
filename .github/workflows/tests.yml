@@ -28,11 +28,11 @@ jobs:
         pip install -r ./requirements_dev.txt
     - name: Set up submodules
       run: |
-        bash ./ext_source_setup
+        bash ./ext_source_setup.sh
     - name: Install pre-requisites
       run: |
         sudo apt-get update
-        bash ./prereqs
+        bash ./prereqs.sh
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |

@@ -10,6 +10,7 @@
 #include "differential_privacy/base/status.h" // the header file associated with status.cc
 #include "differential_privacy/base/canonical_errors.h" // the header file associated with status.cc
 #include "differential_privacy/base/statusor.h" //header file associated with statusor.cc
+#include "differential_privacy/algorithms/bounded-mean.h"
 #include "differential_privacy/proto/data.pb.h" // for Output type
 
 using namespace std;
@@ -27,9 +28,23 @@ void declareStatusOr(py::module & m, string const & suffix) {
     cls.def(py::init<T>(), "value"_a);
     cls.def(py::init<dp::base::Status>(), "status"_a);
     cls.def("ok", &dp::base::StatusOr<T>::ok);
+    //cls.def("value_or_die", &dp::base::StatusOr<T>::ValueOrDie<T>);
     //cls.def(py::self == dpbase::Status());
 
 }
+
+
+template<class Algorithm>
+ void declareStatusOr2(py::module & m, string const & suffix) {
+   py::class_<dp::base::StatusOr<Algorithm>> cls(m, ("StatusOr" + suffix).c_str());
+   cls.def(py::init<>());
+   //cls.def(py::init<Algorithm>(), "value"_a);
+   cls.def(py::init<dp::base::Status>(), "status"_a);
+   cls.def("ok", &dp::base::StatusOr<Algorithm>::ok);
+   //cls.def("value_or_die", &dp::base::StatusOr<T>::ValueOrDie<T>);
+   //cls.def(py::self == dpbase::Status());
+}
+
 
 void init_base_status(py::module &m) {
 
@@ -96,6 +111,10 @@ void init_base_status(py::module &m) {
     declareStatusOr<double>(m, "D");
     declareStatusOr<dp::Output>(m, "O");
 
+
+    // declareStatusOr2 is only a little different from declareStatusOr
+    // (see above in this file).
+    // Using declareStatusOr (without "2" at the end) below results in this error:
+    // external/google_dp/differential_privacy/base/statusor_internals.h:104:60: error: use of deleted function 'differential_privacy::BoundedMean<int>::BoundedMean(differential_privacy::BoundedMean<int>&&)'
+    declareStatusOr2<typename dp::BoundedMean<int>>(m, "BoundedMeantInt");
 }
-
-

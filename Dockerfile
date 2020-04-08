@@ -12,17 +12,17 @@ WORKDIR /root
 RUN \
     apt-get update && \
     apt-get -y install software-properties-common \
-                       sudo \
-                       wget \
-                       unzip \
-                       gcc \
-                       g++ \
-                       build-essential \
-                       python3-distutils \
-                       pkg-config \
-                       zip \
-                       zlib1g-dev \
-                       git && \
+    sudo \
+    wget \
+    unzip \
+    gcc \
+    g++ \
+    build-essential \
+    python3-distutils \
+    pkg-config \
+    zip \
+    zlib1g-dev \
+    git && \
     wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh && \
     chmod +x bazel-2.1.0-installer-linux-x86_64.sh && \
     ./bazel-2.1.0-installer-linux-x86_64.sh --user && \
@@ -33,6 +33,8 @@ WORKDIR /root/PyDP
 COPY . /root/PyDP
 
 RUN \
+    git submodule init && \
+    git submodule update && \
     bash build_PyDP.sh && \
     python3 setup.py sdist bdist_wheel && \
     pip install dist/pydp-0.1.0-py2.py3-none-any.whl && \

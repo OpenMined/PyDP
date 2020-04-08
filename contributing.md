@@ -65,7 +65,7 @@ Dockerfile is added so users on all systems can get involved in development. Win
 To build the image:
 
 ```
-$ docker build -t pydp:test
+$ docker build -t pydp:test .
 ```
 
 To run the image:
@@ -89,7 +89,7 @@ $ python
 Note: After each change in your code, you have to run:
 
 ```
-$ docker build
+$ docker build -t pydp:test .
 ```
 
 ## Pre-requisites

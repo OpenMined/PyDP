@@ -11,6 +11,16 @@ Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=
 
 ## Setting up your environment
 
+### Git Submodules
+
+Currently we are using git submodules to allow editors like VSCode to locate source code, this should be refactored later. Don't forget to init and update the submodules or you will get an error on building.
+
+```
+$ git submodule update --init --recursive
+```
+
+### Install Scripts
+
 Two installation scripts are available to help get your environment ready set up:
 - ext_source_setup - This clones Google's differential privacy library as well as some other third party dependencies.
 - prereqs - This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list below.

@@ -6,6 +6,8 @@
 #include "absl/strings/string_view.h"
 #include "absl/types/optional.h"
 
+#include "differential_privacy/algorithms/bounded-mean.h"
+
 namespace pybind11 {
     namespace detail
     {
@@ -14,5 +16,15 @@ namespace pybind11 {
 
         template <typename T>
         struct type_caster<absl::optional<T>> : optional_caster<absl::optional<T>> {};
-    }   
+
+
+      // It compiles but it's probably completely useless:
+      template <typename T>
+       struct type_caster<std::unique_ptr<differential_privacy::BoundedMean<T>>> {
+         static handle cast(std::unique_ptr<differential_privacy::BoundedMean<T>> src, return_value_policy /* policy */, handle /* parent */) {
+           return static_cast<typename differential_privacy::BoundedMean<T>>(*src);
+         };
+      };
+
+    }
 }

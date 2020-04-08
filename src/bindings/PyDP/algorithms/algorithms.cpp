@@ -9,6 +9,7 @@
 #include "../pydp_lib/casting.hpp" // our caster helper library
 
 #include "differential_privacy/algorithms/algorithm.h"
+#include "differential_privacy/algorithms/bounded-mean.h"
 #include "differential_privacy/algorithms/bounded-sum.h"
 #include "differential_privacy/algorithms/bounded-algorithm.h"
 #include "differential_privacy/algorithms/count.h"
@@ -54,9 +55,25 @@ namespace dp = differential_privacy;
               nullptr>
     void declareBoundedSum(py::module & m, string const & suffix) {
         py::class_<dp::BoundedSum<T>> cls(m, ("BoundedSum" + suffix).c_str());
+        py::class_<typename dp::BoundedSum<T>::Builder> bld(cls, "Builder");
+        bld.def(py::init<>());
     }
 
+    template <typename T,
+          typename std::enable_if<std::is_integral<T>::value ||
+                                  std::is_floating_point<T>::value>::type* =
+              nullptr>
+    void declareBoundedMean(py::module & m, string const & suffix) {
+      py::class_<dp::BoundedMean<T>> cls(m, ("BoundedMean" + suffix).c_str());
 
+      py::class_<typename dp::BoundedMean<T>::Builder> bld(cls, "Builder");
+      bld.def(py::init<>());
+      bld.def("set_epsilon", &dp::BoundedMean<T>::Builder::SetEpsilon);
+      bld.def("set_lower", &dp::BoundedMean<T>::Builder::SetLower);
+      bld.def("set_upper", &dp::BoundedMean<T>::Builder::SetUpper);
+      bld.def("clear_bounds", &dp::BoundedMean<T>::Builder::ClearBounds);
+      bld.def("build", &dp::BoundedMean<T>::Builder::Build);
+    }
     //todo: make these generators work. refer to the statusor implementation for inspiration
     // template<typename T>
     // void declareCount(py::module & m, string const & suffix) {
@@ -86,5 +103,8 @@ void init_algorithms(py::module &m) {
 
     declareBoundedSum<int>(m,"I");
     declareBoundedAlgorithmBuilder<int,dp::BoundedSum<int>, typename dp::BoundedSum<int>::Builder>(m,"I");
+
+    declareBoundedMean<int>(m, "Int");
+    //declareBoundedAlgorithmBuilder<int,dp::BoundedMean<int>, typename dp::BoundedMean<int>::Builder>(m,"II");
 
 }

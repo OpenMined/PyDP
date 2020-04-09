@@ -29,12 +29,18 @@ RUN \
     export PATH="$PATH:$HOME/bin" && \
     rm bazel-2.1.0-installer-linux-x86_64.sh
 
+# get third-party dependencies
+WORKDIR /tmp/third_party
+
+RUN git clone https://github.com/google/differential-privacy.git && \
+    git clone https://github.com/pybind/pybind11_bazel.git
+
 WORKDIR /root/PyDP
 COPY . /root/PyDP
 
+RUN cp -r /tmp/third_party/* /root/PyDP/third_party
+
 RUN \
-    git submodule init && \
-    git submodule update && \
     bash build_PyDP.sh && \
     python3 setup.py sdist bdist_wheel && \
     pip install dist/pydp-0.1.0-py2.py3-none-any.whl && \

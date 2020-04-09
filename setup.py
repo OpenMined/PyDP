@@ -11,11 +11,11 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-requirements = [ ]
+requirements = []
 
-setup_requirements = [ ]
+setup_requirements = []
 
-test_requirements = [ ]
+test_requirements = []
 
 setup(
     author="Ben Szymkow",
@@ -40,7 +40,7 @@ setup(
     package_data={
         'pydp': ['pydp.so'],
     },
-    packages=find_packages(), # need to check this
+    packages=find_packages(),  # need to check this
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,

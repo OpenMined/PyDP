@@ -2,20 +2,20 @@
 
 #include <string>
 
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
+#include "../pydp_lib/casting.hpp"  // our caster helper library
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
-#include "../pydp_lib/casting.hpp" // our caster helper library
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 
 #include "differential_privacy/algorithms/algorithm.h"
 #include "differential_privacy/algorithms/bounded-mean.h"
 #include "differential_privacy/algorithms/bounded-sum.h"
 #include "differential_privacy/algorithms/bounded-algorithm.h"
+#include "differential_privacy/algorithms/bounded-sum.h"
 #include "differential_privacy/algorithms/count.h"
-#include "differential_privacy/algorithms/util.h"
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
-
+#include "differential_privacy/algorithms/util.h"
 
 using namespace std;
 

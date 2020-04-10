@@ -34,5 +34,4 @@ void init_base_logging(py::module &m) {
     // https://github.com/google/differential-privacy/blob/master/differential_privacy/base/logging.cc#L42
     obje.def_property_readonly("log_directory",&Logging_helper::get_log_directory);
     obje.def_property_readonly("vlog_level", &Logging_helper::get_vlog_level);
-  
 }

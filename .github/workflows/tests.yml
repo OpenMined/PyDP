@@ -28,15 +28,26 @@ jobs:
         pip install -r ./requirements_dev.txt
     - name: Set up submodules
       run: |
-        bash ./ext_source_setup
+        bash ./ext_source_setup.sh
     - name: Install pre-requisites
       run: |
         sudo apt-get update
-        bash ./prereqs
+        bash ./prereqs.sh
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |
         bash ./build_PyDP.sh
+    - name: pep8 style
+      run: |
+        pycodestyle
+    - name: Lint with clang-format
+      run: |
+        # lint files (all .cpp and .h files) inplace
+        find ./src/bindings/PyDP -iname *.hpp -o -iname *.cpp | xargs clang-format -i -style='file'
+        # print changes
+        git diff
+        # already well formated if 'git diff' doesn't output
+        ! ( git diff |  grep -q ^ ) || return 1
     - name: Run tests
       run: |
          python setup.py test 

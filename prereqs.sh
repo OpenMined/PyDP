@@ -1,5 +1,4 @@
-#! /bin/bash
-
+#!/bin/bash
 
 # checking for g++
 dpkg -s g++ &> /dev/null

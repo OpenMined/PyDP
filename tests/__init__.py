@@ -1,6 +1,7 @@
 import unittest
 import pycodestyle
 
+
 class TestCodeFormat(unittest.TestCase):
 
     def test_conformance(self):

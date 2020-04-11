@@ -13,17 +13,17 @@ template <>
 struct type_caster<absl::string_view> : string_caster<absl::string_view, true> {
 };
 
-        template <typename T>
-        struct type_caster<absl::optional<T>> : optional_caster<absl::optional<T>> {};
+template <typename T>
+struct type_caster<absl::optional<T>> : optional_caster<absl::optional<T>> {};
 
+// It compiles but it's probably completely useless:
+template <typename T>
+struct type_caster<std::unique_ptr<differential_privacy::BoundedMean<T>>> {
+  static handle cast(std::unique_ptr<differential_privacy::BoundedMean<T>> src,
+                     return_value_policy /* policy */, handle /* parent */) {
+    return static_cast<typename differential_privacy::BoundedMean<T>>(*src);
+  };
+};
 
-      // It compiles but it's probably completely useless:
-      template <typename T>
-       struct type_caster<std::unique_ptr<differential_privacy::BoundedMean<T>>> {
-         static handle cast(std::unique_ptr<differential_privacy::BoundedMean<T>> src, return_value_policy /* policy */, handle /* parent */) {
-           return static_cast<typename differential_privacy::BoundedMean<T>>(*src);
-         };
-      };
-
-    }
-}
+}  // namespace detail
+}  // namespace pybind11

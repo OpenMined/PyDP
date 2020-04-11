@@ -47,7 +47,7 @@ jobs:
         # print changes
         git diff src
         # already well formated if 'git diff' doesn't output
-        ! ( git diff |  grep -q ^ ) || exit 1
+        ! ( git diff src |  grep -q ^ ) || exit 1
     - name: Run tests
       run: |
          python setup.py test 

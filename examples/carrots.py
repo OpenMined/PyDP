@@ -3,7 +3,7 @@
  double.
 """
 
-import pydp as dp    # our privacy library
+import pydp as dp  # our privacy library
 import pandas as pd
 
 # Creating a class ClassReporter
@@ -19,8 +19,9 @@ class CarrotReporter:
         self.data_filename = data_filename
         self.epsilon = epsilon
         self._epsilon = epsilon
-        self._df = pd.read_csv(self.data_filename, sep=',', names=[
-                               'animal', 'carrots_eaten'])
+        self._df = pd.read_csv(
+            self.data_filename, sep=",", names=["animal", "carrots_eaten"]
+        )
 
     # Function to return total number of carrots in dataset.
     def sum_carrots(self) -> int:
@@ -41,12 +42,17 @@ class CarrotReporter:
     def privacy_budget(self) -> float:
         return self._privacy_budget
 
-    def private_sum(self, privacy_budget: float) -> dp.StatusOrO: pass
-    def private_mean(self, privacy_budget: float) -> dp.StatusOrO: pass
-    def private_count_above(self, privacy_budget: float,
-                            limit: int) -> dp.StatusOrO: pass
+    def private_sum(self, privacy_budget: float) -> dp.StatusOrO:
+        pass
 
-    def private_max(self, privacy_budget: float) -> dp.StatusOrO: pass
+    def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
+        pass
+
+    def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
+        pass
+
+    def private_max(self, privacy_budget: float) -> dp.StatusOrO:
+        pass
 
     _epsilon: float
     _privacy_budget = float(1)

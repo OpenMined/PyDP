@@ -11,4 +11,4 @@ class TestCodeFormat(unittest.TestCase):
         style.input_dir('algorithms')
         style.input_dir('base')
         result = style.check_files()
-        assert result.total_errors ==  0
+        assert result.total_errors == 0

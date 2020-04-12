@@ -41,10 +41,8 @@ template <typename T, class Algorithm, class Builder>
 void declareBoundedAlgorithmBuilder(py::module& m, string const& suffix) {
   py::class_<dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>> cls(
       m, ("BoundedAlgorithmBuilder" + suffix).c_str());
-  cls.def("set_lower",
-          &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetLower);
-  cls.def("set_upper",
-          &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetUpper);
+  cls.def("set_lower", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetLower);
+  cls.def("set_upper", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetUpper);
   cls.def("clear_bounds",
           &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::ClearBounds);
   // todo: SetApproxBounds produces a "std::__cxx11::string =
@@ -55,18 +53,18 @@ void declareBoundedAlgorithmBuilder(py::module& m, string const& suffix) {
   cls.def("build", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::Build);
 }
 
-template <typename T, typename std::enable_if<
-                          std::is_integral<T>::value ||
-                          std::is_floating_point<T>::value>::type* = nullptr>
+template <typename T,
+          typename std::enable_if<std::is_integral<T>::value ||
+                                  std::is_floating_point<T>::value>::type* = nullptr>
 void declareBoundedSum(py::module& m, string const& suffix) {
   py::class_<dp::BoundedSum<T>> cls(m, ("BoundedSum" + suffix).c_str());
   py::class_<typename dp::BoundedSum<T>::Builder> bld(cls, "Builder");
   bld.def(py::init<>());
 }
 
-template <typename T, typename std::enable_if<
-                          std::is_integral<T>::value ||
-                          std::is_floating_point<T>::value>::type* = nullptr>
+template <typename T,
+          typename std::enable_if<std::is_integral<T>::value ||
+                                  std::is_floating_point<T>::value>::type* = nullptr>
 void declareBoundedMean(py::module& m, string const& suffix) {
   py::class_<dp::BoundedMean<T>> cls(m, ("BoundedMean" + suffix).c_str());
 

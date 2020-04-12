@@ -5,7 +5,7 @@
 
 #include "pybind11/pybind11.h"
 
-#include "../pydp_lib/casting.hpp"  // our caster helper library
+#include "../pydp_lib/casting.hpp"              // our caster helper library
 #include "differential_privacy/base/logging.h"  // the header file associated with logging.cc
 
 namespace py = pybind11;
@@ -18,9 +18,7 @@ class Logging_helper {
   }
   int get_vlog_level() { return dpbase::get_vlog_level(); }
 
-  std::__cxx11::string get_log_directory() {
-    return dpbase::get_log_directory();
-  }
+  std::__cxx11::string get_log_directory() { return dpbase::get_log_directory(); }
 };
 
 void init_base_logging(py::module& m) {
@@ -30,7 +28,6 @@ void init_base_logging(py::module& m) {
   // cannot set these two properites it as set log_directory and v_log level is
   // in anonymous namespace
   // https://github.com/google/differential-privacy/blob/master/differential_privacy/base/logging.cc#L42
-  obje.def_property_readonly("log_directory",
-                             &Logging_helper::get_log_directory);
+  obje.def_property_readonly("log_directory", &Logging_helper::get_log_directory);
   obje.def_property_readonly("vlog_level", &Logging_helper::get_vlog_level);
 }

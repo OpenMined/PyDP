@@ -37,9 +37,9 @@ jobs:
     - name: Build pydp lib
       run: |
         bash ./build_PyDP.sh
-    - name: pep8 style
+    - name: Black pep8 style
       run: |
-        pycodestyle
+        black ./ --check
     - name: Lint with clang-format
       run: |
         # lint files (all .cpp and .h files) inplace
@@ -50,7 +50,7 @@ jobs:
         ! ( git diff src |  grep -q ^ ) || exit 1
     - name: Run tests
       run: |
-         python setup.py test 
+         python setup.py test
     - name: Check test coverage
       run: |
          coverage run --source pydp setup.py test

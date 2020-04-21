@@ -10,6 +10,16 @@ class TestBoundedMean():
             set_lower(1).set_upper(9).build().value_or_die()
         assert 1 < dp.get_value(mean.result(a).value_or_die()) < 9
 
+    def test_c_api(self):
+        a = [2, 4, 6, 8]
+
+        mean_algorithm = dp.new_bounded_mean_int(1.0, 1, 9)
+
+        assert 1 < dp.result_bounded_mean_int(mean_algorithm, a[0], a[-1] < 9
+
+        dp.delete_bounded_mean(mean_algorithm)
+
+
 # TODO: port this test
 #
 # TYPED_TEST(BoundedMeanTest, BasicTest) {

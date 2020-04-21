@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../../c/c_api.h"
 #include "../pydp_lib/casting.hpp"  // our caster helper library
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
@@ -78,6 +79,7 @@ void declareBoundedMean(py::module& m, string const& suffix) {
   bld.def("clear_bounds", &dp::BoundedMean<T>::Builder::ClearBounds);
   bld.def("build", &dp::BoundedMean<T>::Builder::Build);
 }
+
 // todo: make these generators work. refer to the statusor implementation for
 // inspiration
 // template<typename T>
@@ -103,6 +105,10 @@ void init_algorithms(py::module& m) {
   m.def("default_epsilon", &dp::DefaultEpsilon);
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
+
+  m.def("new_bounded_mean_int", &DP_BoundedMeanInt_New);
+  m.def("delete_bounded_mean_int", &DP_BoundedMeanInt_Delete);
+  m.def("result_bounded_mean_int", &DP_BoundedMeanInt_Result);
 
   // declareAlgorithmBuilder<double, dp::BoundedSum,
 

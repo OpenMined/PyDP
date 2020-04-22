@@ -15,11 +15,11 @@ typedef struct DP_BoundedMeanInt {
 
 } DP_BoundedMeanInt;
 
-extern DP_BoundedMeanInt* DP_BoundedMeanInt_New(double epsilon, int lower, int upper);
+extern DP_BoundedMeanInt* DP_NewBoundedMeanInt(double epsilon, int lower, int upper);
 
-extern void DP_BoundedMeanInt_Delete(DP_BoundedMeanInt* config);
+extern void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config);
 
-extern double DP_BoundedMeanInt_Result(DP_BoundedMeanInt* config, int begin, int end);
+extern double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, int begin, int end);
 
 
 #ifdef __cplusplus

@@ -17,6 +17,9 @@
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 #include "differential_privacy/algorithms/util.h"
 
+
+PYBIND11_MAKE_OPAQUE(DP_BoundedMeanInt);
+
 using namespace std;
 
 namespace py = pybind11;
@@ -106,9 +109,24 @@ void init_algorithms(py::module& m) {
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
 
-  m.def("new_bounded_mean_int", &DP_BoundedMeanInt_New);
-  m.def("delete_bounded_mean_int", &DP_BoundedMeanInt_Delete);
-  m.def("result_bounded_mean_int", &DP_BoundedMeanInt_Result);
+
+  /*
+  m.def("_TF_NewSessionOptions", TF_NewSessionOptions,
+        py::return_value_policy::reference,
+        py::call_guard<py::gil_scoped_release>());
+  m.def("TF_DeleteSessionOptions", TF_DeleteSessionOptions,
+        py::call_guard<py::gil_scoped_release>());
+
+  */
+
+  py::class_<DP_BoundedMeanInt> DP_BoundedMeanInt_class(m, "DP_BoundedMeanInt");
+
+  m.def("_DP_NewBoundedMeanInt", DP_NewBoundedMeanInt,
+        pybind11::return_value_policy::reference,
+        pybind11::call_guard<pybind11::gil_scoped_release>());
+  m.def("_DP_DeleteBoundedMeanInt", DP_DeleteBoundedMeanInt,
+        pybind11::call_guard<pybind11::gil_scoped_release>());
+  m.def("_DP_ResultBoundedMeanInt", &DP_ResultBoundedMeanInt);
 
   // declareAlgorithmBuilder<double, dp::BoundedSum,
 

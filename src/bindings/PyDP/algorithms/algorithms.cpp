@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../../c/c_api.h"
 #include "../pydp_lib/casting.hpp"  // our caster helper library
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
@@ -15,6 +16,8 @@
 #include "differential_privacy/algorithms/count.h"
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 #include "differential_privacy/algorithms/util.h"
+
+PYBIND11_MAKE_OPAQUE(DP_BoundedMeanInt);
 
 using namespace std;
 
@@ -78,6 +81,7 @@ void declareBoundedMean(py::module& m, string const& suffix) {
   bld.def("clear_bounds", &dp::BoundedMean<T>::Builder::ClearBounds);
   bld.def("build", &dp::BoundedMean<T>::Builder::Build);
 }
+
 // todo: make these generators work. refer to the statusor implementation for
 // inspiration
 // template<typename T>
@@ -103,6 +107,15 @@ void init_algorithms(py::module& m) {
   m.def("default_epsilon", &dp::DefaultEpsilon);
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
+
+  py::class_<DP_BoundedMeanInt> DP_BoundedMeanInt_class(m, "DP_BoundedMeanInt");
+
+  m.def("_DP_NewBoundedMeanInt", DP_NewBoundedMeanInt,
+        pybind11::return_value_policy::reference,
+        pybind11::call_guard<pybind11::gil_scoped_release>());
+  m.def("_DP_DeleteBoundedMeanInt", DP_DeleteBoundedMeanInt,
+        pybind11::call_guard<pybind11::gil_scoped_release>());
+  m.def("_DP_ResultBoundedMeanInt", &DP_ResultBoundedMeanInt);
 
   // declareAlgorithmBuilder<double, dp::BoundedSum,
 

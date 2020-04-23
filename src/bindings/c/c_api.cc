@@ -6,30 +6,46 @@
 extern "C" {
 namespace differential_privacy {
 
-double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, pybind11::list l) {
-  std::vector<int> a;
+bool has_bounds;
+
+double DP_ResultBoundedMean(DP_BoundedMeanInt* config, pybind11::list l) {
+  std::vector<double> a;
 
   for (auto i : l) {
-    a.push_back(i.cast<int>());
+    a.push_back(i.cast<double>());
   }
-
-  std::unique_ptr<BoundedMean<int>> mean = BoundedMean<int>::Builder()
-                                               .SetEpsilon(config->epsilon)
-                                               .SetLower(config->lower)
-                                               .SetUpper(config->upper)
-                                               .Build()
-                                               .ValueOrDie();
-
+  std::unique_ptr<BoundedMean<double>> mean;
+  if (has_bounds){
+    mean = BoundedMean<double>::Builder()
+                              .SetEpsilon(config->epsilon)
+                              .SetLower(config->lower)
+                              .SetUpper(config->upper)
+                              .Build()
+                              .ValueOrDie();
+  }
+  else{
+    mean = BoundedMean<double>::Builder()
+                              .SetEpsilon(config->epsilon)
+                              .Build()
+                              .ValueOrDie();
+  }
   Output result = mean->Result(a.begin(), a.end()).ValueOrDie();
 
   return GetValue<double>(result);
 }
 
-DP_BoundedMeanInt* DP_NewBoundedMeanInt(double epsilon, int lower, int upper) {
+DP_BoundedMeanInt* DP_NewBoundedMean(double epsilon, int lower, int upper) {
+  has_bounds = true;
   return new DP_BoundedMeanInt{epsilon, lower, upper};
 }
 
-void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config) { delete config; };
+DP_BoundedMeanInt* DP_NewBoundedMean1(double epsilon) {
+  has_bounds = false;
+  return new DP_BoundedMeanInt{epsilon};
+}
+
+
+void DP_DeleteBoundedMean(DP_BoundedMeanInt* config) { delete config; };
 
 }  // end namespace differential_privacy
 }  // end extern "C"

@@ -17,12 +17,14 @@ typedef struct DP_BoundedMeanInt {
 
 } DP_BoundedMeanInt;
 
-extern DP_BoundedMeanInt* DP_NewBoundedMeanInt(double epsilon, int lower,
+extern DP_BoundedMeanInt* DP_NewBoundedMean(double epsilon, int lower,
                                                int upper);
 
-extern void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config);
+extern DP_BoundedMeanInt* DP_NewBoundedMean1(double epsilon);
 
-extern double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config,
+extern void DP_DeleteBoundedMean(DP_BoundedMeanInt* config);
+
+extern double DP_ResultBoundedMean(DP_BoundedMeanInt* config,
                                       pybind11::list a);
 
 #ifdef __cplusplus

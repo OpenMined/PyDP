@@ -1,15 +1,15 @@
 #include "c_api.h"
 
-#include "pybind11/pybind11.h"
 #include "differential_privacy/algorithms/bounded-mean.h"
+#include "pybind11/pybind11.h"
 
 extern "C" {
 namespace differential_privacy {
 
 double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, pybind11::list l) {
   std::vector<int> a;
-  
-  for (auto i : l){
+
+  for (auto i : l) {
     a.push_back(i.cast<int>());
   }
 
@@ -26,12 +26,10 @@ double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, pybind11::list l) {
 }
 
 DP_BoundedMeanInt* DP_NewBoundedMeanInt(double epsilon, int lower, int upper) {
-  return new DP_BoundedMeanInt { epsilon, lower, upper };
+  return new DP_BoundedMeanInt{epsilon, lower, upper};
 }
 
-void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config){
-  delete config;
-};
+void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config) { delete config; };
 
 }  // end namespace differential_privacy
 }  // end extern "C"

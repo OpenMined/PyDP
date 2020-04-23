@@ -17,7 +17,6 @@
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 #include "differential_privacy/algorithms/util.h"
 
-
 PYBIND11_MAKE_OPAQUE(DP_BoundedMeanInt);
 
 using namespace std;
@@ -108,7 +107,6 @@ void init_algorithms(py::module& m) {
   m.def("default_epsilon", &dp::DefaultEpsilon);
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
-
 
   /*
   m.def("_TF_NewSessionOptions", TF_NewSessionOptions,

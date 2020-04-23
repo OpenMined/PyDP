@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "pybind11/pybind11.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,7 +21,7 @@ extern DP_BoundedMeanInt* DP_NewBoundedMeanInt(double epsilon, int lower, int up
 
 extern void DP_DeleteBoundedMeanInt(DP_BoundedMeanInt* config);
 
-extern double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, int begin, int end);
+extern double DP_ResultBoundedMeanInt(DP_BoundedMeanInt* config, pybind11::list a);
 
 
 #ifdef __cplusplus

@@ -15,7 +15,7 @@ class TestBoundedMean():
 
         mean_algorithm = dp._DP_NewBoundedMeanInt(1.0, 1, 9)
 
-        assert 1 < dp._DP_ResultBoundedMeanInt(mean_algorithm, a[0], a[-1]) < 9
+        assert 1 < dp._DP_ResultBoundedMeanInt(mean_algorithm, a) < 9
 
         dp._DP_DeleteBoundedMeanInt(mean_algorithm)
 

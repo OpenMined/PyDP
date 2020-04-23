@@ -108,15 +108,6 @@ void init_algorithms(py::module& m) {
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
 
-  /*
-  m.def("_TF_NewSessionOptions", TF_NewSessionOptions,
-        py::return_value_policy::reference,
-        py::call_guard<py::gil_scoped_release>());
-  m.def("TF_DeleteSessionOptions", TF_DeleteSessionOptions,
-        py::call_guard<py::gil_scoped_release>());
-
-  */
-
   py::class_<DP_BoundedMeanInt> DP_BoundedMeanInt_class(m, "DP_BoundedMeanInt");
 
   m.def("_DP_NewBoundedMeanInt", DP_NewBoundedMeanInt,

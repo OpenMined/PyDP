@@ -12,7 +12,7 @@ Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=
 
 ## Setting up your Environment
 
-Three scripts are available to help get your environment ready set up.
+Three scripts need to be run in order to get the environment ready.
 
 ### Git Submodules
 
@@ -32,7 +32,7 @@ $ git submodule update --init --recursive
 
 ### Install Script
 
-This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list below.
+This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list in the said file.
 
 ```
 $ ./prereqs.sh

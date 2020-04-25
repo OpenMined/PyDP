@@ -5,6 +5,7 @@
 
 import pydp as dp  # our privacy library
 import pandas as pd
+import statistics as s
 
 # Creating a class ClassReporter
 
@@ -29,7 +30,7 @@ class CarrotReporter:
 
     # Function to return mean of the carrots in the dataset.
     def mean_carrots(self) -> float:
-        return self._df.mean()[0]
+        return s.mean(list(self._df["carrots_eaten"]))
 
     # Function to calculate total number of carrots above a particular row.
     def count_above(self, limit: int) -> int:
@@ -43,6 +44,13 @@ class CarrotReporter:
         return self._privacy_budget
 
     def private_sum(self, privacy_budget: float) -> dp.StatusOrO:
+        pass
+
+    def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
+        x = dp.BoundedMean(privacy_budget)
+        return x.result(list(self._df["carrots_eaten"]))
+
+    def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
         pass
 
     def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
@@ -64,3 +72,4 @@ print("Mean:\t" + str(c.mean_carrots()))
 print("Sum:\t" + str(c.sum_carrots()))
 print("Above 70:\t" + str(c.count_above(70)))
 print("Max:\t" + str(c.max()))
+print("private mean:\t" + str(c.private_mean(1)))

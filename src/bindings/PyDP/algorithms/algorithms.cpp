@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../../c/c_api.h"
 #include "../pydp_lib/casting.hpp"  // our caster helper library
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
@@ -16,66 +17,50 @@
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 #include "differential_privacy/algorithms/util.h"
 
+PYBIND11_MAKE_OPAQUE(DP_BoundedMeanInt);
+
 using namespace std;
 
 namespace py = pybind11;
-using namespace py::literals;
+// using namespace py::literals;
 
 namespace dp = differential_privacy;
 
-// helper class for Algorithm, which is a templated class
-template <typename T>
-void declareAlgorithm(py::module& m, string const& suffix) {
-  py::class_<dp::Algorithm<T>> cls(m, ("Algorithm" + suffix).c_str());
-  cls.def(py::init<double>(), "epsilon"_a);
+// template <typename T, typename std::enable_if<
+//                           std::is_integral<T>::value ||
+//                           std::is_floating_point<T>::value>::type* = nullptr>
+// void declareBoundedSum(py::module& m, string const& suffix) {
+//   py::class_<dp::BoundedSum<T>> cls(m, ("BoundedSum" + suffix).c_str());
+//   py::class_<typename dp::BoundedSum<T>::Builder> bld(cls, "Builder");
+//   bld.def(py::init<>());
+// }
+
+class BoundedMeanDummy {
+ public:
+  BoundedMeanDummy(double epsilon, int lower, int upper) {
+    obj = DP_NewBoundedMean(epsilon, lower, upper);
+  }
+
+  BoundedMeanDummy(double epsilon) { obj = DP_NewBoundedMean1(epsilon); }
+
+  double Result(py::list l) { return DP_ResultBoundedMean(obj, l); }
+
+  ~BoundedMeanDummy() { DP_DeleteBoundedMean(obj); }
+
+  DP_BoundedMeanInt* obj;
+};
+
+void declareBoundedMean(py::module& m) {
+  py::class_<BoundedMeanDummy> bld(m, "BoundedMean");
+
+  bld.def(py::init<double, int, int>(), py::return_value_policy::reference,
+          py::call_guard<pybind11::gil_scoped_release>());
+  bld.def(py::init<double>(), py::return_value_policy::reference,
+          py::call_guard<pybind11::gil_scoped_release>());
+  bld.def("result", &BoundedMeanDummy::Result);
+  // bld.def("build", &dp::BoundedMean<T>::Builder::Build);
 }
 
-template <typename T, class Algorithm, class Builder>
-void declareAlgorithmBuilder(py::module& m, string const& suffix) {
-  py::class_<dp::AlgorithmBuilder<T, Algorithm, Builder>> cls(
-      m, ("AlgorithmBuilder" + suffix).c_str());
-  cls.def("build", &dp::AlgorithmBuilder<T, Algorithm, Builder>::Build);
-}
-
-template <typename T, class Algorithm, class Builder>
-void declareBoundedAlgorithmBuilder(py::module& m, string const& suffix) {
-  py::class_<dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>> cls(
-      m, ("BoundedAlgorithmBuilder" + suffix).c_str());
-  cls.def("set_lower", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetLower);
-  cls.def("set_upper", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::SetUpper);
-  cls.def("clear_bounds",
-          &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::ClearBounds);
-  // todo: SetApproxBounds produces a "std::__cxx11::string =
-  // std::__cxx11::basic_string<char>" issue on compile which is usually due to
-  // different compilers. We need to fix this, potentially with a custom cast?
-  // cls.def("set_approx_bounds", &dp::BoundedAlgorithmBuilder<T, Algorithm,
-  // Builder>::SetApproxBounds);
-  cls.def("build", &dp::BoundedAlgorithmBuilder<T, Algorithm, Builder>::Build);
-}
-
-template <typename T,
-          typename std::enable_if<std::is_integral<T>::value ||
-                                  std::is_floating_point<T>::value>::type* = nullptr>
-void declareBoundedSum(py::module& m, string const& suffix) {
-  py::class_<dp::BoundedSum<T>> cls(m, ("BoundedSum" + suffix).c_str());
-  py::class_<typename dp::BoundedSum<T>::Builder> bld(cls, "Builder");
-  bld.def(py::init<>());
-}
-
-template <typename T,
-          typename std::enable_if<std::is_integral<T>::value ||
-                                  std::is_floating_point<T>::value>::type* = nullptr>
-void declareBoundedMean(py::module& m, string const& suffix) {
-  py::class_<dp::BoundedMean<T>> cls(m, ("BoundedMean" + suffix).c_str());
-
-  py::class_<typename dp::BoundedMean<T>::Builder> bld(cls, "Builder");
-  bld.def(py::init<>());
-  bld.def("set_epsilon", &dp::BoundedMean<T>::Builder::SetEpsilon);
-  bld.def("set_lower", &dp::BoundedMean<T>::Builder::SetLower);
-  bld.def("set_upper", &dp::BoundedMean<T>::Builder::SetUpper);
-  bld.def("clear_bounds", &dp::BoundedMean<T>::Builder::ClearBounds);
-  bld.def("build", &dp::BoundedMean<T>::Builder::Build);
-}
 // todo: make these generators work. refer to the statusor implementation for
 // inspiration
 // template<typename T>
@@ -102,13 +87,19 @@ void init_algorithms(py::module& m) {
   m.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   m.def("qnorm", &dp::Qnorm);
 
+  // py::class_<DP_BoundedMeanInt> DP_BoundedMeanInt_class(m, "DP_BoundedMeanInt");
+
+  // m.def("_DP_NewBoundedMeanInt", DP_NewBoundedMeanInt,
+  //       pybind11::return_value_policy::reference,
+  //       pybind11::call_guard<pybind11::gil_scoped_release>());
+  // m.def("_DP_DeleteBoundedMeanInt", DP_DeleteBoundedMeanInt,
+  //       pybind11::call_guard<pybind11::gil_scoped_release>());
+  // m.def("_DP_ResultBoundedMeanInt", &DP_ResultBoundedMeanInt);
+
   // declareAlgorithmBuilder<double, dp::BoundedSum,
 
-  declareBoundedSum<int>(m, "I");
-  declareBoundedAlgorithmBuilder<int, dp::BoundedSum<int>,
-                                 typename dp::BoundedSum<int>::Builder>(m, "I");
-
-  declareBoundedMean<int>(m, "Int");
+  // declareBoundedSum<int>(m, "I");
+  declareBoundedMean(m);
   // declareBoundedAlgorithmBuilder<int,dp::BoundedMean<int>, typename
   // dp::BoundedMean<int>::Builder>(m,"II");
 }

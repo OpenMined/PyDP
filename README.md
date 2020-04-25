@@ -7,3 +7,34 @@ PyDP is part of the OpenMined community, come join the movement on [Slack](http:
 # Instructions
 
 If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/master/contributing.md).
+
+
+## Usage
+
+As part of the 0.1.0 dev release, we have managed to port the Private Mean function (Bounded Mean). Other functions will be released in further release.
+
+To install the package:
+`pip install python-dp`
+
+```
+import pydp as dp # imports the DP library
+
+# To calculate the Bounded Mean
+# epsilon is a number between 0 and 1 denoting how much privacy we cant affort to loose
+# If both the lower and upper bounds are specified, 
+# x = dp.BoundedMean(epsilon: double, lower: int, upper: int)
+x = dp.BoundedMean(0.6, 1, 10)
+
+# If lower and upper bounds are not specified, 
+# DP library automtaically calculates these bounds
+# x = dp.BoundedMean(epsilon: double)
+x = dp.BoundedMean(0.6)
+
+# To get the resut
+# The data needs to be in the form of list of integer/ float
+# Refer to examples/carrots.py for an example
+x.result(input_data: list)
+
+```
+
+Known issue: If the privacy budget (epsilon is too less), we get a StatusOR error in the command line. While this needs to be raised as an error, right now, it's just displayed as an error in Logs.

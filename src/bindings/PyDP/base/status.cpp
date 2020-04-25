@@ -32,8 +32,7 @@ void declareStatusOr(py::module &m, string const &suffix) {
 
 template <class Algorithm>
 void declareStatusOr2(py::module &m, string const &suffix) {
-  py::class_<dp::base::StatusOr<Algorithm>> cls(m,
-                                                ("StatusOr" + suffix).c_str());
+  py::class_<dp::base::StatusOr<Algorithm>> cls(m, ("StatusOr" + suffix).c_str());
   cls.def(py::init<>());
   // cls.def(py::init<Algorithm>(), "value"_a);
   cls.def(py::init<dp::base::Status>(), "status"_a);
@@ -48,14 +47,10 @@ void init_base_status(py::module &m) {
 
   // Status class (we can now build functions and enuums from this class)
   status.def(py::init<dp::base::StatusCode &, std::string &>())
-      .def("__repr__", &dp::base::Status::ToString,
-           "String representation of status")
-      .def("set_payload", &dp::base::Status::SetPayload,
-           "Sets the status payload")
-      .def("get_payload", &dp::base::Status::GetPayload,
-           "Returns the status payload")
-      .def("erase_payload", &dp::base::Status::ErasePayload,
-           "Erases at target url");
+      .def("__repr__", &dp::base::Status::ToString, "String representation of status")
+      .def("set_payload", &dp::base::Status::SetPayload, "Sets the status payload")
+      .def("get_payload", &dp::base::Status::GetPayload, "Returns the status payload")
+      .def("erase_payload", &dp::base::Status::ErasePayload, "Erases at target url");
 
   // scoped enumerator for Status Code
   py::enum_<dp::base::StatusCode>(status, "StatusCode", py::arithmetic())
@@ -106,8 +101,7 @@ void init_base_status(py::module &m) {
   // from statusor
   m.def("handle_invalid_status_ctor_arg",
         &dp::base::statusor_internal::Helper::HandleInvalidStatusCtorArg);
-  m.def("crash", &dp::base::statusor_internal::Helper::Crash,
-        "Crash helper function");
+  m.def("crash", &dp::base::statusor_internal::Helper::Crash, "Crash helper function");
 
   declareStatusOr<double>(m, "D");
   declareStatusOr<dp::Output>(m, "O");

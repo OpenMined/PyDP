@@ -10,8 +10,7 @@
 namespace pybind11 {
 namespace detail {
 template <>
-struct type_caster<absl::string_view> : string_caster<absl::string_view, true> {
-};
+struct type_caster<absl::string_view> : string_caster<absl::string_view, true> {};
 
 template <typename T>
 struct type_caster<absl::optional<T>> : optional_caster<absl::optional<T>> {};

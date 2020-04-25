@@ -35,37 +35,33 @@ namespace dp = differential_privacy;
 //   bld.def(py::init<>());
 // }
 
-class BoundedMeanDummy{
-  public:
-    BoundedMeanDummy(double epsilon, int lower,
-                    int upper){
-      obj = DP_NewBoundedMean(epsilon, lower, upper);
-    }
+class BoundedMeanDummy {
+ public:
+  BoundedMeanDummy(double epsilon, int lower, int upper) {
+    obj = DP_NewBoundedMean(epsilon, lower, upper);
+  }
 
-    BoundedMeanDummy(double epsilon){
-      obj = DP_NewBoundedMean1(epsilon);
-    }
+  BoundedMeanDummy(double epsilon) {
+    obj = DP_NewBoundedMean1(epsilon);
+  }
 
-    double Result(py::list l){
-      return DP_ResultBoundedMean(obj, l);
-    }
+  double Result(py::list l) {
+    return DP_ResultBoundedMean(obj, l);
+  }
 
-    ~BoundedMeanDummy(){
-      DP_DeleteBoundedMean(obj);
-    }
+  ~BoundedMeanDummy() {
+    DP_DeleteBoundedMean(obj);
+  }
 
-    DP_BoundedMeanInt* obj;
+  DP_BoundedMeanInt* obj;
 };
-
 
 void declareBoundedMean(py::module& m) {
   py::class_<BoundedMeanDummy> bld(m, "BoundedMean");
 
-  bld.def(py::init<double, int, int>(),
-          py::return_value_policy::reference,
+  bld.def(py::init<double, int, int>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
-  bld.def(py::init<double>(),
-          py::return_value_policy::reference,
+  bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &BoundedMeanDummy::Result);
   // bld.def("build", &dp::BoundedMean<T>::Builder::Build);

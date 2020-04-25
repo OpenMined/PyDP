@@ -15,19 +15,16 @@ double DP_ResultBoundedMean(DP_BoundedMeanInt* config, pybind11::list l) {
     a.push_back(i.cast<double>());
   }
   std::unique_ptr<BoundedMean<double>> mean;
-  if (has_bounds){
+  if (has_bounds) {
     mean = BoundedMean<double>::Builder()
-                              .SetEpsilon(config->epsilon)
-                              .SetLower(config->lower)
-                              .SetUpper(config->upper)
-                              .Build()
-                              .ValueOrDie();
-  }
-  else{
-    mean = BoundedMean<double>::Builder()
-                              .SetEpsilon(config->epsilon)
-                              .Build()
-                              .ValueOrDie();
+               .SetEpsilon(config->epsilon)
+               .SetLower(config->lower)
+               .SetUpper(config->upper)
+               .Build()
+               .ValueOrDie();
+  } else {
+    mean =
+        BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
   }
   Output result = mean->Result(a.begin(), a.end()).ValueOrDie();
 
@@ -44,8 +41,9 @@ DP_BoundedMeanInt* DP_NewBoundedMean1(double epsilon) {
   return new DP_BoundedMeanInt{epsilon};
 }
 
-
-void DP_DeleteBoundedMean(DP_BoundedMeanInt* config) { delete config; };
+void DP_DeleteBoundedMean(DP_BoundedMeanInt* config) {
+  delete config;
+};
 
 }  // end namespace differential_privacy
 }  // end extern "C"

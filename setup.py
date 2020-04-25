@@ -36,7 +36,7 @@ setup(
     long_description_content_type="text/markdown",
     include_package_data=True,
     keywords='pydp',
-    name='pydp',
+    name='python-dp',
     package_data={
         'pydp': ['pydp.so'],
     },

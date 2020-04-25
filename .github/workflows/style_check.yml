@@ -33,7 +33,7 @@ jobs:
     - name: Lint with clang-format
       run: |
         # lint files (all .cpp and .h files) inplace
-        find ./src/bindings/PyDP -iname *.hpp -o -iname *.cpp | xargs clang-format -i -style='file'
+        find ./src/bindings/PyDP -iname *.hpp -o -iname *.cpp -iname *.h -iname *.cc | xargs clang-format -i -style='file'
         # print changes
         git diff src
         # already well formated if 'git diff' doesn't output

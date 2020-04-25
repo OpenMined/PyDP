@@ -43,6 +43,7 @@ class CarrotReporter:
         return self._privacy_budget
 
     def private_sum(self, privacy_budget: float) -> dp.StatusOrO: pass
+
     def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
         x = dp.BoundedMean(privacy_budget)
         return x.result(list(self._df['carrots_eaten']))

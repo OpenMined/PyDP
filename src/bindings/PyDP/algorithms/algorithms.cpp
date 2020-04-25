@@ -41,11 +41,17 @@ class BoundedMeanDummy {
     obj = DP_NewBoundedMean(epsilon, lower, upper);
   }
 
-  BoundedMeanDummy(double epsilon) { obj = DP_NewBoundedMean1(epsilon); }
+  BoundedMeanDummy(double epsilon) {
+    obj = DP_NewBoundedMean1(epsilon);
+  }
 
-  double Result(py::list l) { return DP_ResultBoundedMean(obj, l); }
+  double Result(py::list l) {
+    return DP_ResultBoundedMean(obj, l);
+  }
 
-  ~BoundedMeanDummy() { DP_DeleteBoundedMean(obj); }
+  ~BoundedMeanDummy() {
+    DP_DeleteBoundedMean(obj);
+  }
 
   DP_BoundedMeanInt* obj;
 };

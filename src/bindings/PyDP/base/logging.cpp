@@ -16,9 +16,13 @@ class Logging_helper {
   Logging_helper(const char* directory, const char* file_name, int level) {
     dpbase::InitLogging(directory, file_name, level);
   }
-  int get_vlog_level() { return dpbase::get_vlog_level(); }
+  int get_vlog_level() {
+    return dpbase::get_vlog_level();
+  }
 
-  std::__cxx11::string get_log_directory() { return dpbase::get_log_directory(); }
+  std::__cxx11::string get_log_directory() {
+    return dpbase::get_log_directory();
+  }
 };
 
 void init_base_logging(py::module& m) {

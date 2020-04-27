@@ -9,7 +9,7 @@ class TestLaplaceDistribution:
     def test_diversity_getter(self):
         stddev = kOneOverLog2
         dist = dp.LaplaceDistribution(stddev)
-        assert dist.GetDiversity() == stddev
+        assert dist.get_diversity() == stddev
 
     def test_cdf(self):
         assert dp.LaplaceDistribution.cdf(5, 0) == 0.5
@@ -21,7 +21,7 @@ class TestGaussianDistribution:
     def test_standard_deviation_getter(self):
         stddev = kOneOverLog2
         dist = dp.GaussianDistribution(stddev)
-        assert dist.Stddev() == stddev
+        assert dist.stddev() == stddev
 
 
 # TODO: port the following tests

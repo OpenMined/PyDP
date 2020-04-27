@@ -58,7 +58,7 @@ Install wheel:
 $ pip install dist/pydp-0.1.0-py2.py3-none-any.whl
 ```
 
-### Docker Support
+## Docker Support
 
 Dockerfile is added so users on all systems can get involved in development. Windows developers can start contrbiuting with the help of Docker support.
 
@@ -92,14 +92,6 @@ Note: After each change in your code, you have to run:
 $ docker build -t pydp:test .
 ```
 
-## Pre-requisites
-
-Nothing in particular, prereqs takes care of everything.
-
-## Project Structure
-
-_To be updated_
-
 ### Third Party dependencies
 
 Make sure you run:
@@ -107,3 +99,11 @@ Make sure you run:
 ```
 $ ./ext_source_setup.sh
 ```
+
+## Coding Standards
+
+For Naming of modules, classes and methods in Python, make sure you follow naming conventions found [here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).
+
+For C++ Styling, we follow Google's coding standard. Read more about it [here](./.clang-format).
+
+For Python Formatting, we use [Black](https://black.readthedocs.io/en/stable/the_black_code_style.html), a stricter subset of PEP8.

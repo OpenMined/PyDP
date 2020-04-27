@@ -2,7 +2,11 @@
 
 Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
 
-Fixes # (issue)
+<!-- Depending on whether the PR fixes the Issue at fully or partially -->
+
+Fixes # (issue)  <!-- Fix the issue is fixed in whole (no futher work will be needed) -->
+
+Partial issue # (issue) <!-- In-case the issue is partially fixed but still some work may be needed -->
 
 ## Type of change
 

@@ -1,4 +1,4 @@
-// Provides bindings for perentile class
+// Provides bindings for percentile class
 
 #include "pybind11/pybind11.h"
 

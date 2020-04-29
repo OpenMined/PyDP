@@ -27,15 +27,15 @@ import pydp as dp # imports the DP library
 x = dp.BoundedMean(0.6, 1, 10)
 
 # If lower and upper bounds are not specified, 
-# DP library automtaically calculates these bounds
+# DP library automatically calculates these bounds
 # x = dp.BoundedMean(epsilon: double)
 x = dp.BoundedMean(0.6)
 
 # To get the result
 # Currently supported data types are integer and float. Future versions will support additional data types
-# Refer to examples/carrots.py for an example
+# Refer to examples/carrots.py for an introduction
 x.result(input_data: list)
 
 ```
 
-Known issue: If the privacy budget (epsilon is too less), we get a StatusOR error in the command line. While this needs to be raised as an error, right now, it's just displayed as an error in Logs.
+Known issue: If the privacy budget (epsilon is too less), we get a StatusOR error in the command line. While this needs to be raised as an error, right now, it's just displayed as an error in logs.

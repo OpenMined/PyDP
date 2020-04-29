@@ -30,7 +30,7 @@ void declareGaussianDistribution(py::module& m) {
       .def("stddev", &dpi::GaussianDistribution::Stddev);
 }
 
-void init_distributions(py::module& m) {
+void init_algorithms_distributions(py::module& m) {
   declareLaplaceDistribution(m);
   declareGaussianDistribution(m);
 }

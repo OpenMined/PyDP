@@ -6,9 +6,11 @@
 extern "C" {
 namespace differential_privacy {
 
+// Helper variable in-case bounds are not set
 bool has_bounds;
 
-double DP_ResultBoundedMean(DP_BoundedMeanInt* config, pybind11::list l) {
+// Bounded Mean
+double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l) {
   std::vector<double> a;
 
   for (auto i : l) {
@@ -31,17 +33,19 @@ double DP_ResultBoundedMean(DP_BoundedMeanInt* config, pybind11::list l) {
   return GetValue<double>(result);
 }
 
-DP_BoundedMeanInt* DP_NewBoundedMean(double epsilon, int lower, int upper) {
+// Common functions
+
+BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower, int upper) {
   has_bounds = true;
-  return new DP_BoundedMeanInt{epsilon, lower, upper};
+  return new BoundedFunctionHelperObject{epsilon, lower, upper};
 }
 
-DP_BoundedMeanInt* DP_NewBoundedMean1(double epsilon) {
+BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon) {
   has_bounds = false;
-  return new DP_BoundedMeanInt{epsilon};
+  return new BoundedFunctionHelperObject{epsilon};
 }
 
-void DP_DeleteBoundedMean(DP_BoundedMeanInt* config) {
+void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config) {
   delete config;
 };
 

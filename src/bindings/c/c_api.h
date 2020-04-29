@@ -10,20 +10,23 @@
 extern "C" {
 #endif
 
-typedef struct DP_BoundedMeanInt {
+// Common Functions for all Bounded Functions
+
+typedef struct BoundedFunctionHelperObject {
   double epsilon;
   int lower;
   int upper;
 
-} DP_BoundedMeanInt;
+} BoundedFunctionHelperObject;
 
-extern DP_BoundedMeanInt* DP_NewBoundedMean(double epsilon, int lower, int upper);
+extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower, int upper);
 
-extern DP_BoundedMeanInt* DP_NewBoundedMean1(double epsilon);
+extern BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon);
 
-extern void DP_DeleteBoundedMean(DP_BoundedMeanInt* config);
+extern void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config);
 
-extern double DP_ResultBoundedMean(DP_BoundedMeanInt* config, pybind11::list a);
+// Bounded Mean
+extern double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list a);
 
 #ifdef __cplusplus
 } /* end extern "C" */

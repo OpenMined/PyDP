@@ -14,7 +14,7 @@
 #include "differential_privacy/algorithms/count.h"
 #include "differential_privacy/algorithms/numerical-mechanisms.h"
 
-PYBIND11_MAKE_OPAQUE(DP_BoundedMeanInt);
+PYBIND11_MAKE_OPAQUE(BoundedFunctionHelperObject);
 
 using namespace std;
 
@@ -25,22 +25,22 @@ namespace dp = differential_privacy;
 class BoundedMeanDummy {
  public:
   BoundedMeanDummy(double epsilon, int lower, int upper) {
-    obj = DP_NewBoundedMean(epsilon, lower, upper);
+    obj = NewBoundedFunctionObject(epsilon, lower, upper);
   }
 
   BoundedMeanDummy(double epsilon) {
-    obj = DP_NewBoundedMean1(epsilon);
+    obj = NewBoundedFunctionObject1(epsilon);
   }
 
   double Result(py::list l) {
-    return DP_ResultBoundedMean(obj, l);
+    return Result_BoundedMean(obj, l);
   }
 
   ~BoundedMeanDummy() {
-    DP_DeleteBoundedMean(obj);
+    DeleteBoundedFunctionObject(obj);
   }
 
-  DP_BoundedMeanInt* obj;
+  BoundedFunctionHelperObject* obj;
 };
 
 void declareBoundedMean(py::module& m) {

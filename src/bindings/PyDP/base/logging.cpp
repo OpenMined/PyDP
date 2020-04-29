@@ -9,19 +9,19 @@
 #include "differential_privacy/base/logging.h"  // the header file associated with logging.cc
 
 namespace py = pybind11;
-namespace dpbase = differential_privacy::base;
+namespace dpb = differential_privacy::base;
 
 class Logging_helper {
  public:
   Logging_helper(const char* directory, const char* file_name, int level) {
-    dpbase::InitLogging(directory, file_name, level);
+    dpb::InitLogging(directory, file_name, level);
   }
   int get_vlog_level() {
-    return dpbase::get_vlog_level();
+    return dpb::get_vlog_level();
   }
 
   std::__cxx11::string get_log_directory() {
-    return dpbase::get_log_directory();
+    return dpb::get_log_directory();
   }
 };
 

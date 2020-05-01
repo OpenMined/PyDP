@@ -1,39 +1,27 @@
 // Provides bindings for Bounded Functions
 
 #include "../../c/c_api.h"
+
 #include "../pydp_lib/casting.hpp"  // our caster helper library
+#include "../pydp_lib/helper_class.hpp"  //  Dummy helper class
+
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
 
-PYBIND11_MAKE_OPAQUE(BoundedFunctionHelperObject);
-
 using namespace std;
 
 namespace py = pybind11;
 
 
-class BoundedMeanDummy {
+class BoundedMeanDummy :public Dummy{
  public:
-  BoundedMeanDummy(double epsilon, int lower, int upper) {
-    obj = NewBoundedFunctionObject(epsilon, lower, upper);
-  }
-
-  BoundedMeanDummy(double epsilon) {
-    obj = NewBoundedFunctionObject1(epsilon);
-  }
-
-  double Result(py::list l) {
+  using Dummy::Dummy;
+  double Result(py::list l) override{
     return Result_BoundedMean(obj, l);
   }
-
-  ~BoundedMeanDummy() {
-    DeleteBoundedFunctionObject(obj);
-  }
-
-  BoundedFunctionHelperObject* obj;
 };
 
 void declareBoundedMean(py::module& m) {

@@ -19,7 +19,7 @@ class TestBoundedMean:
         a = [2, 4, 6, 8]
 
         mean_algorithm = dp.BoundedMean(1.0, 1, 9)
-        assert 1 < dp.mean_algorithm.result(a) < 9
+        assert 1.0 <= mean_algorithm.result(a) <= 9.0
 
 
 # TODO: port this test

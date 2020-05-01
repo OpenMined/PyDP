@@ -34,20 +34,26 @@ def test_min(data):
 def test_median(data):
     maxx = dp.Median(1.0, 0, 2048)
 
-    assert statistics.median(data) - 20 < maxx.result(data, 1.0) \
+    assert (
+        statistics.median(data) - 20
+        < maxx.result(data, 1.0)
         < statistics.median(data) + 20
+    )
 
     assert 90 <= maxx.result(data, 1.0) <= 100
 
 
 def test_median1(data):
     maxx = dp.Median(1.0)
-    assert statistics.median(data) - 20 < maxx.result(data, 1.0) \
+    assert (
+        statistics.median(data) - 20
+        < maxx.result(data, 1.0)
         < statistics.median(data) + 20
+    )
     assert 90 <= maxx.result(data, 1.0) <= 100
 
 
-def percentile(N, percent, key=lambda x:x):
+def percentile(N, percent, key=lambda x: x):
     """
     Find the percentile of a list of values.
 
@@ -78,5 +84,6 @@ def test_percentile(data):
     assert maxx.percentile == 0.45
     assert actual_percentile - 10 < maxx.result(data, 1.0) < actual_percentile + 10
     assert 80 < maxx.result(data, 1.0) < 100
+
 
 # TODO Yet some more tests

@@ -2,7 +2,7 @@
 
 #include "../../c/c_api.h"
 
-#include "../pydp_lib/casting.hpp"  // our caster helper library
+#include "../pydp_lib/casting.hpp"       // our caster helper library
 #include "../pydp_lib/helper_class.hpp"  //  Dummy helper class
 
 #include "pybind11/complex.h"
@@ -10,16 +10,14 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-
 using namespace std;
 
 namespace py = pybind11;
 
-
-class BoundedMeanDummy :public Dummy{
+class BoundedMeanDummy : public Dummy {
  public:
   using Dummy::Dummy;
-  double Result(py::list l) override{
+  double Result(py::list l) override {
     return Result_BoundedMean(obj, l);
   }
 };

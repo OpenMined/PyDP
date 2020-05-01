@@ -4,7 +4,6 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-
 PYBIND11_MAKE_OPAQUE(BoundedFunctionHelperObject);
 
 using namespace std;
@@ -21,11 +20,9 @@ class Dummy {
     obj = NewBoundedFunctionObject1(epsilon);
   }
 
-  virtual double Result(py::list) {
-  }
+  virtual double Result(py::list) {}
 
-  virtual double Result(py::list, double) {
-  }
+  virtual double Result(py::list, double) {}
 
   ~Dummy() {
     DeleteBoundedFunctionObject(obj);

@@ -19,7 +19,8 @@ typedef struct BoundedFunctionHelperObject {
 
 } BoundedFunctionHelperObject;
 
-extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower, int upper);
+extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower,
+                                                             int upper);
 
 extern BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon);
 
@@ -29,14 +30,17 @@ extern void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config);
 extern double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list a);
 
 // Order statistics
-extern int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list a, double privacy_budget);
+extern int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list a,
+                          double privacy_budget);
 
-extern int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list a, double privacy_budget);
+extern int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list a,
+                          double privacy_budget);
 
-extern int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list a, double privacy_budget);
+extern int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list a,
+                             double privacy_budget);
 
-extern int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list a, double privacy_budget, double percentile);
-
+extern int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list a,
+                                 double privacy_budget, double percentile);
 
 #ifdef __cplusplus
 } /* end extern "C" */

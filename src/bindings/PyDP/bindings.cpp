@@ -11,6 +11,7 @@ void init_base_percentile(py::module &);
 
 // algorithms
 void init_algorithms_bounded_functions(py::module &);
+void init_algorithms_count(py::module &);
 
 // util
 void init_algorithms_util(py::module &);
@@ -33,6 +34,7 @@ PYBIND11_MODULE(pydp, m) {
   init_algorithms_bounded_functions(m);
   init_algorithms_util(m);
   init_algorithms_distributions(m);
+  init_algorithms_count(m);
 
   // Proto
   init_proto(m);

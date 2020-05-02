@@ -9,7 +9,7 @@ void init_base_status(py::module &);
 void init_base_logging(py::module &);
 void init_base_percentile(py::module &);
 
-// algorithms
+// bounded functions
 void init_algorithms_bounded_functions(py::module &);
 
 // util
@@ -17,6 +17,9 @@ void init_algorithms_util(py::module &);
 
 // distributions
 void init_algorithms_distributions(py::module &);
+
+// order statistics
+void init_algorithms_order_statistics(py::module &);
 
 // proto
 void init_proto(py::module &);
@@ -33,6 +36,7 @@ PYBIND11_MODULE(pydp, m) {
   init_algorithms_bounded_functions(m);
   init_algorithms_util(m);
   init_algorithms_distributions(m);
+  init_algorithms_order_statistics(m);
 
   // Proto
   init_proto(m);

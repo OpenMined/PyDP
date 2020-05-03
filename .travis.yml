@@ -1,5 +1,3 @@
-
-sudo: required
 language: python
 python:
   #- '3.5'
@@ -8,7 +6,6 @@ python:
 services:
   - docker
 install:
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - pip3 install -r requirements_dev.txt
   - pip3 install wheel
 script:

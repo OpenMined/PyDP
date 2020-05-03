@@ -21,6 +21,9 @@ void init_algorithms_distributions(py::module &);
 // order statistics
 void init_algorithms_order_statistics(py::module &);
 
+// rand
+void init_algorithms_rand(py::module&);
+
 // proto
 void init_proto(py::module &);
 
@@ -37,6 +40,7 @@ PYBIND11_MODULE(pydp, m) {
   init_algorithms_util(m);
   init_algorithms_distributions(m);
   init_algorithms_order_statistics(m);
+  init_algorithms_rand(m);
 
   // Proto
   init_proto(m);

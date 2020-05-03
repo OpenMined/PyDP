@@ -11,7 +11,7 @@ install:
   - pip3 install -r requirements_dev.txt
   - pip3 install wheel
 script:
-  - python3 setup.py tests
+  - python3 setup.py test
   - export PYDP_VERSION=$(git tag | tail -n1)
   - echo $PYDP_VERSION
 deploy:

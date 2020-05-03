@@ -1,0 +1,31 @@
+
+sudo: required
+language: python
+python:
+  - '3.5'
+  - '3.6'
+  - '3.7'
+services:
+  - docker
+install:
+  - pip3 install -r requirements_dev.txt
+  - pip3 install wheel
+script:
+  - python3 setup.py tests
+  - export PYDP_VERSION=$(git tag | tail -n1)
+  - echo $PYDP_VERSION
+deploy:
+  provider: pypi
+  user: novavic
+  server: https://test.pypi.org/legacy/
+  distributions: bdist_wheel
+  dist: python
+  package_glob: dist/*.whl
+  #on:
+  #  tags: true
+  password:
+    secure: QnFXxNkqP488GMmOFfrgQp5NFT5PHT+UrTOeZ7wEt9apNp//8wiNlbGIty2aGcNJZP2EIHkqaDXe4BIAYaxeEuBITPC9ch3p1PWvxr+q4NesDDpaM1e8yFcktJFZqfXn/R5S2bBqtw+oOzxfS1nVU8PAicCDdGMdnwdlBfOVxjNJa+6YtOyDetPAxsoo46dsjBZSjkdsTIzDuJ70uwsklqF0lGT4rofdRTxvSdg4hHgRnrQEDk5V9AVC8e+XWncytd5a/nc95G6ehhea7Cln3Kic+/8+t1xTtKGB7x/kTDKGkYVdG7JYcphARYgHGKjeyeRb41J/FWIKgchZ5nXBK9ZOxqBUtYWyrFfl350FxGUuK6jGvZP0zeGBJiHOzqerGSrulj8mCUGBJmMgKPuNxkwLgDWPHKnpdDkWz5QClF4F5Of8+Lwhj60IQNrNuk/yJX9as3Y8qDbTHj3hOxEIU3UNkCeHuqAwco1E55iExfRw/AmfnGWvKtM3qUJE9v9BCIE2owQkwFynjDKlJEtG+p0RoO0q1FK+VGqZRmAmxynAmUwW4+1K5sqtyEYmg0zLWFzrhX89Pn7/aJLdXTmHXFfQUs8Clcfjq9g6cziPGh0hRaQaL5oGp+39JOPLbGuU5dytcpBkMTzItEblkqCGTGXNjUBQDoxKYQ6f6T3Tuk4=
+notifications:
+  email:
+    on_success: never
+    on_failure: always

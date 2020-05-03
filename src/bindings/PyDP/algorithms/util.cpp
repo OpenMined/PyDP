@@ -4,13 +4,10 @@
 
 #include "differential_privacy/algorithms/util.h"
 
-
 namespace py = pybind11;
 namespace dp = differential_privacy;
 
-
 void init_algorithms_util(py::module& m) {
-
   py::module util = m.def_submodule("util", "Some Utility Functions");
 
   util.def("xor_strings", &dp::XorStrings);

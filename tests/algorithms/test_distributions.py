@@ -23,35 +23,36 @@ class TestGaussianDistribution:
         dist = dp.GaussianDistribution(stddev)
         assert dist.stddev() == stddev
 
+
 class TestLaplaceDistributionDatatypes:
     def test_LaplaceDistributionTypes(self):
         ld = dp.LaplaceDistribution(2.0)
         assert isinstance(ld, dp.LaplaceDistribution)
-        
+
         sud = ld.GetUniformDouble()
-        assert instance(sud,float)
+        assert instance(sud, float)
         lds = ld.sample()
         lds1 = ld.sample(4.0)
         assert isinstance(lds, float)
         assert isinstance(lds1, float)
         ldg = ld.get_diversity()
-        assert isinstance(ldg,float)
-        lcdf = ld.cdf(2.0,.5)
+        assert isinstance(ldg, float)
+        lcdf = ld.cdf(2.0, 0.5)
         assert isinstance(lcdf, float)
-        
+
+
 class TestGaussianDistributionDataTypes:
     def test_GaussianDistributionTypes(self):
         gd = dp.GaussianDistribution(3)
-        assert isinstance(gd,dp.GaussianDistribution)
-        
+        assert isinstance(gd, dp.GaussianDistribution)
+
         gds = gd.sample()
-        gds1 = gd.sample(1.)
-        assert isinstance(gds,float)
+        gds1 = gd.sample(1.0)
+        assert isinstance(gds, float)
         assert isinstance(gds1, float)
         gdstd = gd.stddev()
-        assert isinstance(gdstd,float)
-        
-        
+        assert isinstance(gdstd, float)
+
 
 # TODO: port the following tests
 #

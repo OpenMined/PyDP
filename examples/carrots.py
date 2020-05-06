@@ -51,16 +51,12 @@ class CarrotReporter:
         return x.result(list(self._df["carrots_eaten"]))
 
     def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
-        pass
-
-    def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
-        pass
-
-    def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
-        pass
+        x = dp.CountInt(privacy_budget)
+        return x.result(list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"]))
 
     def private_max(self, privacy_budget: float) -> dp.StatusOrO:
-        pass
+        x = dp.Max(privacy_budget, 0, 150)
+        return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 
     _epsilon: float
     _privacy_budget = float(1)
@@ -73,3 +69,5 @@ print("Sum:\t" + str(c.sum_carrots()))
 print("Above 70:\t" + str(c.count_above(70)))
 print("Max:\t" + str(c.max()))
 print("private mean:\t" + str(c.private_mean(1)))
+print("private max:\t" + str(c.private_max(1)))
+print("private count above:\t" + str(c.private_count_above(1, 70)))

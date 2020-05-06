@@ -55,6 +55,7 @@ class CarrotReporter:
         return x.result(list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"]))
 
     def private_max(self, privacy_budget: float) -> dp.StatusOrO:
+        # 0 and 150 are the upper and lower limits for the search bound.
         x = dp.Max(privacy_budget, 0, 150)
         return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 

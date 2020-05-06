@@ -38,12 +38,18 @@ RUN git clone https://github.com/google/differential-privacy.git && \
 WORKDIR /root/PyDP
 COPY . /root/PyDP
 
-RUN cp -r /tmp/third_party/* /root/PyDP/third_party
+RUN if [[-d "/root/PyDP/third_party/differential-privacy"] && -d "/root/PyDP/third_party/pybind11_bazel"]; \
+        then echo ""; \
+    else echo "removed" && \
+        rm -rf third_party/differential-privacy/ third_party/pybind11_bazel/ && \
+        cp -r /tmp/third_party/* /root/PyDP/third_party/ ; \
+    fi
+
 
 RUN \
     bash build_PyDP.sh && \
     python3 setup.py sdist bdist_wheel && \
-    pip install dist/pydp-0.1.0-py2.py3-none-any.whl && \
+    pip install dist/*.whl && \
     pip install -r requirements_dev.txt
 
 # Define default command.

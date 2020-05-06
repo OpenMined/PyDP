@@ -40,20 +40,24 @@ class CarrotReporter:
     def max(self) -> int:
         return self._df.max()[1]
 
+    # Function to return the remaining privacy budget.
     def privacy_budget(self) -> float:
         return self._privacy_budget
 
     def private_sum(self, privacy_budget: float) -> dp.StatusOrO:
         pass
 
+    # Function to return the DP mean of all carrots eaten.
     def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
         x = dp.BoundedMean(privacy_budget)
         return x.result(list(self._df["carrots_eaten"]))
 
+    # Function to return the DP count of the number of animals who ate more than "limit" carrots.
     def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
         x = dp.CountInt(privacy_budget)
         return x.result(list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"]))
 
+    # Function to return the DP maximum of the number of carrots eaten by any one animal.
     def private_max(self, privacy_budget: float) -> dp.StatusOrO:
         # 0 and 150 are the upper and lower limits for the search bound.
         x = dp.Max(privacy_budget, 0, 150)

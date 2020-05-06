@@ -17,7 +17,7 @@ export BROWSER_PYSCRIPT
 python_version_full := $(wordlist 2,4,$(subst ., ,$(shell python --version 2>&1)))
 python_version_major := $(word 1,${python_version_full})
 
-ifeq ($(python_version_major), 2):
+ifeq ($(python_version_major), 2)
 	python_var := python3
 else
 	python_var := python

@@ -4,7 +4,15 @@
 """The setup script."""
 
 from setuptools import setup, find_packages
+from setuptools.dist import Distribution
 import os
+
+
+class BinaryDistribution(Distribution):
+  """This class is needed in order to create OS specific wheels."""
+
+  def has_ext_modules(self):
+    return True
 
 
 def read(fname):
@@ -30,6 +38,7 @@ setup(
         "Programming Language :: Python :: 3.7",
     ],
     description="Python API for Google's Differential Privacy library",
+    distclass=BinaryDistribution,
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("README.md"),

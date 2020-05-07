@@ -44,8 +44,10 @@ class CarrotReporter:
     def privacy_budget(self) -> float:
         return self._privacy_budget
 
+    # Function to return the DP sum of all carrots eaten.
     def private_sum(self, privacy_budget: float) -> dp.StatusOrO:
-        pass
+        x = dp.BoundedSum(privacy_budget)
+        return x.result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.
     def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
@@ -74,5 +76,6 @@ print("Sum:\t" + str(c.sum_carrots()))
 print("Above 70:\t" + str(c.count_above(70)))
 print("Max:\t" + str(c.max()))
 print("private mean:\t" + str(c.private_mean(1)))
+print(f"private sum:\t {c.private_sum(c.epsilon)}")
 print("private max:\t" + str(c.private_max(1)))
 print("private count above:\t" + str(c.private_count_above(1, 70)))

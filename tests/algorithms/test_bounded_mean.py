@@ -21,6 +21,7 @@ class TestBoundedMean:
         mean_algorithm = dp.BoundedMean(1.0, 1, 9)
         assert 1.0 <= mean_algorithm.result(a) <= 9.0
 
+
 def test_bounded_mean():
     bm1 = dp.BoundedMean(3.4, 1, 2)
     assert (bm1, dp.BoundedMean)
@@ -29,6 +30,7 @@ def test_bounded_mean():
     bm2 = dp.BoundedMean(3.4)
     assert isinstance(bm2, dp.BoundedMean)
     assert isinstance(bm2.result([1.5, 2, 2.5]), float)
+
 
 # TODO: port this test
 #

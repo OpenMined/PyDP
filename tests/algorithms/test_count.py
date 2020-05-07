@@ -48,6 +48,27 @@ class TestPercentile:
         assert count.memory_used() == 0
 
 
+class TestCountDataTypes:
+    def test_count_datatypes(self):
+        ci1 = dp.CountInt()
+        ci2 = dp.CountInt(2.0)
+        assert isinstance(ci1, dp.CountInt)
+        assert isinstance(ci2, dp.CountInt)
+
+        ci2ae = ci2.add_entry(2)
+        assert isinstance(ci2ae, None)
+        ci2aes = ci2.add_entries([4, 6, 8])
+        assert isinstance(ci2aes, None)
+        mem = ci2.memory_used()
+        assert isinstance(mem, int)
+        par = ci2.partial_result()
+        par2 = ci2.partial_result(1.0)
+        assert isinstance(par, int)
+        assert isinstance(par2, int)
+        res = ci2.result([2])
+        assert isinstance(res, int)
+
+
 # TODO: port the following tests
 #
 # TEST(CountTest, MergeTest)

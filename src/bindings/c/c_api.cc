@@ -3,6 +3,7 @@
 #include "differential_privacy/algorithms/algorithm.h"
 
 #include "differential_privacy/algorithms/bounded-mean.h"
+#include "differential_privacy/algorithms/bounded-sum.h"
 
 #include "absl/random/distributions.h"
 #include "differential_privacy/algorithms/order-statistics.h"
@@ -35,6 +36,33 @@ double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l)
         BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
   }
   Output result = mean->Result(a.begin(), a.end()).ValueOrDie();
+
+  return GetValue<double>(result);
+}
+
+// Bounded Sum
+double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list l) {
+  std::vector<double> a;
+
+  for (auto i : l) {
+    a.push_back(i.cast<double>());
+  }
+  std::unique_ptr<BoundedSum<double>> sum;
+  if (has_bounds) {
+    sum = BoundedSum<double>::Builder()
+      .SetEpsilon(config->epsilon)
+      .SetLower(config->lower)
+      .SetUpper(config->upper)
+      .Build()
+      .ValueOrDie();
+  } else {
+    sum =
+      BoundedSum<double>::Builder()
+      .SetEpsilon(config->epsilon)
+      .Build()
+      .ValueOrDie();
+  }
+  Output result = sum->Result(a.begin(), a.end()).ValueOrDie();
 
   return GetValue<double>(result);
 }

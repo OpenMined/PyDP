@@ -38,12 +38,8 @@ RUN git clone https://github.com/google/differential-privacy.git && \
 WORKDIR /root/PyDP
 COPY . /root/PyDP
 
-RUN if [[-d "/root/PyDP/third_party/differential-privacy"] && -d "/root/PyDP/third_party/pybind11_bazel"]; \
-        then echo ""; \
-    else echo "removed" && \
-        rm -rf third_party/differential-privacy/ third_party/pybind11_bazel/ && \
-        cp -r /tmp/third_party/* /root/PyDP/third_party/ ; \
-    fi
+RUN rm -rf third_party/differential-privacy/ third_party/pybind11_bazel/ && \
+    cp -r /tmp/third_party/* /root/PyDP/third_party
 
 
 RUN \

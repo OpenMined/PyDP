@@ -9,10 +9,10 @@ import os
 
 
 class BinaryDistribution(Distribution):
-  """This class is needed in order to create OS specific wheels."""
+    """This class is needed in order to create OS specific wheels."""
 
-  def has_ext_modules(self):
-    return True
+    def has_ext_modules(self):
+        return True
 
 
 def read(fname):
@@ -47,7 +47,7 @@ setup(
     keywords="pydp",
     name="python-dp",
     package_data={"pydp": ["pydp.so"],},
-    packages=find_packages(),  # need to check this
+    packages=find_packages(exclude=["tests/"]),  # need to check this
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,

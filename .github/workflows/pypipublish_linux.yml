@@ -16,8 +16,6 @@ jobs:
         python-version: [3.5, 3.6, 3.7]
 
     runs-on: ${{ matrix.os }}
-    container: quay.io/pypa/manylinux2010_x86_64
-
 
     steps:
       - uses: actions/checkout@v2

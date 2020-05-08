@@ -25,9 +25,7 @@ jobs:
           bash ./ext_source_setup.sh
       - name: Install pre-requisites
         run: |
-          sudo apt-get update
-          bash ./prereqs.sh
-          export PATH="$PATH:$HOME/bin"
+          yum install bazel
       - name: Build pydp lib
         run: |
           bash ./build_PyDP.sh

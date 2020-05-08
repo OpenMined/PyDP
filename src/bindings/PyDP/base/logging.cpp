@@ -20,7 +20,7 @@ class Logging_helper {
     return dpb::get_vlog_level();
   }
 
-  std::__cxx11::string get_log_directory() {
+  std::string get_log_directory() {
     return dpb::get_log_directory();
   }
 };

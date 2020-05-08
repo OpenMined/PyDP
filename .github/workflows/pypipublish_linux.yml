@@ -25,6 +25,7 @@ jobs:
           bash ./ext_source_setup.sh
       - name: Install pre-requisites
         run: |
+          yum install wget
           wget https://copr.fedorainfracloud.org/coprs/vbatts/bazel/repo/epel-7/vbatts-bazel-epel-7.repo -P /etc/yum.repos.d/
           yum install bazel
       - name: Build pydp lib

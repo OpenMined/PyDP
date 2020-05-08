@@ -5,10 +5,10 @@ PYTHON_CONFIGURE_BZL_PATH='./third_party/pybind11_bazel/python_configure.bzl'
 
 if ! grep -Fxq "$EDITION_MARK" $PYTHON_CONFIGURE_BZL_PATH
 then
-    sed -i '159i\ \ \ \ python_bin_path=repository_ctx.which("python3")\n\ \ \ \ if\ python_bin_path != None:\n\ \ \ \ \ \ \ \ return\ str(python_bin_path)' $PYTHON_CONFIGURE_BZL_PATH
-    sed -i '18s/py/third_party\/pybind11_bazel\/py/' $PYTHON_CONFIGURE_BZL_PATH
-    sed -i '12iPYBIND11_BAZEL_DIR = "//third_party/pybind11_bazel"' $PYTHON_CONFIGURE_BZL_PATH
-    sed -i "8i$EDITION_MARK" $PYTHON_CONFIGURE_BZL_PATH
+    gsed -i '159i\ \ \ \ python_bin_path=repository_ctx.which("python3")\n\ \ \ \ if\ python_bin_path != None:\n\ \ \ \ \ \ \ \ return\ str(python_bin_path)' $PYTHON_CONFIGURE_BZL_PATH
+    gsed -i '18s/py/third_party\/pybind11_bazel\/py/' $PYTHON_CONFIGURE_BZL_PATH
+    gsed -i '12iPYBIND11_BAZEL_DIR = "//third_party/pybind11_bazel"' $PYTHON_CONFIGURE_BZL_PATH
+    gsed -i "8i$EDITION_MARK" $PYTHON_CONFIGURE_BZL_PATH
 fi
 
 PARAMS=""

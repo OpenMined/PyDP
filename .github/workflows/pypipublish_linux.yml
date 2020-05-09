@@ -34,7 +34,7 @@ jobs:
       - name: Install pre-requisites
         run: |
           yum -y install wget
-
+          
           # install environment to build bazel
           # adapted from https://github.com/bazelbuild/bazel/wiki/FAQ
           # nice to see that they are using my old devtoolset-2
@@ -53,6 +53,8 @@ jobs:
           yum -y install centos-release-scl-rh
           # use the local Pasteur repository for scl-rh too
           wget http://people.centos.org/tru/devtools-3/devtools-3.repo -O /etc/yum.repos.d/devtools-3.repo
+          wget https://copr.fedorainfracloud.org/coprs/rhscl/devtoolset-3/repo/epel-6/rhscl-devtoolset-3-epel-6.repo -P /etc/yum.repos.d/
+
           yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++ devtoolset-3-binutils
 
 

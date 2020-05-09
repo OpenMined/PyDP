@@ -80,9 +80,9 @@ jobs:
           
           # this does not work:
           #--------------------
-          # wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-installer-linux-x86_64.sh 
-          # wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-installer-linux-x86_64.sh.sig 
-          # gpg --verify bazel-0.4.5-installer-linux-x86_64.sh.sig && sh /bazel-0.4.5-installer-linux-x86_64.sh
+          # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh 
+          # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh.sig 
+          # gpg --verify bazel-0.9.0-installer-linux-x86_64.sh.sig && sh /bazel-0.9.0-installer-linux-x86_64.sh
           #
           # yields:
           #--------
@@ -94,19 +94,20 @@ jobs:
           
           # github issue known issue https://github.com/bazelbuild/bazel/issues/3018#issuecomment-308577562
           yum -y install zip unzip
-          wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip 
-          #wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip.sig 
-          #gpg --verify bazel-0.4.5-dist.zip.sig &&
-          unzip -d /tmp/bazel-0.4.5-dist  bazel-0.4.5-dist.zip && \
-          #/bin/rm bazel-0.4.5-dist.zip.sig bazel-0.4.5-dist.zip
-          /bin/rm bazel-0.4.5-dist.zip
+          wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip
+          #wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip.sig 
+          #gpg --verify bazel-0.9.0-dist.zip.sig &&
+          unzip -d /tmp/bazel-0.9.0-dist  bazel-0.
+          -dist.zip && \
+          #/bin/rm bazel-0.9.0-dist.zip.sig bazel-0.9.0-dist.zip
+          /bin/rm bazel-0.9.0-dist.zip
           
           # enable the new devtoolset
-          echo 'cd /tmp/bazel-0.4.5-dist && bash ./compile.sh && cp output/bazel /usr/local/bin' | scl enable devtoolset-3 bash
+          echo 'cd /tmp/bazel-0.9.0-dist && bash ./compile.sh && cp output/bazel /usr/local/bin' | scl enable devtoolset-3 bash
           # replace devtoolset-3 by 4/5 if you are using the other versions
           
           # cleanup
-          /bin/rm -rf  /tmp/bazel-0.4.5-dist 
+          /bin/rm -rf  /tmp/bazel-0.9.0-dist 
           # stop here if you only need bazel (to build tensorflow for instance)
           # if you want to build the git version of bazel uncomment the following 2 lines.
           #git clone https://github.com/bazelbuild/bazel /tmp/bazel && \

@@ -92,6 +92,8 @@ jobs:
           # /usr/local/bin/bazel: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /usr/local/bin/bazel)
           # CentOS-6 glibc is glibc-2.12-1.xxxx
           
+          # github issue known issue https://github.com/bazelbuild/bazel/issues/3018#issuecomment-308577562
+          yum -y install zip unzip
           wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip 
           #wget https://github.com/bazelbuild/bazel/releases/download/0.4.5/bazel-0.4.5-dist.zip.sig 
           #gpg --verify bazel-0.4.5-dist.zip.sig &&

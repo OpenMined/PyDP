@@ -97,8 +97,7 @@ jobs:
           wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip
           #wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip.sig 
           #gpg --verify bazel-0.9.0-dist.zip.sig &&
-          unzip -d /tmp/bazel-0.9.0-dist  bazel-0.
-          -dist.zip && \
+          unzip -d /tmp/bazel-0.9.0-dist  bazel-0.9.0-dist.zip && \
           #/bin/rm bazel-0.9.0-dist.zip.sig bazel-0.9.0-dist.zip
           /bin/rm bazel-0.9.0-dist.zip
           

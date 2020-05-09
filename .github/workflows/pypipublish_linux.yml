@@ -35,84 +35,90 @@ jobs:
         run: |
           yum -y install wget
           
-          # install environment to build bazel
-          # adapted from https://github.com/bazelbuild/bazel/wiki/FAQ
-          # nice to see that they are using my old devtoolset-2
-          yum -y install java-1.8.0-openjdk-devel wget which findutils binutils gcc tar gzip zip unzip java java-devel git clang zlib-devel gcc-c++
+          yum -y install http://centos.biz.net.id/7/os/x86_64/Packages/libstdc++-4.8.5-28.el7.i686.rpm
 
-          # one should really use the latest devtoolset-N from scl-rh
-          # to use newer gcc versions
-          # devtoolset-2-gcc.x86_64              4.8.2-15.el6                @devtools      
-          # devtoolset-3-gcc.x86_64              4.9.2-6.2.el6               @centos-sclo-rh
-          # devtoolset-4-gcc.x86_64              5.3.1-6.1.el6               @centos-sclo-rh
-          # devtoolset-6-gcc.x86_64              6.2.1-3.1.el6               @centos-sclo-rh
+          wget https://copr.fedorainfracloud.org/coprs/vbatts/bazel/repo/epel-7/vbatts-bazel-epel-7.repo -P /etc/yum.repos.d/	
+          yum -y install bazel
+          
+          
+          # # install environment to build bazel
+          # # adapted from https://github.com/bazelbuild/bazel/wiki/FAQ
+          # # nice to see that they are using my old devtoolset-2
+          # yum -y install java-1.8.0-openjdk-devel wget which findutils binutils gcc tar gzip zip unzip java java-devel git clang zlib-devel gcc-c++
+
+          # # one should really use the latest devtoolset-N from scl-rh
+          # # to use newer gcc versions
+          # # devtoolset-2-gcc.x86_64              4.8.2-15.el6                @devtools      
+          # # devtoolset-3-gcc.x86_64              4.9.2-6.2.el6               @centos-sclo-rh
+          # # devtoolset-4-gcc.x86_64              5.3.1-6.1.el6               @centos-sclo-rh
+          # # devtoolset-6-gcc.x86_64              6.2.1-3.1.el6               @centos-sclo-rh
          
 
 
 
-          yum -y install centos-release-scl-rh
-          # use the local Pasteur repository for scl-rh too
-          # wget http://people.centos.org/tru/devtools-3/devtools-3.repo -O /etc/yum.repos.d/devtools-3.repo
-          wget https://copr.fedorainfracloud.org/coprs/rhscl/devtoolset-3/repo/epel-6/rhscl-devtoolset-3-epel-6.repo -P /etc/yum.repos.d/
+          # yum -y install centos-release-scl-rh
+          # # use the local Pasteur repository for scl-rh too
+          # # wget http://people.centos.org/tru/devtools-3/devtools-3.repo -O /etc/yum.repos.d/devtools-3.repo
+          # wget https://copr.fedorainfracloud.org/coprs/rhscl/devtoolset-3/repo/epel-6/rhscl-devtoolset-3-epel-6.repo -P /etc/yum.repos.d/
 
-          yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++ devtoolset-3-binutils
-
-
-          # Set the path to java and gcc
-          export JAVA_HOME=/usr/lib/jvm/java-1.8.0
-          export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
+          # yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++ devtoolset-3-binutils
 
 
+          # # Set the path to java and gcc
+          # export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+          # export CC=/opt/rh/devtoolset-2/root/usr/bin/gcc
 
-          # use one of these
-          #yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++ devtoolset-3-binutils
-          #yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
-          #yum -y install devtoolset-3-gcc devtoolset-6-gcc-c++ devtoolset-3-binutils
+
+
+          # # use one of these
+          # #yum -y install devtoolset-3-gcc devtoolset-3-gcc-c++ devtoolset-3-binutils
+          # #yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
+          # #yum -y install devtoolset-3-gcc devtoolset-6-gcc-c++ devtoolset-3-binutils
           
-          # GPG key
-          #gpg --recv-key 48457EE0 ; gpg --recv-key 48457EE0
-          # yes twice, the 1st time, the config file are generated but not used
-          #gpg: directory `/root/.gnupg' created
-          #gpg: new configuration file `/root/.gnupg/gpg.conf' created
-          #gpg: WARNING: options in `/root/.gnupg/gpg.conf' are not yet active during this run
-          #gpg: keyring `/root/.gnupg/secring.gpg' created
-          #gpg: keyring `/root/.gnupg/pubring.gpg' created
-          #gpg: no keyserver known (use option --keyserver)
-          #gpg: keyserver receive failed: Syntax error in URI
+          # # GPG key
+          # #gpg --recv-key 48457EE0 ; gpg --recv-key 48457EE0
+          # # yes twice, the 1st time, the config file are generated but not used
+          # #gpg: directory `/root/.gnupg' created
+          # #gpg: new configuration file `/root/.gnupg/gpg.conf' created
+          # #gpg: WARNING: options in `/root/.gnupg/gpg.conf' are not yet active during this run
+          # #gpg: keyring `/root/.gnupg/secring.gpg' created
+          # #gpg: keyring `/root/.gnupg/pubring.gpg' created
+          # #gpg: no keyserver known (use option --keyserver)
+          # #gpg: keyserver receive failed: Syntax error in URI
           
-          # this does not work:
-          #--------------------
-          # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh 
-          # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh.sig 
-          # gpg --verify bazel-0.9.0-installer-linux-x86_64.sh.sig && sh /bazel-0.9.0-installer-linux-x86_64.sh
-          #
-          # yields:
-          #--------
-          # bazel is now installed in /usr/local
-          # bash completion: source /usr/local/lib/bazel/bin/bazel-complete.bash
-          # but the provided bazel binary is not working..
-          # /usr/local/bin/bazel: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /usr/local/bin/bazel)
-          # CentOS-6 glibc is glibc-2.12-1.xxxx
+          # # this does not work:
+          # #--------------------
+          # # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh 
+          # # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-installer-linux-x86_64.sh.sig 
+          # # gpg --verify bazel-0.9.0-installer-linux-x86_64.sh.sig && sh /bazel-0.9.0-installer-linux-x86_64.sh
+          # #
+          # # yields:
+          # #--------
+          # # bazel is now installed in /usr/local
+          # # bash completion: source /usr/local/lib/bazel/bin/bazel-complete.bash
+          # # but the provided bazel binary is not working..
+          # # /usr/local/bin/bazel: /lib64/libc.so.6: version `GLIBC_2.14' not found (required by /usr/local/bin/bazel)
+          # # CentOS-6 glibc is glibc-2.12-1.xxxx
           
-          # github issue known issue https://github.com/bazelbuild/bazel/issues/3018#issuecomment-308577562
-          yum -y install zip unzip
-          wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip
-          #wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip.sig 
-          #gpg --verify bazel-0.9.0-dist.zip.sig &&
-          unzip -d /tmp/bazel-0.9.0-dist  bazel-0.9.0-dist.zip && \
-          #/bin/rm bazel-0.9.0-dist.zip.sig bazel-0.9.0-dist.zip
-          /bin/rm bazel-0.9.0-dist.zip
+          # # github issue known issue https://github.com/bazelbuild/bazel/issues/3018#issuecomment-308577562
+          # yum -y install zip unzip
+          # wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip
+          # #wget https://github.com/bazelbuild/bazel/releases/download/0.9.0/bazel-0.9.0-dist.zip.sig 
+          # #gpg --verify bazel-0.9.0-dist.zip.sig &&
+          # unzip -d /tmp/bazel-0.9.0-dist  bazel-0.9.0-dist.zip && \
+          # #/bin/rm bazel-0.9.0-dist.zip.sig bazel-0.9.0-dist.zip
+          # /bin/rm bazel-0.9.0-dist.zip
           
-          # enable the new devtoolset
-          echo 'cd /tmp/bazel-0.9.0-dist && bash ./compile.sh && cp output/bazel /usr/local/bin' | scl enable devtoolset-3 bash
-          # replace devtoolset-3 by 4/5 if you are using the other versions
+          # # enable the new devtoolset
+          # echo 'cd /tmp/bazel-0.9.0-dist && bash ./compile.sh && cp output/bazel /usr/local/bin' | scl enable devtoolset-3 bash
+          # # replace devtoolset-3 by 4/5 if you are using the other versions
           
-          # cleanup
-          /bin/rm -rf  /tmp/bazel-0.9.0-dist 
-          # stop here if you only need bazel (to build tensorflow for instance)
-          # if you want to build the git version of bazel uncomment the following 2 lines.
-          #git clone https://github.com/bazelbuild/bazel /tmp/bazel && \
-          #cd /tmp/bazel && bazel build //src:bazel && cp bazel-bin/src/bazel /usr/local/bin/bazel.new
+          # # cleanup
+          # /bin/rm -rf  /tmp/bazel-0.9.0-dist 
+          # # stop here if you only need bazel (to build tensorflow for instance)
+          # # if you want to build the git version of bazel uncomment the following 2 lines.
+          # #git clone https://github.com/bazelbuild/bazel /tmp/bazel && \
+          # #cd /tmp/bazel && bazel build //src:bazel && cp bazel-bin/src/bazel /usr/local/bin/bazel.new
 
 
 

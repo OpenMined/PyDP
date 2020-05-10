@@ -3,7 +3,7 @@ name: Linux Package PyPI deploy
 on:
   push: # only for testing
       branches:
-      - pypit
+      - pypi
   release:
     types: [created]
 

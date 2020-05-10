@@ -3,7 +3,7 @@ name: Linux Package PyPI deploy
 on:
   push: # only for testing
       branches:
-      - pypi 
+      - pypi
   release:
     types: [created]
 
@@ -40,14 +40,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./requirements_dev.txt
 
-      - name: Build and publish
+      - name: Build wheel
         run: |
           python setup.py bdist_wheel
 
-      - name: Repairing wheel
+      - name: Renaming wheel
         run: |
-          pip install auditwheel==2.0.0
-          auditwheel repair --plat manylinux1_x86_64 dist/*.whl 
           find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
 
       - name: Publishing the wheel
@@ -55,5 +53,5 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          python setup.py bdist_wheel
+          twine check dist/*
           twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl

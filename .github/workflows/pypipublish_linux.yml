@@ -44,6 +44,7 @@ jobs:
       - name: Build pydp lib
         run: |
           python -V
+          python3 -V
           bash ./build_PyDP.sh
 
       - name: Set up Python ${{ matrix.python-version }}

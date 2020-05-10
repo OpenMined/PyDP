@@ -5,8 +5,15 @@
 
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
+from setuptools.command.install import install
+
 import os
 
+class InstallPlatlib(install):
+    def finalize_options(self):
+        install.finalize_options(self)
+        if self.distribution.has_ext_modules():
+            self.install_lib = self.install_platlib
 
 class BinaryDistribution(Distribution):
     """This class is needed in order to create OS specific wheels."""
@@ -48,6 +55,7 @@ setup(
     name="python-dp",
     package_data={"pydp": ["pydp.so"],},
     packages=find_packages(exclude=["tests/"]),  # need to check this
+    cmdclass={'install': InstallPlatlib},
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,

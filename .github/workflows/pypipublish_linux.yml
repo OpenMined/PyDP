@@ -3,7 +3,7 @@ name: Linux Package PyPI deploy
 on:
   push: # only for testing
       branches:
-      - pypi 
+      - pypit
   release:
     types: [created]
 
@@ -46,8 +46,8 @@ jobs:
 
       - name: Repairing wheel
         run: |
-          pip install auditwheel==2.0.0
-          auditwheel repair --plat manylinux1_x86_64 dist/*.whl 
+          # pip install auditwheel==2.0.0
+          # auditwheel repair --plat manylinux1_x86_64 dist/*.whl 
           find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
 
       - name: Publishing the wheel

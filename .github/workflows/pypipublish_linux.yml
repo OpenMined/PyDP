@@ -43,7 +43,7 @@ jobs:
           export PATH="$PATH:$HOME/bin"
       - name: Build pydp lib
         run: |
-          echo python -V
+          python -V
           bash ./build_PyDP.sh
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -57,7 +57,7 @@ jobs:
 
       - name: Build wheel
         run: |
-          echo python -V
+          python -V
           python setup.py bdist_wheel
 
       - name: Renaming wheel

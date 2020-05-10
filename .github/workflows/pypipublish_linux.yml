@@ -22,6 +22,10 @@ jobs:
       - name: Set up submodules
         run: |
           bash ./ext_source_setup.sh
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
       - name: Install pre-requisites
         run: |
           sudo apt-get update
@@ -47,10 +51,6 @@ jobs:
           python3 -V
           bash ./build_PyDP.sh
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip

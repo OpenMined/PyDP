@@ -47,8 +47,8 @@ jobs:
       - name: Repairing wheel
         run: |
           pip install auditwheel==2.0.0
-          auditwheel repair --plat manylinux2010_x86_64 dist/*.whl 
-          find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux2010}"' -- {} \;
+          auditwheel repair --plat manylinux1_x86_64 dist/*.whl 
+          find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
 
       - name: Publishing the wheel
         env:

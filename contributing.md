@@ -55,7 +55,7 @@ $ python3 setup.py sdist bdist_wheel
 Install wheel:
 
 ```
-$ pip install dist/pydp-0.1.0-py2.py3-none-any.whl
+$ pip install dist/*.whl
 ```
 
 ## Docker Support

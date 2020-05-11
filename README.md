@@ -11,7 +11,7 @@ If you'd like to contribute to this project please read these [guidelines](https
 
 ## Usage
 
-As part of the 0.1.0 dev release, we have managed to port the Private Mean function (Bounded Mean). Other functions will be released in further release.
+As part of the 0.1.1 dev release, we have managed to port the Private Mean function (Bounded Mean). Other functions will be released in further release.
 
 To install the package:
 `pip install python-dp`

@@ -1,9 +1,6 @@
 name: Linux Package PyPI deploy
 
 on:
-  push: # only for testing
-      branches:
-      - pypi
   release:
     types: [created]
 
@@ -13,7 +10,7 @@ jobs:
       matrix:
         os: 
           - ubuntu-latest
-        python-version: [3.5, 3.6, 3.7]
+        python-version: [3.5, 3.6, 3.7,3.8]
 
     runs-on: ${{ matrix.os }}
 
@@ -47,8 +44,6 @@ jobs:
           export PATH="$PATH:$HOME/bin"
       - name: Build pydp lib
         run: |
-          python -V
-          python3 -V
           bash ./build_PyDP.sh
 
       - name: Install python dependencies
@@ -58,7 +53,6 @@ jobs:
 
       - name: Build wheel
         run: |
-          python -V
           python setup.py bdist_wheel
 
       - name: Renaming wheel
@@ -67,7 +61,7 @@ jobs:
 
       - name: Publishing the wheel
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_USERNAME: "__token__"
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
         run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl
+          twine upload --skip-existing dist/*.whl

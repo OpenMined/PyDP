@@ -45,6 +45,7 @@ setup(
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     description="Python API for Google's Differential Privacy library",
     distclass=BinaryDistribution,
@@ -61,6 +62,6 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/OpenMined/PyDP",
-    version="0.1.11", # just testing
+    version="0.1.1",
     zip_safe=False,
 )

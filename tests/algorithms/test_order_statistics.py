@@ -36,21 +36,21 @@ def test_median(data):
 
     assert (
         statistics.median(data) - 20
-        < maxx.result(data, 1.0)
+        < int(maxx.result(data, 1.0))
         < statistics.median(data) + 20
     )
 
-    assert 90 <= maxx.result(data, 1.0) <= 100
+    assert 90 <= int(maxx.result(data, 1.0)) <= 100
 
 
 def test_median1(data):
     maxx = dp.Median(1.0)
     assert (
         statistics.median(data) - 20
-        < maxx.result(data, 1.0)
+        < int(maxx.result(data, 1.0))
         < statistics.median(data) + 20
     )
-    assert 90 <= maxx.result(data, 1.0) <= 100
+    assert 80 <= int(maxx.result(data, 1.0)) <= 100
 
 
 def percentile(N, percent, key=lambda x: x):

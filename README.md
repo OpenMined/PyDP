@@ -11,10 +11,23 @@ If you'd like to contribute to this project please read these [guidelines](https
 
 ## Usage
 
-As part of the 0.1.1 dev release, we have managed to port the Private Mean function (Bounded Mean). Other functions will be released in further release.
+As part of the 0.1.1 dev release, we have added all functions required in carrots demo. These include: 
+- BoundedMean
+- BoundedSum
+- Max
+- Count Above
+
+Along with few others: 
+- Percentile
+- Min
+- Median
 
 To install the package:
 `pip install python-dp`
+
+For usage, refer to [Jupyer Notebook](https://github.com/OpenMined/PyDP/blob/dev/examples/1.1%20-%20Introductions%20to%20PyDP.ipynb) or [Python file](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots.py).
+Sample usage can be found below.
+
 
 ```
 import pydp as dp # imports the DP library

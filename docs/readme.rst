@@ -18,9 +18,8 @@ If you’d like to contribute to this project please read these
 Usage
 -----
 
-As part of the 0.1.1 dev release, we have managed to port the Private
-Mean function (Bounded Mean). Other functions will be released in
-further release.
+As part of the 0.1.1 dev release, we have added all functions required in carrots demo.
+
 
 To install the package: ``pip install python-dp``
 

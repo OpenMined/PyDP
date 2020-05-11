@@ -12,14 +12,13 @@ import statistics as s
 
 class CarrotReporter:
 
-    data_filename: str
-    epsilon: float
-
     # Function to read the csv file and creating a dataframe
     def __init__(self, data_filename, epsilon):
         self.data_filename = data_filename
         self.epsilon = epsilon
         self._epsilon = epsilon
+        self._privacy_budget = float(1.0)
+
         self._df = pd.read_csv(
             self.data_filename, sep=",", names=["animal", "carrots_eaten"]
         )
@@ -65,17 +64,16 @@ class CarrotReporter:
         x = dp.Max(privacy_budget, 0, 150)
         return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 
-    _epsilon: float
-    _privacy_budget = float(1)
-    _df: pd.DataFrame
-
 
 c = CarrotReporter("animals_and_carrots.csv", 1)
 print("Mean:\t" + str(c.mean_carrots()))
+print("Private Mean:\t" + str(c.private_mean(1)))
+
 print("Sum:\t" + str(c.sum_carrots()))
-print("Above 70:\t" + str(c.count_above(70)))
+print("Private Sum:\t" + str(c.private_sum(1)))
+
+print("(Count) Above 70 values:\t" + str(c.count_above(70)))
+print("private Count Above:\t" + str(c.private_count_above(1, 70)))
+
 print("Max:\t" + str(c.max()))
-print("private mean:\t" + str(c.private_mean(1)))
-print(f"private sum:\t {c.private_sum(c.epsilon)}")
-print("private max:\t" + str(c.private_max(1)))
-print("private count above:\t" + str(c.private_count_above(1, 70)))
+print("Private Max:\t" + str(c.private_max(1)))

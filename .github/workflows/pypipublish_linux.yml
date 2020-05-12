@@ -2,7 +2,7 @@ name: Linux Package PyPI deploy
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   deploy:

@@ -112,5 +112,5 @@ void init_base_status(py::module &m) {
   // external/google_dp/differential_privacy/base/statusor_internals.h:104:60:
   // error: use of deleted function
   // 'differential_privacy::BoundedMean<int>::BoundedMean(differential_privacy::BoundedMean<int>&&)'
-  declareStatusOr2<typename dp::BoundedMean<int>>(m, "BoundedMeantInt");
+  // declareStatusOr2<typename dp::BoundedMean<int>>(m, "BoundedMeantInt");
 }

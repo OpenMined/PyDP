@@ -92,14 +92,6 @@ Note: After each change in your code, you have to run:
 $ docker build -t pydp:test .
 ```
 
-### Third Party dependencies
-
-Make sure you run:
-
-```
-$ ./ext_source_setup.sh
-```
-
 ## Coding Standards
 
 For Naming of modules, classes and methods in Python, make sure you follow naming conventions found [here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).

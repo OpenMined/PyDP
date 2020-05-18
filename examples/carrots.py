@@ -6,6 +6,8 @@
 import pydp as dp  # our privacy library
 import pandas as pd
 import statistics as s
+from pathlib import Path
+import os
 
 # Creating a class ClassReporter
 
@@ -64,8 +66,10 @@ class CarrotReporter:
         x = dp.Max(privacy_budget, 0, 150)
         return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 
+# get absolute path
+path = Path(os.path.dirname(os.path.abspath(__file__)))
 
-c = CarrotReporter("animals_and_carrots.csv", 1)
+c = CarrotReporter(path / "animals_and_carrots.csv", 1)
 print("Mean:\t" + str(c.mean_carrots()))
 print("Private Mean:\t" + str(c.private_mean(1)))
 

@@ -5,6 +5,7 @@
 #include "differential_privacy/algorithms/bounded-mean.h"
 #include "differential_privacy/algorithms/bounded-standard-deviation.h"
 #include "differential_privacy/algorithms/bounded-sum.h"
+#include "differential_privacy/algorithms/bounded-variance.h"
 
 #include "absl/random/distributions.h"
 #include "differential_privacy/algorithms/order-statistics.h"
@@ -88,6 +89,32 @@ double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
                              .ValueOrDie();
   }
   Output result = standard_deviation->Result(a.begin(), a.end()).ValueOrDie();
+
+  return GetValue<double>(result);
+}
+
+double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::list l) {
+  std::vector<double> a;
+
+  for (auto i : l) {
+    a.push_back(i.cast<double>());
+  }
+  std::unique_ptr<BoundedVariance<double>> variance;
+
+  if (has_bounds) {
+    variance = BoundedVariance<double>::Builder()
+                   .SetEpsilon(config->epsilon)
+                   .SetLower(config->lower)
+                   .SetUpper(config->upper)
+                   .Build()
+                   .ValueOrDie();
+  } else {
+    variance = BoundedVariance<double>::Builder()
+                   .SetEpsilon(config->epsilon)
+                   .Build()
+                   .ValueOrDie();
+  }
+  Output result = variance->Result(a.begin(), a.end()).ValueOrDie();
 
   return GetValue<double>(result);
 }

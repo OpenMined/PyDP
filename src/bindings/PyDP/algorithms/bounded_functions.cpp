@@ -23,7 +23,7 @@ class BoundedMeanDummy : public Dummy {
 };
 
 class BoundedSumDummy : public Dummy {
-public:
+ public:
   using Dummy::Dummy;
   double Result(py::list l) override {
     return Result_BoundedSum(obj, l);
@@ -31,7 +31,7 @@ public:
 };
 
 class BoundedStandardDeviationDummy : public Dummy {
-public:
+ public:
   using Dummy::Dummy;
   double Result(py::list l) override {
     return Result_BoundedStandardDeviation(obj, l);

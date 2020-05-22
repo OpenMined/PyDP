@@ -23,7 +23,7 @@ void init_algorithms_distributions(py::module &);
 void init_algorithms_order_statistics(py::module &);
 
 // rand
-void init_algorithms_rand(py::module&);
+void init_algorithms_rand(py::module &);
 
 // proto
 void init_proto(py::module &);

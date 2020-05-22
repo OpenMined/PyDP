@@ -3,8 +3,8 @@
 #include "differential_privacy/algorithms/algorithm.h"
 
 #include "differential_privacy/algorithms/bounded-mean.h"
-#include "differential_privacy/algorithms/bounded-sum.h"
 #include "differential_privacy/algorithms/bounded-standard-deviation.h"
+#include "differential_privacy/algorithms/bounded-sum.h"
 
 #include "absl/random/distributions.h"
 #include "differential_privacy/algorithms/order-statistics.h"
@@ -51,24 +51,22 @@ double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list l) 
   std::unique_ptr<BoundedSum<double>> sum;
   if (has_bounds) {
     sum = BoundedSum<double>::Builder()
-      .SetEpsilon(config->epsilon)
-      .SetLower(config->lower)
-      .SetUpper(config->upper)
-      .Build()
-      .ValueOrDie();
+              .SetEpsilon(config->epsilon)
+              .SetLower(config->lower)
+              .SetUpper(config->upper)
+              .Build()
+              .ValueOrDie();
   } else {
     sum =
-      BoundedSum<double>::Builder()
-      .SetEpsilon(config->epsilon)
-      .Build()
-      .ValueOrDie();
+        BoundedSum<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
   }
   Output result = sum->Result(a.begin(), a.end()).ValueOrDie();
 
   return GetValue<double>(result);
 }
 
-double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config, pybind11::list l) {
+double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
+                                       pybind11::list l) {
   std::vector<double> a;
 
   for (auto i : l) {
@@ -78,16 +76,16 @@ double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config, pybi
 
   if (has_bounds) {
     standard_deviation = BoundedStandardDeviation<double>::Builder()
-      .SetEpsilon(config->epsilon)
-      .SetLower(config->lower)
-      .SetUpper(config->upper)
-      .Build()
-      .ValueOrDie();
+                             .SetEpsilon(config->epsilon)
+                             .SetLower(config->lower)
+                             .SetUpper(config->upper)
+                             .Build()
+                             .ValueOrDie();
   } else {
     standard_deviation = BoundedStandardDeviation<double>::Builder()
-      .SetEpsilon(config->epsilon)
-      .Build()
-      .ValueOrDie();
+                             .SetEpsilon(config->epsilon)
+                             .Build()
+                             .ValueOrDie();
   }
   Output result = standard_deviation->Result(a.begin(), a.end()).ValueOrDie();
 

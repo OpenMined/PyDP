@@ -18,7 +18,7 @@ Three scripts need to be run in order to get the environment ready.
 
 Currently we are using git submodules to allow editors like VSCode to locate source code, this should be refactored later.
 
-This clones Google's differential privacy library as well as some other third party dependencies.
+This clones Google's differential privacy library.
 
 ```
 $ ./ext_source_setup.sh
@@ -34,8 +34,13 @@ $ git submodule update --init --recursive
 
 This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list in the said file.
 
+If you are on Linux
 ```
-$ ./prereqs.sh
+$ ./prereqs_linux.sh  
+```
+If you are on OSX
+```
+$ ./prereqs_mac.sh  
 ```
 
 ### Build Script

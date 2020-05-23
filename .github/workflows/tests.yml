@@ -32,7 +32,7 @@ jobs:
     - name: Install pre-requisites
       run: |
         sudo apt-get update
-        bash ./prereqs.sh
+        bash ./prereqs_linux.sh
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |

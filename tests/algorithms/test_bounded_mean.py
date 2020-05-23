@@ -1,6 +1,7 @@
 import pytest
 import pydp as dp
 
+
 def test_c_api():
     a = [2, 4, 6, 8]
 

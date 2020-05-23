@@ -66,6 +66,7 @@ class CarrotReporter:
         x = dp.Max(privacy_budget, 0, 150)
         return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 
+
 # get absolute path
 path = Path(os.path.dirname(os.path.abspath(__file__)))
 

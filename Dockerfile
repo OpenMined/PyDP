@@ -33,22 +33,21 @@ RUN \
 WORKDIR /tmp/third_party
 
 RUN git clone https://github.com/google/differential-privacy.git
+RUN pip3 install pipenv
 
 WORKDIR /root/PyDP
 COPY . /root/PyDP
 
-RUN rm -rf third_party/differential-privacy/ third_party/pybind11_bazel/ && \
+RUN rm -rf third_party/differential-privacy/ && \
     cp -r /tmp/third_party/* /root/PyDP/third_party
 
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java
 
-RUN pip install pipenv
-
 RUN \
-    pipenv run build_PyDP.sh && \
+    pipenv run bazel build src/python:bindings_test  --verbose_failures && \
     pipenv run python3 setup.py sdist bdist_wheel && \
-    pipenv install dist/*.whl && \
+    pipenv install dist/*.whl
 
 # Define default command.
 CMD ["bash"]

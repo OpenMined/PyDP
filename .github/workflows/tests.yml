@@ -42,5 +42,5 @@ jobs:
         pipenv run python setup.py test
     - name: Check test coverage
       run: |
-         coverage run --source pydp setup.py test
-         coverage report --ignore-errors --fail-under 95 -m
+        pipenv run coverage run --source pydp setup.py test
+        pipenv run coverage report --ignore-errors --fail-under 95 -m

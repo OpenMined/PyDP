@@ -30,11 +30,9 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 
 py_repositories()
 
-# google differential privacy library and protobuf dependencies
-git_repository(
+local_repository(
     name = "google_dp",
-    commit = "14f26fb91570cce384c2715d3adcaa4e92eec605",
-    remote = "https://github.com/google/differential-privacy",
+    path = "third_party/differential-privacy",
 )
 
 load("@google_dp//:differential_privacy_deps.bzl", "differential_privacy_deps")

@@ -36,7 +36,7 @@ jobs:
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |
-        bash pipenv run ./build_PyDP.sh
+        pipenv run ./build_PyDP.sh
     - name: Run tests
       run: |
         pipenv run python setup.py test

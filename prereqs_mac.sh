@@ -10,8 +10,8 @@ else
 fi
 
 # TODO Python checking and installation
-echo "Donwloading and installing Python3 homebrew"
-brew install python
+# echo "Donwloading and installing Python3 homebrew"
+# brew install python
 
 # checking for bazel
 echo "Donwloading and installing Bazel using homebrew"

@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  python-style-check:
 
     runs-on: ubuntu-latest
     strategy:
@@ -30,6 +30,15 @@ jobs:
     - name: Black pep8 style
       run: |
         black ./ --check
+ 
+  cpp-style-check:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+    steps:
+    - uses: actions/checkout@v2
     - name: Lint with clang-format
       run: |
         # lint files (all .cpp and .h files) inplace
@@ -37,4 +46,4 @@ jobs:
         # print changes
         git diff src
         # already well formated if 'git diff' doesn't output
-        ! ( git diff src |  grep -q ^ ) || exit 1
+        ! ( git diff src |  grep -q ^ ) || exit 

@@ -24,7 +24,7 @@ class TestLogging:
     def test_vlog_level(self):
         directory = "tests"
         vlog_level = 1
-        success = Logging(directory, "log_test.txt", vlog_level)
+        success = pd.Logging(directory, "log_test.txt", vlog_level)
         assert pd.Logging.vlog_level == vlog_level
 
     def test_vlog_directory(self):

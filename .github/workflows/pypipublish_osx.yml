@@ -1,4 +1,4 @@
-name: Linux Package PyPI deploy
+name: MacOS Package PyPI deploy
 
 on:
   push:
@@ -25,10 +25,6 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Installing Bazel
-        run: |
-          brew tap bazelbuild/tap
-          brew install bazelbuild/tap/bazel
 
       - name: Install python dependencies
         run: |

@@ -3,7 +3,7 @@ name: MacOS Package PyPI deploy
 on:
   push:
     branches:	
-      - mac-workflow
+      - mac-workflow-test
   release:
     types: [published]
 
@@ -22,22 +22,28 @@ jobs:
           rm -rf third_party/differential-privacy/java 
           rm -rf third_party/differential-privacy/examples/java
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv
+          pip install twine
+          pip install wheel
+          pip install setuptools
 
       - name: Build pydp lib
         run: |
-          pipenv run ./build_PyDP.sh
+          bazel build src/python:bindings_test  --verbose_failures
+          rm -f pydp.so
+          cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
+
 
       - name: Build wheel
         run: |
-          pipenv run python setup.py bdist_wheel
+          python -V
+          python setup.py bdist_wheel
 
       # - name: Publishing the wheel
       #   env:
@@ -50,4 +56,4 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          pipenv run twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl
+          twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl

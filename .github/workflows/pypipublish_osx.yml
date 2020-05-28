@@ -1,0 +1,57 @@
+name: Linux Package PyPI deploy
+
+on:
+  push:
+    branches:	
+      - mac-workflow
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up submodules
+        run: |
+          git submodule update --init --recursive
+          rm -rf third_party/differential-privacy/java 
+          rm -rf third_party/differential-privacy/examples/java
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Installing Bazel
+        run: |
+          brew tap bazelbuild/tap
+          brew install bazelbuild/tap/bazel
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+
+      - name: Build pydp lib
+        run: |
+          pipenv run ./build_PyDP.sh
+
+      - name: Build wheel
+        run: |
+          pipenv run python setup.py bdist_wheel
+
+      # - name: Publishing the wheel
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: ${{ secrets.TOKEN }}
+      #   run: |
+      #     twine upload --skip-existing dist/*.whl
+      - name: Publishing the wheel Test
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl

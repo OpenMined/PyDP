@@ -6,13 +6,10 @@ on:
 
 jobs:
   deploy:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: 
-          - ubuntu-latest
         python-version: [3.5, 3.6, 3.7, 3.8]
-
-    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2

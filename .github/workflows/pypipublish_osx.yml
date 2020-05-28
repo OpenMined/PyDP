@@ -1,9 +1,6 @@
 name: MacOS Package PyPI deploy
 
 on:
-  push:
-    branches:	
-      - mac-workflow-test
   release:
     types: [published]
 
@@ -42,18 +39,11 @@ jobs:
 
       - name: Build wheel
         run: |
-          python -V
           python setup.py bdist_wheel
 
-      # - name: Publishing the wheel
-      #   env:
-      #     TWINE_USERNAME: __token__
-      #     TWINE_PASSWORD: ${{ secrets.TOKEN }}
-      #   run: |
-      #     twine upload --skip-existing dist/*.whl
-      - name: Publishing the wheel Test
+      - name: Publishing the wheel
         env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
         run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl
+          twine upload --skip-existing dist/*.whl

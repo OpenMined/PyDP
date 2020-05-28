@@ -50,4 +50,4 @@ jobs:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
-          twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl
+          pipenv run twine upload --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*.whl

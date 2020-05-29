@@ -31,3 +31,10 @@ chmod +x bazel-2.1.0-installer-linux-x86_64.sh
 ./bazel-2.1.0-installer-linux-x86_64.sh --user
 export PATH="$PATH:$HOME/bin"
 rm bazel-2.1.0-installer-linux-x86_64.sh
+
+
+# Downloading the Google DP library
+git submodule update --init --recursive
+# Removing the Java part 
+rm -rf third_party/differential-privacy/java 
+rm -rf third_party/differential-privacy/examples/java

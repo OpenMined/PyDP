@@ -46,7 +46,7 @@ RUN rm -rf third_party/differential-privacy/java && \
 
 RUN \
     pipenv run bazel build src/python:bindings_test  --verbose_failures && \
-    pipenv run python3 setup.py sdist bdist_wheel && \
+    pipenv run python3 setup.py bdist_wheel && \
     pipenv install dist/*.whl
 
 # Define default command.

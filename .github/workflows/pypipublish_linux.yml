@@ -15,7 +15,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up submodules
         run: |
-          bash ./ext_source_setup.sh
+          git submodule update --init --recursive
+          rm -rf third_party/differential-privacy/java 
+          rm -rf third_party/differential-privacy/examples/java
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
@@ -43,15 +45,19 @@ jobs:
       - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv
+          pip install twine
+          pip install wheel
+          pip install setuptools
 
       - name: Build pydp lib
         run: |
-          pipenv run ./build_PyDP.sh
+          bazel build src/python:bindings_test  --verbose_failures
+          rm -f pydp.so
+          cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
 
       - name: Build wheel
         run: |
-          pipenv run python setup.py bdist_wheel
+          python setup.py bdist_wheel
 
       - name: Renaming wheel
         run: |

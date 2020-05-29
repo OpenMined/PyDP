@@ -1,0 +1,49 @@
+name: MacOS Package PyPI deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up submodules
+        run: |
+          git submodule update --init --recursive
+          rm -rf third_party/differential-privacy/java 
+          rm -rf third_party/differential-privacy/examples/java
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install twine
+          pip install wheel
+          pip install setuptools
+
+      - name: Build pydp lib
+        run: |
+          bazel build src/python:bindings_test  --verbose_failures
+          rm -f pydp.so
+          cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
+
+
+      - name: Build wheel
+        run: |
+          python setup.py bdist_wheel
+
+      - name: Publishing the wheel
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
+        run: |
+          twine upload --skip-existing dist/*.whl

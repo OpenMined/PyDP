@@ -3,11 +3,16 @@
  double.
 """
 
-import pydp as dp  # our privacy library
-import pandas as pd
+import sys  # isort:skip
+
+sys.path.append("../pydp")  # isort:skip
+
+import os
 import statistics as s
 from pathlib import Path
-import os
+
+import pandas as pd
+import pydp as dp  # our privacy library
 
 # Creating a class ClassReporter
 

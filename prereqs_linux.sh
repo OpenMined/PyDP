@@ -22,8 +22,7 @@ fi
 
 # pipenv
 echo "Checking for pipenv"
-dpkg -s pipenv &> /dev/null
-if command [ $? -eq 0 ]; then
+if python -c pipenv &> /dev/null; then
     echo "pipenv is already installed"
 else
     echo "installing pipenv"

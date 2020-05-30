@@ -22,11 +22,11 @@ fi
 
 # pipenv
 echo "Checking for pipenv"
-if python -c "import pipenv" &> /dev/null; then
+if python3 -c "import pipenv" &> /dev/null; then
     echo "pipenv is already installed"
 else
     echo "installing pipenv"
-    pip install pipenv
+    pip3 install pipenv
 fi
 
 # checking for bazel

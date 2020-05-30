@@ -20,6 +20,15 @@ else
     sudo apt-get install python3.6
 fi
 
+# pipenv
+echo "Checking for pipenv"
+dpkg -s pipenv &> /dev/null
+if command [ $? -eq 0 ]; then
+    echo "pipenv is already installed"
+else
+    echo "installing pipenv"
+    sudo apt install pipenv
+fi
 
 # checking for bazel
 echo "Installing Bazel dependencies"

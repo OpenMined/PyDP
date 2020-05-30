@@ -46,8 +46,9 @@ RUN rm -rf third_party/differential-privacy/java && \
 
 RUN \
     pipenv run bazel build src/python:bindings_test  --verbose_failures && \
+    cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     pipenv run python3 setup.py bdist_wheel && \
-    pipenv install dist/*.whl
+    pip3 install dist/*.whl
 
 # Define default command.
 CMD ["bash"]

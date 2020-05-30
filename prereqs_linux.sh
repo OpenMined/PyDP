@@ -27,7 +27,7 @@ if command [ $? -eq 0 ]; then
     echo "pipenv is already installed"
 else
     echo "installing pipenv"
-    sudo apt install pipenv
+    pip install pipenv
 fi
 
 # checking for bazel

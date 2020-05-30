@@ -4,7 +4,7 @@
 
 # PyDP
 
-In today's Data-driven world, where data analytics is used by the Researchers or Data Scientists to create better models or innovative solutions for a better future! They often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, sometimes, AI models can memorize details about the data they've trained on and could 'leak' these details later on. Differential privacy is a framework (using math) for measuring this leakage and reducing the possibility of it happening. It works by injecting a controlled amount of statistical noise to obscure the data contributions from individuals in the dataset. 
+In today's Data-driven world, where data analytics is used by the Researchers or Data Scientists to create better models or innovative solutions for a better future! They often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, sometimes, AI models can memorize details about the data they've trained on and could 'leak' these details later on. Differential privacy is a framework (using math) for measuring this leakage and reducing the possibility of it happening. 
 
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, helping us achieve better privacy.
 

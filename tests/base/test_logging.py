@@ -1,7 +1,7 @@
 import pytest
 import pydp as dp
 
-# TODO
+# TODO :- add a read_only_property to the `logging.cc` file.
 # class TestLogging:
 #     def test_logging(self):
 #         directory = "tests"

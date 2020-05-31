@@ -47,6 +47,7 @@ RUN rm -rf third_party/differential-privacy/java && \
 RUN \
     pipenv run bazel build src/python:bindings_test  --verbose_failures && \
     cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
+    rm -rf dist/ && \
     pipenv run python3 setup.py bdist_wheel && \
     pip3 install dist/*.whl
 

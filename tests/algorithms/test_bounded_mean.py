@@ -11,7 +11,7 @@ def test_c_api():
 
 def test_bounded_mean():
     bm1 = dp.BoundedMean(3.4, 1, 2)
-    assert (bm1, dp.BoundedMean)
+    assert isinstance(bm1, dp.BoundedMean)
     assert isinstance(bm1.result([1.5, 2, 2.5]), float)
 
     bm2 = dp.BoundedMean(3.4)

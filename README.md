@@ -1,10 +1,11 @@
-![Tests](https://img.shields.io/github/workflow/status/OpenMined/PySyft/Tests)
-![License](https://img.shields.io/github/license/OpenMined/PySyft)
+![Tests](https://img.shields.io/github/workflow/status/OpenMined/PyDP/Tests)
+![Version](https://img.shields.io/github/v/tag/OpenMined/PyDP?color=green&label=pypi)
+![License](https://img.shields.io/github/license/OpenMined/PyDP)
 
 
 # PyDP
 
-In today's Data-driven world, where data analytics is used by the Researchers or Data Scientists to create better models or innovative solutions for a better future! They often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, sometimes, AI models can memorize details about the data they've trained on and could 'leak' these details later on. Differential privacy is a framework (using math) for measuring this leakage and reducing the possibility of it happening. 
+In today's data-driven world, where data analytics is used by the Researchers or Data Scientists to create better models or innovative solutions for a better future! They often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, sometimes, AI models can memorize details about the data they've trained on and could 'leak' these details later on. Differential privacy is a framework (using math) for measuring this leakage and reducing the possibility of it happening. 
 
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, helping us achieve better privacy.
 

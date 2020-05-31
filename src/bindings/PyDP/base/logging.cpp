@@ -42,4 +42,3 @@ void init_base_logging(py::module& m) {
   obje.def_property_readonly("vlog_level", &Logging_helper::get_vlog_level);
   obje.def_property_readonly("log_status", &Logging_helper::get_log_status);
 }
-

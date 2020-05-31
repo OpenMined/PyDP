@@ -42,11 +42,14 @@ jobs:
         bazel build src/python:bindings_test  --verbose_failures
         rm -f pydp.so
         cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
+        python setup.py bdist_wheel
+        pip install dist/*.whl
     - name: Run tests
       run: |
         pip install pycodestyle
         pip install pytest
         python setup.py test
+        pytest tests
     - name: Check test coverage
       run: |
         coverage run --source pydp setup.py test

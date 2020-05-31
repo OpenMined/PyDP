@@ -32,4 +32,3 @@ class TestLogging:
         vlog_level = 1
         tvd = dp.Logging(directory, "log_test.txt", vlog_level)
         assert tvd.log_directory == "tests/"
-

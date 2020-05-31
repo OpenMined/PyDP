@@ -15,11 +15,13 @@ def data():
         a.append(200 * i / kDataSize)
     return a
 
+
 def test_max(data):
     maxx = dp.Max(1.0, 0, 2048)
     assert 190 < maxx.result(data, 1.0) < 210
 
     assert max(data) - 10 < maxx.result(data, 1.0) < max(data) + 10
+
 
 def test_min(data):
     maxx = dp.Min(1.0, 0, 2048)
@@ -27,6 +29,7 @@ def test_min(data):
     assert min(data) - 10 < maxx.result(data, 1.0) < min(data) + 10
 
     assert -10 < maxx.result(data, 1.0) < 10
+
 
 def test_median(data):
     maxx = dp.Median(1.0, 0, 2048)
@@ -38,6 +41,7 @@ def test_median(data):
     )
 
     assert 90 <= int(maxx.result(data, 1.0)) <= 100
+
 
 def test_median1(data):
     maxx = dp.Median(1.0)
@@ -69,6 +73,7 @@ def percentile(N, percent, key=lambda x: x):
     d0 = key(N[int(f)]) * (c - k)
     d1 = key(N[int(c)]) * (k - f)
     return d0 + d1
+
 
 def test_percentile(data):
     maxx = dp.Percentile(1.0, 0, 2048)

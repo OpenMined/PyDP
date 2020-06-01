@@ -1,37 +1,34 @@
 import pytest
-import pydp as pd
+import pydp as dp
 
 
-class TestLogging():
+class TestLogging:
     def test_logging(self):
-        directory = 'tests'
+        directory = "tests"
         vlog_level = 3
-        success = pd.Logging(directory, 'log_test', vlog_level)
-        assert success is True
+        tl = dp.Logging(directory, "log_test", vlog_level)
+        assert tl.log_status is True
 
     def test_logging1(self):
-        directory = ''
+        directory = ""
         vlog_level = 3
-        success = pd.Logging(
-            directory, 'log_test.txt', vlog_level)
-        assert success is False
+        tl1 = dp.Logging(directory, "log_test.txt", vlog_level)
+        assert tl1.log_status is False
 
     def test_logging2(self):
-        directory = 'tests'
+        directory = "tests"
         vlog_level = 3
-        success = pd.Logging(directory, '', vlog_level)
-        assert success is False
+        tl2 = dp.Logging(directory, "", vlog_level)
+        assert tl2.log_status is False
 
     def test_vlog_level(self):
-        directory = 'tests'
+        directory = "tests"
         vlog_level = 1
-        success = Logging(
-            directory, 'log_test.txt', vlog_level)
-        assert pd.Logging.vlog_level == vlog_level
+        tvl = dp.Logging(directory, "log_test.txt", vlog_level)
+        assert tvl.vlog_level == vlog_level
 
     def test_vlog_directory(self):
-        directory = 'tests'
+        directory = "tests"
         vlog_level = 1
-        success = pd.logging.init_logging(
-            directory, 'log_test.txt', vlog_level)
-        assert pd.Logging.log_directory == 'tests/'
+        tvd = dp.Logging(directory, "log_test.txt", vlog_level)
+        assert tvd.log_directory == "tests/"

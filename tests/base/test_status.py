@@ -3,7 +3,7 @@ import pytest
 import pydp as pd
 
 
-class TestStatus():
+class TestStatus:
     def test_hello(self):
         i = 1
         assert 1 == i
@@ -40,7 +40,7 @@ class TestStatus():
         assert s == "kInvalidArgument"
 
 
-class TestSampleLoad():
+class TestSampleLoad:
     def test_payload_test(self):
         # when status code is OK, no appending is done to the status object
         s = pd.Status(pd.Status.StatusCode(0), "New status object")

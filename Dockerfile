@@ -1,5 +1,5 @@
 # Pull base image.
-FROM python:3.6-slim-buster
+FROM python:3.7-slim-buster
 
 # Set environment variables.
 ENV HOME /root
@@ -32,19 +32,25 @@ RUN \
 # get third-party dependencies
 WORKDIR /tmp/third_party
 
-RUN git clone https://github.com/google/differential-privacy.git && \
-    git clone https://github.com/pybind/pybind11_bazel.git
+RUN git clone https://github.com/google/differential-privacy.git
+RUN pip3 install pipenv
 
 WORKDIR /root/PyDP
 COPY . /root/PyDP
 
-RUN cp -r /tmp/third_party/* /root/PyDP/third_party
+RUN rm -rf third_party/differential-privacy/ && \
+    cp -r /tmp/third_party/* /root/PyDP/third_party
 
+RUN rm -rf third_party/differential-privacy/java && \ 
+    rm -rf third_party/differential-privacy/examples/java
+
+# build the bindings using Bazel and create a fresh wheel file after deleting the old one in dist folder.
 RUN \
-    bash build_PyDP.sh && \
-    python3 setup.py sdist bdist_wheel && \
-    pip install dist/pydp-0.1.0-py2.py3-none-any.whl && \
-    pip install -r requirements_dev.txt
+    pipenv run bazel build src/python:bindings_test  --verbose_failures && \
+    cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
+    rm -rf dist/ && \
+    pipenv run python3 setup.py bdist_wheel && \
+    pipenv install dist/*.whl
 
 # Define default command.
 CMD ["bash"]

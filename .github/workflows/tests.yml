@@ -14,7 +14,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.5, 3.6, 3.7]
+        python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -25,33 +25,29 @@ jobs:
     - name: Install python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r ./requirements_dev.txt
+        pip install coverage
+        pip install wheel
     - name: Set up submodules
       run: |
-        bash ./ext_source_setup.sh
+        git submodule update --init --recursive
+        rm -rf third_party/differential-privacy/java 
+        rm -rf third_party/differential-privacy/examples/java
     - name: Install pre-requisites
       run: |
         sudo apt-get update
-        bash ./prereqs.sh
+        bash ./prereqs_linux.sh
         export PATH="$PATH:$HOME/bin"
     - name: Build pydp lib
       run: |
-        bash ./build_PyDP.sh
-    - name: pep8 style
-      run: |
-        pycodestyle
-    - name: Lint with clang-format
-      run: |
-        # lint files (all .cpp and .h files) inplace
-        find ./src/bindings/PyDP -iname *.hpp -o -iname *.cpp | xargs clang-format -i -style='file'
-        # print changes
-        git diff src
-        # already well formated if 'git diff' doesn't output
-        ! ( git diff src |  grep -q ^ ) || exit 1
+        bazel build src/python:bindings_test  --verbose_failures
+        rm -f pydp.so
+        cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
     - name: Run tests
       run: |
-         python setup.py test 
+        pip install pycodestyle
+        pip install pytest
+        python setup.py test
     - name: Check test coverage
       run: |
-         coverage run --source pydp setup.py test
-         coverage report --ignore-errors --fail-under 95 -m
+        coverage run --source pydp setup.py test
+        coverage report --ignore-errors --fail-under 95 -m

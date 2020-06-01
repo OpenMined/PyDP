@@ -12,7 +12,7 @@ This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential
 **Things to remember about PyDP :**
 - :rocket: Features Differentially Private Algorithmic functions as part of the 0.1.1 dev release, added to carrots demo such as BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median , etc.  
 - All the computation methods mentioned above, use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
-- :fire: Currently supports Linux only. (OSX, Windows coming real soon... :smiley:)
+- :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
 - :star: Supports all the Python 3+ versions.
 
 ## Installation

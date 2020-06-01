@@ -50,7 +50,7 @@ RUN \
     cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python3 setup.py bdist_wheel && \
-    pip3 install dist/*.whl
+    pipenv install dist/*.whl
 
 # Define default command.
 CMD ["bash"]

@@ -1,0 +1,33 @@
+name: Update Docker Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE: openmined/pydp
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build -t $IMAGE -f Dockerfile .
+
+      - name: Tag images
+        run: |
+          docker tag $IMAGE $IMAGE:latest
+          docker tag $IMAGE $IMAGE:$GITHUB_SHA
+      - name: Run tests
+        run: | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
+          docker run $IMAGE:latest /bin/bash -c  "pipenv install dev && pipenv run pytest ./tests"
+      - name: Publish to docker hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+          docker push $IMAGE:latest
+          docker push $IMAGE:$GITHUB_SHA

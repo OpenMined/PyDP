@@ -59,7 +59,7 @@ PyDP is part of the OpenMined community, come join the rapidly growing community
 
 ## Start Contributing
 
-If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/master/contributing.md).
+If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -67,7 +67,8 @@ Please make sure to update tests as appropriate.
 
 ***Note : Known issue -***  If the privacy budget (epsilon is too less), we get a StatusOR error in the command line. While this needs to be raised as an error, right now, it's just displayed as an error in logs.
 
-## Contributors
+<!-- ## Contributors -->
+
 
 ## License
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)

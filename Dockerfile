@@ -44,6 +44,7 @@ RUN rm -rf third_party/differential-privacy/ && \
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java
 
+# build the bindings using Bazel and create a fresh wheel file after deleting the old one in dist folder.
 RUN \
     pipenv run bazel build src/python:bindings_test  --verbose_failures && \
     cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \

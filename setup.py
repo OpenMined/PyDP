@@ -52,6 +52,6 @@ setup(
     setup_requires=setup_requirements,
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="0.1.1",
+    version="0.1.2",
     zip_safe=False,
 )

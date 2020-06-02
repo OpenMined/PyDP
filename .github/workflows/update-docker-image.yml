@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - dev
-name: Update Docker Image
+name: Update and Test Docker Image
 jobs:
   publish:
     name: Build and publish

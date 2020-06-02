@@ -1,4 +1,4 @@
-# Pull base image.
+# Pull base image. To use a different version of python, also change the version of python environment on line 49.
 FROM python:3.7-slim-buster
 
 # Set environment variables.
@@ -46,7 +46,7 @@ RUN rm -rf third_party/differential-privacy/java && \
 
 # build the bindings using Bazel and create a fresh wheel file after deleting the old one in dist folder.
 RUN \
-    pipenv run bazel build src/python:bindings_test  --verbose_failures && \
+    pipenv --python 3.7 run bazel build src/python:bindings_test  --verbose_failures && \
     cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python3 setup.py bdist_wheel && \

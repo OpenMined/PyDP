@@ -1,10 +1,8 @@
-name: Update Docker Image
-
 on:
   push:
     branches:
       - dev
-
+name: Update Docker Image
 jobs:
   publish:
     name: Build and publish
@@ -26,8 +24,8 @@ jobs:
       - name: Run tests
         run: | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
           docker run $IMAGE:latest /bin/bash -c  "pipenv install dev && pipenv run pytest ./tests"
-      - name: Publish to docker hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
-          docker push $IMAGE:latest
-          docker push $IMAGE:$GITHUB_SHA
+#       - name: Publish to docker hub
+#         run: |
+#           echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+#           docker push $IMAGE:latest
+#           docker push $IMAGE:$GITHUB_SHA

@@ -1,9 +1,9 @@
 on:
   pull_request:
     branches:
-      - [dev] #add more branches as required
-    tags:
-      - [v*] 
+      - dev # add more branches as required
+    # tags:
+    #   - [v*] 
 name: Update and Test Docker Image
 jobs:
   publish:
@@ -24,18 +24,20 @@ jobs:
       # - name: Get the version #
       #   id: get_version
       #   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
       
       - name: Build images
         run: docker build -t $IMAGE-${{matrix.python-version}} --build-arg python-version=${{matrix.python-version}} -f Dockerfile .
 
       - name: Tag images
         run: |
-          docker tag $IMAGE $IMAGE:latest
-          docker tag $IMAGE $IMAGE:$GITHUB_SHA
+          docker tag $IMAGE-${{matrix.python-version}} $IMAGE-${{matrix.python-version}}:latest
+          docker tag $IMAGE-${{matrix.python-version}} $IMAGE-${{matrix.python-version}}:$GITHUB_SHA
       - name: Run tests
         run:
           | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
-          docker run $IMAGE:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
+          docker run $IMAGE-${{matrix.python-version}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v2      
       # - name: Publish to docker hub

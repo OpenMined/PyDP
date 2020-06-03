@@ -1,6 +1,6 @@
 # Pull base image.
-ARG python-version
-FROM python:${python-version}-slim-buster
+ARG python_version
+FROM python:${python_version}-slim-buster
 
 # Set environment variables.
 ENV HOME /root

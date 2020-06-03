@@ -31,7 +31,7 @@ jobs:
           echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
 
       - name: Build images
-        run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg python-version=${{matrix.python-version}} -f Dockerfile .
+        run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg python_version=${{matrix.python-version}} -f Dockerfile .
 
       - name: Tag images
         run: |

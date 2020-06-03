@@ -3,7 +3,7 @@ on:
     branches:
       - dev # add more branches as required
     # tags:
-    #   - [v*] 
+    #   - [v*]
 name: Update and Test Docker Image
 jobs:
   publish:
@@ -13,7 +13,7 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
     env:
-      IMAGE: openmined/pydp-${GITHUB_REF##*/} #Grab the branch name. example: openmined/pydp-dev   
+      IMAGE: openmined/pydp-${GITHUB_REF##*/} #Grab the branch name. example: openmined/pydp-dev
 
     steps:
       - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
       #   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
-      
+
       - name: Build images
         run: docker build -t $IMAGE-${{matrix.python-version}} --build-arg python-version=${{matrix.python-version}} -f Dockerfile .
 
@@ -39,7 +39,7 @@ jobs:
           | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
           docker run $IMAGE-${{matrix.python-version}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
       - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v2      
+        uses: mxschmitt/action-tmate@v2
       # - name: Publish to docker hub
       #   run: |
       #     echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin

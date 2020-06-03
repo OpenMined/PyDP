@@ -1,6 +1,7 @@
 // Provides bindings for Util
 
 #include "pybind11/pybind11.h"
+#include <pybind11/stl.h>
 
 #include "differential_privacy/algorithms/util.h"
 
@@ -14,4 +15,6 @@ void init_algorithms_util(py::module& m) {
   util.def("default_epsilon", &dp::DefaultEpsilon);
   util.def("get_next_power_of_two", &dp::GetNextPowerOfTwo);
   util.def("qnorm", &dp::Qnorm);
+  util.def("mean",&dp::Mean<double>);
+  // util.def("hello", &dp:: )
 }

@@ -31,16 +31,16 @@ jobs:
           echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
 
       - name: Build images
-        run: docker build -t ${{build_name.image_name}} --build-arg python-version=${{matrix.python-version}} -f Dockerfile .
+        run: docker build -t ${{steps.build_name.image_name}} --build-arg python-version=${{matrix.python-version}} -f Dockerfile .
 
       - name: Tag images
         run: |
-          docker tag ${{build_name.image_name}} ${{build_name.image_name}}:latest
-          docker tag ${{build_name.image_name}} ${{build_name.image_name}}:$GITHUB_SHA
+          docker tag ${{steps.build_name.image_name}} ${{steps.build_name.image_name}}:latest
+          docker tag ${{steps.build_name.image_name}} ${{steps.build_name.image_name}}:$GITHUB_SHA
       - name: Run tests
         run:
           | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
-          docker run ${{build_name.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
+          docker run ${{steps.build_name.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v2
       # - name: Publish to docker hub

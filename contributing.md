@@ -61,10 +61,16 @@ $ pip install dist/*.whl
 Dockerfile is added so users on all systems can get involved in development.
 Windows developers can start contributing with the help of Docker support.
 
-To build the image:
+To build the image with the default python version:
 
 ```
 $ docker build -t pydp:test .
+```
+
+To change the python version use the --build-arg parameter:
+
+```
+$ docker build --build-args PYTHON_VERSION=3.8 -t pydp:test .
 ```
 
 To run the image:

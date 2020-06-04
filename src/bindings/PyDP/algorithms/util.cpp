@@ -23,4 +23,5 @@ void init_algorithms_util(py::module& m) {
   util.def("correlation", &dp::Correlation<double>);
   util.def("vector_filter", &dp::VectorFilter<double>);
   util.def("vector_to_string", &dp::VectorToString<double>);
+  util.def("round_to_nearest_multiple", &dp::RoundToNearestMultiple);
 }

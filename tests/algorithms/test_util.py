@@ -47,6 +47,34 @@ def test_next_power_exact_negative():
     assert abs(npn2 - 0.125) < kTolerance
 
 
+def test_round_positive():
+    kTolerance = 1e-5
+    rp1 = dp.util.round_to_nearest_multiple(4.9, 2.0)
+    rp2 = dp.util.round_to_nearest_multiple(5.1, 2.0)
+    assert abs(rp1 - 4) < kTolerance
+    assert abs(rp2 - 6) < kTolerance
+
+
+def test_round_negative():
+    kTolerance = 1e-5
+    rn1 = dp.util.round_to_nearest_multiple(-4.9, 2.0)
+    rn2 = dp.util.round_to_nearest_multiple(-5.1, 2.0)
+    assert abs(rn1 + 4) < kTolerance
+    assert abs(rn2 + 6) < kTolerance
+
+
+def test_round_positive_ties():
+    kTolerance = 1e-5
+    rpt = dp.util.round_to_nearest_multiple(5.0, 2.0)
+    assert abs(rpt - 6.0) < kTolerance
+
+
+def test_round_negative_ties():
+    kTolerance = 1e-5
+    rnt = dp.util.round_to_nearest_multiple(-5.0, 2.0)
+    assert abs(rnt + 4.0) < kTolerance
+
+
 def test_statistics():
     a = [1.0, 5.0, 7.0, 9.0, 13.0]
     assert dp.util.mean(a) == 7.0

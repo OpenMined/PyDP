@@ -1,57 +1,68 @@
-# Pull base image.
-ARG python_version
-FROM python:${python_version}-slim-buster
+# Pull base image
+ARG PYTHON_VERSION=3.7
+FROM python:${PYTHON_VERSION}-slim-buster
 
-# Set environment variables.
-ENV HOME /root
-ENV PATH "/root/bin:${PATH}"
+# must be redefined after FROM
+ARG PYTHON_VERSION=$PYTHON_VERSION 
+ARG BAZEL_VERSION=3.2.0
+ARG BAZEL_INSTALLER=bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh
+ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 
-# Define working directory.
-WORKDIR /root
+# Set environment variables
+ENV HOME=/root
+ENV PROJECT_DIR="${HOME}/PyDP"
+ENV PATH="/root/bin:${PATH}"
 
-# Install.
-RUN \
-    apt-get update && \
-    apt-get -y install software-properties-common \
+# Define working directory
+WORKDIR ${HOME}
+
+# Install apt-get packages
+RUN apt-get update && \
+    apt-get -y install \
     sudo \
     wget \
-    unzip \
+    zip \
+    git \
+    software-properties-common \
     gcc \
     g++ \
     build-essential \
     python3-distutils \
     pkg-config \
-    zip \
-    zlib1g-dev \
-    git && \
-    wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh && \
-    chmod +x bazel-2.1.0-installer-linux-x86_64.sh && \
-    ./bazel-2.1.0-installer-linux-x86_64.sh --user && \
-    export PATH="$PATH:$HOME/bin" && \
-    rm bazel-2.1.0-installer-linux-x86_64.sh
+    zlib1g-dev
 
-# get third-party dependencies
-WORKDIR /tmp/third_party
-# TODO: peg this dependency to particular version. Can pass args in for latest or stable etc
-RUN git clone https://github.com/google/differential-privacy.git 
-RUN pip3 install pipenv
+# Download and Install Bazel
+RUN wget ${BAZEL_DOWNLOAD_URL}/${BAZEL_VERSION}/${BAZEL_INSTALLER} && \
+    chmod +x ${BAZEL_INSTALLER} && ./${BAZEL_INSTALLER} --user && rm ${BAZEL_INSTALLER}
 
-WORKDIR /root/PyDP
-COPY . /root/PyDP
+# Update pip and setuptools and install pipenv
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install pipenv
 
-RUN rm -rf third_party/differential-privacy/ && \
-    cp -r /tmp/third_party/* /root/PyDP/third_party
+# Change working dir
+WORKDIR ${PROJECT_DIR}
 
+# Copy local source over
+COPY . ${PROJECT_DIR}
+
+# Get google dp dependency
+RUN mkdir -p third_party && \
+    cd third_party && \
+    git clone https://github.com/google/differential-privacy.git
+
+# Remove unused java code
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java
 
-# build the bindings using Bazel and create a fresh wheel file after deleting the old one in dist folder.
-RUN \
-    pipenv run bazel build src/python:bindings_test  --verbose_failures && \
-    cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
+# Build the bindings using Bazel and create a python wheel
+RUN pipenv --python ${PYTHON_VERSION} && \
+    pipenv run bazel build src/python:bindings_test  --verbose_failures
+
+RUN cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python setup.py bdist_wheel && \
-    pipenv install dist/*.whl
+    pipenv install dist/*.whl 
+    # pip install dist/*.whl #TODO: See why one is installing outside of virtual env
 
-# Define default command.
-CMD ["bash"]
+# Default entrypoint
+CMD ["/bin/bash"]

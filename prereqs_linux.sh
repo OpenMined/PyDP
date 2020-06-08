@@ -21,16 +21,20 @@ else
 fi
 
 
-# checking for bazel
-echo "Installing Bazel dependencies"
-sudo apt-get install pkg-config zip zlib1g-dev unzip
-echo "Donwloading Bazel 2.1.0"
-wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
+# bazel
+if command -v bazel &>/dev/null; then
+    echo "Bazel already installed"
+else
+    echo "Installing Bazel dependencies"
+    sudo apt-get install pkg-config zip zlib1g-dev unzip
+    echo "Donwloading Bazel 2.1.0"
+    wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
 
-chmod +x bazel-2.1.0-installer-linux-x86_64.sh
-./bazel-2.1.0-installer-linux-x86_64.sh --user
-export PATH="$PATH:$HOME/bin"
-rm bazel-2.1.0-installer-linux-x86_64.sh
+    chmod +x bazel-2.1.0-installer-linux-x86_64.sh
+    ./bazel-2.1.0-installer-linux-x86_64.sh --user
+    export PATH="$PATH:$HOME/bin"
+    rm bazel-2.1.0-installer-linux-x86_64.sh
+fi
 
 
 # Downloading the Google DP library

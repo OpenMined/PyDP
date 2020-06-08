@@ -26,20 +26,46 @@ double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l)
     a.push_back(i.cast<double>());
   }
   std::unique_ptr<BoundedMean<double>> mean;
+  base::StatusOr<std::unique_ptr<BoundedMean<double>>> result;
   if (has_bounds) {
-    mean = BoundedMean<double>::Builder()
+     result = BoundedMean<double>::Builder()
+               .SetEpsilon(config->epsilon)
+               .SetLower(config->lower)
+               .SetUpper(config->upper)
+               .Build();
+  } else {
+    // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a raised exeception
+    result = BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build();
+  }
+    
+  if (result.ok()){
+    if (has_bounds){
+      mean = BoundedMean<double>::Builder()
                .SetEpsilon(config->epsilon)
                .SetLower(config->lower)
                .SetUpper(config->upper)
                .Build()
                .ValueOrDie();
-  } else {
-    mean =
-        BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
-  }
-  Output result = mean->Result(a.begin(), a.end()).ValueOrDie();
 
-  return GetValue<double>(result);
+    } else{
+      mean = BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
+    }
+    
+  }
+  else{
+    // TODO: custtom error?
+    throw std::runtime_error(result.status().error_message());
+    // PyErr_SetString(PyExc_RuntimeError, result.status().error_message().c_str());
+  }
+
+  base::StatusOr<Output> resultf = mean->Result(a.begin(), a.end());
+  if (resultf.ok()){
+    return GetValue<double>(resultf.ValueOrDie());
+  }
+  else{
+    throw std::runtime_error(resultf.status().error_message());
+    // PyErr_SetString(PyExc_RuntimeError, (std::to_string(result.status().error_code()) + result.status().error_message()).c_str());
+  }
 }
 
 // Bounded Sum
@@ -243,6 +269,8 @@ BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon) {
 void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config) {
   delete config;
 };
+
+
 
 }  // end namespace differential_privacy
 }  // end extern "C"

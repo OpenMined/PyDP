@@ -32,8 +32,8 @@ RUN \
 
 # get third-party dependencies
 WORKDIR /tmp/third_party
-
-RUN git clone https://github.com/google/differential-privacy.git
+# TODO: peg this dependency to particular version. Can pass args in for latest or stable etc
+RUN git clone https://github.com/google/differential-privacy.git 
 RUN pip3 install pipenv
 
 WORKDIR /root/PyDP
@@ -50,7 +50,7 @@ RUN \
     pipenv run bazel build src/python:bindings_test  --verbose_failures && \
     cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     rm -rf dist/ && \
-    pipenv run python3 setup.py bdist_wheel && \
+    pipenv run python setup.py bdist_wheel && \
     pipenv install dist/*.whl
 
 # Define default command.

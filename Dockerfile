@@ -61,6 +61,9 @@ COPY . ${PROJECT_DIR}
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java
 
+# This makes the pipenv's virtual environment in the project dir 
+ENV PIPENV_VENV_IN_PROJECT=true 
+
 # Build the bindings using Bazel and create a python wheel
 RUN pipenv --python ${PYTHON_VERSION} && \
     pipenv run bazel build src/python:bindings_test  --verbose_failures
@@ -71,5 +74,8 @@ RUN cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     pipenv install dist/*.whl 
     # pip install dist/*.whl #TODO: See why one is installing outside of virtual env
 
+# This `activates` the virtual env
+ENV VIRTUAL_ENV=$PROJECT_DIR/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # Default entrypoint
 CMD ["/bin/bash"]

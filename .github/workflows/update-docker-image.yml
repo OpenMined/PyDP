@@ -39,12 +39,12 @@ jobs:
         run: |
           docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:latest
           docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:${GITHUB_SHA}
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v2
       - name: Run tests
         run:
           | # Not sure if this is what is desired. If a test fails the whole build fails - can mark flaky tests if needed?
           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v2
       # - name: Publish to docker hub
       #   run: |
       #     echo "${{ secrets.DOCKER_PASSWORD }}" |  docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin

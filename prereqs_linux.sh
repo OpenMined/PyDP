@@ -22,7 +22,7 @@ fi
 
 # pipenv
 echo "Checking for pipenv"
-if python3 -c "import pipenv" &> /dev/null; then
+if python -c "import pipenv" &> /dev/null; then
     echo "pipenv is already installed"
 else
     echo "installing pipenv"

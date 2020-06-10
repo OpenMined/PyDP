@@ -11,7 +11,7 @@ fi
 
 # checking for python 3.6
 echo "Checking for python3 installation"
-if command -v python3 &>/dev/null; then
+if command python --version | grep -q 'Python 3'; then
     echo "Python 3 already installed"
 else
     echo "Installing Python 3 is not installed"

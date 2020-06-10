@@ -9,7 +9,7 @@ else
     sudo apt-get install g++
 fi
 
-# python 3.6
+# checking for python 3.6
 echo "Checking for python3 installation"
 if command -v python3 &>/dev/null; then
     echo "Python 3 already installed"
@@ -20,9 +20,9 @@ else
     sudo apt-get install python3.6
 fi
 
-# pipenv
+# checking for pipenv
 echo "Checking for pipenv"
-if python -c "import pipenv" &> /dev/null; then
+if python3 -c "import pipenv" &> /dev/null; then
     echo "pipenv is already installed"
 else
     echo "installing pipenv"

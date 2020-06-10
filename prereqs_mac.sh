@@ -23,12 +23,9 @@ fi
 if command -v bazel &>/dev/null; then
     echo "Bazel already installed"
 else
-    echo "Donwloading Bazel 3.2.0"
-    curl -LO https://github.com/bazelbuild/bazel/releases/download/3.2.0/bazel-3.2.0-installer-darwin-x86_64.sh
-    chmod +x bazel-3.2.0-installer-darwin-x86_64.sh
-    ./bazel-3.2.0-installer-darwin-x86_64.sh
-    export PATH="$PATH:$HOME/bin"
-    rm bazel-3.2.0-installer-darwin-x86_64.sh
+    echo "Downloading and installing Bazel using homebrew"
+    brew tap bazelbuild/tap
+    brew install bazelbuild/tap/bazel
 fi
 
 # pipenv

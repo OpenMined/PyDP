@@ -1,6 +1,21 @@
 # Contributors Guidelines to PyDP
 
-## About PyDP
+## Getting Started
+
+### Learn Git and Github
+
+All our development is done using Git and Github. If you're not too familiar with Git and Github, start by reviewing this guide. <https://guides.github.com/activities/hello-world/>
+
+### Slack
+
+A great first place to join the Community is the Slack channel <http://slack.openmined.org>.
+
+### Issues
+
+On <https://github.com/OpenMined/PyDP/issues> you can find all open Issues. You can find a detailed explanation on how to work with issues below under [Issue Allocation](#issue-allocation).
+
+
+# About PyDP
 
 The project uses [Pybind11](http://pybind11.readthedocs.io) to wrap Google's [Differential Privacy](https://github.com/google/differential-privacy) library.
 
@@ -10,35 +25,40 @@ You can check out [here](https://www.learncpp.com/) to get your started about C+
 
 Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=jQedHfF1Jfw) about it.
 
-## Setting up your Environment
+## Setup
 
-Three scripts need to be run in order to get the environment ready.
+### Forking a Repository
 
-### Git Submodules
+To contribute to PySyft you will need to fork the OpenMind/PyDP repository.
+Then you can work risk-free on your fork.
 
-Currently we are using git submodules to allow editors like VSCode to locate source code, this should be refactored later.
+You will just need to fork once. After that you can call `git fetch upstream` and `git pull 'branch-name'` before you do your local changes to get the remote changes and be up-to-date
 
-This clones Google's differential privacy library as well as some other third party dependencies.
+### Syncing a Forked Repository
 
-```
-$ ./ext_source_setup.sh
-```
+To sync your fork with the OpenMined/PyDP repository please see this [Guide](https://help.github.com/articles/syncing-a-fork/) on how to sync your fork.
 
-or simply type:
-
-```
-$ git submodule update --init --recursive
-```
 
 ### Install Script
 
 This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list in the said file.
 
+If you are on Linux
 ```
-$ ./prereqs.sh
+$ ./prereqs_linux.sh  
+```
+If you are on OSX
+```
+$ ./prereqs_mac.sh
 ```
 
 ### Build Script
+
+To achieve clean builds of different python versions we are using a virtualenv to isolate
+the build process from system python and system libraries. Since python2 is deprecated
+pipenv should be looking for a python3 binary to create the virtualenv from by default.
+If you want to use a specific version of python3 please refer to the
+[pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
 
 Build the python library:
 
@@ -46,10 +66,15 @@ Build the python library:
 $ ./build_PyDP.sh
 ```
 
+Run the test example:
+```
+$ pipenv run python examples/carrots.py
+```
+
 Build the python wheel:
 
 ```
-$ python3 setup.py sdist bdist_wheel
+$ pipenv run python setup.py bdist_wheel
 ```
 
 Install wheel:
@@ -60,12 +85,19 @@ $ pip install dist/*.whl
 
 ## Docker Support
 
-Dockerfile is added so users on all systems can get involved in development. Windows developers can start contrbiuting with the help of Docker support.
+Dockerfile is added so users on all systems can get involved in development.
+Windows developers can start contributing with the help of Docker support.
 
-To build the image:
+To build the image with the default python version:
 
 ```
 $ docker build -t pydp:test .
+```
+
+To change the python version use the --build-arg parameter:
+
+```
+$ docker build --build-args PYTHON_VERSION=3.8 -t pydp:test .
 ```
 
 To run the image:
@@ -74,13 +106,14 @@ To run the image:
 $ docker run --rm -it pydp:test
 ```
 
-Docker Run will allow to interactively with the files; to check if your code works perfectly, you can type:
+Docker Run will allow to interactively with the files; to check if your code works
+perfectly, you can type:
 
 ```
 $ make test-all
 ```
 
-To run the code, you can open python interpretor inside the container by typing
+To run the code, you can open python interpreter inside the container by typing
 
 ```
 $ python
@@ -92,18 +125,33 @@ Note: After each change in your code, you have to run:
 $ docker build -t pydp:test .
 ```
 
-### Third Party dependencies
-
-Make sure you run:
-
-```
-$ ./ext_source_setup.sh
-```
-
 ## Coding Standards
 
-For Naming of modules, classes and methods in Python, make sure you follow naming conventions found [here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).
+For Naming of modules, classes and methods in Python, make sure you follow naming
+conventions found
+[here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).
 
-For C++ Styling, we follow Google's coding standard. Read more about it [here](./.clang-format).
+For C++ Styling, we follow Google's coding standard. Read more about it
+[here](./.clang-format).
 
-For Python Formatting, we use [Black](https://black.readthedocs.io/en/stable/the_black_code_style.html), a stricter subset of PEP8.
+For Python Formatting, we use
+[Black](https://black.readthedocs.io/en/stable/the_black_code_style.html),
+a stricter subset of PEP8.
+
+## Contributing
+
+### Beginner Issues
+
+If you are new to the project and want to get into the code, we recommend picking an issue with the label "good first issue". These issues should only require general programming knowledge and little to none insights into the project.
+
+### Issue Allocation
+
+Each issue someone is currently working on should have an assignee. If you want to contribute to an issue someone else is already working on please make sure to get in contact with that person via slack or github and organize yourself.
+
+If you want to work on an open issue, please post a comment telling that you will work on that issue, we will assign you as the assignee then.
+
+**Caution**: We try our best to keep the assignee up-to-date, but as we are all humans with our own schedule delays are possible, so make sure to check the comments once before you start working on an issue even when no one is assigned to it.
+
+
+
+

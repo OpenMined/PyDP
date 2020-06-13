@@ -39,7 +39,7 @@ You will just need to fork once. After that you can call `git fetch upstream` an
 To sync your fork with the OpenMined/PyDP repository please see this [Guide](https://help.github.com/articles/syncing-a-fork/) on how to sync your fork.
 
 
-### Install Script
+### Installing Script
 
 This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list in the said file.
 
@@ -52,7 +52,7 @@ If you are on OSX
 $ ./prereqs_mac.sh
 ```
 
-### Build Script
+### Building Script
 
 To achieve clean builds of different python versions we are using a virtualenv to isolate
 the build process from system python and system libraries. Since python2 is deprecated
@@ -125,20 +125,8 @@ Note: After each change in your code, you have to run:
 $ docker build -t pydp:test .
 ```
 
-## Coding Standards
 
-For Naming of modules, classes and methods in Python, make sure you follow naming
-conventions found
-[here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).
-
-For C++ Styling, we follow Google's coding standard. Read more about it
-[here](./.clang-format).
-
-For Python Formatting, we use
-[Black](https://black.readthedocs.io/en/stable/the_black_code_style.html),
-a stricter subset of PEP8.
-
-## Contributing
+# Contributing
 
 ### Beginner Issues
 
@@ -152,6 +140,47 @@ If you want to work on an open issue, please post a comment telling that you wil
 
 **Caution**: We try our best to keep the assignee up-to-date, but as we are all humans with our own schedule delays are possible, so make sure to check the comments once before you start working on an issue even when no one is assigned to it.
 
+### Coding Standards
+
+For Naming of modules, classes and methods in Python, make sure you follow naming
+conventions found
+[here](https://visualgit.readthedocs.io/en/latest/pages/naming_convention.html).
+
+For C++ Styling, we follow Google's coding standard. Read more about it
+[here](./.clang-format).
+
+For Python Formatting, we use
+[Black](https://black.readthedocs.io/en/stable/the_black_code_style.html),
+a stricter subset of PEP8.
+
+### Keep it DRY (Don't repeat yourself)
+
+As with any software project, it's important to keep the amount of code to a minimum, so keep code duplication to a minimum!
+
+### Creating a Pull Request
+
+At any point in time you can create a pull request, so others can see your changes and give you feedback.
+Please create all pull requests to the `dev` branch.
+
+If your PR is still work in progress and not ready to be merged please add a `[WIP]` at the start of the title.
+Example:`[WIP] BoundedMean error check`
+
+***Always fill the PR template before sending a PR for better review and understanding :***
+- Description - summary of the change, the motivation, and any additionl context that will help others understand your PR
+- Affected Dependencies - List any dependencies that are required for this change.
+- **How has this been tested? (Important)**
+   - Describe the tests that you ran to verify your changes.
+   - Provide instructions so we can reproduce.
+   - List any relevant details for your test configuration.
+- Checklist - Following the code of conduct and basic guidelines.
+
+### Check CI and Wait for Reviews
+
+After each commit GitHub Actions will check your new code against the formatting guidelines and execute the tests to check if the test coverage is high enough.
+
+We will only merge PRs that pass the GitHub Actions checks.
+
+If your check fails, don't worry, you will still be able to make changes and make your code pass the checks.
 
 
 

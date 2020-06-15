@@ -13,7 +13,6 @@
 #include "base/status.h"
 #include "base/statusor.h"
 
-
 #include "pybind11/pybind11.h"
 
 extern "C" {

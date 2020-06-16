@@ -174,6 +174,7 @@ Example:`[WIP] BoundedMean error check`
    - List any relevant details for your test configuration.
 - Checklist - Following the code of conduct and basic guidelines.
 
+
 ### Check CI and Wait for Reviews
 
 After each commit GitHub Actions will check your new code against the formatting guidelines and execute the tests to check if the test coverage is high enough.

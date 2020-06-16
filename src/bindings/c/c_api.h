@@ -31,7 +31,11 @@ extern double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::
 
 extern double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list a);
 
-extern double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config, pybind11::list a);
+extern double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
+                                              pybind11::list a);
+
+extern double Result_BoundedVariance(BoundedFunctionHelperObject* config,
+                                     pybind11::list a);
 
 // Order statistics
 extern int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list a,

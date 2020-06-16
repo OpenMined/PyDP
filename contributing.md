@@ -25,6 +25,7 @@ You can check out [here](https://www.learncpp.com/) to get your started about C+
 
 Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=jQedHfF1Jfw) about it.
 
+
 ## Setup
 
 ### Forking a Repository
@@ -38,21 +39,35 @@ You will just need to fork once. After that you can call `git fetch upstream` an
 
 To sync your fork with the OpenMined/PyDP repository please see this [Guide](https://help.github.com/articles/syncing-a-fork/) on how to sync your fork.
 
-
 ### Installing Script
 
 This script automates the installation of the prerequisite packages to get you started, you can optionally install these manually referring to the list in the said file.
 
 If you are on Linux
+
 ```
 $ ./prereqs_linux.sh  
+
 ```
 If you are on OSX
+
+```
+If you are on OSX
+```
+
+$ ./prereqs_mac.sh
+
 ```
 $ ./prereqs_mac.sh
 ```
 
 ### Building Script
+
+To achieve clean builds of different python versions we are using a virtualenv to isolate
+the build process from system python and system libraries. Since python2 is deprecated
+pipenv should be looking for a python3 binary to create the virtualenv from by default.
+If you want to use a specific version of python3 please refer to the
+[pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
 
 To achieve clean builds of different python versions we are using a virtualenv to isolate
 the build process from system python and system libraries. Since python2 is deprecated
@@ -125,7 +140,6 @@ Note: After each change in your code, you have to run:
 $ docker build -t pydp:test .
 ```
 
-
 # Contributing
 
 ### Beginner Issues
@@ -182,6 +196,4 @@ After each commit GitHub Actions will check your new code against the formatting
 We will only merge PRs that pass the GitHub Actions checks.
 
 If your check fails, don't worry, you will still be able to make changes and make your code pass the checks.
-
-
 

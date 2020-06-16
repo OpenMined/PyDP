@@ -10,7 +10,11 @@ In today's data-driven world, where data analytics is used by the Researchers or
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, helping us achieve better privacy.
 
 **Things to remember about PyDP :**
+
 - :rocket: Features Differentially Private Algorithmic functions as part of the 0.1.1 dev release, added to carrots demo such as BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median , etc.  
+
+- :rocket: Features Differentially Private Algorithmic functions to support carrots demo including: BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.  
+
 - All the computation methods mentioned above, use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
 - :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
 - :star: Supports all the Python 3+ versions.

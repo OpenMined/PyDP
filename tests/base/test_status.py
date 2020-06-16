@@ -1,6 +1,6 @@
 import pytest
 
-import pydp as pd
+import pydp as dp
 
 
 class TestStatus:
@@ -31,19 +31,19 @@ class TestStatus:
         actual_codes = []
         x = range(17)
         for n in x:
-            actual_codes.append(str(pd.Status.StatusCode(n)))
+            actual_codes.append(str(dp.Status.StatusCode(n)))
         print(actual_codes)
         assert status_code_available == actual_codes
 
     def test_code_to_string(self):
-        s = pd.Status.status_code_to_string(pd.Status.StatusCode(3))
+        s = dp.Status.status_code_to_string(dp.Status.StatusCode(3))
         assert s == "kInvalidArgument"
 
 
 class TestSampleLoad:
     def test_payload_test(self):
         # when status code is OK, no appending is done to the status object
-        s = pd.Status(pd.Status.StatusCode(0), "New status object")
+        s = dp.Status(dp.Status.StatusCode(0), "New status object")
         url = "http://test.com"
         payload_content = "example payload content"
         s.set_payload(url, payload_content)
@@ -51,14 +51,14 @@ class TestSampleLoad:
 
     def test_payload_test_1(self):
         # in all Status code except 0, payload is added
-        s = pd.Status(pd.Status.StatusCode(1), "New status object")
+        s = dp.Status(dp.Status.StatusCode(1), "New status object")
         url = "http://test.com"
         payload_content = "example payload content"
         s.set_payload(url, payload_content)
         assert s.get_payload(url) == payload_content
 
     def test_erase_payload(self):
-        s = pd.Status(pd.Status.StatusCode(0), "New status object")
+        s = dp.Status(dp.Status.StatusCode(0), "New status object")
         url = "http://test.com"
         payload_content = "example payload content"
         s.set_payload(url, payload_content)

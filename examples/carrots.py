@@ -3,9 +3,16 @@
  double.
 """
 
-import pydp as dp  # our privacy library
-import pandas as pd
+import sys  # isort:skip
+
+sys.path.append("../pydp")  # isort:skip
+
+import os
 import statistics as s
+from pathlib import Path
+
+import pandas as pd
+import pydp as dp  # our privacy library
 
 # Creating a class ClassReporter
 
@@ -65,7 +72,10 @@ class CarrotReporter:
         return x.result(list(self._df["carrots_eaten"]), privacy_budget)
 
 
-c = CarrotReporter("animals_and_carrots.csv", 1)
+# get absolute path
+path = Path(os.path.dirname(os.path.abspath(__file__)))
+
+c = CarrotReporter(path / "animals_and_carrots.csv", 1)
 print("Mean:\t" + str(c.mean_carrots()))
 print("Private Mean:\t" + str(c.private_mean(1)))
 

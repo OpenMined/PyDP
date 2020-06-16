@@ -1,4 +1,4 @@
-name: Linux Package PyPI deploy
+name: MacOS Package PyPI deploy
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
@@ -19,28 +19,9 @@ jobs:
           rm -rf third_party/differential-privacy/java 
           rm -rf third_party/differential-privacy/examples/java
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install pre-requisites
-        run: |
-          sudo apt-get update
-          # checking for g++
-          dpkg -s g++ &> /dev/null
-          if [ $? -eq 0 ]; then
-              echo "g++ is installed, skipping..."
-          else
-              echo "Installing g++"
-              sudo apt-get install g++
-          fi
-          echo "Installing Bazel dependencies"
-          sudo apt-get install pkg-config zip zlib1g-dev unzip
-          echo "Donwloading Bazel 2.1.0"
-          wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
-
-          chmod +x bazel-2.1.0-installer-linux-x86_64.sh
-          ./bazel-2.1.0-installer-linux-x86_64.sh --user
-          export PATH="$PATH:$HOME/bin"
 
       - name: Install python dependencies
         run: |
@@ -55,13 +36,10 @@ jobs:
           rm -f pydp.so
           cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
 
+
       - name: Build wheel
         run: |
           python setup.py bdist_wheel
-
-      - name: Renaming wheel
-        run: |
-          find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
 
       - name: Publishing the wheel
         env:

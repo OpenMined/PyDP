@@ -23,7 +23,7 @@ class BoundedMeanDummy : public Dummy {
 };
 
 class BoundedSumDummy : public Dummy {
-public:
+ public:
   using Dummy::Dummy;
   double Result(py::list l) override {
     return Result_BoundedSum(obj, l);
@@ -31,10 +31,18 @@ public:
 };
 
 class BoundedStandardDeviationDummy : public Dummy {
-public:
+ public:
   using Dummy::Dummy;
   double Result(py::list l) override {
     return Result_BoundedStandardDeviation(obj, l);
+  }
+};
+
+class BoundedVarianceDummy : public Dummy {
+ public:
+  using Dummy::Dummy;
+  double Result(py::list l) override {
+    return Result_BoundedVariance(obj, l);
   }
 };
 
@@ -68,8 +76,19 @@ void declareBoundedStandardDeviation(py::module& m) {
   cls.def("result", &BoundedStandardDeviationDummy::Result);
 }
 
+void declareBoundedVariance(py::module& m) {
+  py::class_<BoundedVarianceDummy> cls(m, "BoundedVariance");
+
+  cls.def(py::init<double, int, int>(), py::return_value_policy::reference,
+          py::call_guard<pybind11::gil_scoped_release>());
+  cls.def(py::init<double>(), py::return_value_policy::reference,
+          py::call_guard<pybind11::gil_scoped_release>());
+  cls.def("result", &BoundedVarianceDummy::Result);
+}
+
 void init_algorithms_bounded_functions(py::module& m) {
   declareBoundedMean(m);
   declareBoundedSum(m);
   declareBoundedStandardDeviation(m);
+  declareBoundedVariance(m);
 }

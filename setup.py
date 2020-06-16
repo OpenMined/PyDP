@@ -10,13 +10,6 @@ from setuptools.command.install import install
 import os
 
 
-class InstallPlatlib(install):
-    def finalize_options(self):
-        install.finalize_options(self)
-        if self.distribution.has_ext_modules():
-            self.install_lib = self.install_platlib
-
-
 class BinaryDistribution(Distribution):
     """This class is needed in order to create OS specific wheels."""
 
@@ -32,7 +25,6 @@ requirements = []
 
 setup_requirements = []
 
-test_requirements = []
 
 setup(
     author="Chinmay Shah",
@@ -56,12 +48,10 @@ setup(
     keywords="pydp",
     name="python-dp",
     package_data={"pydp": ["pydp.so"],},
-    packages=find_packages(exclude=["tests/"]),  # need to check this
-    cmdclass={"install": InstallPlatlib},
+    packages=find_packages(exclude=["tests"]),  # need to check this
     setup_requires=setup_requirements,
     test_suite="tests",
-    tests_require=test_requirements,
     url="https://github.com/OpenMined/PyDP",
-    version="0.1.1",
+    version="0.1.2",
     zip_safe=False,
 )

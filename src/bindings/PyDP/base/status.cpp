@@ -7,10 +7,10 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "differential_privacy/base/canonical_errors.h"  // the header file associated with status.cc
-#include "differential_privacy/base/status.h"  // the header file associated with status.cc
-#include "differential_privacy/base/statusor.h"  //header file associated with statusor.cc
-#include "differential_privacy/proto/data.pb.h"  // for Output type
+#include "base/canonical_errors.h"  // the header file associated with status.cc
+#include "base/status.h"            // the header file associated with status.cc
+#include "base/statusor.h"          //header file associated with statusor.cc
+// #include "differential_privacy/proto/data.pb.h"  // for Output type
 
 using namespace std;
 
@@ -104,7 +104,7 @@ void init_base_status(py::module &m) {
   m.def("crash", &dpb::statusor_internal::Helper::Crash, "Crash helper function");
 
   declareStatusOr<double>(m, "D");
-  declareStatusOr<dp::Output>(m, "O");
+  // declareStatusOr<dp::Output>(m, "O");
 
   // declareStatusOr2 is only a little different from declareStatusOr
   // (see above in this file).

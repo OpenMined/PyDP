@@ -39,6 +39,13 @@ fi
 
 # Downloading the Google DP library
 git submodule update --init --recursive
+
+# checkout out to particular commit
+cd third_party/differential-privacy && git checkout b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73
+
+cd -
+# renaming workspace.bazel to workspace
+mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
+
 # Removing the Java part 
-rm -rf third_party/differential-privacy/java 
-rm -rf third_party/differential-privacy/examples/java
+rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java

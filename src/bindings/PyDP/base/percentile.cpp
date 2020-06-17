@@ -2,7 +2,7 @@
 
 #include "pybind11/pybind11.h"
 
-#include "differential_privacy/base/percentile.h"
+#include "base/percentile.h"
 
 using namespace std;
 namespace py = pybind11;

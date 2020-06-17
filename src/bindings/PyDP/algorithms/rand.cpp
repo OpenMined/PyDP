@@ -1,5 +1,5 @@
 // Provides bindings for rand
-#include "differential_privacy/algorithms/rand.h"
+#include "algorithms/rand.h"
 #include "../pydp_lib/casting.hpp"
 #include "pybind11/pybind11.h"
 

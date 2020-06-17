@@ -33,14 +33,29 @@ py_repositories()
 # Google DP library and it's dependencies
 local_repository(
     name = "google_dp",
-    path = "third_party/differential-privacy",
+    path = "third_party/differential-privacy/cc",
 )
-load("@google_dp//:differential_privacy_deps.bzl", "differential_privacy_deps")
-differential_privacy_deps()
+load("@google_dp//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
+cc_differential_privacy_deps()
 
+
+http_archive(
+    name = "com_google_protobuf",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.11.4.tar.gz"],
+    sha256 = "a79d19dcdf9139fa4b81206e318e33d245c4c9da1ffed21c87288ed4380426f9",
+    strip_prefix = "protobuf-3.11.4",
+)
 # we still need to load Protobuf
 load(
     "@com_google_protobuf//:protobuf_deps.bzl",
     "protobuf_deps",
 )
 protobuf_deps()
+
+# Google DP library and it's dependencies
+local_repository(
+    name = "com_google_differential_privacy",
+    path = "third_party/differential-privacy",
+)
+load("@com_google_differential_privacy//:differential_privacy_deps.bzl", "differential_privacy_deps")
+differential_privacy_deps()

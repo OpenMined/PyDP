@@ -1,14 +1,17 @@
 #include "c_api.h"
 
-#include "differential_privacy/algorithms/algorithm.h"
+#include "algorithms/algorithm.h"
 
-#include "differential_privacy/algorithms/bounded-mean.h"
-#include "differential_privacy/algorithms/bounded-standard-deviation.h"
-#include "differential_privacy/algorithms/bounded-sum.h"
-#include "differential_privacy/algorithms/bounded-variance.h"
+#include "algorithms/bounded-mean.h"
+#include "algorithms/bounded-standard-deviation.h"
+#include "algorithms/bounded-sum.h"
+#include "algorithms/bounded-variance.h"
 
 #include "absl/random/distributions.h"
-#include "differential_privacy/algorithms/order-statistics.h"
+#include "algorithms/order-statistics.h"
+
+#include "base/status.h"
+#include "base/statusor.h"
 
 #include "pybind11/pybind11.h"
 

@@ -54,12 +54,6 @@ $ ./prereqs_linux.sh
 If you are on OSX
 
 ```
-If you are on OSX
-```
-
-If you are on Mac
-
-```
 $ ./prereqs_mac.sh
 ```
 

@@ -28,16 +28,19 @@ void init_algorithms_util(py::module& m) {
   util.def("safe_add", [](int64_t i, int64_t j) {
     int64_t k;
     bool result = dp::SafeAdd(i, j, &k);
-    return k;
+    if (result) return k;
+    throw std::runtime_error("Result of addition will overflow.");
   });
   util.def("safe_subtract", [](int64_t i, int64_t j) {
     int64_t k;
     bool result = dp::SafeSubtract(i, j, &k);
-    return k;
+    if (result) return k;
+    throw std::runtime_error("Result of subtraction will overflow.");
   });
   util.def("safe_square", [](int64_t i) {
     int64_t k;
     bool result = dp::SafeSquare(i, &k);
-    return k;
+    if (result) return k;
+    throw std::runtime_error("Result of squaring will overflow.");
   });
 }

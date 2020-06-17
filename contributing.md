@@ -9,6 +9,8 @@ All our development is done using Git and Github. If you're not too familiar wit
 ### Slack
 
 A great first place to join the Community is the Slack channel <http://slack.openmined.org>.
+- For support in using this library, please join the **#lib_pydp** Slack channel. 
+- If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel.
 
 ### Issues
 
@@ -30,7 +32,7 @@ Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=
 
 ### Forking a Repository
 
-To contribute to PySyft you will need to fork the OpenMind/PyDP repository.
+To contribute to PyDP you will need to fork the OpenMind/PyDP repository.
 Then you can work risk-free on your fork.
 
 You will just need to fork once. After that you can call `git fetch upstream` and `git pull 'branch-name'` before you do your local changes to get the remote changes and be up-to-date
@@ -55,7 +57,7 @@ If you are on OSX
 If you are on OSX
 ```
 
-$ ./prereqs_mac.sh
+If you are on Mac
 
 ```
 $ ./prereqs_mac.sh

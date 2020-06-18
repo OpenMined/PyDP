@@ -129,7 +129,6 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
                .SetUpper(config->upper)
                .Build();
   } else {
-    // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a raised exeception
     variance_obj = BoundedVariance<double>::Builder().SetEpsilon(config->epsilon).Build();
   }
     
@@ -153,82 +152,104 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
 
 int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list l,
                    double privacy_budget) {
-  std::unique_ptr<continuous::Max<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Max<int64_t>>> max;
   if (has_bounds) {
-    search = continuous::Max<int64_t>::Builder()
+    max = continuous::Max<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
                  .SetLower(config->lower)
                  .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   } else {
-    search = continuous::Max<int64_t>::Builder()
+    max = continuous::Max<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!max.ok()){
+    throw std::runtime_error(max.status().error_message());
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
+  else{
+    for (auto i : l) {
+      max.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = max.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()){
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(resultf.status().error_message());
+    }
+  }
 }
 
 // Min
 
 int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list l,
                    double privacy_budget) {
-  std::unique_ptr<continuous::Min<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Min<int64_t>>> min;
   if (has_bounds) {
-    search = continuous::Min<int64_t>::Builder()
+    min = continuous::Min<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
                  .SetLower(config->lower)
                  .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   } else {
-    search = continuous::Min<int64_t>::Builder()
+    min = continuous::Min<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!min.ok()){
+    throw std::runtime_error(min.status().error_message());
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
+  else{
+    for (auto i : l) {
+      min.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = min.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()){
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(resultf.status().error_message());
+    }
+  }
 }
 
 // Max
 
 int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list l,
                       double privacy_budget) {
-  std::unique_ptr<continuous::Median<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Median<int64_t>>> median;
   if (has_bounds) {
-    search = continuous::Median<int64_t>::Builder()
+    median = continuous::Median<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
                  .SetLower(config->lower)
                  .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   } else {
-    search = continuous::Median<int64_t>::Builder()
+    median = continuous::Median<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!median.ok()){
+    throw std::runtime_error(median.status().error_message());
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
+  else{
+    for (auto i : l) {
+      median.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = median.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()){
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(resultf.status().error_message());
+    }
+  }
 }
 
 // Percentile
-
+// can't add error handling to this for some reasons
+// TODO
 int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
                           double privacy_budget, double percentile) {
   std::unique_ptr<continuous::Percentile<int64_t>> search;
@@ -247,9 +268,8 @@ int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
                  .Build()
                  .ValueOrDie();
   }
-
   for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+    search->AddEntry(i.cast<int64_t>());
   }
 
   return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());

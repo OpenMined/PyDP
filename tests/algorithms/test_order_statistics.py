@@ -12,7 +12,7 @@ def data():
     kDataSize = 10000
     a = []
     for i in range(kDataSize):
-        a.append(200 * i / kDataSize)
+        a.append(int(200 * i / kDataSize))
     return a
 
 

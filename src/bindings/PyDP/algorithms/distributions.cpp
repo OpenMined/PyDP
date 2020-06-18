@@ -2,7 +2,7 @@
 
 #include "pybind11/pybind11.h"
 
-#include "differential_privacy/algorithms/distributions.h"
+#include "algorithms/distributions.h"
 
 using namespace std;
 namespace py = pybind11;

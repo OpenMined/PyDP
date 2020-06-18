@@ -12,6 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
+ENV DP_SHA="b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -45,18 +46,13 @@ WORKDIR ${PROJECT_DIR}
 # Copy local source over
 COPY . ${PROJECT_DIR}
 
-# Dealing with 3rd party code one needs to pin it to a version or a SHA.
-# Either we clone it here as was done but then it should be @e819e03 to match the submodule 
-# and will needed to be updated in keeping with that (a rather tedious way)
-# Get google dp dependency. Rather copy the thrid party deps as it's a cloned submodule
-# COPY ./third_party third_party
+# Get google dp dependency
+RUN mkdir -p third_party && \
+    cd third_party && \
+    git clone https://github.com/google/differential-privacy.git && \
+    cd differential-privacy && \
+    git checkout ${DP_SHA}
 
-# RUN mkdir -p third_party && \
-#     cd third_party && \
-#     git clone https://github.com/google/differential-privacy.git
-
-# Or we just copy it in and ensure the CI/CD clone the repo and the submodule.
-# Then all keeps in sync.
 # Remove unused java code
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java

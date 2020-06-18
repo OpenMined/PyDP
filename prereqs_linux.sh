@@ -9,9 +9,11 @@ else
     sudo apt-get install g++
 fi
 
-# python 3.6
+# checking for python 3.6
 echo "Checking for python3 installation"
 if command -v python3 &>/dev/null; then
+    echo "Python 3 already installed"
+elif command python --version | grep -q 'Python 3'; then
     echo "Python 3 already installed"
 else
     echo "Installing Python 3 is not installed"
@@ -20,6 +22,14 @@ else
     sudo apt-get install python3.6
 fi
 
+# checking for pipenv
+echo "Checking for pipenv"
+if python3 -c "import pipenv" &> /dev/null; then
+    echo "pipenv is already installed"
+else
+    echo "installing pipenv"
+    pip3 install pipenv
+fi
 
 # bazel
 if command -v bazel &>/dev/null; then
@@ -39,6 +49,12 @@ fi
 
 # Downloading the Google DP library
 git submodule update --init --recursive
-# Removing the Java part 
-rm -rf third_party/differential-privacy/java 
-rm -rf third_party/differential-privacy/examples/java
+
+# checkout out to particular commit
+cd third_party/differential-privacy && git checkout b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73 && \
+cd -
+# renaming workspace.bazel to workspace
+mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
+
+# Removing the java part
+rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java

@@ -3,8 +3,8 @@
 #include "../pydp_lib/casting.hpp"  // our caster helper library
 #include "pybind11/pybind11.h"
 
-#include "differential_privacy/proto/data.pb.h"
-#include "differential_privacy/proto/util.h"  // the header file associated with status.cc
+// #include "differential_privacy/proto/data.pb.h"
+#include "proto/util.h"  // the header file associated with status.cc
 
 using namespace std;
 

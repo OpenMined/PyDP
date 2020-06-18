@@ -15,18 +15,18 @@ pybind_extension(
 
     visibility = ["//src/python:__pkg__"],
     deps = [
-        "@google_dp//differential_privacy/base:percentile",
-        "@google_dp//differential_privacy/base:logging",
-        "@google_dp//differential_privacy/base:statusor_internals",
-        "@google_dp//differential_privacy/base:status",
-        "@google_dp//differential_privacy/base:canonical_errors",
-        "@google_dp//differential_privacy/base:statusor",
-        "@google_dp//differential_privacy/algorithms:algorithm",
-        "@google_dp//differential_privacy/algorithms:bounded-mean",
-        "@google_dp//differential_privacy/algorithms:bounded-sum",
-        "@google_dp//differential_privacy/algorithms:bounded-standard-deviation",
-        "@google_dp//differential_privacy/algorithms:count",
-        "@google_dp//differential_privacy/algorithms:order-statistics",
-        "@google_dp//differential_privacy/proto:data_cc_proto"
+        "@google_dp//base:percentile",
+        "@google_dp//base:logging",
+        "@google_dp//base:statusor_internals",
+        "@google_dp//base:status",
+        "@google_dp//base:canonical_errors",
+        "@google_dp//base:statusor",
+        "@google_dp//algorithms:algorithm",
+        "@google_dp//algorithms:bounded-mean",
+        "@google_dp//algorithms:bounded-sum",
+        "@google_dp//algorithms:bounded-standard-deviation",
+        "@google_dp//algorithms:count",
+        "@google_dp//algorithms:order-statistics",
+        "@google_dp//proto:util-lib"
     ],
 )

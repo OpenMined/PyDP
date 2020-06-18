@@ -2,7 +2,7 @@
 
 #include "pybind11/pybind11.h"
 
-#include "differential_privacy/algorithms/util.h"
+#include "algorithms/util.h"
 
 namespace py = pybind11;
 namespace dp = differential_privacy;

@@ -12,6 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
+ENV DP_SHA="b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -48,7 +49,9 @@ COPY . ${PROJECT_DIR}
 # Get google dp dependency
 RUN mkdir -p third_party && \
     cd third_party && \
-    git clone https://github.com/google/differential-privacy.git
+    git clone https://github.com/google/differential-privacy.git && \
+    cd differential-privacy && \
+    git checkout ${DP_SHA}
 
 # Remove unused java code
 RUN rm -rf third_party/differential-privacy/java && \ 

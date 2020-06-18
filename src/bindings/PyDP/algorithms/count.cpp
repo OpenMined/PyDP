@@ -3,7 +3,7 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "differential_privacy/algorithms/count.h"
+#include "algorithms/count.h"
 
 using namespace std;
 

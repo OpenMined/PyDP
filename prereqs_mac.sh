@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# homebrew
 which -s brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
@@ -9,21 +10,42 @@ else
     brew update
 fi
 
-# TODO: We want to check if user has python already installed.
-# In-case if they have some other version of python installed, 
-# this will create yet another installation.
+# python 3
+echo "Checking for python3 installation"
+if command -v python3 &>/dev/null; then
+    echo "Python 3 already installed"
+else
+    echo "Downloading and installing Python3 using homebrew"
+    brew install python3
+fi
 
-# echo "Downloading and installing Python3 using homebrew"
-# brew install python3
+# bazel
+if command -v bazel &>/dev/null; then
+    echo "Bazel already installed"
+else
+    echo "Downloading and installing Bazel using homebrew"
+    brew tap bazelbuild/tap
+    brew install bazelbuild/tap/bazel
+fi
 
-# checking for bazel
-echo "Downloading and installing Bazel using homebrew"
-brew tap bazelbuild/tap
-brew install bazelbuild/tap/bazel
-
+# pipenv
+echo "Checking for pipenv"
+if python3 -c "import pipenv" &> /dev/null; then
+    echo "pipenv is already installed"
+else
+    echo "installing pipenv"
+    pip3 install pipenv
+fi
 
 # Downloading the Google DP library
 git submodule update --init --recursive
+
+# checkout out to particular commit
+cd third_party/differential-privacy && git checkout b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73
+
+cd -
+# renaming workspace.bazel to workspace
+mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
+
 # Removing the Java part 
-rm -rf third_party/differential-privacy/java 
-rm -rf third_party/differential-privacy/examples/java
+rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java

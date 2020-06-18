@@ -1,9 +1,12 @@
 on:
-  push:
-    branches:
-      - dev # add more branches as required
-    # tags:
-    #   - [v*]
+  release:
+    types: [published]
+# we wil use this as we move to regular publishing
+#   push:
+#     branches:
+#       - dev # add more branches as required
+#     # tags:
+#     #   - [v*]
 name: Update and Test Docker Image
 jobs:
   publish:
@@ -38,19 +41,21 @@ jobs:
       - name: Tag images
         run: |
           docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:latest
-      - name: Run tests
-        run:
-          | 
-          docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
+# Pausing this temporary as we don't have verified tests
+#       - name: Run tests
+#         run:
+#           | 
+#           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
       
       - name: Starting to Publish- docker login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
 
-      - name: tag and push latest nightly images
-        if: github.event_name == 'push'
-        run: |
-          docker tag $IMAGE $IMAGE:latest-py${{ matrix.python-version }}
-          docker push $IMAGE:latest-py${{ matrix.python-version }}
+# we want to only support release at the moment, but might need to change this later in the timeline
+#       - name: tag and push latest nightly images
+#         if: github.event_name == 'push'
+#         run: |
+#           docker tag $IMAGE $IMAGE:latest-py${{ matrix.python-version }}
+#           docker push $IMAGE:latest-py${{ matrix.python-version }}
       
       - name: tag and push release image
         if: github.event_name == 'release'

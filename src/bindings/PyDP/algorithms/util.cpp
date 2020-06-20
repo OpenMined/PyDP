@@ -24,7 +24,6 @@ void init_algorithms_util(py::module& m) {
   util.def("vector_filter", &dp::VectorFilter<double>);
   util.def("vector_to_string", &dp::VectorToString<double>);
   util.def("round_to_nearest_multiple", &dp::RoundToNearestMultiple);
-  // TODO: Throw an exception in case the function returns false.
   util.def("safe_add", [](int64_t i, int64_t j) {
     int64_t k;
     bool result = dp::SafeAdd(i, j, &k);

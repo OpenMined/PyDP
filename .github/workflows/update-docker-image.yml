@@ -1,0 +1,71 @@
+on:
+  release:
+    types: [published]
+# we wil use this as we move to regular publishing
+#   push:
+#     branches:
+#       - dev # add more branches as required
+#     # tags:
+#     #   - [v*]
+name: Update and Test Docker Image
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+    env:
+      IMAGE: openmined/pydp
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      # - name: Get the version #
+      #   id: get_version
+      #   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Show python version and build image name  
+        id: build_name
+        run: |
+          python -c "import sys; print(sys.version)"
+          echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
+
+      - name: Build images
+        run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg PYTHON_VERSION=${{matrix.python-version}} -f Dockerfile .
+
+      - name: Tag images
+        run: |
+          docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:latest
+# Pausing this temporary as we don't have verified tests
+#       - name: Run tests
+#         run:
+#           | 
+#           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
+      
+      - name: Starting to Publish- docker login
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+
+# we want to only support release at the moment, but might need to change this later in the timeline
+#       - name: tag and push latest nightly images
+#         if: github.event_name == 'push'
+#         run: |
+#           docker tag $IMAGE $IMAGE:latest-py${{ matrix.python-version }}
+#           docker push $IMAGE:latest-py${{ matrix.python-version }}
+      
+      - name: tag and push release image
+        if: github.event_name == 'release'
+        run: |
+          docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
+          docker push $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
+      
+      - name: push latest stable image for python 3.7
+        if: github.event_name == 'release' && matrix.python-version == '3.7'
+        run: |
+          docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}
+          docker push $IMAGE:${{ github.event.release.tag_name }}
+          docker push $IMAGE:latest

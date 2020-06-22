@@ -58,13 +58,14 @@ jobs:
 #           docker push $IMAGE:latest-py${{ matrix.python-version }}
       
       - name: tag and push release image
-        if: github.event_name == 'release'
+#         if: github.event_name == 'release'
         run: |
           docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
           docker push $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
       
       - name: push latest stable image for python 3.7
-        if: github.event_name == 'release' && matrix.python-version == '3.7'
+#         if: github.event_name == 'release' && matrix.python-version == '3.7'
+        if: matrix.python-version == '3.7'
         run: |
           docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}
           docker push $IMAGE:${{ github.event.release.tag_name }}

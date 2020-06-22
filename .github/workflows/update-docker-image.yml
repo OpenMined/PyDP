@@ -69,4 +69,5 @@ jobs:
         run: |
           docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}
           docker push $IMAGE:${{ github.event.release.tag_name }}
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:latest
           docker push $IMAGE:latest

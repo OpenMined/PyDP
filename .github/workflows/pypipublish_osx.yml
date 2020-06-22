@@ -16,6 +16,9 @@ jobs:
       - name: Set up submodules
         run: |
           git submodule update --init --recursive
+          cd third_party/differential-privacy
+          git checkout b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73
+          cd -
           rm -rf third_party/differential-privacy/java 
           rm -rf third_party/differential-privacy/examples/java
       - name: Set up Python ${{ matrix.python-version }}

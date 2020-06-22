@@ -48,7 +48,7 @@ class BoundedVarianceDummy : public Dummy {
 
 void declareBoundedMean(py::module& m) {
   py::class_<BoundedMeanDummy> bld(m, "BoundedMean");
-
+  bld.attr("__module__") = "pydp";
   bld.def(py::init<double, int, int>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def(py::init<double>(), py::return_value_policy::reference,
@@ -58,7 +58,7 @@ void declareBoundedMean(py::module& m) {
 
 void declareBoundedSum(py::module& m) {
   py::class_<BoundedSumDummy> cls(m, "BoundedSum");
-
+  cls.attr("__module__") = "pydp";
   cls.def(py::init<double, int, int>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def(py::init<double>(), py::return_value_policy::reference,
@@ -68,7 +68,7 @@ void declareBoundedSum(py::module& m) {
 
 void declareBoundedStandardDeviation(py::module& m) {
   py::class_<BoundedStandardDeviationDummy> cls(m, "BoundedStandardDeviation");
-
+  cls.attr("__module__") = "pydp";
   cls.def(py::init<double, int, int>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def(py::init<double>(), py::return_value_policy::reference,
@@ -78,7 +78,7 @@ void declareBoundedStandardDeviation(py::module& m) {
 
 void declareBoundedVariance(py::module& m) {
   py::class_<BoundedVarianceDummy> cls(m, "BoundedVariance");
-
+  cls.attr("__module__") = "pydp";
   cls.def(py::init<double, int, int>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def(py::init<double>(), py::return_value_policy::reference,

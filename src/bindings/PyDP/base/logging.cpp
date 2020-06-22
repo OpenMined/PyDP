@@ -33,6 +33,7 @@ class Logging_helper {
 
 void init_base_logging(py::module& m) {
   py::class_<Logging_helper> obje(m, "Logging");
+  obje.attr("__module__") = "pydp";
   obje.def(py::init<const char*, const char*, int>());
 
   // cannot set these two properites it as set log_directory and v_log level is

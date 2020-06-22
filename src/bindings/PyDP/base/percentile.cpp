@@ -10,8 +10,9 @@ namespace dpb = differential_privacy::base;
 
 template <typename T>
 void declarePercentile(py::module& m, string const& suffix) {
-  py::class_<dpb::Percentile<T>>(m, ("Percentile" + suffix).c_str())
-      .def(py::init())
+  py::class_<dpb::Percentile<T>> percentile(m, ("Percentile" + suffix).c_str());
+  percentile.attr("__module__") = "pydp";
+  percentile.def(py::init())
       .def("add", &dpb::Percentile<T>::Add)
       .def("reset", &dpb::Percentile<T>::Reset)
       .def("serialize_to_proto", &dpb::Percentile<T>::SerializeToProto)

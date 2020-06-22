@@ -9,8 +9,9 @@ namespace py = pybind11;
 namespace dpi = differential_privacy::internal;
 
 void declareLaplaceDistribution(py::module& m) {
-  py::class_<dpi::LaplaceDistribution>(m, "LaplaceDistribution")
-      .def(py::init<double>())
+  py::class_<dpi::LaplaceDistribution> laplace_dist(m, "LaplaceDistribution");
+  laplace_dist.attr("__module__") = "pydp";
+  laplace_dist.def(py::init<double>())
       .def("get_uniform_double", &dpi::LaplaceDistribution::GetUniformDouble)
       .def("sample",
            (double (dpi::LaplaceDistribution::*)()) & dpi::LaplaceDistribution::Sample)
@@ -21,8 +22,9 @@ void declareLaplaceDistribution(py::module& m) {
 }
 
 void declareGaussianDistribution(py::module& m) {
-  py::class_<dpi::GaussianDistribution>(m, "GaussianDistribution")
-      .def(py::init<double>())
+  py::class_<dpi::GaussianDistribution> gauss_dist(m, "GaussianDistribution");
+  gauss_dist.attr("__module__") = "pydp";
+  gauss_dist.def(py::init<double>())
       .def("sample", (double (dpi::GaussianDistribution::*)()) &
                          dpi::GaussianDistribution::Sample)
       .def("sample", (double (dpi::GaussianDistribution::*)(double)) &

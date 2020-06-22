@@ -10,9 +10,6 @@
 #include "absl/random/distributions.h"
 #include "algorithms/order-statistics.h"
 
-#include "base/status.h"
-#include "base/statusor.h"
-
 #include "pybind11/pybind11.h"
 
 extern "C" {
@@ -28,21 +25,30 @@ double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l)
   for (auto i : l) {
     a.push_back(i.cast<double>());
   }
-  std::unique_ptr<BoundedMean<double>> mean;
+  base::StatusOr<std::unique_ptr<BoundedMean<double>>> mean_obj;
   if (has_bounds) {
-    mean = BoundedMean<double>::Builder()
-               .SetEpsilon(config->epsilon)
-               .SetLower(config->lower)
-               .SetUpper(config->upper)
-               .Build()
-               .ValueOrDie();
+    mean_obj = BoundedMean<double>::Builder()
+                   .SetEpsilon(config->epsilon)
+                   .SetLower(config->lower)
+                   .SetUpper(config->upper)
+                   .Build();
   } else {
-    mean =
-        BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
+    // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
+    // raised exeception
+    mean_obj = BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build();
   }
-  Output result = mean->Result(a.begin(), a.end()).ValueOrDie();
 
-  return GetValue<double>(result);
+  if (!mean_obj.ok()) {
+    // TODO: custtom error?
+    throw std::runtime_error(mean_obj.status().error_message());
+  }
+
+  base::StatusOr<Output> resultf = mean_obj.ValueOrDie()->Result(a.begin(), a.end());
+  if (resultf.ok()) {
+    return GetValue<double>(resultf.ValueOrDie());
+  } else {
+    throw std::runtime_error(resultf.status().error_message());
+  }
 }
 
 // Bounded Sum
@@ -52,21 +58,29 @@ double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list l) 
   for (auto i : l) {
     a.push_back(i.cast<double>());
   }
-  std::unique_ptr<BoundedSum<double>> sum;
+  base::StatusOr<std::unique_ptr<BoundedSum<double>>> sum_obj;
   if (has_bounds) {
-    sum = BoundedSum<double>::Builder()
-              .SetEpsilon(config->epsilon)
-              .SetLower(config->lower)
-              .SetUpper(config->upper)
-              .Build()
-              .ValueOrDie();
+    sum_obj = BoundedSum<double>::Builder()
+                  .SetEpsilon(config->epsilon)
+                  .SetLower(config->lower)
+                  .SetUpper(config->upper)
+                  .Build();
   } else {
-    sum =
-        BoundedSum<double>::Builder().SetEpsilon(config->epsilon).Build().ValueOrDie();
+    // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
+    // raised exeception
+    sum_obj = BoundedSum<double>::Builder().SetEpsilon(config->epsilon).Build();
   }
-  Output result = sum->Result(a.begin(), a.end()).ValueOrDie();
 
-  return GetValue<double>(result);
+  if (!sum_obj.ok()) {
+    throw std::runtime_error(sum_obj.status().error_message());
+  }
+
+  base::StatusOr<Output> resultf = sum_obj.ValueOrDie()->Result(a.begin(), a.end());
+  if (resultf.ok()) {
+    return GetValue<double>(resultf.ValueOrDie());
+  } else {
+    throw std::runtime_error(resultf.status().error_message());
+  }
 }
 
 double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
@@ -76,24 +90,30 @@ double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
   for (auto i : l) {
     a.push_back(i.cast<double>());
   }
-  std::unique_ptr<BoundedStandardDeviation<double>> standard_deviation;
-
+  base::StatusOr<std::unique_ptr<BoundedStandardDeviation<double>>> sd_obj;
   if (has_bounds) {
-    standard_deviation = BoundedStandardDeviation<double>::Builder()
-                             .SetEpsilon(config->epsilon)
-                             .SetLower(config->lower)
-                             .SetUpper(config->upper)
-                             .Build()
-                             .ValueOrDie();
+    sd_obj = BoundedStandardDeviation<double>::Builder()
+                 .SetEpsilon(config->epsilon)
+                 .SetLower(config->lower)
+                 .SetUpper(config->upper)
+                 .Build();
   } else {
-    standard_deviation = BoundedStandardDeviation<double>::Builder()
-                             .SetEpsilon(config->epsilon)
-                             .Build()
-                             .ValueOrDie();
+    // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
+    // raised exeception
+    sd_obj =
+        BoundedStandardDeviation<double>::Builder().SetEpsilon(config->epsilon).Build();
   }
-  Output result = standard_deviation->Result(a.begin(), a.end()).ValueOrDie();
 
-  return GetValue<double>(result);
+  if (!sd_obj.ok()) {
+    throw std::runtime_error(sd_obj.status().error_message());
+  }
+
+  base::StatusOr<Output> resultf = sd_obj.ValueOrDie()->Result(a.begin(), a.end());
+  if (resultf.ok()) {
+    return GetValue<double>(resultf.ValueOrDie());
+  } else {
+    throw std::runtime_error(resultf.status().error_message());
+  }
 }
 
 double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::list l) {
@@ -102,24 +122,29 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
   for (auto i : l) {
     a.push_back(i.cast<double>());
   }
-  std::unique_ptr<BoundedVariance<double>> variance;
-
+  base::StatusOr<std::unique_ptr<BoundedVariance<double>>> variance_obj;
   if (has_bounds) {
-    variance = BoundedVariance<double>::Builder()
-                   .SetEpsilon(config->epsilon)
-                   .SetLower(config->lower)
-                   .SetUpper(config->upper)
-                   .Build()
-                   .ValueOrDie();
+    variance_obj = BoundedVariance<double>::Builder()
+                       .SetEpsilon(config->epsilon)
+                       .SetLower(config->lower)
+                       .SetUpper(config->upper)
+                       .Build();
   } else {
-    variance = BoundedVariance<double>::Builder()
-                   .SetEpsilon(config->epsilon)
-                   .Build()
-                   .ValueOrDie();
+    variance_obj =
+        BoundedVariance<double>::Builder().SetEpsilon(config->epsilon).Build();
   }
-  Output result = variance->Result(a.begin(), a.end()).ValueOrDie();
 
-  return GetValue<double>(result);
+  if (!variance_obj.ok()) {
+    throw std::runtime_error(variance_obj.status().error_message());
+  } else {
+    base::StatusOr<Output> resultf =
+        variance_obj.ValueOrDie()->Result(a.begin(), a.end());
+    if (resultf.ok()) {
+      return GetValue<double>(resultf.ValueOrDie());
+    } else {
+      throw std::runtime_error(resultf.status().error_message());
+    }
+  }
 }
 
 // Order Statistics
@@ -128,82 +153,92 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
 
 int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list l,
                    double privacy_budget) {
-  std::unique_ptr<continuous::Max<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Max<int64_t>>> max;
   if (has_bounds) {
-    search = continuous::Max<int64_t>::Builder()
-                 .SetEpsilon(config->epsilon)
-                 .SetLower(config->lower)
-                 .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+    max = continuous::Max<int64_t>::Builder()
+              .SetEpsilon(config->epsilon)
+              .SetLower(config->lower)
+              .SetUpper(config->upper)
+              .Build();
   } else {
-    search = continuous::Max<int64_t>::Builder()
-                 .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+    max = continuous::Max<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!max.ok()) {
+    throw std::runtime_error(max.status().error_message());
+  } else {
+    for (auto i : l) {
+      max.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = max.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()) {
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    } else {
+      throw std::runtime_error(resultf.status().error_message());
+    }
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
 }
 
 // Min
 
 int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list l,
                    double privacy_budget) {
-  std::unique_ptr<continuous::Min<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Min<int64_t>>> min;
   if (has_bounds) {
-    search = continuous::Min<int64_t>::Builder()
-                 .SetEpsilon(config->epsilon)
-                 .SetLower(config->lower)
-                 .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+    min = continuous::Min<int64_t>::Builder()
+              .SetEpsilon(config->epsilon)
+              .SetLower(config->lower)
+              .SetUpper(config->upper)
+              .Build();
   } else {
-    search = continuous::Min<int64_t>::Builder()
-                 .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+    min = continuous::Min<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!min.ok()) {
+    throw std::runtime_error(min.status().error_message());
+  } else {
+    for (auto i : l) {
+      min.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = min.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()) {
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    } else {
+      throw std::runtime_error(resultf.status().error_message());
+    }
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
 }
 
 // Max
 
 int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list l,
                       double privacy_budget) {
-  std::unique_ptr<continuous::Median<int64_t>> search;
+  base::StatusOr<std::unique_ptr<continuous::Median<int64_t>>> median;
   if (has_bounds) {
-    search = continuous::Median<int64_t>::Builder()
+    median = continuous::Median<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
                  .SetLower(config->lower)
                  .SetUpper(config->upper)
-                 .Build()
-                 .ValueOrDie();
+                 .Build();
   } else {
-    search = continuous::Median<int64_t>::Builder()
-                 .SetEpsilon(config->epsilon)
-                 .Build()
-                 .ValueOrDie();
+    median = continuous::Median<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
   }
-
-  for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+  if (!median.ok()) {
+    throw std::runtime_error(median.status().error_message());
+  } else {
+    for (auto i : l) {
+      median.ValueOrDie()->AddEntry(i.cast<int64_t>());
+    }
+    base::StatusOr<Output> resultf = median.ValueOrDie()->PartialResult(privacy_budget);
+    if (resultf.ok()) {
+      return GetValue<int64_t>(resultf.ValueOrDie());
+    } else {
+      throw std::runtime_error(resultf.status().error_message());
+    }
   }
-
-  return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());
 }
 
 // Percentile
-
+// can't add error handling to this for some reasons
+// TODO
 int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
                           double privacy_budget, double percentile) {
   std::unique_ptr<continuous::Percentile<int64_t>> search;
@@ -222,9 +257,8 @@ int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
                  .Build()
                  .ValueOrDie();
   }
-
   for (auto i : l) {
-    search->AddEntry(i.cast<double>());
+    search->AddEntry(i.cast<int64_t>());
   }
 
   return GetValue<int64_t>(search->PartialResult(privacy_budget).ValueOrDie());

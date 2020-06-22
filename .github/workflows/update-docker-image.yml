@@ -38,9 +38,9 @@ jobs:
       - name: Build images
         run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg PYTHON_VERSION=${{matrix.python-version}} -f Dockerfile .
 
-      - name: Tag images
-        run: |
-          docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:latest
+      # - name: Tag images
+      #   run: |
+      #     docker tag ${{steps.build_name.outputs.image_name}} ${{steps.build_name.outputs.image_name}}:latest
 # Pausing this temporary as we don't have verified tests
 #       - name: Run tests
 #         run:
@@ -60,13 +60,13 @@ jobs:
       - name: tag and push release image
 #         if: github.event_name == 'release'
         run: |
-          docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
           docker push $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
       
       - name: push latest stable image for python 3.7
 #         if: github.event_name == 'release' && matrix.python-version == '3.7'
         if: matrix.python-version == '3.7'
         run: |
-          docker tag $IMAGE $IMAGE:${{ github.event.release.tag_name }}
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}
           docker push $IMAGE:${{ github.event.release.tag_name }}
           docker push $IMAGE:latest

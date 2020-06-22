@@ -14,8 +14,9 @@ template <typename T>
 void declareCount(py::module& m, string const& suffix) {
   using count_builder = typename dp::Count<T>::Builder;
 
-  py::class_<dp::Count<T>>(m, ("Count" + suffix).c_str())
-      .def(py::init([]() { return count_builder().Build().ValueOrDie(); }))
+  py::class_<dp::Count<T>> count(m, ("Count" + suffix).c_str());
+  count.attr("__module__") = "pydp";
+  count.def(py::init([]() { return count_builder().Build().ValueOrDie(); }))
       .def(py::init([](double epsilon) {
         return count_builder().SetEpsilon(epsilon).Build().ValueOrDie();
       }))

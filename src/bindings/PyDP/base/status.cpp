@@ -44,7 +44,7 @@ void declareStatusOr2(py::module &m, string const &suffix) {
 void init_base_status(py::module &m) {
   // Creating the Status class
   py::class_<dpb::Status> status(m, "Status");
-
+  status.attr("__module__") = "pydp";
   // Status class (we can now build functions and enuums from this class)
   status.def(py::init<dpb::StatusCode &, std::string &>())
       .def("__repr__", &dpb::Status::ToString, "String representation of status")

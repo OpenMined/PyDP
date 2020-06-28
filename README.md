@@ -69,6 +69,10 @@ Please make sure to update tests as appropriate.
 
 <!-- ## Contributors -->
 
+## Support
+For support in using this library, please join the [**#lib_pydp**](https://openmined.slack.com/archives/CN4UTGTPD) Slack channel. If you’d like to follow along with any code changes to the library, please join the [**#code_dp_python**](https://openmined.slack.com/archives/C0134KETQN5) Slack channel. [Click here to join our Slack community!](https://slack.openmined.org)
+
+
 
 ## License
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)

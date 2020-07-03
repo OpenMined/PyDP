@@ -35,7 +35,9 @@ Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=
 To contribute to PyDP you will need to fork the OpenMind/PyDP repository.
 Then you can work risk-free on your fork.
 
-You will just need to fork once. After that you can call `git fetch upstream` and `git pull 'branch-name'` before you do your local changes to get the remote changes and be up-to-date
+You will just need to fork once. After that you can call `git fetch upstream` and `git pull 'branch-name'` before you do your local changes to get the remote changes and be up-to-date.
+
+**Note:** All of PyDP work is done on :dev branch.
 
 ### Syncing a Forked Repository
 
@@ -189,7 +191,9 @@ Example:`[WIP] BoundedMean error check`
 
 After each commit GitHub Actions will check your new code against the formatting guidelines and execute the tests to check if the test coverage is high enough.
 
-We will only merge PRs that pass the GitHub Actions checks.
+***We will only merge PRs that pass ALL the GitHub Actions checks.***
 
-If your check fails, don't worry, you will still be able to make changes and make your code pass the checks.
+If your check fails, don't worry, you will still be able to make changes and make your code pass the checks. Feel free to ask around in the Slack channel **#lib_pydp**.
+
+Note: It is always suggested to run black or clang format test or pytest on the code before sending a PR.
 

@@ -8,7 +8,7 @@ All our development is done using Git and Github. If you're not too familiar wit
 
 ### Slack
 
-A great first place to join the Community is the Slack channel <http://slack.openmined.org>.
+A great first place to join the Community is the Slack workspace <http://slack.openmined.org>.
 - For support in using this library, please join the **#lib_pydp** Slack channel. 
 - If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel.
 
@@ -196,4 +196,3 @@ After each commit GitHub Actions will check your new code against the formatting
 If your check fails, don't worry, you will still be able to make changes and make your code pass the checks. Feel free to ask around in the Slack channel **#lib_pydp**.
 
 Note: It is always suggested to run black or clang format test or pytest on the code before sending a PR.
-

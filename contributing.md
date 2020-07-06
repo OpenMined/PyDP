@@ -150,7 +150,7 @@ Each issue someone is currently working on should have an assignee. If you want 
 
 If you want to work on an open issue, please post a comment telling that you will work on that issue, we will assign you as the assignee then.
 
-**Caution**: We try our best to keep the assignee up-to-date, but as we are all humans with our own schedule delays are possible, so make sure to check the comments once before you start working on an issue even when no one is assigned to it.
+**Caution**: We try our best to keep the assignees up-to-date, but we are a group of people collaborating, delays could occur, so make sure to check the comments, before you start working on an unassigned issue.
 
 ### Coding Standards
 

@@ -146,7 +146,7 @@ If you are new to the project and want to get into the code, we recommend pickin
 
 ### Issue Allocation
 
-Each issue someone is currently working on should have an assignee. If you want to contribute to an issue someone else is already working on please make sure to get in contact with that person via slack or github and organize yourself.
+Each issue someone is currently working on should have an assignee. If you want to contribute to an issue someone else is already working on please make sure to get in touch with that person via slack or GitHub and organize the workflow collaboratively. 
 
 If you want to work on an open issue, please post a comment telling that you will work on that issue, we will assign you as the assignee then.
 

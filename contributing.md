@@ -35,7 +35,7 @@ Regarding Pybind, Here is a good [introduction](https://www.youtube.com/watch?v=
 To contribute to PyDP you will need to fork the OpenMind/PyDP repository.
 Then you can work risk-free on your fork.
 
-You will just need to fork once. After that you can call `git fetch upstream` and `git pull 'branch-name'` before you do your local changes to get the remote changes and be up-to-date.
+Fork the repository and run `git fetch upstream` followed by `git pull 'branch-name'` before you begin your work, to get the remote changes on your local machine.
 
 **Note:** All of PyDP work is done on :dev branch.
 

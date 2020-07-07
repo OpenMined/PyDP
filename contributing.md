@@ -14,7 +14,7 @@ A great first place to join the Community is the Slack workspace <http://slack.o
 
 ### Issues
 
-On <https://github.com/OpenMined/PyDP/issues> you can find all open Issues. You can find a detailed explanation on how to work with issues below under [Issue Allocation](#issue-allocation).
+On <https://github.com/OpenMined/PyDP/issues> you can find all open Issues. Find a detailed explanation on how to work with issues below, under [Issue Allocation](#issue-allocation).
 
 
 # About PyDP

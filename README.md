@@ -54,10 +54,10 @@ x.result(input_data: list)
 ## Learning Resources
 Some of the good learning resources to get started with Python differential privacy (PyDP) project and understand the concepts behind it can be found [here](https://github.com/OpenMined/PyDP/blob/dev/resources.md).
 
-## Join Us
-PyDP is part of the OpenMined community. Come join the rapidly growing community of 7300+ on [Slack](http://slack.openmined.org/). The slack community is very friendly and great about quickly answering questions and getting your doubts cleared. It is also a great place to interact with fellow community members who have similar interests.
+## Support
+For support in using this library, please join the **#lib_pydp** Slack channel. If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel. [Click here to join our Slack community!](https://slack.openmined.org)
 
-## Start Contributing
+## Contributing
 
 If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
 

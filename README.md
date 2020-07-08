@@ -10,7 +10,8 @@ In today's data-driven world, where data analytics is used by the Researchers or
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, helping us achieve better privacy.
 
 **Things to remember about PyDP :**
-- :rocket: Features Differentially Private Algorithmic functions to support carrots demo including: BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.  
+
+- :rocket: Features Differentially Private Algorithmic functions as part of the 0.1.1 dev release, added to carrots demo such as BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median , etc.    
 - All the computation methods mentioned above, use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
 - :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
 - :star: Supports all the Python 3+ versions.
@@ -54,10 +55,10 @@ x.result(input_data: list)
 ## Learning Resources
 Some of the good learning resources to get started with Python differential privacy (PyDP) project and understand the concepts behind it can be found [here](https://github.com/OpenMined/PyDP/blob/dev/resources.md).
 
-## Join Us
-PyDP is part of the OpenMined community, come join the rapidly growing community of 7300+ on [Slack](http://slack.openmined.org/). The slack community is very friendly and great about quickly answering questions and getting your doubts cleared plus, it is a great place to interact with the fellow community member with similar interests such as yours.
+## Support
+For support in using this library, please join the **#lib_pydp** Slack channel. If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel. [Click here to join our Slack community!](https://slack.openmined.org)
 
-## Start Contributing
+## Contributing
 
 If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
 

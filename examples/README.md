@@ -10,7 +10,7 @@ the animals as many carrots as they desire. The animals record how many carrots
 they have eaten per day. For this particular day, the number of carrots eaten
 can be seen in `animals_and_carrots.csv`.
 
-At the end of each day, Alex often asks aggregate question about how many
+At the end of each day, Alex often asks aggregate questions about how many
 carrots everyone ate. For example, he wants to know how many carrots are eaten
 each day, so he knows how many to order the next day. The animals are fearful
 that Alex will use the data against their best interest. For example, Alex could

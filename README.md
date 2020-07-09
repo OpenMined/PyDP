@@ -5,14 +5,13 @@
 
 # PyDP
 
-In today's data-driven world, where data analytics is used by the Researchers or Data Scientists to create better models or innovative solutions for a better future! They often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, sometimes, AI models can memorize details about the data they've trained on and could 'leak' these details later on. Differential privacy is a framework (using math) for measuring this leakage and reducing the possibility of it happening. 
+In today's data-driven world, data analytics is used by researchers or data scientists to create better models or innovative solutions for a better future. These models often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, some AI models can memorize details about the data they've trained on and could leak these details later on. Differential privacy is a mathematical framework for measuring this privacy leakage and reducing the possibility of it happening. 
 
-This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, helping us achieve better privacy.
+This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, PyDP is helping us achieve better privacy.
 
 **Things to remember about PyDP :**
-
-- :rocket: Features Differentially Private Algorithmic functions as part of the 0.1.1 dev release, added to carrots demo such as BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median , etc.    
-- All the computation methods mentioned above, use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
+- :rocket: Features differentially private algorithms including: BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.  
+- All the computation methods mentioned above use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
 - :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
 - :star: Supports all the Python 3+ versions.
 
@@ -30,7 +29,7 @@ For usage via code explanation, refer to [Jupyer Notebook](https://github.com/Op
 
 A sample of usage can be found below:
 
-```
+```python
 import pydp as dp # imports the DP library
 
 # To calculate the Bounded Mean

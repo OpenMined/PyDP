@@ -13,16 +13,6 @@ webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
 
-# check for python version
-python_version_full := $(wordlist 2,4,$(subst ., ,$(shell python --version 2>&1)))
-python_version_major := $(word 1,${python_version_full})
-
-ifeq ($(python_version_major), 2)
-	python_var := python3
-else
-	python_var := python
-endif
-
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
@@ -34,10 +24,10 @@ for line in sys.stdin:
 endef
 export PRINT_HELP_PYSCRIPT
 
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
+BROWSER := pipenv run python -c "$$BROWSER_PYSCRIPT"
 
 help:
-	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
+	@pipenv run python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
@@ -55,30 +45,26 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-test: ## remove test and coverage artifacts
-	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
 test: ## run tests quickly with the default Python
-	${python_var} setup.py test
-
-test-all: ## run tests on every Python version with tox
-	tox
+	pipenv run python setup.py test
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source pydp setup.py test
-	coverage report -m
-	coverage html
+	pipenv run coverage run --source pydp setup.py test
+	pipenv run coverage report -m
+	pipenv run coverage html
 	$(BROWSER) htmlcov/index.html
 
 release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	${python_var} setup.py sdist
-	${python_var} setup.py bdist_wheel
+	pipenv run python setup.py sdist
+	pipenv run python setup.py bdist_wheel
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	${python_var} setup.py install
+	pipenv run python setup.py install

@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 setuptools = "*"
 bumpversion = "==0.5.3"
-tox = "==3.5.2"
 pytest = "*"
 pycodestyle = "*"
 twine = "*"

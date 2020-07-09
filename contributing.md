@@ -9,7 +9,7 @@ All our development is done using Git and Github. If you're not too familiar wit
 ### Slack
 
 A great first place to join the Community is the Slack workspace <http://slack.openmined.org>.
-- For support in using this library, please join the **#lib_pydp** Slack channel. 
+- For support in using this library, please join the **#lib_pydp** Slack channel.
 - If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel.
 
 ### Issues
@@ -119,11 +119,11 @@ To run the image:
 $ docker run --rm -it pydp:test
 ```
 
-Docker Run will allow to interactively with the files; to check if your code works
+Docker Run will allow to interact with the files; to check if your code works
 perfectly, you can type:
 
 ```
-$ make test-all
+$ make test
 ```
 
 To run the code, you can open python interpreter inside the container by typing
@@ -146,7 +146,7 @@ If you are new to the project and want to get into the code, we recommend pickin
 
 ### Issue Allocation
 
-Each issue someone is currently working on should have an assignee. If you want to contribute to an issue someone else is already working on please make sure to get in touch with that person via slack or GitHub and organize the workflow collaboratively. 
+Each issue someone is currently working on should have an assignee. If you want to contribute to an issue someone else is already working on please make sure to get in touch with that person via slack or GitHub and organize the workflow collaboratively.
 
 If you want to work on an open issue, please post a comment telling that you will work on that issue, we will assign you as the assignee then.
 

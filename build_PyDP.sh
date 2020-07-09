@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 pipenv run pipenv install --dev --skip-lock
 pipenv run bazel build src/python:bindings_test  --verbose_failures

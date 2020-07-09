@@ -28,8 +28,8 @@ jobs:
         pip install black
     - name: Black pep8 style
       run: |
-        black ./ --check
- 
+        black ./ --check --diff
+
   cpp-style-check:
 
     runs-on: ubuntu-latest
@@ -40,9 +40,4 @@ jobs:
     - uses: actions/checkout@v2
     - name: Lint with clang-format
       run: |
-        # lint files (all .cpp and .h files) inplace
-        find ./src/bindings/ -iname *.hpp -o -iname *.cpp -o -iname *.h -o -iname *.cc | xargs clang-format -i -style='file'
-        # print changes
-        git diff src
-        # already well formated if 'git diff' doesn't output
-        ! ( git diff src |  grep -q ^ ) || exit 
+        python run-clang-format.py -r src/bindings/

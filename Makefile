@@ -49,14 +49,14 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-test: ## run tests quickly with the default Python
-	pipenv run python setup.py test
+check-style-python:
+	pipenv run black ./ --check --diff
 
-coverage: ## check code coverage quickly with the default Python
-	pipenv run coverage run --source pydp setup.py test
-	pipenv run coverage report -m
-	pipenv run coverage html
-	$(BROWSER) htmlcov/index.html
+check-style-c++:
+	pipenv run ./run-clang-format.py -r src/bindings/
+
+test: check-style-python check-style-c++  ## check style and run tests using pytest
+	pipenv run pytest tests
 
 release: dist ## package and upload a release
 	twine upload dist/*

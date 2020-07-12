@@ -52,11 +52,13 @@ clean-test: ## remove test and coverage artifacts
 check-style-python:
 	pipenv run black ./ --check --diff
 
-check-style-c++:
+check-style-cpp:
 	pipenv run ./run-clang-format.py -r src/bindings/
 
-test: check-style-python check-style-c++  ## check style and run tests using pytest
+run-tests-only: install
 	pipenv run pytest tests
+
+test: check-style-python check-style-cpp run-tests-only ## check style and run tests
 
 release: dist ## package and upload a release
 	twine upload dist/*

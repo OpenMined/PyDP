@@ -76,7 +76,7 @@ If you want to use a specific version of python3 please refer to the
 Build the python library:
 
 ```
-$ ./build_PyDP.sh
+$ make build
 ```
 
 Run the test example:

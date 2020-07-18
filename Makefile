@@ -29,7 +29,7 @@ BROWSER := pipenv run python -c "$$BROWSER_PYSCRIPT"
 help:
 	@pipenv run python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-build:
+build: ## compile bindings and genearte Python module
 	./build_PyDP.sh
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
@@ -52,10 +52,10 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-format-style-python:
+format-style-python: ## format Python files code style in-place
 	@ pipenv run black ./
 
-format-style-cpp:
+format-style-cpp: ## format C++ files code style in-place
 	@ find ./src/bindings/ -iname *.hpp -o -iname *.cpp -o -iname *.h -o -iname *.cc | \
 	xargs clang-format -i -style='file'
 

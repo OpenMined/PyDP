@@ -67,12 +67,6 @@ pipenv should be looking for a python3 binary to create the virtualenv from by d
 If you want to use a specific version of python3 please refer to the
 [pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
 
-To achieve clean builds of different python versions we are using a virtualenv to isolate
-the build process from system python and system libraries. Since python2 is deprecated
-pipenv should be looking for a python3 binary to create the virtualenv from by default.
-If you want to use a specific version of python3 please refer to the
-[pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
-
 Build the python library:
 
 ```

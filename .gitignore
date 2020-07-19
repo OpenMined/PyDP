@@ -17,6 +17,7 @@ __pycache__/
 *$py.class
 
 # Distribution / packaging
+Pipfile.lock
 .Python
 env/
 build/
@@ -37,7 +38,6 @@ wheels/
 
 # Unit test / coverage reports
 htmlcov/
-.tox/
 .coverage
 .coverage.*
 .cache

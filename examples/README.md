@@ -40,3 +40,10 @@ more than one row.
 ## How to Run
 
 ```python PyDP/example/carrots.py```
+
+### Docker alternative
+To run the examples in a container:
+1. `cd PyDP/examples`
+2. `docker build -t pydp-sandbox:local .`
+3. `docker run -p 8899:8899 pydp-sandbox:local`
+4. Open `displayed url` in a browser.

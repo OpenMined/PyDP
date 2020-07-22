@@ -104,7 +104,7 @@ $ docker build -t pydp:test .
 To change the python version use the --build-arg parameter:
 
 ```
-$ docker build --build-args PYTHON_VERSION=3.8 -t pydp:test .
+$ docker build --build-arg PYTHON_VERSION=3.8 -t pydp:test .
 ```
 
 To run the image:

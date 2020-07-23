@@ -10,5 +10,6 @@ pytest = "*"
 black = "*"
 twine = "*"
 clang-format = "*"
+sphinx = "*"
 
 [packages]

@@ -47,3 +47,5 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 .mypy_cache/
+docs/_build/*
+docs/_generate/*

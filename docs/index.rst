@@ -1,5 +1,9 @@
-******************
 PyDP Documentation
-******************
+============================
 
-This directory contains the documentation for the PyDP library.
+
+.. toctree::
+   :maxdepth: 2
+
+   readme
+   pydp

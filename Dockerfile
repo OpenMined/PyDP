@@ -12,7 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="b7f4c39d9f73d67b34cdbd1b8483e5f72072fc73"
+ENV DP_SHA="d9f9215deec7f6bc85b1076a220dc83795cb0be8"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -68,7 +68,6 @@ RUN cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python setup.py bdist_wheel && \
     pipenv install dist/*.whl 
-    # pip install dist/*.whl #TODO: See why one is installing outside of virtual env
 
 # This `activates` the virtual env
 ENV VIRTUAL_ENV=$PROJECT_DIR/.venv

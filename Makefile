@@ -59,19 +59,19 @@ format-style-cpp: ## format C++ files code style in-place
 	@ find ./src/bindings/ -iname *.hpp -o -iname *.cpp -o -iname *.h -o -iname *.cc | \
 	xargs clang-format -i -style='file'
 
-check-style-python:
+check-style-python: ## check for Python code style in-place
 	@ echo "\e[36mChecking Python code style.\e[0m" && \
 	pipenv run black ./ --check --diff || \
 	( echo "\e[33mRun \e[36mmake format-style-python\e[33m to fix style errors.\e[0m"; \
 	  exit 1 )
 
-check-style-cpp:
+check-style-cpp: ## check for C++ code style in-place
 	@ echo "\e[36mChecking C++ code style.\e[0m" && \
 	pipenv run ./run-clang-format.py -r src/bindings/ || \
 	( echo "\e[33mRun \e[34mmake format-style-cpp\e[33m to fix style errors.\e[0m"; \
 	  exit 1 )
 
-run-tests-only: install
+run-tests-only: install ## run tests without style tests
 	pipenv run pytest tests
 
 test: check-style-python check-style-cpp run-tests-only ## check style and run tests

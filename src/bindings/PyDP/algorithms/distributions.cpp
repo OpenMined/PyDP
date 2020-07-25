@@ -11,14 +11,14 @@ namespace dpi = differential_privacy::internal;
 void declareLaplaceDistribution(py::module& m) {
   py::class_<dpi::LaplaceDistribution> laplace_dist(m, "LaplaceDistribution");
   laplace_dist.attr("__module__") = "pydp";
-  laplace_dist.def(py::init<double>())
+  laplace_dist.def(py::init<double, double>())
       .def("get_uniform_double", &dpi::LaplaceDistribution::GetUniformDouble)
       .def("sample",
            (double (dpi::LaplaceDistribution::*)()) & dpi::LaplaceDistribution::Sample)
       .def("sample", (double (dpi::LaplaceDistribution::*)(double)) &
                          dpi::LaplaceDistribution::Sample)
-      .def("get_diversity", &dpi::LaplaceDistribution::GetDiversity)
-      .def("cdf", &dpi::LaplaceDistribution::cdf);
+      .def("get_diversity", &dpi::LaplaceDistribution::GetDiversity);
+  // .def("cdf", &dpi::LaplaceDistribution::cdf);
 }
 
 void declareGaussianDistribution(py::module& m) {

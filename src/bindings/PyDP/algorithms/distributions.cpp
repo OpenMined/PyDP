@@ -18,7 +18,7 @@ void declareLaplaceDistribution(py::module& m) {
       .def("sample", (double (dpi::LaplaceDistribution::*)(double)) &
                          dpi::LaplaceDistribution::Sample)
       .def("get_diversity", &dpi::LaplaceDistribution::GetDiversity);
-      // .def("cdf", &dpi::LaplaceDistribution::cdf);
+  // .def("cdf", &dpi::LaplaceDistribution::cdf);
 }
 
 void declareGaussianDistribution(py::module& m) {

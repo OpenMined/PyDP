@@ -57,7 +57,7 @@ format-style-python: ## format Python files code style in-place
 
 format-style-cpp: ## format C++ files code style in-place
 	@ find ./src/bindings/ -iname *.hpp -o -iname *.cpp -o -iname *.h -o -iname *.cc | \
-	xargs clang-format -i -style='file'
+	pipenv run xargs clang-format -i -style='file'
 
 check-style-python: ## check for Python code style in-place
 	@ echo "\e[36mChecking Python code style.\e[0m" && \

@@ -23,6 +23,6 @@ void declarePercentile(py::module& m, string const& suffix) {
 }
 
 void init_base_percentile(py::module& m) {
-  declarePercentile<int>(m, "Int");
+//   declarePercentile<int>(m, "Int");
   declarePercentile<double>(m, "Double");
 }

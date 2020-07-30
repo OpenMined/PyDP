@@ -2,7 +2,8 @@ name: Build Docs
 
 on:
   push:
-
+    branches:
+      "dev"
 
 jobs:
   build:
@@ -17,17 +18,6 @@ jobs:
       with:
         docs-folder: "docs/"
     
-    # Great extra actions to compose with:
-    # Create an artifact of the html output.
-    # - uses: actions/upload-artifact@v1
-    #   with:
-    #     name: DocumentationHTML
-    #     path: docs/_build/html/
-    # # Create an artifact out of the previously built pdf.
-    # - uses: actions/upload-artifact@v1
-    #   with:
-    #     name: Documentation
-    #     path: docs2/_build/latex/pdfexample.pdf
     # Publish built docs to gh-pages branch.
     # ===============================
     - name: Commit documentation changes

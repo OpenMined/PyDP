@@ -11,5 +11,6 @@ black = "*"
 twine = "*"
 clang-format = "*"
 sphinx = "*"
+sphinx-rtd-theme = "*"
 
 [packages]

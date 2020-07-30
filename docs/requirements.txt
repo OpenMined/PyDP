@@ -1,1 +1,2 @@
 python-dp
+sphinx-rtd-theme

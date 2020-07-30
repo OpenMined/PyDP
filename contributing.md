@@ -190,3 +190,11 @@ After each commit GitHub Actions will check your new code against the formatting
 If your check fails, don't worry, you will still be able to make changes and make your code pass the checks. Feel free to ask around in the Slack channel **#lib_pydp**.
 
 Note: It is always suggested to run black or clang format test or pytest on the code before sending a PR.
+
+### Check the Docs
+We are using (Sphinx)[https://www.sphinx-doc.org/en/master/] to generate the docs. A github action builds these on based on the `dev` branch. In order to check that your docstring are correctly processed you can build the docs locally.
+Run
+```
+cd docs/ && make html && make serve
+``` 
+and navigate to `localhost:8000` in a browser to view the docs.

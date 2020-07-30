@@ -214,3 +214,9 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+.PHONY: serve
+serve:
+	@echo
+	@echo "Serving docs on localhost:8000"
+	cd _build/html && python -m http.server 8000
+	

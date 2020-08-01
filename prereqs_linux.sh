@@ -52,6 +52,7 @@ if command -v clang-format &>/dev/null; then
 else
     echo "installing clang-format"
     sudo apt-get install clang-format
+fi
 
 # Downloading the Google DP library
 git submodule update --init --recursive

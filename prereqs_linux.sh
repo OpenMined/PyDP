@@ -46,6 +46,12 @@ else
     rm bazel-2.1.0-installer-linux-x86_64.sh
 fi
 
+# clang-format
+if command -v clang-format &>/dev/null; then
+    echo "clang-format already installed"
+else
+    echo "installing clang-format"
+    sudo apt-get install clang-format
 
 # Downloading the Google DP library
 git submodule update --init --recursive

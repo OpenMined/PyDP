@@ -84,7 +84,8 @@ void declareBoundedStandardDeviation(py::module& m) {
   cls.def("result", &BoundedStandardDeviationDummy::Result);
   cls.def_property("l0_sensitvity", &BoundedStandardDeviationDummy::get_l0_sensitivity,
                    &BoundedStandardDeviationDummy::set_l0_sensitivity);
-  cls.def_property("linf_sensitvity", &BoundedStandardDeviationDummy::get_linf_sensitivity,
+  cls.def_property("linf_sensitvity",
+                   &BoundedStandardDeviationDummy::get_linf_sensitivity,
                    &BoundedSumDummy::set_linf_sensitivity);
 }
 

@@ -69,6 +69,7 @@ void declareMax(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MaxDummy::Result);
+  bld.def_property("l0_sensitvity", &MaxDummy::get_l0_sensitivity, &MaxDummy::set_l0_sensitivity);
 }
 
 void declareMin(py::module& m) {
@@ -79,6 +80,7 @@ void declareMin(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MinDummy::Result);
+  bld.def_property("l0_sensitvity", &MinDummy::get_l0_sensitivity, &MinDummy::set_l0_sensitivity);
 }
 
 void declareMedian(py::module& m) {
@@ -89,6 +91,7 @@ void declareMedian(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MedianDummy::Result);
+  bld.def_property("l0_sensitvity", &MedianDummy::get_l0_sensitivity, &MedianDummy::set_l0_sensitivity);
 }
 
 void declarePercentile(py::module& m) {
@@ -101,6 +104,7 @@ void declarePercentile(py::module& m) {
   bld.def("result", &PercentileDummy::Result);
   bld.def_property("percentile", &PercentileDummy::getPercentile,
                    &PercentileDummy::setPercentile);
+  bld.def_property("l0_sensitvity", &PercentileDummy::get_l0_sensitivity, &PercentileDummy::set_l0_sensitivity);
 }
 
 void init_algorithms_order_statistics(py::module& m) {

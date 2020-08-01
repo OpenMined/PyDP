@@ -70,7 +70,7 @@ class TestGaussianDistribution:
     def test_standard_deviation_getter(self):
         stddev = k_one_over_log2
         dist = dp.GaussianDistribution(stddev)
-        assert dist.stddev() == stddev
+        assert dist.stddev == stddev
 
 
 class TestLaplaceDistributionDatatypes:
@@ -100,7 +100,7 @@ class TestGaussianDistributionDataTypes:
         gds1 = gd.sample(1.0)
         assert isinstance(gds, float)
         assert isinstance(gds1, float)
-        gdstd = gd.stddev()
+        gdstd = gd.stddev
         assert isinstance(gdstd, float)
 
 

@@ -14,13 +14,14 @@ extern "C" {
 
 typedef struct BoundedFunctionHelperObject {
   double epsilon;
-  int lower;
-  int upper;
-
+  int lower_bound;
+  int upper_bound;
+  int l0_sensitivity;
+  int linf_sensitivity;
 } BoundedFunctionHelperObject;
 
-extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower,
-                                                             int upper);
+extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower_bound,
+                                                             int upper_bound);
 
 extern BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon);
 
@@ -49,6 +50,14 @@ extern int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list
 
 extern int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list a,
                                  double privacy_budget, double percentile);
+
+extern void set_l0_sensitivity_(int _l0_sensitivity);
+
+extern int get_l0_sensitivity_();
+
+extern void set_linf_sensitivity_(int _linf_sensitivity);
+
+extern int get_linf_sensitivity_();
 
 #ifdef __cplusplus
 } /* end extern "C" */

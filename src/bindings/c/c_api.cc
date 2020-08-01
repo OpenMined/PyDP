@@ -40,10 +40,10 @@ double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l)
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
     mean_obj = BoundedMean<double>::Builder()
-                .SetEpsilon(config->epsilon)
-                .SetMaxPartitionsContributed(l0_sensitivity)
-                .SetMaxContributionsPerPartition(linf_sensitivity)
-                .Build();
+                   .SetEpsilon(config->epsilon)
+                   .SetMaxPartitionsContributed(l0_sensitivity)
+                   .SetMaxContributionsPerPartition(linf_sensitivity)
+                   .Build();
   }
 
   if (!mean_obj.ok()) {
@@ -79,10 +79,10 @@ double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list l) 
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
     sum_obj = BoundedSum<double>::Builder()
-                .SetEpsilon(config->epsilon)
-                .SetMaxPartitionsContributed(l0_sensitivity)
-                .SetMaxContributionsPerPartition(linf_sensitivity)
-                .Build();
+                  .SetEpsilon(config->epsilon)
+                  .SetMaxPartitionsContributed(l0_sensitivity)
+                  .SetMaxContributionsPerPartition(linf_sensitivity)
+                  .Build();
   }
 
   if (!sum_obj.ok()) {
@@ -111,17 +111,16 @@ double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
                  .SetLower(config->lower_bound)
                  .SetUpper(config->upper_bound)
                  .SetMaxPartitionsContributed(l0_sensitivity)
-                  .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build();
   } else {
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
-    sd_obj =
-        BoundedStandardDeviation<double>::Builder()
-          .SetEpsilon(config->epsilon)
-          .SetMaxPartitionsContributed(l0_sensitivity)
-          .SetMaxContributionsPerPartition(linf_sensitivity)
-          .Build();
+    sd_obj = BoundedStandardDeviation<double>::Builder()
+                 .SetEpsilon(config->epsilon)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .Build();
   }
 
   if (!sd_obj.ok()) {
@@ -152,12 +151,11 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
                        .SetMaxContributionsPerPartition(linf_sensitivity)
                        .Build();
   } else {
-    variance_obj =
-        BoundedVariance<double>::Builder()
-          .SetEpsilon(config->epsilon)
-          .SetMaxPartitionsContributed(l0_sensitivity)
-          .SetMaxContributionsPerPartition(linf_sensitivity)
-          .Build();
+    variance_obj = BoundedVariance<double>::Builder()
+                       .SetEpsilon(config->epsilon)
+                       .SetMaxPartitionsContributed(l0_sensitivity)
+                       .SetMaxContributionsPerPartition(linf_sensitivity)
+                       .Build();
   }
 
   if (!variance_obj.ok()) {
@@ -221,10 +219,10 @@ int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list l,
               .Build();
   } else {
     min = continuous::Min<int64_t>::Builder()
-            .SetEpsilon(config->epsilon)
-            .SetMaxPartitionsContributed(l0_sensitivity)
-            .SetMaxContributionsPerPartition(linf_sensitivity)
-            .Build();
+              .SetEpsilon(config->epsilon)
+              .SetMaxPartitionsContributed(l0_sensitivity)
+              .SetMaxContributionsPerPartition(linf_sensitivity)
+              .Build();
   }
   if (!min.ok()) {
     throw std::runtime_error(min.status().error_message());
@@ -252,14 +250,14 @@ int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list l,
                  .SetLower(config->lower_bound)
                  .SetUpper(config->upper_bound)
                  .SetMaxPartitionsContributed(l0_sensitivity)
-                  .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build();
   } else {
     median = continuous::Median<int64_t>::Builder()
-              .SetEpsilon(config->epsilon)
-              .SetMaxPartitionsContributed(l0_sensitivity)
-              .SetMaxContributionsPerPartition(linf_sensitivity)
-              .Build();
+                 .SetEpsilon(config->epsilon)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .Build();
   }
   if (!median.ok()) {
     throw std::runtime_error(median.status().error_message());
@@ -325,19 +323,19 @@ void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config) {
   delete config;
 };
 
-void set_l0_sensitivity_(int _l0_sensitivity){
+void set_l0_sensitivity_(int _l0_sensitivity) {
   l0_sensitivity = _l0_sensitivity;
 }
 
-int get_l0_sensitivity_(){
+int get_l0_sensitivity_() {
   return l0_sensitivity;
 }
 
-void set_linf_sensitivity_(int _linf_sensitivity){
+void set_linf_sensitivity_(int _linf_sensitivity) {
   linf_sensitivity = _linf_sensitivity;
 }
 
-int get_linf_sensitivity_(){
+int get_linf_sensitivity_() {
   return linf_sensitivity;
 }
 

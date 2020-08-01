@@ -20,17 +20,17 @@ class Dummy {
     obj = NewBoundedFunctionObject1(epsilon);
   }
 
-  void set_l0_sensitivity(int _l0_sensitivity){
-   set_l0_sensitivity_(_l0_sensitivity);
+  void set_l0_sensitivity(int _l0_sensitivity) {
+    set_l0_sensitivity_(_l0_sensitivity);
   }
-  int get_l0_sensitivity(){
+  int get_l0_sensitivity() {
     return get_l0_sensitivity_();
   }
 
-  void set_linf_sensitivity(int _linf_sensitivity){
+  void set_linf_sensitivity(int _linf_sensitivity) {
     set_linf_sensitivity_(_linf_sensitivity);
   }
-  int get_linf_sensitivity(){
+  int get_linf_sensitivity() {
     return get_linf_sensitivity_();
   }
 

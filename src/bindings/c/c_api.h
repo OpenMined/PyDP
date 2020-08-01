@@ -20,7 +20,8 @@ typedef struct BoundedFunctionHelperObject {
   int linf_sensitivity;
 } BoundedFunctionHelperObject;
 
-extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower_bound,
+extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon,
+                                                             int lower_bound,
                                                              int upper_bound);
 
 extern BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon);

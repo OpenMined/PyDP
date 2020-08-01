@@ -16,8 +16,6 @@ typedef struct BoundedFunctionHelperObject {
   double epsilon;
   int lower_bound;
   int upper_bound;
-  int l0_sensitivity;
-  int linf_sensitivity;
 } BoundedFunctionHelperObject;
 
 extern BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon,

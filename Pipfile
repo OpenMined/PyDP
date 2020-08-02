@@ -9,7 +9,6 @@ bumpversion = "==0.5.3"
 pytest = "*"
 black = "*"
 twine = "*"
-clang-format = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 

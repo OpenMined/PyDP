@@ -69,9 +69,9 @@ void declareMax(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MaxDummy::Result);
-  bld.def_property("l0_sensitvity", &MaxDummy::get_l0_sensitivity,
+  bld.def_property("l0_sensitivity", &MaxDummy::get_l0_sensitivity,
                    &MaxDummy::set_l0_sensitivity);
-  bld.def_property("linf_sensitvity", &MaxDummy::get_linf_sensitivity,
+  bld.def_property("linf_sensitivity", &MaxDummy::get_linf_sensitivity,
                    &MaxDummy::set_linf_sensitivity);
 }
 
@@ -83,9 +83,9 @@ void declareMin(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MinDummy::Result);
-  bld.def_property("l0_sensitvity", &MinDummy::get_l0_sensitivity,
+  bld.def_property("l0_sensitivity", &MinDummy::get_l0_sensitivity,
                    &MinDummy::set_l0_sensitivity);
-  bld.def_property("linf_sensitvity", &MinDummy::get_linf_sensitivity,
+  bld.def_property("linf_sensitivity", &MinDummy::get_linf_sensitivity,
                    &MinDummy::set_linf_sensitivity);
 }
 
@@ -97,9 +97,9 @@ void declareMedian(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &MedianDummy::Result);
-  bld.def_property("l0_sensitvity", &MedianDummy::get_l0_sensitivity,
+  bld.def_property("l0_sensitivity", &MedianDummy::get_l0_sensitivity,
                    &MedianDummy::set_l0_sensitivity);
-  bld.def_property("linf_sensitvity", &MedianDummy::get_linf_sensitivity,
+  bld.def_property("linf_sensitivity", &MedianDummy::get_linf_sensitivity,
                    &MedianDummy::set_linf_sensitivity);
 }
 
@@ -113,9 +113,9 @@ void declarePercentile(py::module& m) {
   bld.def("result", &PercentileDummy::Result);
   bld.def_property("percentile", &PercentileDummy::getPercentile,
                    &PercentileDummy::setPercentile);
-  bld.def_property("l0_sensitvity", &PercentileDummy::get_l0_sensitivity,
+  bld.def_property("l0_sensitivity", &PercentileDummy::get_l0_sensitivity,
                    &PercentileDummy::set_l0_sensitivity);
-  bld.def_property("linf_sensitvity", &PercentileDummy::get_linf_sensitivity,
+  bld.def_property("linf_sensitivity", &PercentileDummy::get_linf_sensitivity,
                    &PercentileDummy::set_linf_sensitivity);
 }
 

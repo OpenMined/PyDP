@@ -17,6 +17,8 @@ namespace differential_privacy {
 
 // Helper variable in-case bounds are not set
 bool has_bounds;
+int l0_sensitivity = 1;
+int linf_sensitivity = 1;
 
 // Bounded Mean
 double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l) {
@@ -29,13 +31,19 @@ double Result_BoundedMean(BoundedFunctionHelperObject* config, pybind11::list l)
   if (has_bounds) {
     mean_obj = BoundedMean<double>::Builder()
                    .SetEpsilon(config->epsilon)
-                   .SetLower(config->lower)
-                   .SetUpper(config->upper)
+                   .SetLower(config->lower_bound)
+                   .SetUpper(config->upper_bound)
+                   .SetMaxPartitionsContributed(l0_sensitivity)
+                   .SetMaxContributionsPerPartition(linf_sensitivity)
                    .Build();
   } else {
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
-    mean_obj = BoundedMean<double>::Builder().SetEpsilon(config->epsilon).Build();
+    mean_obj = BoundedMean<double>::Builder()
+                   .SetEpsilon(config->epsilon)
+                   .SetMaxPartitionsContributed(l0_sensitivity)
+                   .SetMaxContributionsPerPartition(linf_sensitivity)
+                   .Build();
   }
 
   if (!mean_obj.ok()) {
@@ -62,13 +70,19 @@ double Result_BoundedSum(BoundedFunctionHelperObject* config, pybind11::list l) 
   if (has_bounds) {
     sum_obj = BoundedSum<double>::Builder()
                   .SetEpsilon(config->epsilon)
-                  .SetLower(config->lower)
-                  .SetUpper(config->upper)
+                  .SetLower(config->lower_bound)
+                  .SetUpper(config->upper_bound)
+                  .SetMaxPartitionsContributed(l0_sensitivity)
+                  .SetMaxContributionsPerPartition(linf_sensitivity)
                   .Build();
   } else {
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
-    sum_obj = BoundedSum<double>::Builder().SetEpsilon(config->epsilon).Build();
+    sum_obj = BoundedSum<double>::Builder()
+                  .SetEpsilon(config->epsilon)
+                  .SetMaxPartitionsContributed(l0_sensitivity)
+                  .SetMaxContributionsPerPartition(linf_sensitivity)
+                  .Build();
   }
 
   if (!sum_obj.ok()) {
@@ -94,14 +108,19 @@ double Result_BoundedStandardDeviation(BoundedFunctionHelperObject* config,
   if (has_bounds) {
     sd_obj = BoundedStandardDeviation<double>::Builder()
                  .SetEpsilon(config->epsilon)
-                 .SetLower(config->lower)
-                 .SetUpper(config->upper)
+                 .SetLower(config->lower_bound)
+                 .SetUpper(config->upper_bound)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build();
   } else {
     // TODO: a better solution to this is needed similar to ASSIGN_OR_RETURN but with a
     // raised exeception
-    sd_obj =
-        BoundedStandardDeviation<double>::Builder().SetEpsilon(config->epsilon).Build();
+    sd_obj = BoundedStandardDeviation<double>::Builder()
+                 .SetEpsilon(config->epsilon)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .Build();
   }
 
   if (!sd_obj.ok()) {
@@ -126,12 +145,17 @@ double Result_BoundedVariance(BoundedFunctionHelperObject* config, pybind11::lis
   if (has_bounds) {
     variance_obj = BoundedVariance<double>::Builder()
                        .SetEpsilon(config->epsilon)
-                       .SetLower(config->lower)
-                       .SetUpper(config->upper)
+                       .SetLower(config->lower_bound)
+                       .SetUpper(config->upper_bound)
+                       .SetMaxPartitionsContributed(l0_sensitivity)
+                       .SetMaxContributionsPerPartition(linf_sensitivity)
                        .Build();
   } else {
-    variance_obj =
-        BoundedVariance<double>::Builder().SetEpsilon(config->epsilon).Build();
+    variance_obj = BoundedVariance<double>::Builder()
+                       .SetEpsilon(config->epsilon)
+                       .SetMaxPartitionsContributed(l0_sensitivity)
+                       .SetMaxContributionsPerPartition(linf_sensitivity)
+                       .Build();
   }
 
   if (!variance_obj.ok()) {
@@ -157,8 +181,10 @@ int64_t Result_Max(BoundedFunctionHelperObject* config, pybind11::list l,
   if (has_bounds) {
     max = continuous::Max<int64_t>::Builder()
               .SetEpsilon(config->epsilon)
-              .SetLower(config->lower)
-              .SetUpper(config->upper)
+              .SetLower(config->lower_bound)
+              .SetUpper(config->upper_bound)
+              .SetMaxPartitionsContributed(l0_sensitivity)
+              .SetMaxContributionsPerPartition(linf_sensitivity)
               .Build();
   } else {
     max = continuous::Max<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
@@ -186,11 +212,17 @@ int64_t Result_Min(BoundedFunctionHelperObject* config, pybind11::list l,
   if (has_bounds) {
     min = continuous::Min<int64_t>::Builder()
               .SetEpsilon(config->epsilon)
-              .SetLower(config->lower)
-              .SetUpper(config->upper)
+              .SetLower(config->lower_bound)
+              .SetUpper(config->upper_bound)
+              .SetMaxPartitionsContributed(l0_sensitivity)
+              .SetMaxContributionsPerPartition(linf_sensitivity)
               .Build();
   } else {
-    min = continuous::Min<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
+    min = continuous::Min<int64_t>::Builder()
+              .SetEpsilon(config->epsilon)
+              .SetMaxPartitionsContributed(l0_sensitivity)
+              .SetMaxContributionsPerPartition(linf_sensitivity)
+              .Build();
   }
   if (!min.ok()) {
     throw std::runtime_error(min.status().error_message());
@@ -215,11 +247,17 @@ int64_t Result_Median(BoundedFunctionHelperObject* config, pybind11::list l,
   if (has_bounds) {
     median = continuous::Median<int64_t>::Builder()
                  .SetEpsilon(config->epsilon)
-                 .SetLower(config->lower)
-                 .SetUpper(config->upper)
+                 .SetLower(config->lower_bound)
+                 .SetUpper(config->upper_bound)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build();
   } else {
-    median = continuous::Median<int64_t>::Builder().SetEpsilon(config->epsilon).Build();
+    median = continuous::Median<int64_t>::Builder()
+                 .SetEpsilon(config->epsilon)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
+                 .Build();
   }
   if (!median.ok()) {
     throw std::runtime_error(median.status().error_message());
@@ -246,14 +284,18 @@ int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
     search = continuous::Percentile<int64_t>::Builder()
                  .SetPercentile(percentile)
                  .SetEpsilon(config->epsilon)
-                 .SetLower(config->lower)
-                 .SetUpper(config->upper)
+                 .SetLower(config->lower_bound)
+                 .SetUpper(config->upper_bound)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build()
                  .ValueOrDie();
   } else {
     search = continuous::Percentile<int64_t>::Builder()
                  .SetPercentile(percentile)
                  .SetEpsilon(config->epsilon)
+                 .SetMaxPartitionsContributed(l0_sensitivity)
+                 .SetMaxContributionsPerPartition(linf_sensitivity)
                  .Build()
                  .ValueOrDie();
   }
@@ -266,10 +308,10 @@ int64_t Result_Percentile(BoundedFunctionHelperObject* config, pybind11::list l,
 
 // Common functions
 
-BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower,
-                                                      int upper) {
+BoundedFunctionHelperObject* NewBoundedFunctionObject(double epsilon, int lower_bound,
+                                                      int upper_bound) {
   has_bounds = true;
-  return new BoundedFunctionHelperObject{epsilon, lower, upper};
+  return new BoundedFunctionHelperObject{epsilon, lower_bound, upper_bound};
 }
 
 BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon) {
@@ -280,6 +322,22 @@ BoundedFunctionHelperObject* NewBoundedFunctionObject1(double epsilon) {
 void DeleteBoundedFunctionObject(BoundedFunctionHelperObject* config) {
   delete config;
 };
+
+void set_l0_sensitivity_(int _l0_sensitivity) {
+  l0_sensitivity = _l0_sensitivity;
+}
+
+int get_l0_sensitivity_() {
+  return l0_sensitivity;
+}
+
+void set_linf_sensitivity_(int _linf_sensitivity) {
+  linf_sensitivity = _linf_sensitivity;
+}
+
+int get_linf_sensitivity_() {
+  return linf_sensitivity;
+}
 
 }  // end namespace differential_privacy
 }  // end extern "C"

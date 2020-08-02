@@ -54,6 +54,10 @@ void declareBoundedMean(py::module& m) {
   bld.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   bld.def("result", &BoundedMeanDummy::Result);
+  bld.def_property("l0_sensitvity", &BoundedMeanDummy::get_l0_sensitivity,
+                   &BoundedMeanDummy::set_l0_sensitivity);
+  bld.def_property("linf_sensitvity", &BoundedMeanDummy::get_linf_sensitivity,
+                   &BoundedMeanDummy::set_linf_sensitivity);
 }
 
 void declareBoundedSum(py::module& m) {
@@ -64,6 +68,10 @@ void declareBoundedSum(py::module& m) {
   cls.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def("result", &BoundedSumDummy::Result);
+  cls.def_property("l0_sensitvity", &BoundedSumDummy::get_l0_sensitivity,
+                   &BoundedSumDummy::set_l0_sensitivity);
+  cls.def_property("linf_sensitvity", &BoundedSumDummy::get_linf_sensitivity,
+                   &BoundedSumDummy::set_linf_sensitivity);
 }
 
 void declareBoundedStandardDeviation(py::module& m) {
@@ -74,6 +82,11 @@ void declareBoundedStandardDeviation(py::module& m) {
   cls.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def("result", &BoundedStandardDeviationDummy::Result);
+  cls.def_property("l0_sensitvity", &BoundedStandardDeviationDummy::get_l0_sensitivity,
+                   &BoundedStandardDeviationDummy::set_l0_sensitivity);
+  cls.def_property("linf_sensitvity",
+                   &BoundedStandardDeviationDummy::get_linf_sensitivity,
+                   &BoundedSumDummy::set_linf_sensitivity);
 }
 
 void declareBoundedVariance(py::module& m) {
@@ -84,6 +97,10 @@ void declareBoundedVariance(py::module& m) {
   cls.def(py::init<double>(), py::return_value_policy::reference,
           py::call_guard<pybind11::gil_scoped_release>());
   cls.def("result", &BoundedVarianceDummy::Result);
+  cls.def_property("l0_sensitvity", &BoundedVarianceDummy::get_l0_sensitivity,
+                   &BoundedVarianceDummy::set_l0_sensitivity);
+  cls.def_property("linf_sensitvity", &BoundedVarianceDummy::get_linf_sensitivity,
+                   &BoundedVarianceDummy::set_linf_sensitivity);
 }
 
 void init_algorithms_bounded_functions(py::module& m) {

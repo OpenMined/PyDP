@@ -45,7 +45,8 @@ void declareGaussianDistribution(py::module &m) {
                     scale
                          A factor to scale stddev.    
              )pbdoc")
-      .def("stddev", &dpi::GaussianDistribution::Stddev, R"pbdoc(Returns stddev)pbdoc");
+      .def_property_readonly("stddev", &dpi::GaussianDistribution::Stddev,
+                             R"pbdoc(Returns stddev)pbdoc");
 }
 
 void declareGeometricDistribution(py::module &m) {
@@ -59,8 +60,8 @@ void declareGeometricDistribution(py::module &m) {
       .def("sample", py::overload_cast<double>(&dpi::GeometricDistribution::Sample),
            py::arg("scale") = 1.0, "Returns a sample from p = 1 - e^-(lambda/scale).")
 
-      .def("lambda", &dpi::GeometricDistribution::Lambda,
-           R"pbdoc(Returns lambda. Where p = 1 - e^-lambda)pbdoc");
+      .def_property_readonly("lambda", &dpi::GeometricDistribution::Lambda,
+                             R"pbdoc(Returns lambda. Where p = 1 - e^-lambda)pbdoc");
   geometric_dist.attr("__doc__") =
       R"pbdoc(Draws samples from the geometric distribution of probability
           \math{p = 1 - e^{-\lambda}}, i.e. the number of bernoulli trial failures before the

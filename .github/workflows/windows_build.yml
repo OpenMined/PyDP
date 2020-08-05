@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7
+        python-version: 3.8
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -28,8 +28,32 @@ jobs:
       uses: abhinavsingh/setup-bazel@v3
     - name: Build PyDP
       run: |
-        ./bazel.exe build  src/python:bindings_win --verbose_failures
-    # - name: Build and publish
+         bazel build  src/python:bindings_win --verbose_failures
+         copy bazel-bin\src\bindings\pydp-win.so pydp\pydp.pyd
+         python setup.py bdist_wheel
+
+    - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: .\dist\python_dp-0.1.4-cp38-cp38-win_amd64.whl
+          asset_name: python_dp-0.1.4-cp38-cp38-win_amd64.whl
+          asset_content_type: application/zip
+    
+        # - name: Build and publish
     #   env:
     #     TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
     #     TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

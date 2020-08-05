@@ -1,3 +1,4 @@
 [submodule "third_party/differential-privacy"]
+	branch = windows-support
+	url = https://github.com/benjaminDev/differential-privacy
 	path = third_party/differential-privacy
-	url = https://github.com/google/differential-privacy

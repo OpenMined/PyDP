@@ -6,17 +6,12 @@ import pydp as dp
 class TestPercentile:
     def test_basic(self, input_class):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class()
-        count.result(c)
-
-    def test_basic_epsilon(self, input_class):
-        c = [1, 2, 3, 4, 2, 3]
         count = input_class(1.7)
         count.result(c)
 
     def test_repeated_result(self, input_class):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class()
+        count = input_class(1.7)
         count.add_entries(c)
 
         count.partial_result(0.5)

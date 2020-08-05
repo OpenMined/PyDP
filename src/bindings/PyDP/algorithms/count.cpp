@@ -5,6 +5,8 @@
 
 #include "algorithms/count.h"
 
+#include "../pydp_lib/algorithm_builder.hpp"
+
 using namespace std;
 
 namespace py = pybind11;
@@ -12,14 +14,11 @@ namespace dp = differential_privacy;
 
 template <typename T>
 void declareCount(py::module& m, string const& suffix) {
-  using count_builder = typename dp::Count<T>::Builder;
+  using builder = typename dp::python::AlgorithmBuilder<T, dp::Count<T>>;
 
   py::class_<dp::Count<T>> count(m, ("Count" + suffix).c_str());
   count.attr("__module__") = "pydp";
-  count.def(py::init([]() { return count_builder().Build().ValueOrDie(); }))
-      .def(py::init([](double epsilon) {
-        return count_builder().SetEpsilon(epsilon).Build().ValueOrDie();
-      }))
+  count.def(py::init([](double epsilon) { return builder().Build(epsilon); }))
       .def("add_entry", &dp::Count<T>::AddEntry)
       .def("add_entries",
            [](dp::Count<T>& obj, std::vector<T>& v) {

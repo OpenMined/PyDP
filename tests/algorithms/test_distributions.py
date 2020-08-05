@@ -1,34 +1,81 @@
 import pytest
 import pydp as dp
 import math
+from typing import List
+from itertools import accumulate
+import math
 
-kOneOverLog2 = 1.44269504089
+k_num_samples = 10000000
+k_num_geometric_samples = 1000000
+k_gaussian_samples = 1000000
+k_one_over_log2 = 1.44269504089
 
 
-# legacy tests
-# no new tests exists for these that can be tested
-# class TestLaplaceDistribution:
-# def test_diversity_getter(self):
-#     stddev = kOneOverLog2
-#     dist = dp.LaplaceDistribution(stddev, 1.0)
-#     assert dist.get_diversity() == stddev
+def skew(samples: List[float], mu: float, sigma: float):
+    """Unfortunately this is implemented in third_party/differential-privacy/cc/algorithms/distributions_test.cc
+       and we don't want to pull the test files in. I'm assuming it'll be moved to
+       third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
+       Until then this should suffice. #FIXME: when possible we can fix this.  
+    """
+    skew = list(
+        accumulate(samples, lambda lhs, rhs: lhs + (rhs - mu) * (rhs - mu) * (rhs - mu))
+    )[-1]
+    return skew / (len(samples) * sigma * sigma * sigma)
 
-# def test_cdf(self):
-#     assert dp.LaplaceDistribution.cdf(5, 0) == 0.5
-#     assert dp.LaplaceDistribution.cdf(1, -1) == 0.5 * math.exp(-1)
-#     assert dp.LaplaceDistribution.cdf(1, 1) == 1 - 0.5 * math.exp(-1)
+
+def kurtosis(samples: List[float], mu: float, var: float):
+    """Unfortunately this is implemented in third_party/differential-privacy/cc/algorithms/distributions_test.cc
+       and we don't want to pull the test files in. I'm assuming it'll be moved to
+       third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
+       Until then this should suffice. #FIXME: when possible we can fix this.  
+    """
+    kurt = list(
+        accumulate(samples, lambda lhs, rhs: lhs + ((rhs - mu) * (rhs - mu)) ** 2)
+    )[-1]
+    n = len(samples)
+    kurt = (n + 1) * kurt / (n * var * var)
+    kurt -= 3 * (n - 1)
+    kurt *= (n - 1) / (n - 2) / (n - 3)
+    return kurt
+
+
+# From what I understand @openmined/dp-research are going to look at validating correctness
+# Until then we can use this to assert on floating point numbers.
+# FIXME: When possible we should add 'correctness' tests.
+expect_near = lambda expected, actual, tol: (
+    expected + tol >= actual and expected - tol <= actual
+)
+
+
+class TestLaplaceDistribution:
+    def test_diversity_getter(self):
+        sensitivity, epsilon = 1.0, 22.0
+        dist = dp.LaplaceDistribution(epsilon=epsilon, sensitivity=sensitivity)
+        assert dist.get_diversity() == sensitivity / epsilon
+
+    def test_check_statistics_for_geo_unit_values(self):
+
+        ld = dp.LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
+        samples = [ld.sample(scale=1.0) for _ in range(k_num_geometric_samples)]
+        mean = dp.util.mean(samples)
+        var = dp.util.variance(samples)
+
+        assert expect_near(0.0, mean, 0.01)
+        assert expect_near(2.0, var, 0.1)
+        assert expect_near(0.0, skew(samples, mean, math.sqrt(var)), 0.1)
+        assert expect_near(3.0, kurtosis(samples, mean, var), 0.1)
 
 
 class TestGaussianDistribution:
     def test_standard_deviation_getter(self):
-        stddev = kOneOverLog2
+        stddev = k_one_over_log2
         dist = dp.GaussianDistribution(stddev)
-        assert dist.stddev() == stddev
+        assert dist.stddev == stddev
 
 
 class TestLaplaceDistributionDatatypes:
     def test_LaplaceDistributionTypes(self):
-        ld = dp.LaplaceDistribution(2.0, 1.0)
+        ld = dp.LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
         assert isinstance(ld, dp.LaplaceDistribution)
 
         sud = ld.get_uniform_double()
@@ -53,9 +100,22 @@ class TestGaussianDistributionDataTypes:
         gds1 = gd.sample(1.0)
         assert isinstance(gds, float)
         assert isinstance(gds1, float)
-        gdstd = gd.stddev()
+        gdstd = gd.stddev
         assert isinstance(gdstd, float)
 
+
+# class TestGeometricDistribution:
+#     def test_ratios(self):
+#         from collections import Counter
+#         p=1e-2
+#         dist = dp.GeometricDistribution(lambda_=-1.0*math.log(1-p))
+#         samples  = [dist.sample() for _ in range(k_num_geometric_samples)]
+#         counts = list(Counter([s for s in samples if s < 51]).values())
+#         ratios = [c_i/c_j for c_i, c_j in zip(counts[:-1], counts[1:])]
+# This test fails. It's a replica of
+# https://github.com/google/differential-privacy/blob/9923ad4ee1b84a7002085e50345fcc05f2b21bcb/cc/algorithms/distributions_test.cc#L208
+# and should pass.
+# assert expect_near(p, dp.util.mean(ratios), p / 1e-2)
 
 # TODO: port the following tests
 #

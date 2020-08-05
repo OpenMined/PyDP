@@ -28,6 +28,14 @@ else
     brew install bazelbuild/tap/bazel
 fi
 
+# clang-format
+if command -v clang-format &>/dev/null; then
+    echo "clang-format already installed"
+else
+    echo "installing clang-format"
+    brew install clang-format
+fi
+
 # pipenv
 echo "Checking for pipenv"
 if python3 -c "import pipenv" &> /dev/null; then

@@ -9,5 +9,7 @@ bumpversion = "==0.5.3"
 pytest = "*"
 black = "*"
 twine = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
 
 [packages]

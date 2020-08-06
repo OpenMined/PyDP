@@ -42,8 +42,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: 0.1.4-cp38-win_amd64-beta.1
-        release_name: Release 0.1.4-cp38-win_amd64-beta.1
+        tag_name: 0.1.4-cp38-win_amd64-beta.2
+        release_name: Release 0.1.4-cp38-win_amd64-beta.2
         draft: false
         prerelease: true
     - name: Upload Release Asset
@@ -53,8 +53,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: .\dist\python_dp-0.1.4_cp38_win_amd64_beta.1-cp38-cp38-win_amd64.whl
-        asset_name: python_dp-0.1.4_cp38_win_amd64_beta.1-cp38-cp38-win_amd64.whl
+        asset_path: .\dist\python_dp-0.1.4_cp38_win_amd64_beta.2-cp38-cp38-win_amd64.whl
+        asset_name: python_dp-0.1.4_cp38_win_amd64_beta.2-cp38-cp38-win_amd64.whl
         asset_content_type: application/zip
   
         # - name: Build and publish

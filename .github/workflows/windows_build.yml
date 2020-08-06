@@ -1,6 +1,5 @@
 name: Windows Package
 
-
 on: 
   workflow_dispatch:
     inputs:
@@ -34,7 +33,8 @@ jobs:
          bazel build  src/python:bindings_win --verbose_failures
          copy bazel-bin\src\bindings\pydp-win.so pydp\pydp.pyd
          python setup.py bdist_wheel
-         echo ::set-output name=version::(python -c "import pydp; print(pydp.__version__)")
+         $version=(python -c "import pydp; print(pydp.__version__)")
+         echo ::set-output::name=version::$version
       id: build-pydp
 
     - name: Create Release

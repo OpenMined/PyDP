@@ -44,8 +44,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.build-pydp.version }}
-        release_name: Release ${{ steps.build-pydp.version }}
+        tag_name: 0.1.4-cp38-win_amd64-beta.1
+        release_name: Release 0.1.4-cp38-win_amd64-beta.1
         draft: false
         prerelease: true
     - name: Upload Release Asset

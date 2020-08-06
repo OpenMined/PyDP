@@ -3,11 +3,14 @@ name: Windows Package
 
 on: 
   workflow_dispatch:
-    branches:
-    - windows-support
+    inputs:
+      build_reason:
+        description: 'Why you building the windows wheel'     
+        required: true
+        default: 'To test it'
 
 jobs:
-  deploy:
+  build-windows-wheel:
 
     runs-on: windows-latest
     steps:

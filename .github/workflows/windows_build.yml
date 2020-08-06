@@ -34,8 +34,7 @@ jobs:
          copy bazel-bin\src\bindings\pydp-win.so pydp\pydp.pyd
          python setup.py bdist_wheel
          $version=(python -c "import pydp; print(pydp.__version__)")
-         $step_tag='name=version'
-         echo ::set-output::$step_tag::$version
+         echo "::set-output name=version::$version"
       id: build-pydp
 
     - name: Create Release

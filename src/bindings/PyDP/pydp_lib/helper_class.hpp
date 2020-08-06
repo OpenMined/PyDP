@@ -20,9 +20,9 @@ class Dummy {
     obj = NewBoundedFunctionObject1(epsilon);
   }
 
-  virtual double Result(py::list) {}
+  virtual double Result(py::list){return 0.0;}
 
-  virtual double Result(py::list, double) {}
+  virtual double Result(py::list, double) {return 0.0;}
 
   ~Dummy() {
     DeleteBoundedFunctionObject(obj);

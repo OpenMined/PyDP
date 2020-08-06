@@ -37,12 +37,10 @@ pybind_extension(
     name = "pydp-win",
     srcs = glob([
         "PyDP/*.cpp",
-        "PyDP/base/logging.cpp",
-        "PyDP/base/status.cpp",
-        "PyDP/base/percentile.cpp",
-
-        "PyDP/algorithms/count.cpp",
-        "PyDP/algorithms/util.cpp",
+        "PyDP/base/*.cpp",
+        "PyDP/pydp_lib/*.hpp",            
+        "PyDP/algorithms/*.cpp",
+        "PyDP/proto/*.cpp",
         "c/*.cc",
         "c/*.h",
     ]),

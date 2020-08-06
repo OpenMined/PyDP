@@ -36,7 +36,8 @@ jobs:
          $version=(python -c "import pydp; print(pydp.__version__)")
          echo "::set-output name=version::$version"
       id: build-pydp
-
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v2
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1

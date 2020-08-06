@@ -48,23 +48,21 @@ class TestPercentile:
 
 class TestCountDataTypes:
     def test_count_datatypes(self):
-        ci1 = dp.CountInt()
-        ci2 = dp.CountInt(2.0)
-        assert isinstance(ci1, dp.CountInt)
-        assert isinstance(ci2, dp.CountInt)
+        count = dp.CountInt(2.0)
+        assert isinstance(count, dp.CountInt)
 
-        ci2ae = ci2.add_entry(2)
-        assert isinstance(ci2ae, type(None))
-        ci2aes = ci2.add_entries([4, 6, 8])
-        assert isinstance(ci2aes, type(None))
-        mem = ci2.memory_used()
+        countae = count.add_entry(2)
+        assert isinstance(countae, type(None))
+        countaes = count.add_entries([4, 6, 8])
+        assert isinstance(countaes, type(None))
+        mem = count.memory_used()
         assert isinstance(mem, int)
-        par = ci2.partial_result()
+        par = count.partial_result()
         assert isinstance(par, int)
         # TODO
-        # par2 = ci2.partial_result(1.0)
+        # par2 = count.partial_result(1.0)
         # assert isinstance(par2, int)
-        res = ci2.result([2])
+        res = count.result([2])
         assert isinstance(res, int)
 
 

@@ -1,8 +1,8 @@
 name: Windows Package
 
 
-on:
-  push:
+on: 
+  workflow_dispatch:
     branches:
     - windows-support
 
@@ -31,6 +31,8 @@ jobs:
          bazel build  src/python:bindings_win --verbose_failures
          copy bazel-bin\src\bindings\pydp-win.so pydp\pydp.pyd
          python setup.py bdist_wheel
+         echo ::set-output name=version::(python -c "import pydp; print(pydp.__version__)")
+      id: build-pydp
 
     - name: Create Release
       id: create_release
@@ -38,10 +40,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.build-pydp.version }}
+        release_name: Release ${{ steps.build-pydp.version }}
         draft: false
-        prerelease: false
+        prerelease: true
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1

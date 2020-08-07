@@ -49,34 +49,17 @@ class AlgorithmBuilder {
         .ValueOrDie();
   }
 
+  std::map<std::type_index, std::string> type_to_name = {{typeid(double), "Double"},
+                                                         {typeid(int), "Int"}};
+  std::map<std::type_index, std::string> algorithm_to_name = {
+      {typeid(dp::BoundedMean<T>), "BoundedMean"},
+      {typeid(dp::BoundedSum<T>), "BoundedSum"},
+      {typeid(dp::BoundedStandardDeviation<T>), "BoundedStandardDeviation"},
+      {typeid(dp::BoundedVariance<T>), "BoundedVariance"}};
+
   std::string get_algorithm_name() {
     // Set the suffix string
-    std::string suffix = "";
-    // TODO: Change to mapping function
-    if (typeid(T) == typeid(int)) {
-      suffix = "Int";
-    } else if (typeid(T) == typeid(double)) {
-      suffix = "Double";
-    } else {
-      throw std::runtime_error("Binding error - Only int and double types supported");
-    }
-
-    // Set the algorithm name string
-    std::string name = "";
-    // TODO: Change to mapping function
-    if (typeid(Algorithm) == typeid(dp::BoundedMean<T>)) {
-      name = "BoundedMean";
-    } else if (typeid(Algorithm) == typeid(dp::BoundedSum<T>)) {
-      name = "BoundedSum";
-    } else if (typeid(Algorithm) == typeid(dp::BoundedStandardDeviation<T>)) {
-      name = "BoundedStandardDeviation";
-    } else if (typeid(Algorithm) == typeid(dp::BoundedVariance<T>)) {
-      name = "BoundedVariance";
-    } else {
-      throw std::runtime_error(std::string("Binding error - Unsupported algorithm: ") +
-                               std::string(typeid(Algorithm).name()));
-    }
-    return (name + suffix);
+    return (algorithm_to_name[typeid(Algorithm)] + type_to_name[typeid(T)]);
   }
 };
 

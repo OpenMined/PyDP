@@ -17,18 +17,13 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> Build(double epsilon) {
-    return typename Algorithm::Builder()
-        .SetLaplaceMechanism(absl::make_unique<LaplaceMechanism::Builder>())
-        .SetEpsilon(epsilon)
-        .Build()
-        .ValueOrDie();
+    return typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
   }
 
   std::unique_ptr<Algorithm> BuildWithBounds(double epsilon, T lower_bound,
                                              T upper_bound, int l0_sensitivity = 1,
                                              int linf_sensitivity = 1) {
     return typename Algorithm::Builder()
-        .SetLaplaceMechanism(absl::make_unique<LaplaceMechanism::Builder>())
         .SetEpsilon(epsilon)
         .SetLower(lower_bound)
         .SetUpper(upper_bound)
@@ -41,7 +36,6 @@ class AlgorithmBuilder {
   std::unique_ptr<Algorithm> BuildWithoutBounds(double epsilon, int l0_sensitivity = 1,
                                                 int linf_sensitivity = 1) {
     return typename Algorithm::Builder()
-        .SetLaplaceMechanism(absl::make_unique<LaplaceMechanism::Builder>())
         .SetEpsilon(epsilon)
         .SetMaxPartitionsContributed(l0_sensitivity)
         .SetMaxContributionsPerPartition(linf_sensitivity)

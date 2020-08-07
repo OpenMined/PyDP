@@ -39,4 +39,4 @@ more than one row.
 
 ## How to Run
 
-```python PyDP/example/carrots.py```
+```python PyDP/examples/carrots.py```

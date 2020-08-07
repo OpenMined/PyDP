@@ -32,6 +32,7 @@ void declareBoundedAlgorithm(py::module& m) {
           }),
           py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
           py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
+
   bld.def(py::init([](double epsilon, int l0_sensitivity, int linf_sensitivity) {
             py::print("Building without bounds");
             return builder().BuildWithoutBounds(epsilon, l0_sensitivity,
@@ -39,8 +40,34 @@ void declareBoundedAlgorithm(py::module& m) {
           }),
           py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
           py::arg("linf_sensitivity") = 1);
+
+  // TODO: can't get it work
+  // bld.def_property_readonly("l0_sensitivity", [](Algorithm& obj){
+  //   return obj.GetMaxPartitionsContributed();
+  // });
+  // bld.def_property_readonly("linf_sensitivity", [](Algorithm& obj){
+  //   return obj.SetMaxContributionsPerPartition();
+  // });
+
+  bld.def("privacy_budget_left",
+          [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });
+
+  // TODO
+  // bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
+  //   return obj.AddEntries(v.begin(), v.end()).ValueOrDie();
+  // });
+
+  // bld.def("partial_result", [](Algorithm& obj) {
+  //   return dp::GetValue<double>(obj.PartialResult().ValueOrDie());
+  // })
+  // bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
+  //   return dp::GetValue<double>(obj.PartialResult(privacy_budget).ValueOrDie());
+  // })
+
+  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
+
   bld.def("result", [](Algorithm& obj, std::vector<T>& v) {
-    return dp::GetValue<T>(obj.Result(v.begin(), v.end()).ValueOrDie());
+    return dp::GetValue<double>(obj.Result(v.begin(), v.end()).ValueOrDie());
   });
 }
 

@@ -27,27 +27,21 @@ void declareBoundedAlgorithm(py::module& m) {
   bld.def(py::init([](double epsilon, T lower_bound, T upper_bound, int l0_sensitivity,
                       int linf_sensitivity) {
             py::print("Building with bounds");
-            return builder().BuildWithBounds(epsilon, lower_bound, upper_bound,
-                                             l0_sensitivity, linf_sensitivity);
+            return builder().Build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                                   linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
           py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
 
   bld.def(py::init([](double epsilon, int l0_sensitivity, int linf_sensitivity) {
             py::print("Building without bounds");
-            return builder().BuildWithoutBounds(epsilon, l0_sensitivity,
-                                                linf_sensitivity);
+            return builder().Build(epsilon, nullopt, nullopt, l0_sensitivity,
+                                   linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
           py::arg("linf_sensitivity") = 1);
 
-  // TODO: can't get it work
-  // bld.def_property_readonly("l0_sensitivity", [](Algorithm& obj){
-  //   return obj.GetMaxPartitionsContributed();
-  // });
-  // bld.def_property_readonly("linf_sensitivity", [](Algorithm& obj){
-  //   return obj.SetMaxContributionsPerPartition();
-  // });
+  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
 
   bld.def("privacy_budget_left",
           [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });

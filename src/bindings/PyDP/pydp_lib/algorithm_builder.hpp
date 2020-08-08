@@ -15,47 +15,36 @@ namespace differential_privacy {
 namespace python {
 
 template <typename T, class Algorithm>
+constexpr bool is_bounded_algorithm() {
+  return std::is_same<Algorithm, dp::BoundedMean<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedSum<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedStandardDeviation<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedVariance<T>>::value;
+}
+
+template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
-  std::unique_ptr<Algorithm> Build(double epsilon) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj =
-        typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
+  std::unique_ptr<Algorithm> Build(double epsilon,
+                                   std::optional<T> lower_bound = std::nullopt,
+                                   std::optional<T> upper_bound = std::nullopt,
+                                   std::optional<int> l0_sensitivity = std::nullopt,
+                                   std::optional<int> linf_sensitivity = std::nullopt) {
+    auto builder = typename Algorithm::Builder();
 
-    if (!obj.ok()) {
-      throw std::runtime_error(obj.status().error_message());
+    builder.SetEpsilon(epsilon);
+
+    if (l0_sensitivity.has_value())
+      builder.SetMaxPartitionsContributed(l0_sensitivity.value());
+    if (linf_sensitivity.has_value())
+      builder.SetMaxContributionsPerPartition(linf_sensitivity.value());
+
+    if constexpr (is_bounded_algorithm<T, Algorithm>()) {
+      if (lower_bound.has_value()) builder.SetLower(lower_bound.value());
+      if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
     }
 
-    return std::move(obj.ValueOrDie());
-  }
-
-  std::unique_ptr<Algorithm> BuildWithBounds(double epsilon, T lower_bound,
-                                             T upper_bound, int l0_sensitivity = 1,
-                                             int linf_sensitivity = 1) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj =
-        typename Algorithm::Builder()
-            .SetEpsilon(epsilon)
-            .SetLower(lower_bound)
-            .SetUpper(upper_bound)
-            .SetMaxPartitionsContributed(l0_sensitivity)
-            .SetMaxContributionsPerPartition(linf_sensitivity)
-            .Build();
-
-    if (!obj.ok()) {
-      throw std::runtime_error(obj.status().error_message());
-    }
-
-    return std::move(obj.ValueOrDie());
-  }
-
-  std::unique_ptr<Algorithm> BuildWithoutBounds(double epsilon, int l0_sensitivity = 1,
-                                                int linf_sensitivity = 1) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj =
-        typename Algorithm::Builder()
-            .SetEpsilon(epsilon)
-            .SetMaxPartitionsContributed(l0_sensitivity)
-            .SetMaxContributionsPerPartition(linf_sensitivity)
-            .Build();
-
+    base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
       throw std::runtime_error(obj.status().error_message());
     }

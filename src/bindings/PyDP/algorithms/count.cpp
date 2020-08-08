@@ -29,6 +29,8 @@ void declareCount(py::module& m, string const& suffix) {
       //.def("serialize", &dp::Count<T>::Serialize)
       //.def("merge", &dp::Count<T>::Merge)
       .def("memory_used", &dp::Count<T>::MemoryUsed)
+      .def_property_readonly("epsilon",
+                             [](dp::Count<T>& obj) { return obj.GetEpsilon(); })
       .def("result",
            [](dp::Count<T>& obj, std::vector<T>& v) {
              auto result = obj.Result(v.begin(), v.end());

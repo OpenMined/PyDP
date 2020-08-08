@@ -52,22 +52,40 @@ void declareBoundedAlgorithm(py::module& m) {
   bld.def("privacy_budget_left",
           [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });
 
-  // TODO
-  // bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
-  //   return obj.AddEntries(v.begin(), v.end()).ValueOrDie();
-  // });
+  bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
+    obj.AddEntries(v.begin(), v.end());
+  });
 
-  // bld.def("partial_result", [](Algorithm& obj) {
-  //   return dp::GetValue<double>(obj.PartialResult().ValueOrDie());
-  // })
-  // bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
-  //   return dp::GetValue<double>(obj.PartialResult(privacy_budget).ValueOrDie());
-  // })
+  bld.def("partial_result", [](Algorithm& obj) {
+    auto result = obj.PartialResult();
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<double>(result.ValueOrDie());
+  });
+
+  bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
+    auto result = obj.PartialResult(privacy_budget);
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<double>(result.ValueOrDie());
+  });
 
   bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
 
   bld.def("result", [](Algorithm& obj, std::vector<T>& v) {
-    return dp::GetValue<double>(obj.Result(v.begin(), v.end()).ValueOrDie());
+    auto result = obj.Result(v.begin(), v.end());
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<T>(result.ValueOrDie());
   });
 }
 

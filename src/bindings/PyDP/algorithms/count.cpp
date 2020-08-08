@@ -29,9 +29,17 @@ void declareCount(py::module& m, string const& suffix) {
       //.def("serialize", &dp::Count<T>::Serialize)
       //.def("merge", &dp::Count<T>::Merge)
       .def("memory_used", &dp::Count<T>::MemoryUsed)
+      .def_property_readonly("epsilon",
+                             [](dp::Count<T>& obj) { return obj.GetEpsilon(); })
       .def("result",
            [](dp::Count<T>& obj, std::vector<T>& v) {
-             return dp::GetValue<T>(obj.Result(v.begin(), v.end()).ValueOrDie());
+             auto result = obj.Result(v.begin(), v.end());
+
+             if (!result.ok()) {
+               throw std::runtime_error(result.status().error_message());
+             }
+
+             return dp::GetValue<T>(result.ValueOrDie());
            })
       .def("partial_result",
            [](dp::Count<T>& obj) {

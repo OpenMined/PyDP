@@ -10,7 +10,6 @@
 #include "algorithms/bounded-standard-deviation.h"
 #include "algorithms/bounded-sum.h"
 #include "algorithms/bounded-variance.h"
-#include "base/statusor.h"
 
 #include "../pydp_lib/algorithm_builder.hpp"
 #include "../pydp_lib/casting.hpp"  // our caster helper library
@@ -28,47 +27,59 @@ void declareBoundedAlgorithm(py::module& m) {
   bld.def(py::init([](double epsilon, T lower_bound, T upper_bound, int l0_sensitivity,
                       int linf_sensitivity) {
             py::print("Building with bounds");
-            return builder().BuildWithBounds(epsilon, lower_bound, upper_bound,
-                                             l0_sensitivity, linf_sensitivity);
+            return builder().Build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                                   linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
           py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
 
   bld.def(py::init([](double epsilon, int l0_sensitivity, int linf_sensitivity) {
             py::print("Building without bounds");
-            return builder().BuildWithoutBounds(epsilon, l0_sensitivity,
-                                                linf_sensitivity);
+            return builder().Build(epsilon, nullopt, nullopt, l0_sensitivity,
+                                   linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
           py::arg("linf_sensitivity") = 1);
 
-  // TODO: can't get it work
-  // bld.def_property_readonly("l0_sensitivity", [](Algorithm& obj){
-  //   return obj.GetMaxPartitionsContributed();
-  // });
-  // bld.def_property_readonly("linf_sensitivity", [](Algorithm& obj){
-  //   return obj.SetMaxContributionsPerPartition();
-  // });
+  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
 
   bld.def("privacy_budget_left",
           [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });
 
-  // TODO
-  // bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
-  //   return obj.AddEntries(v.begin(), v.end()).ValueOrDie();
-  // });
+  bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
+    obj.AddEntries(v.begin(), v.end());
+  });
 
-  // bld.def("partial_result", [](Algorithm& obj) {
-  //   return dp::GetValue<double>(obj.PartialResult().ValueOrDie());
-  // })
-  // bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
-  //   return dp::GetValue<double>(obj.PartialResult(privacy_budget).ValueOrDie());
-  // })
+  bld.def("partial_result", [](Algorithm& obj) {
+    auto result = obj.PartialResult();
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<double>(result.ValueOrDie());
+  });
+
+  bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
+    auto result = obj.PartialResult(privacy_budget);
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<double>(result.ValueOrDie());
+  });
 
   bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
 
   bld.def("result", [](Algorithm& obj, std::vector<T>& v) {
-    return dp::GetValue<double>(obj.Result(v.begin(), v.end()).ValueOrDie());
+    auto result = obj.Result(v.begin(), v.end());
+
+    if (!result.ok()) {
+      throw std::runtime_error(result.status().error_message());
+    }
+
+    return dp::GetValue<T>(result.ValueOrDie());
   });
 }
 

@@ -10,7 +10,6 @@
 #include "algorithms/bounded-standard-deviation.h"
 #include "algorithms/bounded-sum.h"
 #include "algorithms/bounded-variance.h"
-#include "base/statusor.h"
 
 #include "../pydp_lib/algorithm_builder.hpp"
 #include "../pydp_lib/casting.hpp"  // our caster helper library

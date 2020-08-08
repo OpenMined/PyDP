@@ -18,49 +18,49 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> Build(double epsilon) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj;
-    obj =  typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
-    if (obj.ok()){
-      return std::move(obj.ValueOrDie());
-    }
-    else{
+    base::StatusOr<std::unique_ptr<Algorithm>> obj =
+        typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
+
+    if (!obj.ok()) {
       throw std::runtime_error(obj.status().error_message());
     }
+
+    return std::move(obj.ValueOrDie());
   }
 
   std::unique_ptr<Algorithm> BuildWithBounds(double epsilon, T lower_bound,
                                              T upper_bound, int l0_sensitivity = 1,
                                              int linf_sensitivity = 1) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj;
-    obj =  typename Algorithm::Builder()
-        .SetEpsilon(epsilon)
-        .SetLower(lower_bound)
-        .SetUpper(upper_bound)
-        .SetMaxPartitionsContributed(l0_sensitivity)
-        .SetMaxContributionsPerPartition(linf_sensitivity)
-        .Build();
-    if (obj.ok()){
-      return std::move(obj.ValueOrDie());
-    }
-    else{
+    base::StatusOr<std::unique_ptr<Algorithm>> obj =
+        typename Algorithm::Builder()
+            .SetEpsilon(epsilon)
+            .SetLower(lower_bound)
+            .SetUpper(upper_bound)
+            .SetMaxPartitionsContributed(l0_sensitivity)
+            .SetMaxContributionsPerPartition(linf_sensitivity)
+            .Build();
+
+    if (!obj.ok()) {
       throw std::runtime_error(obj.status().error_message());
-    }   
+    }
+
+    return std::move(obj.ValueOrDie());
   }
 
   std::unique_ptr<Algorithm> BuildWithoutBounds(double epsilon, int l0_sensitivity = 1,
                                                 int linf_sensitivity = 1) {
-    base::StatusOr<std::unique_ptr<Algorithm>> obj;
-    obj = typename Algorithm::Builder()
-        .SetEpsilon(epsilon)
-        .SetMaxPartitionsContributed(l0_sensitivity)
-        .SetMaxContributionsPerPartition(linf_sensitivity)
-        .Build();
-    if (obj.ok()){
-      return std::move(obj.ValueOrDie());
-    }
-    else{
+    base::StatusOr<std::unique_ptr<Algorithm>> obj =
+        typename Algorithm::Builder()
+            .SetEpsilon(epsilon)
+            .SetMaxPartitionsContributed(l0_sensitivity)
+            .SetMaxContributionsPerPartition(linf_sensitivity)
+            .Build();
+
+    if (!obj.ok()) {
       throw std::runtime_error(obj.status().error_message());
     }
+
+    return std::move(obj.ValueOrDie());
   }
 
   std::map<std::type_index, std::string> type_to_name = {{typeid(double), "Double"},

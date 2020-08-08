@@ -7,6 +7,7 @@
 #include "algorithms/bounded-sum.h"
 #include "algorithms/bounded-variance.h"
 #include "algorithms/numerical-mechanisms.h"
+#include "base/statusor.h"
 
 namespace dp = differential_privacy;
 
@@ -17,30 +18,49 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> Build(double epsilon) {
-    return typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
+    base::StatusOr<std::unique_ptr<Algorithm>> obj;
+    obj =  typename Algorithm::Builder().SetEpsilon(epsilon).Build().ValueOrDie();
+    if (obj.ok()){
+      return std::move(obj.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(obj.status().error_message());
+    }
   }
 
   std::unique_ptr<Algorithm> BuildWithBounds(double epsilon, T lower_bound,
                                              T upper_bound, int l0_sensitivity = 1,
                                              int linf_sensitivity = 1) {
-    return typename Algorithm::Builder()
+    base::StatusOr<std::unique_ptr<Algorithm>> obj;
+    obj =  typename Algorithm::Builder()
         .SetEpsilon(epsilon)
         .SetLower(lower_bound)
         .SetUpper(upper_bound)
         .SetMaxPartitionsContributed(l0_sensitivity)
         .SetMaxContributionsPerPartition(linf_sensitivity)
-        .Build()
-        .ValueOrDie();
+        .Build();
+    if (obj.ok()){
+      return std::move(obj.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(obj.status().error_message());
+    }   
   }
 
   std::unique_ptr<Algorithm> BuildWithoutBounds(double epsilon, int l0_sensitivity = 1,
                                                 int linf_sensitivity = 1) {
-    return typename Algorithm::Builder()
+    base::StatusOr<std::unique_ptr<Algorithm>> obj;
+    obj = typename Algorithm::Builder()
         .SetEpsilon(epsilon)
         .SetMaxPartitionsContributed(l0_sensitivity)
         .SetMaxContributionsPerPartition(linf_sensitivity)
-        .Build()
-        .ValueOrDie();
+        .Build();
+    if (obj.ok()){
+      return std::move(obj.ValueOrDie());
+    }
+    else{
+      throw std::runtime_error(obj.status().error_message());
+    }
   }
 
   std::map<std::type_index, std::string> type_to_name = {{typeid(double), "Double"},

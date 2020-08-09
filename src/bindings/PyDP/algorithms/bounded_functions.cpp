@@ -46,6 +46,10 @@ void declareBoundedAlgorithm(py::module& m) {
   bld.def("privacy_budget_left",
           [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });
 
+  bld.def("add_entry", [](Algorithm& obj, T& v) {
+    obj.AddEntry(v);
+  });
+
   bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
     obj.AddEntries(v.begin(), v.end());
   });
@@ -56,21 +60,20 @@ void declareBoundedAlgorithm(py::module& m) {
     if (!result.ok()) {
       throw std::runtime_error(result.status().error_message());
     }
-
     return dp::GetValue<double>(result.ValueOrDie());
   });
 
   bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
+    if (privacy_budget > obj.RemainingPrivacyBudget()){
+      throw std::runtime_error("Privacy budget requeted exceeds set privacy budget");
+    }
     auto result = obj.PartialResult(privacy_budget);
 
     if (!result.ok()) {
       throw std::runtime_error(result.status().error_message());
     }
-
     return dp::GetValue<double>(result.ValueOrDie());
   });
-
-  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
 
   bld.def("result", [](Algorithm& obj, std::vector<T>& v) {
     auto result = obj.Result(v.begin(), v.end());
@@ -78,8 +81,7 @@ void declareBoundedAlgorithm(py::module& m) {
     if (!result.ok()) {
       throw std::runtime_error(result.status().error_message());
     }
-
-    return dp::GetValue<T>(result.ValueOrDie());
+    return dp::GetValue<double>(result.ValueOrDie());
   });
 }
 

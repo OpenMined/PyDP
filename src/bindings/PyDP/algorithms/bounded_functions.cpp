@@ -22,65 +22,7 @@ namespace dp = differential_privacy;
 template <typename T, class Algorithm>
 void declareBoundedAlgorithm(py::module& m) {
   using builder = typename dp::python::AlgorithmBuilder<T, Algorithm>;
-  py::class_<Algorithm> bld(m, builder().get_algorithm_name().c_str());
-  bld.attr("__module__") = "pydp";
-  bld.def(py::init([](double epsilon, T lower_bound, T upper_bound, int l0_sensitivity,
-                      int linf_sensitivity) {
-            py::print("Building with bounds");
-            return builder().Build(epsilon, nullopt, lower_bound, upper_bound,
-                                   l0_sensitivity, linf_sensitivity);
-          }),
-          py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
-          py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
-
-  bld.def(py::init([](double epsilon, int l0_sensitivity, int linf_sensitivity) {
-            py::print("Building without bounds");
-            return builder().Build(epsilon, nullopt, nullopt, nullopt, l0_sensitivity,
-                                   linf_sensitivity);
-          }),
-          py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
-          py::arg("linf_sensitivity") = 1);
-
-  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
-
-  bld.def("privacy_budget_left",
-          [](Algorithm& obj) { return obj.RemainingPrivacyBudget(); });
-
-  bld.def("add_entries", [](Algorithm& obj, std::vector<T>& v) {
-    obj.AddEntries(v.begin(), v.end());
-  });
-
-  bld.def("partial_result", [](Algorithm& obj) {
-    auto result = obj.PartialResult();
-
-    if (!result.ok()) {
-      throw std::runtime_error(result.status().error_message());
-    }
-
-    return dp::GetValue<double>(result.ValueOrDie());
-  });
-
-  bld.def("partial_result", [](Algorithm& obj, double privacy_budget) {
-    auto result = obj.PartialResult(privacy_budget);
-
-    if (!result.ok()) {
-      throw std::runtime_error(result.status().error_message());
-    }
-
-    return dp::GetValue<double>(result.ValueOrDie());
-  });
-
-  bld.def_property_readonly("epsilon", [](Algorithm& obj) { return obj.GetEpsilon(); });
-
-  bld.def("result", [](Algorithm& obj, std::vector<T>& v) {
-    auto result = obj.Result(v.begin(), v.end());
-
-    if (!result.ok()) {
-      throw std::runtime_error(result.status().error_message());
-    }
-
-    return dp::GetValue<T>(result.ValueOrDie());
-  });
+  builder().declare(m);
 }
 
 void init_algorithms_bounded_functions(py::module& m) {

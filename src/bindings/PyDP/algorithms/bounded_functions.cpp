@@ -27,15 +27,15 @@ void declareBoundedAlgorithm(py::module& m) {
   bld.def(py::init([](double epsilon, T lower_bound, T upper_bound, int l0_sensitivity,
                       int linf_sensitivity) {
             py::print("Building with bounds");
-            return builder().Build(epsilon, lower_bound, upper_bound, l0_sensitivity,
-                                   linf_sensitivity);
+            return builder().Build(epsilon, nullopt, lower_bound, upper_bound,
+                                   l0_sensitivity, linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
           py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
 
   bld.def(py::init([](double epsilon, int l0_sensitivity, int linf_sensitivity) {
             py::print("Building without bounds");
-            return builder().Build(epsilon, nullopt, nullopt, l0_sensitivity,
+            return builder().Build(epsilon, nullopt, nullopt, nullopt, l0_sensitivity,
                                    linf_sensitivity);
           }),
           py::arg("epsilon"), py::arg("l0_sensitivity") = 1,

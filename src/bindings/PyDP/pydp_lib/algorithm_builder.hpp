@@ -26,6 +26,7 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> Build(double epsilon,
+                                   std::optional<T> delta = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
                                    std::optional<int> l0_sensitivity = std::nullopt,
@@ -34,6 +35,7 @@ class AlgorithmBuilder {
 
     builder.SetEpsilon(epsilon);
 
+    if (delta.has_value()) builder.SetDelta(delta.value());
     if (l0_sensitivity.has_value())
       builder.SetMaxPartitionsContributed(l0_sensitivity.value());
     if (linf_sensitivity.has_value())

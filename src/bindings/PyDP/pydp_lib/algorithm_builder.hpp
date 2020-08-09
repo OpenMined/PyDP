@@ -134,6 +134,10 @@ class AlgorithmBuilder {
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
+      if (privacy_budget > pythis.RemainingPrivacyBudget()) {
+        throw std::runtime_error("Privacy budget requeted exceeds set privacy budget");
+      }
+
       auto result = pythis.PartialResult(privacy_budget);
 
       if (!result.ok()) {
@@ -145,6 +149,10 @@ class AlgorithmBuilder {
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget,
                                     double noise_interval_level) {
+      if (privacy_budget > pythis.RemainingPrivacyBudget()) {
+        throw std::runtime_error("Privacy budget requeted exceeds set privacy budget");
+      }
+
       auto result = pythis.PartialResult(privacy_budget, noise_interval_level);
 
       if (!result.ok()) {

@@ -123,7 +123,7 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      return dp::GetValue<T>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis) {

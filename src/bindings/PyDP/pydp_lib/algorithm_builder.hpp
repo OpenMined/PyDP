@@ -28,9 +28,9 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> build(double epsilon,
+                                   std::optional<double> delta = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
-                                   std::optional<T> delta = std::nullopt,
                                    std::optional<int> l0_sensitivity = std::nullopt,
                                    std::optional<int> linf_sensitivity = std::nullopt) {
     auto builder = typename Algorithm::Builder();
@@ -77,21 +77,24 @@ class AlgorithmBuilder {
 
     // Constructors
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {
+      // Explicit bounds constructor
       pyself.def(
-          py::init([this](double epsilon, T lower_bound, T upper_bound, double delta,
+          py::init([this](double epsilon, double delta, T lower_bound, T upper_bound,
                           int l0_sensitivity, int linf_sensitivity) {
-            return this->build(epsilon, std::nullopt, lower_bound, upper_bound,
-                               l0_sensitivity, linf_sensitivity);
+            return this->build(epsilon, delta, lower_bound, upper_bound, l0_sensitivity,
+                               linf_sensitivity);
           }),
-          py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
-          py::arg("delta") = 0, py::arg("l0_sensitivity") = 1,
+          py::arg("epsilon"), py::arg("delta") = 0, py::arg("lower_bound"),
+          py::arg("upper_bound"), py::arg("l0_sensitivity") = 1,
           py::arg("linf_sensitivity") = 1);
     }
 
+    // No bounds constructor
     pyself.def(py::init([this](double epsilon, double delta, int l0_sensitivity,
                                int linf_sensitivity) {
-                 return this->build(epsilon, std::nullopt, std::nullopt, std::nullopt,
-                                    l0_sensitivity, linf_sensitivity);
+                 return this->build(epsilon, delta, std::nullopt /*lower_bound*/,
+                                    std::nullopt /*upper_bound*/, l0_sensitivity,
+                                    linf_sensitivity);
                }),
                py::arg("epsilon"), py::arg("delta") = 0, py::arg("l0_sensitivity") = 1,
                py::arg("linf_sensitivity") = 1);

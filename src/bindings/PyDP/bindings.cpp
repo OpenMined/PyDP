@@ -37,7 +37,7 @@ PYBIND11_MODULE(pydp, m) {
   init_base_percentile(m);
 
   // Algorithms
-  auto malgorithms = m.def_submodule("algorithms");
+  auto malgorithms = m.def_submodule("_algorithms");
   init_algorithms_bounded_functions(malgorithms);
   init_algorithms_util(m);
   init_algorithms_distributions(m);

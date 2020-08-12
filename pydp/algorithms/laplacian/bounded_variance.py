@@ -1,5 +1,5 @@
 from ..algorithm import Algorithm
 
 
-class Count(Algorithm):
+class BoundedVariance(Algorithm):
     pass

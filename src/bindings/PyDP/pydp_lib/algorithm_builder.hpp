@@ -104,8 +104,6 @@ class AlgorithmBuilder {
 
     pyself.def("privacy_budget_left", &Algorithm::RemainingPrivacyBudget);
 
-    pyself.def("consume_privacy_budget", &Algorithm::ConsumePrivacyBudget);
-
     pyself.def("memory_used", &Algorithm::MemoryUsed);
 
     // Input data

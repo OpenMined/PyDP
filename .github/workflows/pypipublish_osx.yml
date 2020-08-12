@@ -19,7 +19,7 @@ jobs:
           cd third_party/differential-privacy
           git checkout 0b0a5c2315d84a6a7b1ff34591e33ec11680891es
           cd -
-          rm -rf third_party/differential-privacy/java 
+          rm -rf third_party/differential-privacy/java
           rm -rf third_party/differential-privacy/examples/java
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
@@ -36,8 +36,8 @@ jobs:
       - name: Build pydp lib
         run: |
           bazel build src/python:bindings_test  --verbose_failures
-          rm -f pydp.so
-          cp -f ./bazel-bin/src/bindings/pydp.so ./pydp
+          rm -f _pydp.so
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp
 
 
       - name: Build wheel

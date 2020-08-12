@@ -1,3 +1,3 @@
-from pydp import algorithms
+from ._pydp import *
 
 __version__ = "0.1.4"

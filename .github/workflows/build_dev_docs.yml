@@ -37,10 +37,11 @@ jobs:
         ./build_PyDP.sh
         python -m pip install -U setuptools wheel 
         python setup.py bdist_wheel
-        python -m pip install dist/*.whl 
+         
    
     - uses: ammaraskar/sphinx-action@master
       with:
+        pre-build-command: "python -m pip install dist/*.whl"
         docs-folder: "docs/"
    
     # Publish built docs to gh-pages branch.

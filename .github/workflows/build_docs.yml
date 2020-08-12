@@ -1,9 +1,17 @@
 name: Build Docs
 
-on:
-  push:
-    branches:
-      - dev-docs-actions
+# on:
+#   push:
+#     branches:
+#       - dev-docs-actions
+
+on: 
+  workflow_dispatch:
+    inputs:
+      build_reason:
+        description: 'Why are you building the docs'     
+        required: true
+        default: 'To test it'
 
 jobs:
   build-docs:

@@ -3,7 +3,7 @@ name: Build Dev Docs
 on:
   push:
     branches:
-      - dev-docs-actions
+      - build-dev-docs-action
 
 # on: 
 #   workflow_dispatch:

@@ -35,6 +35,7 @@ jobs:
         rm bazel-2.1.0-installer-linux-x86_64.sh
         pip install pipenv
         ./build_PyDP.sh
+        python -m pip install -U setuptools wheel 
         python setup.py bdist_wheel
         python -m pip install dist/*.whl 
    

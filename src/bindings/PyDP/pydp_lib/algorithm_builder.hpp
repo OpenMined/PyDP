@@ -73,7 +73,7 @@ class AlgorithmBuilder {
   void declare(py::module& m) {
     py::class_<Algorithm> pyself(m, get_algorithm_name().c_str());
 
-    pyself.attr("__module__") = "pydp";
+    pyself.attr("__module__") = "_algorithms";
 
     // Constructors
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {

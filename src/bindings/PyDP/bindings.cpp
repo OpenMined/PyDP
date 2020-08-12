@@ -28,7 +28,7 @@ void init_algorithms_rand(py::module &);
 // proto
 void init_proto(py::module &);
 
-PYBIND11_MODULE(pydp, m) {
+PYBIND11_MODULE(_pydp, m) {
   m.doc() = "Google Differential Privacy python extension";
 
   // Base
@@ -37,12 +37,13 @@ PYBIND11_MODULE(pydp, m) {
   init_base_percentile(m);
 
   // Algorithms
-  init_algorithms_bounded_functions(m);
+  auto malgorithms = m.def_submodule("_algorithms");
+  init_algorithms_bounded_functions(malgorithms);
   init_algorithms_util(m);
   init_algorithms_distributions(m);
   init_algorithms_order_statistics(m);
   init_algorithms_rand(m);
-  init_algorithms_count(m);
+  init_algorithms_count(malgorithms);
 
   // Proto
   init_proto(m);

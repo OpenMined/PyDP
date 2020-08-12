@@ -1,4 +1,4 @@
-pydp.so
+_pydp.so
 # bazel files
 bazel-bin
 bazel-out

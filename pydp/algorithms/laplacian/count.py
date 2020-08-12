@@ -1,14 +1,5 @@
 from ..._pydp import _algorithms
-
-
-def map_type_str(type):
-    if type == "int":
-        return "Int"
-    elif type == "float":
-        return "Double"
-    else:
-        raise RuntimeError(f"dtype: {dtype} is not supported")
-
+from .helper import map_type_str
 
 class Count:
     def __init__(self, epsilon=1.0, dtype="int"):

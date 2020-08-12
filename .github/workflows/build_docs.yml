@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2 
+      with:
+          submodules: 'recursive'
     - name: Set up Python 
-        uses: actions/setup-python@v2
-        with:
+      uses: actions/setup-python@v2
+      with:
           python-version: 3.7 
     - name: Build python-dp
       run: |
-        
-        echo "Donwloading Bazel 2.1.0"
         wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
         chmod +x bazel-2.1.0-installer-linux-x86_64.sh
         ./bazel-2.1.0-installer-linux-x86_64.sh --user

@@ -14,7 +14,6 @@ class WrapAlgorithm:
         "add_entry",
         "result",
         "partial_result",
-        "consume_privacy_budget",
         "reset",
         "serialize",
         "merge",

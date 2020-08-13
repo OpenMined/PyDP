@@ -1,5 +1,5 @@
-from ..algorithm import Algorithm
+from ..algorithm import BoundedAlgorithm
 
 
-class BoundedMean(Algorithm):
+class BoundedMean(BoundedAlgorithm):
     pass

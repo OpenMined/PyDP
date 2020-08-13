@@ -1,5 +1,5 @@
-from ..algorithm import Algorithm
+from ..algorithm import BoundedAlgorithm
 
 
-class BoundedVariance(Algorithm):
+class BoundedVariance(BoundedAlgorithm):
     pass

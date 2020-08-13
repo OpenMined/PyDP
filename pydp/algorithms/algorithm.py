@@ -42,12 +42,12 @@ class WrapAlgorithm:
 
 
 class Algorithm(WrapAlgorithm):
-    def __init__(self, epsilon, dtype="int"):
+    def __init__(self, epsilon=1.0, dtype="int"):
         WrapAlgorithm.__init__(self, dtype=dtype, epsilon=epsilon)
 
 
 class BoundedAlgorithm(WrapAlgorithm):
-    def __init__(self, epsilon, lower_bound, upper_bound, dtype="int"):
+    def __init__(self, epsilon=1.0, lower_bound=None, upper_bound=None, dtype="int"):
         WrapAlgorithm.__init__(
             self,
             dtype=dtype,

@@ -1,7 +1,9 @@
-from .bounded_mean import BoundedMean
-from .bounded_standard_deviation import BoundedStandardDeviation
-from .bounded_sum import BoundedSum
-from .bounded_variance import BoundedVariance
+from .bounded_algorithms import (
+    BoundedMean,
+    BoundedSum,
+    BoundedStandardDeviation,
+    BoundedVariance,
+)
 from .count import Count
 
 

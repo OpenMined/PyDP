@@ -55,7 +55,7 @@ class TestCountDataTypes:
         assert isinstance(countae, type(None))
         countaes = count.add_entries([4, 6, 8])
         assert isinstance(countaes, type(None))
-        mem = count.memory_used()
+        mem = count.memory_used
         assert isinstance(mem, int)
         par = count.partial_result()
         assert isinstance(par, int)

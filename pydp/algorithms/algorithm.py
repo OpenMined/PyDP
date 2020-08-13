@@ -16,9 +16,6 @@ class MetaAlgorithm:
 
         self.dtype = dtype
         self.__algorithm = class_(**kwargs)
-        self.epsilon = self.__algorithm.epsilon
-        self.privacy_budget_left = self.__algorithm.privacy_budget_left
-        self.memory_used = self.__algorithm.memory_used
 
     @staticmethod
     def __map_dtype_str(dtype):
@@ -28,6 +25,27 @@ class MetaAlgorithm:
             return "Double"
         else:
             raise RuntimeError(f"dtype: {dtype} is not supported")
+
+    @property
+    def epsilon(self):
+        """
+        Returns the epsilon use at initialization.
+        """
+        return self.__algorithm.epsilon
+
+    @property
+    def privacy_budget_left(self):
+        """
+        Returns the remaining privacy budget.
+        """
+        return self.__algorithm.privacy_budget_left
+
+    @property
+    def memory_used(self):
+        """
+        Returns the memory currently used by the algorithm in bytes.
+        """
+        return self.__algorithm.memory_used
 
     def add_entries(self, list):
         """

@@ -100,9 +100,10 @@ class AlgorithmBuilder {
     // Getters
     pyself.def_property_readonly("epsilon", &Algorithm::GetEpsilon);
 
-    pyself.def("privacy_budget_left", &Algorithm::RemainingPrivacyBudget);
+    pyself.def_property_readonly("privacy_budget_left",
+                                 &Algorithm::RemainingPrivacyBudget);
 
-    pyself.def("memory_used", &Algorithm::MemoryUsed);
+    pyself.def_property_readonly("memory_used", &Algorithm::MemoryUsed);
 
     // Input data
     pyself.def("add_entries", [](Algorithm& pythis, std::vector<T>& v) {

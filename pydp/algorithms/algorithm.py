@@ -22,7 +22,7 @@ class WrapAlgorithm:
     ]
 
     def __init__(self, dtype="int", **kwargs):
-        binded_class = f"{self.__class__.__name__}{self.__map_type_str(dtype)}"
+        binded_class = f"{self.__class__.__name__}{self.__map_dtype_str(dtype)}"
         class_ = getattr(_algorithms, binded_class)
 
         self.dtype = dtype
@@ -32,10 +32,10 @@ class WrapAlgorithm:
             setattr(self, method, getattr(self.__algorithm, f"{method}"))
 
     @staticmethod
-    def __map_type_str(type):
-        if type == "int":
+    def __map_dtype_str(dtype):
+        if dtype == "int":
             return "Int"
-        elif type == "float":
+        elif dtype == "float":
             return "Double"
         else:
             raise RuntimeError(f"dtype: {dtype} is not supported")

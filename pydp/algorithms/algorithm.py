@@ -59,24 +59,23 @@ class MetaAlgorithm:
         """
         return self.__algorithm.result(list)
 
-    def partial_result(self):
+    def partial_result(self, privacy_budget=None, noise_interval_level=None):
         """
-        Gets the algorithm result, consuming the remaining privacy budget.
-        """
-        return self.__algorithm.partial_result()
+        Gets the algorithm result.
 
-    def partial_result(self, privacy_budget):
-        """
-        Same as above, but consumes only the `privacy_budget` amount of budget.
+        The default call consumes the remaining privacy budget.
 
-        Privacy budget, defined on [0,1], represents the fraction of the total budget to consume.
-        """
-        return self.__algorithm.partial_result(privacy_budget)
+        When `privacy_budget` (defined on [0,1]) is set, it consumes only the `privacy_budget` amount of budget.
 
-    def partial_result(self, privacy_budget, noise_interval_level):
+        `noise_interval_level` provides the confidence level of the noise confidence interval, which may be included in the algorithm output.
         """
-        Same as above, but provides the confidence level of the noise confidence interval, which may be included in the algorithm output.
-        """
+
+        if privacy_budget is None:
+            return self.__algorithm.partial_result()
+
+        if noise_interval_level is None:
+            return self.__algorithm.partial_result(privacy_budget)
+
         return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
 
     def reset(self):

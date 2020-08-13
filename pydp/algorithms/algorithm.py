@@ -17,6 +17,8 @@ class MetaAlgorithm:
         self.dtype = dtype
         self.__algorithm = class_(**kwargs)
         self.epsilon = self.__algorithm.epsilon
+        self.l0_sensitivity = kwargs["l0_sensitivity"]
+        self.linf_sensitivity = kwargs["linf_sensitivity"]
 
     @staticmethod
     def __map_dtype_str(dtype):
@@ -51,7 +53,7 @@ class MetaAlgorithm:
         """
         return self.__algorithm.add_entry(value)
 
-    def result(self, list):
+    def quick_result(self, list):
         """
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
@@ -59,7 +61,7 @@ class MetaAlgorithm:
         """
         return self.__algorithm.result(list)
 
-    def partial_result(self, privacy_budget=None, noise_interval_level=None):
+    def result(self, privacy_budget=None, noise_interval_level=None):
         """
         Gets the algorithm result.
 
@@ -72,11 +74,10 @@ class MetaAlgorithm:
 
         if privacy_budget is None:
             return self.__algorithm.partial_result()
-
-        if noise_interval_level is None:
+        elif noise_interval_level is None:
             return self.__algorithm.partial_result(privacy_budget)
-
-        return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
+        else:
+            return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
 
     def reset(self):
         """
@@ -121,10 +122,20 @@ class Algorithm(MetaAlgorithm):
 
 
 class BoundedAlgorithm(MetaAlgorithm):
-    def __init__(self, epsilon=1.0, lower_bound=None, upper_bound=None, dtype="int"):
+    def __init__(
+        self,
+        epsilon=1.0,
+        lower_bound=None,
+        upper_bound=None,
+        l0_sensitivity=1,
+        linf_sensitivity=1,
+        dtype="int",
+    ):
         super().__init__(
             epsilon=epsilon,
             lower_bound=lower_bound,
             upper_bound=upper_bound,
+            l0_sensitivity=l0_sensitivity,
+            linf_sensitivity=linf_sensitivity,
             dtype=dtype,
         )

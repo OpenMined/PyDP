@@ -7,6 +7,7 @@
 #include "algorithms/bounded-sum.h"
 #include "algorithms/bounded-variance.h"
 #include "algorithms/count.h"
+#include "algorithms/order-statistics.h"
 #include "algorithms/numerical-mechanisms.h"
 #include "base/statusor.h"
 
@@ -21,7 +22,16 @@ constexpr bool is_bounded_algorithm() {
   return std::is_same<Algorithm, dp::BoundedMean<T>>::value ||
          std::is_same<Algorithm, dp::BoundedSum<T>>::value ||
          std::is_same<Algorithm, dp::BoundedStandardDeviation<T>>::value ||
-         std::is_same<Algorithm, dp::BoundedVariance<T>>::value;
+         std::is_same<Algorithm, dp::BoundedVariance<T>>::value||
+         std::is_same<Algorithm, dp::continuous::Max<T>>::value||
+         std::is_same<Algorithm, dp::continuous::Min<T>>::value||
+         std::is_same<Algorithm, dp::continuous::Median<T>>::value||
+         std::is_same<Algorithm, dp::continuous::Percentile<T>>::value;
+}
+
+template <typename T, class Algorithm>
+constexpr bool is_percentile() {
+  return std::is_same<Algorithm, dp::continuous::Percentile<T>>::value;
 }
 
 template <typename T, class Algorithm>
@@ -32,7 +42,8 @@ class AlgorithmBuilder {
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
                                    std::optional<int> l0_sensitivity = std::nullopt,
-                                   std::optional<int> linf_sensitivity = std::nullopt) {
+                                   std::optional<int> linf_sensitivity = std::nullopt,
+                                   std::optional<int> percentile = std::nullopt) {
     auto builder = typename Algorithm::Builder();
 
     builder.SetEpsilon(epsilon);
@@ -46,6 +57,10 @@ class AlgorithmBuilder {
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {
       if (lower_bound.has_value()) builder.SetLower(lower_bound.value());
       if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
+    }
+
+    if constexpr (is_percentile<T, Algorithm>()){
+      if (percentile.has_value()) builder.SetPercentile(percentile.value());
     }
 
     base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
@@ -63,7 +78,13 @@ class AlgorithmBuilder {
       {typeid(dp::BoundedSum<T>), "BoundedSum"},
       {typeid(dp::BoundedStandardDeviation<T>), "BoundedStandardDeviation"},
       {typeid(dp::BoundedVariance<T>), "BoundedVariance"},
-      {typeid(dp::Count<T>), "Count"}};
+      {typeid(dp::Count<T>), "Count"},
+      {typeid(dp::continuous::Min<T>), "Min"},
+      {typeid(dp::continuous::Max<T>), "Max"},
+      {typeid(dp::continuous::Median<T>), "Median"},
+      {typeid(dp::continuous::Percentile<T>), "Percentile"}
+
+      };
 
   std::string get_algorithm_name() {
     // Set the suffix string
@@ -77,6 +98,16 @@ class AlgorithmBuilder {
 
     // Constructors
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {
+      if constexpr (is_percentile<T, Algorithm>()){
+        // Explicit percentile constructor
+        pyself.def(py::init([this](double epsilon, double percentile,  T lower_bound, T upper_bound,
+                                 int l0_sensitivity, int linf_sensitivity) {
+                   return this->build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                                      linf_sensitivity);
+                 }),
+                 py::arg("epsilon"), py::arg("percentile"), py::arg("lower_bound"), py::arg("upper_bound"),
+                 py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
+      }
       // Explicit bounds constructor
       pyself.def(py::init([this](double epsilon, T lower_bound, T upper_bound,
                                  int l0_sensitivity, int linf_sensitivity) {
@@ -86,6 +117,8 @@ class AlgorithmBuilder {
                  py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
                  py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
     }
+
+
 
     // No bounds constructor
     pyself.def(

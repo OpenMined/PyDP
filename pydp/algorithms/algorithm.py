@@ -6,9 +6,9 @@ class MetaAlgorithm:
         dtype = kwargs.pop("dtype")
 
         # Delete bound params if the are not set to avoid  conflicts with builder
-        if kwargs["lower_bound"] is None:
+        if "lower_bound" in kwargs and kwargs["lower_bound"] is None:
             kwargs.pop("lower_bound")
-        if kwargs["upper_bound"] is None:
+        if "upper_bound" in kwargs and kwargs["upper_bound"] is None:
             kwargs.pop("upper_bound")
 
         binded_class = f"{self.__class__.__name__}{self.__map_dtype_str(dtype)}"

@@ -28,7 +28,7 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> build(double epsilon,
-                                  //  std::optional<double> delta = std::nullopt,
+                                   //  std::optional<double> delta = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
                                    std::optional<int> l0_sensitivity = std::nullopt,
@@ -78,33 +78,29 @@ class AlgorithmBuilder {
     // Constructors
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {
       // Explicit bounds constructor
-      pyself.def(
-          py::init([this](double epsilon, T lower_bound, T upper_bound,
-                          int l0_sensitivity, int linf_sensitivity) {
-            return this->build(epsilon, lower_bound, upper_bound, l0_sensitivity,
-                               linf_sensitivity);
-          }),
-          py::arg("epsilon"), py::arg("lower_bound"),
-          py::arg("upper_bound"), py::arg("l0_sensitivity") = 1,
-          py::arg("linf_sensitivity") = 1);
+      pyself.def(py::init([this](double epsilon, T lower_bound, T upper_bound,
+                                 int l0_sensitivity, int linf_sensitivity) {
+                   return this->build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                                      linf_sensitivity);
+                 }),
+                 py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
+                 py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
     }
 
     // No bounds constructor
-    pyself.def(py::init([this](double epsilon, int l0_sensitivity,
-                               int linf_sensitivity) {
-                 return this->build(epsilon, std::nullopt /*lower_bound*/,
-                                    std::nullopt /*upper_bound*/, l0_sensitivity,
-                                    linf_sensitivity);
-               }),
-               py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
-               py::arg("linf_sensitivity") = 1);
+    pyself.def(
+        py::init([this](double epsilon, int l0_sensitivity, int linf_sensitivity) {
+          return this->build(epsilon, std::nullopt /*lower_bound*/,
+                             std::nullopt /*upper_bound*/, l0_sensitivity,
+                             linf_sensitivity);
+        }),
+        py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
+        py::arg("linf_sensitivity") = 1);
 
     // Getters
     pyself.def_property_readonly("epsilon", &Algorithm::GetEpsilon);
 
     pyself.def("privacy_budget_left", &Algorithm::RemainingPrivacyBudget);
-
-    pyself.def("consume_privacy_budget", &Algorithm::ConsumePrivacyBudget);
 
     pyself.def("memory_used", &Algorithm::MemoryUsed);
 
@@ -123,7 +119,7 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      return dp::GetValue<T>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis) {
@@ -133,7 +129,7 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      return dp::GetValue<T>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
@@ -147,7 +143,7 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      return dp::GetValue<T>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget,
@@ -162,12 +158,10 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      return dp::GetValue<T>(result.ValueOrDie());
     });
 
     // Other methods
-    pyself.def("consume_privacy_budget", &Algorithm::ConsumePrivacyBudget);
-
     pyself.def("reset", &Algorithm::Reset);
 
     pyself.def("serialize", &Algorithm::Serialize);

@@ -1,17 +1,17 @@
 import pytest
-import pydp as dp
+from pydp.algorithms.laplacian import Count
 
 
-@pytest.mark.parametrize("input_class", [dp.CountInt, dp.CountDouble])
+@pytest.mark.parametrize("dtype_in", ["int", "float"])
 class TestPercentile:
-    def test_basic(self, input_class):
+    def test_basic(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class(1.7)
+        count = Count(epsilon=1.7, dtype=dtype_in)
         count.result(c)
 
-    def test_repeated_result(self, input_class):
+    def test_repeated_result(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class(1.7)
+        count = Count(epsilon=1.7, dtype=dtype_in)
         count.add_entries(c)
 
         count.partial_result(0.5)
@@ -48,8 +48,8 @@ class TestPercentile:
 
 class TestCountDataTypes:
     def test_count_datatypes(self):
-        count = dp.CountInt(2.0)
-        assert isinstance(count, dp.CountInt)
+        count = Count(2.0, dtype="int")
+        assert isinstance(count, Count)
 
         countae = count.add_entry(2)
         assert isinstance(countae, type(None))

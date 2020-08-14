@@ -1,9 +1,15 @@
 import pytest
+from pydp.distributions import (
+    LaplaceDistribution,
+    GaussianDistribution,
+    # GeometricDistribution,
+)
 import pydp as dp
 import math
 from typing import List
 from itertools import accumulate
 import math
+
 
 k_num_samples = 10000000
 k_num_geometric_samples = 1000000
@@ -50,12 +56,12 @@ expect_near = lambda expected, actual, tol: (
 class TestLaplaceDistribution:
     def test_diversity_getter(self):
         sensitivity, epsilon = 1.0, 22.0
-        dist = dp.LaplaceDistribution(epsilon=epsilon, sensitivity=sensitivity)
+        dist = LaplaceDistribution(epsilon=epsilon, sensitivity=sensitivity)
         assert dist.get_diversity() == sensitivity / epsilon
 
     def test_check_statistics_for_geo_unit_values(self):
 
-        ld = dp.LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
+        ld = LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
         samples = [ld.sample(scale=1.0) for _ in range(k_num_geometric_samples)]
         mean = dp.util.mean(samples)
         var = dp.util.variance(samples)
@@ -69,14 +75,14 @@ class TestLaplaceDistribution:
 class TestGaussianDistribution:
     def test_standard_deviation_getter(self):
         stddev = k_one_over_log2
-        dist = dp.GaussianDistribution(stddev)
+        dist = GaussianDistribution(stddev)
         assert dist.stddev == stddev
 
 
 class TestLaplaceDistributionDatatypes:
     def test_LaplaceDistributionTypes(self):
-        ld = dp.LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
-        assert isinstance(ld, dp.LaplaceDistribution)
+        ld = LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
+        assert isinstance(ld, LaplaceDistribution)
 
         sud = ld.get_uniform_double()
         assert isinstance(sud, float)
@@ -93,8 +99,8 @@ class TestLaplaceDistributionDatatypes:
 
 class TestGaussianDistributionDataTypes:
     def test_GaussianDistributionTypes(self):
-        gd = dp.GaussianDistribution(3)
-        assert isinstance(gd, dp.GaussianDistribution)
+        gd = GaussianDistribution(3)
+        assert isinstance(gd, GaussianDistribution)
 
         gds = gd.sample()
         gds1 = gd.sample(1.0)
@@ -104,18 +110,23 @@ class TestGaussianDistributionDataTypes:
         assert isinstance(gdstd, float)
 
 
-# class TestGeometricDistribution:
-#     def test_ratios(self):
-#         from collections import Counter
-#         p=1e-2
-#         dist = dp.GeometricDistribution(lambda_=-1.0*math.log(1-p))
-#         samples  = [dist.sample() for _ in range(k_num_geometric_samples)]
-#         counts = list(Counter([s for s in samples if s < 51]).values())
-#         ratios = [c_i/c_j for c_i, c_j in zip(counts[:-1], counts[1:])]
-# This test fails. It's a replica of
-# https://github.com/google/differential-privacy/blob/9923ad4ee1b84a7002085e50345fcc05f2b21bcb/cc/algorithms/distributions_test.cc#L208
-# and should pass.
-# assert expect_near(p, dp.util.mean(ratios), p / 1e-2)
+class TestGeometricDistribution:
+    @pytest.mark.skip(reason="This test should pass, see comments")
+    def test_ratios(self):
+        """
+        This test fails. It's a replica of
+         https://github.com/google/differential-privacy/blob/9923ad4ee1b84a7002085e50345fcc05f2b21bcb/cc/algorithms/distributions_test.cc#L208 and should pass.
+        """
+        from collections import Counter
+
+        p = 1e-2
+        dist = GeometricDistribution(lambda_=-1.0 * math.log(1 - p))
+        samples = [dist.sample() for _ in range(k_num_geometric_samples)]
+        counts = list(Counter([s for s in samples if s < 51]).values())
+        ratios = [c_i / c_j for c_i, c_j in zip(counts[:-1], counts[1:])]
+
+        assert expect_near(p, dp.util.mean(ratios), p / 1e-2)
+
 
 # TODO: port the following tests
 #

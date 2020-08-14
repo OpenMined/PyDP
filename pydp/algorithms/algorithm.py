@@ -53,13 +53,13 @@ class MetaAlgorithm:
         """
         return self.__algorithm.add_entry(value)
 
-    def quick_result(self, list):
+    def quick_result(self, data):
         """
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
         """
-        return self.__algorithm.result(list)
+        return self.__algorithm.result(data)
 
     def result(self, privacy_budget=None, noise_interval_level=None):
         """

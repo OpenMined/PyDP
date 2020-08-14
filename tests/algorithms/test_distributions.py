@@ -5,8 +5,6 @@ from typing import List
 from itertools import accumulate
 import math
 
-pytestmark = pytest.mark.skip(reason="distributions fail to compile")
-
 k_num_samples = 10000000
 k_num_geometric_samples = 1000000
 k_gaussian_samples = 1000000

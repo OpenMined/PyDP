@@ -1,7 +1,10 @@
 import pytest
 import pydp as dp
 
-pytestmark = pytest.mark.skip(reason="this percentile is not the DP implementation")
+# TODO: check whether to delete this test suit or update it
+pytestmark = pytest.mark.skip(
+    reason="these tests were for the older percentile wrapping."
+)
 
 
 @pytest.mark.parametrize("input_class", [dp.algorithms.laplacian.Percentile])

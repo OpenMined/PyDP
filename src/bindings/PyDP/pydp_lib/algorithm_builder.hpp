@@ -39,13 +39,17 @@ class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> build(double epsilon,
                                    //  std::optional<double> delta = std::nullopt,
+                                   std::optional<double> percentile = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
                                    std::optional<int> l0_sensitivity = std::nullopt,
-                                   std::optional<int> linf_sensitivity = std::nullopt,
-                                   std::optional<int> percentile = std::nullopt) {
+                                   std::optional<int> linf_sensitivity = std::nullopt) {
     auto builder = typename Algorithm::Builder();
 
+    if constexpr (is_percentile<T, Algorithm>()){
+      if (percentile.has_value()) builder.SetPercentile(percentile.value());
+      
+    }
     builder.SetEpsilon(epsilon);
 
     // if (delta.has_value()) builder.SetDelta(delta.value());
@@ -59,9 +63,8 @@ class AlgorithmBuilder {
       if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
     }
 
-    if constexpr (is_percentile<T, Algorithm>()){
-      if (percentile.has_value()) builder.SetPercentile(percentile.value());
-    }
+    
+
 
     base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
@@ -72,7 +75,8 @@ class AlgorithmBuilder {
   }
 
   std::map<std::type_index, std::string> type_to_name = {{typeid(double), "Double"},
-                                                         {typeid(int), "Int"}};
+                                                         {typeid(int), "Int"},
+                                                         {typeid(int64_t), "Int"}};
   std::map<std::type_index, std::string> algorithm_to_name = {
       {typeid(dp::BoundedMean<T>), "BoundedMean"},
       {typeid(dp::BoundedSum<T>), "BoundedSum"},
@@ -102,7 +106,7 @@ class AlgorithmBuilder {
         // Explicit percentile constructor
         pyself.def(py::init([this](double epsilon, double percentile,  T lower_bound, T upper_bound,
                                  int l0_sensitivity, int linf_sensitivity) {
-                   return this->build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                   return this->build(epsilon,percentile, lower_bound, upper_bound, l0_sensitivity,
                                       linf_sensitivity);
                  }),
                  py::arg("epsilon"), py::arg("percentile"), py::arg("lower_bound"), py::arg("upper_bound"),
@@ -111,7 +115,7 @@ class AlgorithmBuilder {
       // Explicit bounds constructor
       pyself.def(py::init([this](double epsilon, T lower_bound, T upper_bound,
                                  int l0_sensitivity, int linf_sensitivity) {
-                   return this->build(epsilon, lower_bound, upper_bound, l0_sensitivity,
+                   return this->build(epsilon,std::nullopt /*percentile*/, lower_bound, upper_bound, l0_sensitivity,
                                       linf_sensitivity);
                  }),
                  py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
@@ -123,7 +127,7 @@ class AlgorithmBuilder {
     // No bounds constructor
     pyself.def(
         py::init([this](double epsilon, int l0_sensitivity, int linf_sensitivity) {
-          return this->build(epsilon, std::nullopt /*lower_bound*/,
+          return this->build(epsilon, std::nullopt /*percentile*/,std::nullopt /*lower_bound*/,
                              std::nullopt /*upper_bound*/, l0_sensitivity,
                              linf_sensitivity);
         }),
@@ -202,6 +206,11 @@ class AlgorithmBuilder {
     pyself.def("merge", &Algorithm::Merge);
 
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
+
+    // Percentile special case.
+    if constexpr (is_percentile<T, Algorithm>()){
+      pyself.def_property_readonly("percentile", &Algorithm::GetPercentile);
+    }
   }
 };
 

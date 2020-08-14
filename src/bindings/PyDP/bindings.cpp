@@ -7,7 +7,7 @@ namespace py = pybind11;
 // base
 void init_base_status(py::module &);
 void init_base_logging(py::module &);
-void init_base_percentile(py::module &);
+// void init_base_percentile(py::module &);
 
 // bounded functions
 void init_algorithms_bounded_functions(py::module &);
@@ -34,14 +34,14 @@ PYBIND11_MODULE(_pydp, m) {
   // Base
   init_base_status(m);
   init_base_logging(m);
-  init_base_percentile(m);
+  // init_base_percentile(m);
 
   // Algorithms
   auto malgorithms = m.def_submodule("_algorithms");
   init_algorithms_bounded_functions(malgorithms);
   init_algorithms_util(m);
   init_algorithms_distributions(m);
-  init_algorithms_order_statistics(m);
+  init_algorithms_order_statistics(malgorithms);
   init_algorithms_rand(m);
   init_algorithms_count(malgorithms);
 

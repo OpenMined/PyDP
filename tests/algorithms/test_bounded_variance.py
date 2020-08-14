@@ -7,7 +7,7 @@ class TestBoundedVariance:
         epsilon = 1.0
         lower_bound, upper_bound = 0, 16
         bv = BoundedVariance(epsilon, lower_bound, upper_bound, dtype="float")
-        result = bv.result(example_data)
+        result = bv.quick_result(example_data)
         assert type(result) is float and result >= 0
         # Popoviciu's inequality on variances:
         assert result <= (upper_bound - lower_bound) ** 2 / 4

@@ -27,9 +27,8 @@ def test_min(data, dtype):
     minn = dp.algorithms.laplacian.Min(
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
     )
-
-    assert expect_near(min(data), minn.result(data), 10)
-    assert expect_near(0, minn.result(data), 10)
+    assert expect_near(min(data), minn.quick_result(data), 10)
+    assert expect_near(0, minn.quick_result(data), 10)
 
 
 @pytest.mark.parametrize("dtype, data", [("int", data_ints), ("float", data_floats)])
@@ -37,9 +36,9 @@ def test_max(data, dtype):
     maxx = dp.algorithms.laplacian.Max(
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
     )
-    assert 190 < maxx.result(data) < 210
+    assert 190 < maxx.quick_result(data) < 210
 
-    assert expect_near(max(data), maxx.result(data), 10)
+    assert expect_near(max(data), maxx.quick_result(data), 10)
 
 
 @pytest.mark.parametrize("dtype, data", [("int", data_ints), ("float", data_floats)])
@@ -49,7 +48,7 @@ def test_median(data, dtype):
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
     )
 
-    assert expect_near(statistics.median(data), median.result(data), 20)
+    assert expect_near(statistics.median(data), median.quick_result(data), 20)
 
 
 @pytest.mark.parametrize("dtype", ["int", "float"])
@@ -74,7 +73,7 @@ def test_order_statistic_datatypes(data, dtype, order_statistic):
     order_statistic_2 = order_statistic(
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
     )
-    res = order_statistic_2.result(data)
+    res = order_statistic_2.quick_result(data)
 
     assert isinstance(order_statistic_1, order_statistic)
     assert isinstance(order_statistic_2, order_statistic)
@@ -94,11 +93,11 @@ def test_percentile_datatypes(data, dtype, dp_percentile):
     dp_percentile_2 = dp_percentile(
         dtype=dtype, epsilon=1.0, percentile=0.45, lower_bound=0, upper_bound=2048
     )
-    res = dp_percentile_2.result(data)
+    res = dp_percentile_2.quick_result(data)
 
     assert isinstance(dp_percentile_2, dp_percentile)
 
-    assert isinstance(res, type(data[0]))
+    assert isinstance(res, float)
 
 
 # TODO Yet some more tests

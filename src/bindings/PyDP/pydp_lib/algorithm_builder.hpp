@@ -7,8 +7,8 @@
 #include "algorithms/bounded-sum.h"
 #include "algorithms/bounded-variance.h"
 #include "algorithms/count.h"
-#include "algorithms/order-statistics.h"
 #include "algorithms/numerical-mechanisms.h"
+#include "algorithms/order-statistics.h"
 #include "base/statusor.h"
 
 namespace dp = differential_privacy;
@@ -22,10 +22,10 @@ constexpr bool is_bounded_algorithm() {
   return std::is_same<Algorithm, dp::BoundedMean<T>>::value ||
          std::is_same<Algorithm, dp::BoundedSum<T>>::value ||
          std::is_same<Algorithm, dp::BoundedStandardDeviation<T>>::value ||
-         std::is_same<Algorithm, dp::BoundedVariance<T>>::value||
-         std::is_same<Algorithm, dp::continuous::Max<T>>::value||
-         std::is_same<Algorithm, dp::continuous::Min<T>>::value||
-         std::is_same<Algorithm, dp::continuous::Median<T>>::value||
+         std::is_same<Algorithm, dp::BoundedVariance<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Max<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Min<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Median<T>>::value ||
          std::is_same<Algorithm, dp::continuous::Percentile<T>>::value;
 }
 
@@ -35,10 +35,30 @@ constexpr bool is_percentile() {
 }
 
 template <typename T, class Algorithm>
+constexpr bool should_return_T() {
+  return std::is_same<Algorithm, dp::continuous::Max<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Min<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Median<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedSum<T>>::value;
+}
+
+template <typename T, class Algorithm>
+constexpr bool should_return_double() {
+  return std::is_same<Algorithm, dp::BoundedMean<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedStandardDeviation<T>>::value ||
+         std::is_same<Algorithm, dp::BoundedVariance<T>>::value ||
+         std::is_same<Algorithm, dp::continuous::Percentile<T>>::value;
+}
+
+template <typename T, class Algorithm>
+constexpr bool should_return_int() {
+  return std::is_same<Algorithm, dp::Count<T>>::value;
+}
+
+template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> build(double epsilon,
-                                   //  std::optional<double> delta = std::nullopt,
                                    std::optional<double> percentile = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
@@ -46,13 +66,11 @@ class AlgorithmBuilder {
                                    std::optional<int> linf_sensitivity = std::nullopt) {
     auto builder = typename Algorithm::Builder();
 
-    if constexpr (is_percentile<T, Algorithm>()){
+    if constexpr (is_percentile<T, Algorithm>()) {
       if (percentile.has_value()) builder.SetPercentile(percentile.value());
-      
     }
     builder.SetEpsilon(epsilon);
 
-    // if (delta.has_value()) builder.SetDelta(delta.value());
     if (l0_sensitivity.has_value())
       builder.SetMaxPartitionsContributed(l0_sensitivity.value());
     if (linf_sensitivity.has_value())
@@ -63,9 +81,6 @@ class AlgorithmBuilder {
       if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
     }
 
-    
-
-
     base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
       throw std::runtime_error(obj.status().error_message());
@@ -74,9 +89,8 @@ class AlgorithmBuilder {
     return std::move(obj.ValueOrDie());
   }
 
-  std::map<std::type_index, std::string> type_to_name = {{typeid(double), "Double"},
-                                                         {typeid(int), "Int"},
-                                                         {typeid(int64_t), "Int"}};
+  std::map<std::type_index, std::string> type_to_name = {
+      {typeid(double), "Double"}, {typeid(int), "Int"}, {typeid(int64_t), "Int"}};
   std::map<std::type_index, std::string> algorithm_to_name = {
       {typeid(dp::BoundedMean<T>), "BoundedMean"},
       {typeid(dp::BoundedSum<T>), "BoundedSum"},
@@ -88,7 +102,7 @@ class AlgorithmBuilder {
       {typeid(dp::continuous::Median<T>), "Median"},
       {typeid(dp::continuous::Percentile<T>), "Percentile"}
 
-      };
+  };
 
   std::string get_algorithm_name() {
     // Set the suffix string
@@ -102,34 +116,34 @@ class AlgorithmBuilder {
 
     // Constructors
     if constexpr (is_bounded_algorithm<T, Algorithm>()) {
-      if constexpr (is_percentile<T, Algorithm>()){
+      if constexpr (is_percentile<T, Algorithm>()) {
         // Explicit percentile constructor
-        pyself.def(py::init([this](double epsilon, double percentile,  T lower_bound, T upper_bound,
-                                 int l0_sensitivity, int linf_sensitivity) {
-                   return this->build(epsilon,percentile, lower_bound, upper_bound, l0_sensitivity,
-                                      linf_sensitivity);
-                 }),
-                 py::arg("epsilon"), py::arg("percentile"), py::arg("lower_bound"), py::arg("upper_bound"),
-                 py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
+        pyself.def(
+            py::init([this](double epsilon, double percentile, T lower_bound,
+                            T upper_bound, int l0_sensitivity, int linf_sensitivity) {
+              return this->build(epsilon, percentile, lower_bound, upper_bound,
+                                 l0_sensitivity, linf_sensitivity);
+            }),
+            py::arg("epsilon"), py::arg("percentile"), py::arg("lower_bound"),
+            py::arg("upper_bound"), py::arg("l0_sensitivity") = 1,
+            py::arg("linf_sensitivity") = 1);
       }
       // Explicit bounds constructor
       pyself.def(py::init([this](double epsilon, T lower_bound, T upper_bound,
                                  int l0_sensitivity, int linf_sensitivity) {
-                   return this->build(epsilon,std::nullopt /*percentile*/, lower_bound, upper_bound, l0_sensitivity,
-                                      linf_sensitivity);
+                   return this->build(epsilon, std::nullopt /*percentile*/, lower_bound,
+                                      upper_bound, l0_sensitivity, linf_sensitivity);
                  }),
                  py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
                  py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
     }
 
-
-
     // No bounds constructor
     pyself.def(
         py::init([this](double epsilon, int l0_sensitivity, int linf_sensitivity) {
-          return this->build(epsilon, std::nullopt /*percentile*/,std::nullopt /*lower_bound*/,
-                             std::nullopt /*upper_bound*/, l0_sensitivity,
-                             linf_sensitivity);
+          return this->build(epsilon, std::nullopt /*percentile*/,
+                             std::nullopt /*lower_bound*/, std::nullopt /*upper_bound*/,
+                             l0_sensitivity, linf_sensitivity);
         }),
         py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
         py::arg("linf_sensitivity") = 1);
@@ -155,8 +169,12 @@ class AlgorithmBuilder {
       if (!result.ok()) {
         throw std::runtime_error(result.status().error_message());
       }
-
-      return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_T<T, Algorithm>()))
+        return dp::GetValue<T>(result.ValueOrDie());
+      if constexpr ((should_return_double<T, Algorithm>()))
+        return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_int<T, Algorithm>()))
+        return dp::GetValue<int64_t>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis) {
@@ -166,7 +184,12 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_T<T, Algorithm>()))
+        return dp::GetValue<T>(result.ValueOrDie());
+      if constexpr ((should_return_double<T, Algorithm>()))
+        return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_int<T, Algorithm>()))
+        return dp::GetValue<int64_t>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
@@ -180,7 +203,12 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().error_message());
       }
 
-      return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_T<T, Algorithm>()))
+        return dp::GetValue<T>(result.ValueOrDie());
+      if constexpr ((should_return_double<T, Algorithm>()))
+        return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_int<T, Algorithm>()))
+        return dp::GetValue<int64_t>(result.ValueOrDie());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget,
@@ -194,8 +222,12 @@ class AlgorithmBuilder {
       if (!result.ok()) {
         throw std::runtime_error(result.status().error_message());
       }
-
-      return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_T<T, Algorithm>()))
+        return dp::GetValue<T>(result.ValueOrDie());
+      if constexpr ((should_return_double<T, Algorithm>()))
+        return dp::GetValue<double>(result.ValueOrDie());
+      if constexpr ((should_return_int<T, Algorithm>()))
+        return dp::GetValue<int64_t>(result.ValueOrDie());
     });
 
     // Other methods
@@ -208,7 +240,7 @@ class AlgorithmBuilder {
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
 
     // Percentile special case.
-    if constexpr (is_percentile<T, Algorithm>()){
+    if constexpr (is_percentile<T, Algorithm>()) {
       pyself.def_property_readonly("percentile", &Algorithm::GetPercentile);
     }
   }

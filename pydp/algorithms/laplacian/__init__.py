@@ -6,10 +6,9 @@ from .bounded_algorithms import (
     Max,
     Min,
     Median,
-    Percentile,
 )
 from .count import Count
-
+from .percentile import Percentile
 
 __all__ = [
     "BoundedMean",
@@ -19,5 +18,6 @@ __all__ = [
     "Count",
     "Max",
     "Min",
+    "Median",
     "Percentile",
 ]

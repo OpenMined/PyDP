@@ -15,3 +15,15 @@ class BoundedStandardDeviation(BoundedAlgorithm):
 
 class BoundedVariance(BoundedAlgorithm):
     pass
+
+
+class Max(BoundedAlgorithm):
+    pass
+
+
+class Min(BoundedAlgorithm):
+    pass
+
+
+class Median(BoundedAlgorithm):
+    pass

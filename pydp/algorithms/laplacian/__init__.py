@@ -3,9 +3,12 @@ from .bounded_algorithms import (
     BoundedSum,
     BoundedStandardDeviation,
     BoundedVariance,
+    Max,
+    Min,
+    Median,
 )
 from .count import Count
-
+from .percentile import Percentile
 
 __all__ = [
     "BoundedMean",
@@ -13,4 +16,8 @@ __all__ = [
     "BoundedSum",
     "BoundedVariance",
     "Count",
+    "Max",
+    "Min",
+    "Median",
+    "Percentile",
 ]

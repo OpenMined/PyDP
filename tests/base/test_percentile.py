@@ -1,8 +1,10 @@
 import pytest
 import pydp as dp
 
+pytestmark = pytest.mark.skip(reason="this percentile is not the DP implementation")
 
-@pytest.mark.parametrize("input_class", [dp.PercentileInt, dp.PercentileDouble])
+
+@pytest.mark.parametrize("input_class", [dp.algorithms.laplacian.Percentile])
 class TestPercentile:
     def test_empty_input_set(self, input_class):
         percentile = input_class()
@@ -64,7 +66,7 @@ class TestPercentile:
         assert small_memory < large_memory
 
 
-# TODO: port the following tests
-#
-# TYPED_TEST(PercentileTest, SerializeMerge)
-#
+# # TODO: port the following tests
+# #
+# # TYPED_TEST(PercentileTest, SerializeMerge)
+# #

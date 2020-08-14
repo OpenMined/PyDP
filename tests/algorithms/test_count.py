@@ -7,14 +7,14 @@ class TestPercentile:
     def test_basic(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
         count = Count(epsilon=1.7, dtype=dtype_in)
-        count.result(c)
+        count.quick_result(c)
 
     def test_repeated_result(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
         count = Count(epsilon=1.7, dtype=dtype_in)
         count.add_entries(c)
 
-        count.partial_result(0.5)
+        count.result(0.5)
 
     """
     # TODO: port ConfidenceInterval
@@ -57,12 +57,13 @@ class TestCountDataTypes:
         assert isinstance(countaes, type(None))
         mem = count.memory_used()
         assert isinstance(mem, int)
-        par = count.partial_result()
+        par = count.result()
         assert isinstance(par, int)
         # TODO
         # par2 = count.partial_result(1.0)
         # assert isinstance(par2, int)
-        res = count.result([2])
+
+        res = count.quick_result([2])
         assert isinstance(res, int)
 
 

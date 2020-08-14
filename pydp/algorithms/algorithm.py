@@ -73,13 +73,13 @@ class MetaAlgorithm:
         """
         return self.__algorithm.add_entry(value)
 
-    def quick_result(self, list):
+    def quick_result(self, data):
         """
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
         """
-        return self.__algorithm.result(list)
+        return self.__algorithm.result(data)
 
     def result(self, privacy_budget=None, noise_interval_level=None):
         """
@@ -159,3 +159,27 @@ class BoundedAlgorithm(MetaAlgorithm):
             linf_sensitivity=linf_sensitivity,
             dtype=dtype,
         )
+
+
+class PercentileBase(MetaAlgorithm):
+    def __init__(
+        self,
+        epsilon=1.0,
+        percentile=0.0,
+        lower_bound=None,
+        upper_bound=None,
+        dtype="int",
+    ):
+        super().__init__(
+            epsilon=epsilon,
+            percentile=percentile,
+            lower_bound=lower_bound,
+            upper_bound=upper_bound,
+            dtype=dtype,
+        )
+
+    @property
+    def percentile(self):
+        """percentile Gets the value that was set in the constructor.
+        """
+        return self._MetaAlgorithm__algorithm.percentile

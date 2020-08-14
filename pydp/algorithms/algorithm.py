@@ -16,9 +16,8 @@ class MetaAlgorithm:
 
         self.dtype = dtype
         self.__algorithm = class_(**kwargs)
-        self.epsilon = self.__algorithm.epsilon
-        self.l0_sensitivity = kwargs["l0_sensitivity"]
-        self.linf_sensitivity = kwargs["linf_sensitivity"]
+        self._l0_sensitivity = kwargs.get("l0_sensitivity", "Not set")
+        self._linf_sensitivity = kwargs.get("linf_sensitivity", "Not set")
 
     @staticmethod
     def __map_dtype_str(dtype):
@@ -28,6 +27,27 @@ class MetaAlgorithm:
             return "Double"
         else:
             raise RuntimeError(f"dtype: {dtype} is not supported")
+
+    @property
+    def epsilon(self):
+        """
+        Returns the epsilon set at initialization.
+        """
+        return self.__algorithm.epsilon
+
+    @property
+    def l0_sensitivity(self):
+        """
+        Returns the l0_sensitivity set at initialization.
+        """
+        return self._l0_sensitivity
+
+    @property
+    def linf_sensitivity(self):
+        """
+        Returns the linf_sensitivity set at initialization.
+        """
+        return self._linf_sensitivity
 
     def privacy_budget_left(self):
         """

@@ -1,4 +1,4 @@
-from ..algorithm import BoundedAlgorithm
+from .._algorithm import BoundedAlgorithm
 
 
 class BoundedMean(BoundedAlgorithm):

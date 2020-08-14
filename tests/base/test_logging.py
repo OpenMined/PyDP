@@ -1,6 +1,9 @@
 import pytest
 import pydp as dp
 
+# TODO: Check whether we should delete logging public binding or allow it
+pytestmark = pytest.mark.skip(reason="we do not return allow user to set up logging.")
+
 
 class TestLogging:
     def test_logging(self):

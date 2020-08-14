@@ -1,4 +1,4 @@
-from .bounded_algorithms import (
+from ._bounded_algorithms import (
     BoundedMean,
     BoundedSum,
     BoundedStandardDeviation,
@@ -7,8 +7,8 @@ from .bounded_algorithms import (
     Min,
     Median,
 )
-from .count import Count
-from .percentile import Percentile
+from ._count import Count
+from ._percentile import Percentile
 
 __all__ = [
     "BoundedMean",

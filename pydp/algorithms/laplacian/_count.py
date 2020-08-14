@@ -1,4 +1,4 @@
-from ..algorithm import Algorithm
+from .._algorithm import Algorithm
 
 
 class Count(Algorithm):

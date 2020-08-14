@@ -3,7 +3,7 @@ import pydp as dp
 
 # TODO: check whether to delete this test suit or update it
 pytestmark = pytest.mark.skip(
-    reason="these tests were for the older percentile wrapping."
+    reason="these tests were for the older percentile wrapping. See TODO"
 )
 
 

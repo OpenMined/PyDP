@@ -1,10 +1,11 @@
 // Provides bindings for Order Statistics
-#include "../pydp_lib/algorithm_builder.hpp"
 #include "algorithms/order-statistics.h"
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
+
+#include "../pydp_lib/algorithm_builder.hpp"
 
 using namespace std;
 

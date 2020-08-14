@@ -11,7 +11,7 @@ class MetaAlgorithm:
         if "upper_bound" in kwargs and kwargs["upper_bound"] is None:
             kwargs.pop("upper_bound")
 
-        binded_class = f"{self.__class__.__name__}{self.__map_dtype_str(dtype)}"
+        binded_class = self.__class__.__name__ + self.__map_dtype_str(dtype)
         class_ = getattr(_algorithms, binded_class)
 
         self.dtype = dtype
@@ -26,7 +26,7 @@ class MetaAlgorithm:
         elif dtype == "float":
             return "Double"
         else:
-            raise RuntimeError(f"dtype: {dtype} is not supported")
+            raise RuntimeError("dtype: {} is not supported".format(dtype))
 
     @property
     def epsilon(self):

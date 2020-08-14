@@ -1,8 +1,8 @@
-
 import pytest
 import pydp as dp
 
 pytestmark = pytest.mark.skip(reason="this percentile is not the DP implementation")
+
 
 @pytest.mark.parametrize("input_class", [dp.algorithms.laplacian.Percentile])
 class TestPercentile:

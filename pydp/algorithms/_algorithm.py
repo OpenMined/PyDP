@@ -2,6 +2,7 @@ from .._pydp import _algorithms
 
 from typing import Union, List
 
+
 class MetaAlgorithm:
     def __init__(self, **kwargs):
         dtype = kwargs.pop("dtype")
@@ -37,7 +38,7 @@ class MetaAlgorithm:
         return self.__algorithm.epsilon
 
     @property
-    def l0_sensitivity(self)-> float:
+    def l0_sensitivity(self) -> float:
         """
         Returns the l0_sensitivity set at initialization.
         """
@@ -82,7 +83,9 @@ class MetaAlgorithm:
         """
         return self.__algorithm.result(data)
 
-    def result(self, privacy_budget: float=None, noise_interval_level=None) -> Union[int, float]:
+    def result(
+        self, privacy_budget: float = None, noise_interval_level=None
+    ) -> Union[int, float]:
         """
         Gets the algorithm result.
 
@@ -100,7 +103,7 @@ class MetaAlgorithm:
         else:
             return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
 
-    def reset(self)-> None:
+    def reset(self) -> None:
         """
         Resets the algorithm to a state in which it has received no input. After Reset is called, the algorithm should only consider input added after the last Reset call when providing output.
         """
@@ -138,15 +141,16 @@ class MetaAlgorithm:
             confidence_level, privacy_budget
         )
 
+
 class BoundedAlgorithm(MetaAlgorithm):
     def __init__(
         self,
-        epsilon:float=1.0,
-        lower_bound:Union[int, float, None]=None,
-        upper_bound:Union[int, float, None]=None,
-        l0_sensitivity: int=1,
-        linf_sensitivity:int =1,
-        dtype:str="int",
+        epsilon: float = 1.0,
+        lower_bound: Union[int, float, None] = None,
+        upper_bound: Union[int, float, None] = None,
+        l0_sensitivity: int = 1,
+        linf_sensitivity: int = 1,
+        dtype: str = "int",
     ):
         super().__init__(
             epsilon=epsilon,

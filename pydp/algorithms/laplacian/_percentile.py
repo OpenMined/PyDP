@@ -5,11 +5,11 @@ from typing import Union
 class Percentile(MetaAlgorithm):
     def __init__(
         self,
-        epsilon: float=1.0,
-        percentile: float=0.0,
-        lower_bound: Union[int, float, None]=None,
-        upper_bound: Union[int, float, None]=None,
-        dtype:str="int",
+        epsilon: float = 1.0,
+        percentile: float = 0.0,
+        lower_bound: Union[int, float, None] = None,
+        upper_bound: Union[int, float, None] = None,
+        dtype: str = "int",
     ):
         super().__init__(
             epsilon=epsilon,
@@ -20,7 +20,7 @@ class Percentile(MetaAlgorithm):
         )
 
     @property
-    def percentile(self)-> float:
+    def percentile(self) -> float:
         """
         percentile Gets the value that was set in the constructor.
         """

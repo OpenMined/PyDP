@@ -25,7 +25,7 @@ type_data_algorithm = [
 def test_min(data, dtype):
 
     minn = dp.algorithms.laplacian.Min(
-        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
+        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
     assert expect_near(min(data), minn.quick_result(data), 10)
     assert expect_near(0, minn.quick_result(data), 10)
@@ -34,7 +34,7 @@ def test_min(data, dtype):
 @pytest.mark.parametrize("dtype, data", [("int", data_ints), ("float", data_floats)])
 def test_max(data, dtype):
     maxx = dp.algorithms.laplacian.Max(
-        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
+        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
     assert 190 < maxx.quick_result(data) < 210
 
@@ -45,7 +45,7 @@ def test_max(data, dtype):
 def test_median(data, dtype):
 
     median = dp.algorithms.laplacian.Median(
-        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
+        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
 
     assert expect_near(statistics.median(data), median.quick_result(data), 20)
@@ -61,7 +61,7 @@ def test_percentile_getter(dtype):
         epsilon=1.0,
         percentile=expected_percentile,
         lower_bound=0,
-        upper_bound=2048,
+        upper_bound=200,
     )
     assert dp_percentile.percentile == expected_percentile
 
@@ -71,7 +71,7 @@ def test_order_statistic_datatypes(data, dtype, order_statistic):
 
     order_statistic_1 = order_statistic(dtype=dtype, epsilon=1.0)
     order_statistic_2 = order_statistic(
-        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=2048
+        dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
     res = order_statistic_2.quick_result(data)
 
@@ -91,7 +91,7 @@ def test_order_statistic_datatypes(data, dtype, order_statistic):
 def test_percentile_datatypes(data, dtype, dp_percentile):
 
     dp_percentile_2 = dp_percentile(
-        dtype=dtype, epsilon=1.0, percentile=0.45, lower_bound=0, upper_bound=2048
+        dtype=dtype, epsilon=1.0, percentile=0.45, lower_bound=0, upper_bound=200
     )
     res = dp_percentile_2.quick_result(data)
 

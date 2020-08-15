@@ -1,5 +1,6 @@
 from .._pydp import _algorithms
 
+from typing import Union, List
 
 class MetaAlgorithm:
     def __init__(self, **kwargs):
@@ -20,7 +21,7 @@ class MetaAlgorithm:
         self._linf_sensitivity = kwargs.get("linf_sensitivity", "Not set")
 
     @staticmethod
-    def __map_dtype_str(dtype):
+    def __map_dtype_str(dtype: str):
         if dtype == "int":
             return "Int"
         elif dtype == "float":
@@ -29,51 +30,51 @@ class MetaAlgorithm:
             raise RuntimeError("dtype: {} is not supported".format(dtype))
 
     @property
-    def epsilon(self):
+    def epsilon(self) -> float:
         """
         Returns the epsilon set at initialization.
         """
         return self.__algorithm.epsilon
 
     @property
-    def l0_sensitivity(self):
+    def l0_sensitivity(self)-> float:
         """
         Returns the l0_sensitivity set at initialization.
         """
         return self._l0_sensitivity
 
     @property
-    def linf_sensitivity(self):
+    def linf_sensitivity(self) -> float:
         """
         Returns the linf_sensitivity set at initialization.
         """
         return self._linf_sensitivity
 
-    def privacy_budget_left(self):
+    def privacy_budget_left(self) -> float:
         """
         Returns the remaining privacy budget.
         """
         return self.__algorithm.privacy_budget_left()
 
-    def memory_used(self):
+    def memory_used(self) -> float:
         """
         Returns the memory currently used by the algorithm in bytes.
         """
         return self.__algorithm.memory_used()
 
-    def add_entries(self, list):
+    def add_entries(self, data: List[Union[int, float]]) -> None:
         """
         Adds multiple inputs to the algorithm.
         """
-        return self.__algorithm.add_entries(list)
+        return self.__algorithm.add_entries(data)
 
-    def add_entry(self, value):
+    def add_entry(self, value: Union[int, float]) -> None:
         """
         Adds one input to the algorithm.
         """
         return self.__algorithm.add_entry(value)
 
-    def quick_result(self, data):
+    def quick_result(self, data: List[Union[int, float]]) -> Union[int, float]:
         """
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
@@ -81,7 +82,7 @@ class MetaAlgorithm:
         """
         return self.__algorithm.result(data)
 
-    def result(self, privacy_budget=None, noise_interval_level=None):
+    def result(self, privacy_budget: float=None, noise_interval_level=None) -> Union[int, float]:
         """
         Gets the algorithm result.
 
@@ -99,7 +100,7 @@ class MetaAlgorithm:
         else:
             return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
 
-    def reset(self):
+    def reset(self)-> None:
         """
         Resets the algorithm to a state in which it has received no input. After Reset is called, the algorithm should only consider input added after the last Reset call when providing output.
         """
@@ -146,12 +147,12 @@ class Algorithm(MetaAlgorithm):
 class BoundedAlgorithm(MetaAlgorithm):
     def __init__(
         self,
-        epsilon=1.0,
-        lower_bound=None,
-        upper_bound=None,
-        l0_sensitivity=1,
-        linf_sensitivity=1,
-        dtype="int",
+        epsilon:float=1.0,
+        lower_bound:Union[int, float, None]=None,
+        upper_bound:Union[int, float, None]=None,
+        l0_sensitivity: int=1,
+        linf_sensitivity:int =1,
+        dtype:str="int",
     ):
         super().__init__(
             epsilon=epsilon,

@@ -138,12 +138,6 @@ class MetaAlgorithm:
             confidence_level, privacy_budget
         )
 
-
-class Algorithm(MetaAlgorithm):
-    def __init__(self, epsilon=1.0, dtype="int"):
-        super().__init__(epsilon=epsilon, dtype=dtype)
-
-
 class BoundedAlgorithm(MetaAlgorithm):
     def __init__(
         self,
@@ -162,27 +156,3 @@ class BoundedAlgorithm(MetaAlgorithm):
             linf_sensitivity=linf_sensitivity,
             dtype=dtype,
         )
-
-
-class PercentileBase(MetaAlgorithm):
-    def __init__(
-        self,
-        epsilon=1.0,
-        percentile=0.0,
-        lower_bound=None,
-        upper_bound=None,
-        dtype="int",
-    ):
-        super().__init__(
-            epsilon=epsilon,
-            percentile=percentile,
-            lower_bound=lower_bound,
-            upper_bound=upper_bound,
-            dtype=dtype,
-        )
-
-    @property
-    def percentile(self):
-        """percentile Gets the value that was set in the constructor.
-        """
-        return self._MetaAlgorithm__algorithm.percentile

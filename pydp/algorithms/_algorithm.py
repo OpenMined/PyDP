@@ -7,7 +7,7 @@ class MetaAlgorithm:
     def __init__(self, **kwargs):
         dtype = kwargs.pop("dtype")
 
-        # Delete bound params if the are not set to avoid  conflicts with builder
+        # Delete bound params if they are not set to avoid  conflicts with builder
         if "lower_bound" in kwargs and kwargs["lower_bound"] is None:
             kwargs.pop("lower_bound")
         if "upper_bound" in kwargs and kwargs["upper_bound"] is None:

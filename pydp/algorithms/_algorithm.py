@@ -84,7 +84,9 @@ class MetaAlgorithm:
         return self.__algorithm.result(data)
 
     def result(
-        self, privacy_budget: Union[float, None] = None, noise_interval_level: Union[float, None]=None
+        self,
+        privacy_budget: Union[float, None] = None,
+        noise_interval_level: Union[float, None] = None,
     ) -> Union[int, float]:
         """
         Gets the algorithm result.
@@ -125,7 +127,9 @@ class MetaAlgorithm:
     #    """
     #    return self.__algorithm.merge(summary)
 
-    def noise_confidence_interval(self, confidence_level: float, privacy_budget: float) -> float:
+    def noise_confidence_interval(
+        self, confidence_level: float, privacy_budget: float
+    ) -> float:
         """
         Returns the confidence_level confidence interval of noise added within the algorithm with specified privacy budget, using epsilon and other relevant, algorithm-specific parameters (e.g. bounds) provided by the constructor.
 

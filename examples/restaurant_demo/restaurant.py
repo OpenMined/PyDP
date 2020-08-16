@@ -4,6 +4,7 @@ import pydp as dp  # our privacy library
 import pandas as pd
 from collections import defaultdict
 import sys  # isort:skip
+
 sys.path.append("../pydp")  # isort:skip
 
 
@@ -36,7 +37,6 @@ LN_3 = math.log(3)
 
 
 class RestaurantStatistics:
-
     def __init__(self, hours_filename, days_filename, epsilon=LN_3):
         self.hours_filename = hours_filename
         self.days_filename = days_filename
@@ -80,19 +80,24 @@ class RestaurantStatistics:
 
         # Parse times so its easy to check whether they are valid
         visits = self._hour_visits.copy()
-        visits["Time entered"] = pd.to_datetime(visits["Time entered"]).apply(
-            lambda x: x.strftime(r'%H%M')).astype(int)
+        visits["Time entered"] = (
+            pd.to_datetime(visits["Time entered"])
+            .apply(lambda x: x.strftime(r"%H%M"))
+            .astype(int)
+        )
 
         # Only select the visits that happened during the valid hours
         valid_visits = visits[visits["Time entered"].isin(VALID_HOURS)]
 
         # Only count the hours without the minutes (12:00 and 12:30 both add 1 to the 12 count)
         valid_visits["Time entered"] = valid_visits["Time entered"].apply(
-            lambda x: int(str(x)[:2]) if len(str(x)) == 4 else int(str(x)[:1]))
+            lambda x: int(str(x)[:2]) if len(str(x)) == 4 else int(str(x)[:1])
+        )
 
         for time in valid_visits["Time entered"].unique():
-            hours_count[time] = valid_visits[valid_visits["Time entered"]
-                                             == time]["Time entered"].count()
+            hours_count[time] = valid_visits[valid_visits["Time entered"] == time][
+                "Time entered"
+            ].count()
 
         return hours_count
 
@@ -101,15 +106,19 @@ class RestaurantStatistics:
 
         # Only count the hours without the minutes (12:00 and 12:30 both add 1 to the 12 count)
         visits = self._hour_visits.copy()
-        visits["Time entered"] = pd.to_datetime(visits["Time entered"]).apply(
-            lambda x: x.strftime(r'%H')).astype(int)
+        visits["Time entered"] = (
+            pd.to_datetime(visits["Time entered"])
+            .apply(lambda x: x.strftime(r"%H"))
+            .astype(int)
+        )
 
         # TODO: Question, should this be the privacy budget? The original code sets epsilon to be log(3)
         x = dp.CountInt(LN_3)
 
         for time in visits["Time entered"].unique():
             private_hours_count[time] = x.result(
-                list(visits[visits["Time entered"] == time]["Time entered"].astype(int)))
+                list(visits[visits["Time entered"] == time]["Time entered"].astype(int))
+            )
 
         return private_hours_count
 
@@ -117,15 +126,15 @@ class RestaurantStatistics:
         day_counts = dict()
 
         for day in self._day_visits["Day"].unique():
-            day_counts[day] = self._day_visits[self._day_visits["Day"]
-                                               == day]["Day"].count()
+            day_counts[day] = self._day_visits[self._day_visits["Day"] == day][
+                "Day"
+            ].count()
 
         return day_counts
 
     def get_private_counts_per_day(self, privacy_budget: float) -> dict:
         # Pre-process the data set: limit the number of days contributed by a visitor to COUNT_MAX_CONTRIBUTED_DAYS
-        day_visits = bound_visits_per_week(
-            self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)
+        day_visits = bound_visits_per_week(self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)
 
         day_counts = dict()
 
@@ -133,7 +142,8 @@ class RestaurantStatistics:
 
         for day in day_visits["Day"].unique():
             day_counts[day] = x.result(
-                list(day_visits[day_visits["Day"] == day]["Day"]))
+                list(day_visits[day_visits["Day"] == day]["Day"])
+            )
 
         return day_counts
 
@@ -141,15 +151,15 @@ class RestaurantStatistics:
         day_revenue = dict()
 
         for day in self._day_visits["Day"].unique():
-            day_revenue[day] = self._day_visits[self._day_visits["Day"]
-                                                == day]["Money spent (euros)"].sum()
+            day_revenue[day] = self._day_visits[self._day_visits["Day"] == day][
+                "Money spent (euros)"
+            ].sum()
 
         return day_revenue
 
     def get_private_sum_revenue(self, privacy_budget: float) -> dict:
         # Pre-process the data set: limit the number of days contributed by a visitor to SUM_MAX_CONTRIBUTED_DAYS
-        day_visits = bound_visits_per_week(
-            self._day_visits, SUM_MAX_CONTRIBUTED_DAYS)
+        day_visits = bound_visits_per_week(self._day_visits, SUM_MAX_CONTRIBUTED_DAYS)
 
         day_revenue = dict()
 
@@ -157,14 +167,18 @@ class RestaurantStatistics:
 
         for day in day_visits["Day"].unique():
             day_revenue[day] = int(
-                x.result(list(day_visits[day_visits["Day"] == day]["Money spent (euros)"])))
+                x.result(
+                    list(day_visits[day_visits["Day"] == day]["Money spent (euros)"])
+                )
+            )
 
         return day_revenue
 
-    def get_private_sum_revenue_with_preaggregation(self, privacy_budget: float) -> dict:
+    def get_private_sum_revenue_with_preaggregation(
+        self, privacy_budget: float
+    ) -> dict:
         # Pre-process the data set: limit the number of days contributed by a visitor to SUM_MAX_CONTRIBUTED_DAYS
-        day_visits = bound_visits_per_week(
-            self._day_visits, SUM_MAX_CONTRIBUTED_DAYS)
+        day_visits = bound_visits_per_week(self._day_visits, SUM_MAX_CONTRIBUTED_DAYS)
 
         day_revenue = dict()
 
@@ -172,13 +186,15 @@ class RestaurantStatistics:
 
         for day in day_visits["Day"].unique():
             # For each visitor, pre-aggregate their spending for the day.
-            visits_on_day = day_visits[day_visits["Day"] == day][[
-                "VisitorId", "Money spent (euros)"]]
+            visits_on_day = day_visits[day_visits["Day"] == day][
+                ["VisitorId", "Money spent (euros)"]
+            ]
             visitor_to_spending = dict()
 
             for visitor in visits_on_day["VisitorId"].unique():
-                visitor_to_spending[visitor] = visits_on_day[visits_on_day["VisitorId"]
-                                                             == visitor]["Money spent (euros)"].sum()
+                visitor_to_spending[visitor] = visits_on_day[
+                    visits_on_day["VisitorId"] == visitor
+                ]["Money spent (euros)"].sum()
 
             spending = list(visitor_to_spending.values())
 
@@ -213,7 +229,8 @@ def bound_visits_per_week(df, limit):
 
 if __name__ == "__main__":
     r = RestaurantStatistics(
-        hours_filename="day_data.csv", days_filename="week_data.csv")
+        hours_filename="day_data.csv", days_filename="week_data.csv"
+    )
 
     np_count_hour, p_count_hour = r.count_visits_per_hour()
     print("-----------------------------------")

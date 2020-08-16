@@ -2,12 +2,42 @@
 ![Version](https://img.shields.io/github/v/tag/OpenMined/PyDP?color=green&label=pypi)
 ![License](https://img.shields.io/github/license/OpenMined/PyDP)
 
+## Introduction to PyDP
 
-# PyDP
-
-In today's data-driven world, data analytics is used by researchers or data scientists to create better models or innovative solutions for a better future. These models often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, some AI models can memorize details about the data they've trained on and could leak these details later on. Differential privacy is a mathematical framework for measuring this privacy leakage and reducing the possibility of it happening. 
+In today's data-driven world, data analytics is used by researchers or data scientists to create better models or innovative solutions for a better future. These models often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, some AI models can memorize details about the data they've trained on and could leak these details later on. Differential privacy is a mathematical framework for measuring this privacy leakage and reducing the possibility of it happening.
 
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, PyDP is helping us achieve better privacy.
+
+## Brief introduction to google's Differential privacy project :- 
+
+The Differentia Privacy project of google contains a set of libraries of ε- and (ε, δ)-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. The functionality is currently available in C++, Go and Java.
+
+Currently, it provides algorithms to compute the following:
+
+| Algorithm          | C++           | Go        |Java      |
+| -------------      |:-------------:|:---------:|:--------:|
+| Count              | Supported     | Supported |Supported |
+| Sum                | Supported     | Supported |Supported |
+| Mean               | Supported     | Supported |Supported |
+| Variance           | Supported     | Planned   |Planned   |
+| Standard deviation | Supported     | Planned   |Planned   |
+| Order statistics (incl. min, max, and median) | Supported   | Planned | Planned |
+| Automatic bounds approximation | Supported   | Planned | Planned |
+
+It also provides implementations of the Laplacian and Gaussian Mechanisms that can be used to perform computations that aren't covered by the pre-built algorithms.
+All of these algorithms are suitable for research, experimental or production use cases.
+
+This project also contains:
+* A [stochastic tester](https://github.com/google/differential-privacy/tree/main/cc/testing),
+used to help catch regressions that could make the differential privacy
+property no longer hold.
+* [Privacy on Beam](https://github.com/google/differential-privacy/tree/main/privacy-on-beam) -
+an end-to-end differential privacy solution built on [Apache Beam](https://beam.apache.org/documentation/)
+and Go differential privacy library.
+* [Tools for tracking privacy budget.](https://github.com/google/differential-privacy/tree/main/accounting)
+
+More information [here](https://github.com/google/differential-privacy)
+
 
 **Things to remember about PyDP :**
 - :rocket: Features differentially private algorithms including: BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.  
@@ -15,17 +45,33 @@ This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential
 - :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
 - :star: Supports all the Python 3+ versions.
 
+**Key features of PyDP :-**
+
+- PyDP features Differentially Private Algorithms including :- 
+
+1) BoundedMean
+2) BoundedSum
+3) Max
+3) Count Above
+4) Percentile
+5) Min
+6) Median, etc 
+
+- All the computation methods mentioned above use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
+- :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
+- :star: Supports all the Python 3+ versions.
+
+
+
 ## Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyDP.
+PyDP can be installed using the package manager [pip](https://pip.pypa.io/en/stable/) to install PyDP.
 
 ```bash
 pip install python-dp
 ```
 
-## Usage
-Refer to [this example](https://github.com/OpenMined/PyDP/tree/dev/examples) to understand PyDP library usage.
-
-For usage via code explanation, refer to [Jupyer Notebook](https://github.com/OpenMined/PyDP/blob/dev/examples/1.1%20-%20Introductions%20to%20PyDP.ipynb) or [Python file](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots.py) for carrot demo.
+## Example
+For a detailed representation of the features of PyDP library refer to [this example](https://github.com/OpenMined/PyDP/tree/dev/examples) .
 
 A sample of usage can be found below:
 
@@ -59,7 +105,7 @@ For support in using this library, please join the **#lib_pydp** Slack channel. 
 
 ## Contributing
 
-If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
+If you'd like to contribute to this open source project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

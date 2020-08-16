@@ -8,7 +8,7 @@ In today's data-driven world, data analytics is used by researchers or data scie
 
 This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, PyDP is helping us achieve better privacy.
 
-## Brief introduction to google's Differential privacy project :- 
+**Brief introduction to google's Differential privacy project :-** 
 
 The Differentia Privacy project of google contains a set of libraries of ε- and (ε, δ)-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. The functionality is currently available in C++, Go and Java.
 

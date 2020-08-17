@@ -1,9 +1,9 @@
 import pydp as dp
 
 # Sample code to display error handling
-x = dp.Max(1)
+x = dp.algorithms.laplacian.Max(1)
 try:
-    print(x.result([2, 8], 1))
+    print(x.quick_result([2, 8]))
 except RuntimeError as e:
     print("e")
 except SystemError:

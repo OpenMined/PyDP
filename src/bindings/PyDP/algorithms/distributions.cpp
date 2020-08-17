@@ -1,5 +1,4 @@
 // Provides bindings for distributions
-
 #include "pybind11/pybind11.h"
 
 #include "algorithms/distributions.h"
@@ -19,7 +18,7 @@ void declareLaplaceDistribution(py::module &m) {
            py::arg("scale") = 1.0,
            R"pbdoc(
                     Samples the Laplacian distribution Laplace(u, scale*b).
-                    
+
                     Parameters
                     ----------
                     scale
@@ -28,7 +27,7 @@ void declareLaplaceDistribution(py::module &m) {
   laplace_dist.def("get_diversity", &dpi::LaplaceDistribution::GetDiversity,
                    R"pbdoc(
                Returns the parameter defining this distribution, often labeled b.
-               
+
           )pbdoc");
   laplace_dist.attr("__doc__") = "Draws samples from the Laplacian distribution.";
 }
@@ -43,12 +42,13 @@ void declareGaussianDistribution(py::module &m) {
                     Parameters
                     ----------
                     scale
-                         A factor to scale stddev.    
+                         A factor to scale stddev.
              )pbdoc")
       .def_property_readonly("stddev", &dpi::GaussianDistribution::Stddev,
                              R"pbdoc(Returns stddev)pbdoc");
 }
 
+/*
 void declareGeometricDistribution(py::module &m) {
   py::class_<dpi::GeometricDistribution> geometric_dist(m, "GeometricDistribution");
   geometric_dist.attr("__module__") = "pydp";
@@ -64,15 +64,15 @@ void declareGeometricDistribution(py::module &m) {
                              R"pbdoc(Returns lambda. Where p = 1 - e^-lambda)pbdoc");
   geometric_dist.attr("__doc__") =
       R"pbdoc(Draws samples from the geometric distribution of probability
-          \math{p = 1 - e^{-\lambda}}, i.e. the number of bernoulli trial failures before the
-          first success where the success probability is as defined above. lambda must
+          \math{p = 1 - e^{-\lambda}}, i.e. the number of bernoulli trial failures
+before the first success where the success probability is as defined above. lambda must
           be positive. If the result would be higher than the maximum int64_t, returns
           the maximum int64_t, which means that users should be careful around the edges
           of their distribution)pbdoc";
 }
-
+*/
 void init_algorithms_distributions(py::module &m) {
   declareLaplaceDistribution(m);
   declareGaussianDistribution(m);
-  declareGeometricDistribution(m);
+  // declareGeometricDistribution(m);
 }

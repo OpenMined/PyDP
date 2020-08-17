@@ -3,7 +3,7 @@ from .._algorithm import MetaAlgorithm
 
 class Count(MetaAlgorithm):
     """
-    Count Explaination
+    Count Explanation
     TODO
     """
 

@@ -3,7 +3,7 @@ from .._algorithm import BoundedAlgorithm
 
 class BoundedMean(BoundedAlgorithm):
     """
-    Bouned Mean Explanation
+    Bounded Mean Explanation
     TODO
     """
 
@@ -12,7 +12,7 @@ class BoundedMean(BoundedAlgorithm):
 
 class BoundedSum(BoundedAlgorithm):
     """
-    Bouned Sum Explanation
+    Bounded Sum Explanation
     TODO
     """
 
@@ -21,7 +21,7 @@ class BoundedSum(BoundedAlgorithm):
 
 class BoundedStandardDeviation(BoundedAlgorithm):
     """
-    Bouned Standard Deviation Explanation
+    Bounded Standard Deviation Explanation
     TODO
     """
 
@@ -30,7 +30,7 @@ class BoundedStandardDeviation(BoundedAlgorithm):
 
 class BoundedVariance(BoundedAlgorithm):
     """
-    Bouned Variance Explanation
+    Bounded Variance Explanation
     TODO
     """
 

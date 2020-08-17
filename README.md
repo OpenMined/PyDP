@@ -25,12 +25,16 @@ pip install python-dp
 ## Usage
 Refer to [this example](https://github.com/OpenMined/PyDP/tree/dev/examples) to understand PyDP library usage.
 
-For usage via code explanation, refer to [Jupyer Notebook](https://github.com/OpenMined/PyDP/blob/dev/examples/1.1%20-%20Introductions%20to%20PyDP.ipynb) or [Python file](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots.py) for carrot demo.
+For usage via code explanation, refer to [Jupyer Notebook](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb) or [Python file](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py) for carrot demo.
+
+Documentation can be found [here](https://openmined.github.io/PyDP/readme.html).
 
 A sample of usage can be found below:
 
 ```python
 import pydp as dp # imports the DP library
+from pydp.algorithms.laplacian import BoundedMean
+
 
 # To calculate the Bounded Mean
 # epsilon is a number between 0 and 1 denoting privacy threshold
@@ -42,12 +46,12 @@ x = dp.BoundedMean(0.6, 1, 10)
 # If lower and upper bounds are not specified, 
 # DP library automatically calculates these bounds
 # x = dp.BoundedMean(epsilon: double)
-x = dp.BoundedMean(0.6)
+x = BoundedMean(0.6)
 
 # To get the result
 # Currently supported data types are integer and float. Future versions will support additional data types
 # Refer to examples/carrots.py for an introduction
-x.result(input_data: list)
+x.quick_result(input_data: list)
 
 ```
 
@@ -65,7 +69,6 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-***Note : Known issue -***  If the privacy budget (epsilon is too less), we get a StatusOR error in the command line. While this needs to be raised as an error, right now, it's just displayed as an error in logs.
 
 <!-- ## Contributors -->
 

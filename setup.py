@@ -43,7 +43,7 @@ setup(
     distclass=BinaryDistribution,
     install_requires=requirements,
     license="Apache-2.0",
-    long_description=read("docs/readme.rst"),
+    long_description=read("docs/readme.md"),
     include_package_data=True,
     keywords="pydp",
     name="python-dp",

@@ -12,7 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="0b0a5c2315d84a6a7b1ff34591e33ec11680891e"
+ENV DP_SHA="1b1dc6639173c0a13613189ec21851604a4c7335"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -64,7 +64,7 @@ ENV PIPENV_VENV_IN_PROJECT=true
 RUN pipenv --python ${PYTHON_VERSION} && \
     pipenv run bazel build src/python:bindings_test  --verbose_failures
 
-RUN cp -f ./bazel-bin/src/bindings/pydp.so ./pydp && \
+RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python setup.py bdist_wheel && \
     pipenv install dist/*.whl 

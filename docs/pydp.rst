@@ -4,13 +4,36 @@ PyDP
 
 Algorithms
 ##########
-.. automodule:: pydp.algorithms.laplacian
-   :members: BoundedMean, BoundedSum, BoundedStandardDeviation, BoundedVariance, Max, Min, Median, Count, Percentile
+.. currentmodule:: pydp.algorithms.laplacian
+.. autoclass:: BoundedMean
+   :inherited-members: 
+
+.. autoclass::  BoundedSum
+   :inherited-members: 
+.. autoclass::  BoundedStandardDeviation
+   :inherited-members: 
+.. autoclass::  BoundedVariance
+   :inherited-members: 
+.. autoclass::  Max
+   :inherited-members: 
+.. autoclass::  Min
+   :inherited-members: 
+.. autoclass::  Median
+   :inherited-members: 
+.. autoclass::  Count
+   :inherited-members: 
+.. autoclass::  Percentile
+   :inherited-members: 
+
+
 
 Distributions
 #############
-.. automodule:: pydp.distributions
-   :members: GaussianDistribution, LaplaceDistribution
+.. currentmodule:: pydp.distributions
+.. autoclass::  GaussianDistribution
+   :members:
+.. autoclass::  LaplaceDistribution
+   :members:
 
 Util
 ##########

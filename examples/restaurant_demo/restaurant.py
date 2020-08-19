@@ -1,10 +1,11 @@
 import math
 import statistics as s
-import pydp as dp 
+import pydp as dp
 import pandas as pd
 from collections import defaultdict
-import sys  
-sys.path.append("../pydp")  
+import sys
+
+sys.path.append("../pydp")
 
 
 # An hour when visitors start entering the restaurant (900 represents 9:00 AM)
@@ -37,9 +38,9 @@ LN_3 = math.log(3)
 
 class RestaurantStatistics:
     def __init__(self, hours_filename, days_filename, epsilon=LN_3):
-        
+
         # Store the name of the csvs for daily and weekly restaurant data
-        self.hours_filename = hours_filename   
+        self.hours_filename = hours_filename
         self.days_filename = days_filename
 
         # The privacy threshold, a number between 0 and 1
@@ -49,7 +50,6 @@ class RestaurantStatistics:
         self._hour_visits = pd.read_csv(self.hours_filename, sep=",")
         self._day_visits = pd.read_csv(self.days_filename, sep=",")
 
-    
     def count_visits_per_hour(self) -> tuple:
         """Compute raw count of visits per hour of day and return two dictionaries 
         that map an hour to the number of visits in that hour. 
@@ -60,7 +60,6 @@ class RestaurantStatistics:
         private_counts = self.get_private_counts_per_hour()
 
         return non_private_counts, private_counts
-
 
     def count_visits_per_day(self) -> tuple:
         """Compute raw count of visits per day of week and return two dictionaries 
@@ -74,7 +73,6 @@ class RestaurantStatistics:
 
         return non_private_counts, private_counts
 
-    
     def sum_revenue_per_day(self) -> tuple:
         """Compute revenue per day for the whole week. 
         
@@ -86,7 +84,6 @@ class RestaurantStatistics:
 
         return non_private_sum, private_sum
 
-    
     def sum_revenue_per_day_with_preaggregation(self) -> tuple:
         """Calculates revenue per day in the whole week while preagreggating the spending of each visitor before calculating the BoundedSum with PyDP.
         
@@ -119,11 +116,13 @@ class RestaurantStatistics:
         )
 
         for time in valid_visits["Time entered"].unique():
-            hours_count[time] = valid_visits[valid_visits["Time entered"] == time]["Time entered"].count()
+            hours_count[time] = valid_visits[valid_visits["Time entered"] == time][
+                "Time entered"
+            ].count()
 
         return hours_count
 
-    def get_private_counts_per_hour(self, epsilon: float=None) -> dict:
+    def get_private_counts_per_hour(self, epsilon: float = None) -> dict:
         """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per hour. Return a dictionary mapping hours to number of visits"""
         private_hours_count = dict()
 
@@ -136,7 +135,7 @@ class RestaurantStatistics:
         )
 
         # Use the default epsilon value if it is not given as an argument
-        if not epsilon:   
+        if not epsilon:
             x = dp.CountInt(self._epsilon)
         else:
             x = dp.CountInt(epsilon)
@@ -159,7 +158,7 @@ class RestaurantStatistics:
 
         return day_counts
 
-    def get_private_counts_per_day(self, epsilon: float=None) -> dict:
+    def get_private_counts_per_day(self, epsilon: float = None) -> dict:
         """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per day. Return a dictionary mapping days to number of visits"""
         # Pre-process the data set: limit the number of days contributed by a visitor to COUNT_MAX_CONTRIBUTED_DAYS
         day_visits = bound_visits_per_week(self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)
@@ -167,7 +166,7 @@ class RestaurantStatistics:
         day_counts = dict()
 
         # Use the default epsilon value if it is not given as an argument
-        if not epsilon:   
+        if not epsilon:
             x = dp.CountInt(self._epsilon)
         else:
             x = dp.CountInt(epsilon)
@@ -190,7 +189,7 @@ class RestaurantStatistics:
 
         return day_revenue
 
-    def get_private_sum_revenue(self, epsilon: float=None) -> dict:
+    def get_private_sum_revenue(self, epsilon: float = None) -> dict:
         """Compute an anonymized (within a given threshold of epsilon) version of the revenue per day. Return a dictionary mapping days to revenue"""
         # Pre-process the data set: limit the number of days contributed by a visitor to SUM_MAX_CONTRIBUTED_DAYS
         day_visits = bound_visits_per_week(self._day_visits, SUM_MAX_CONTRIBUTED_DAYS)
@@ -198,7 +197,7 @@ class RestaurantStatistics:
         day_revenue = dict()
 
         # Use the default epsilon value if it is not given as an argument
-        if not epsilon:   
+        if not epsilon:
             x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1)
         else:
             x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1)
@@ -212,7 +211,9 @@ class RestaurantStatistics:
 
         return day_revenue
 
-    def get_private_sum_revenue_with_preaggregation(self, epsilon: float=None) -> dict:
+    def get_private_sum_revenue_with_preaggregation(
+        self, epsilon: float = None
+    ) -> dict:
         """Compute an anonymized (within a given threshold of epsilon) version of the revenue per day. 
         
         Before performing the computation, 
@@ -225,7 +226,7 @@ class RestaurantStatistics:
         day_revenue = dict()
 
         # Use the default epsilon value if it is not given as an argument
-        if not epsilon:   
+        if not epsilon:
             x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2)
         else:
             x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2)
@@ -238,7 +239,9 @@ class RestaurantStatistics:
             visitor_to_spending = dict()
 
             for visitor in visits_on_day["VisitorId"].unique():
-                visitor_to_spending[visitor] = visits_on_day[visits_on_day["VisitorId"] == visitor]["Money spent (euros)"].sum()
+                visitor_to_spending[visitor] = visits_on_day[
+                    visits_on_day["VisitorId"] == visitor
+                ]["Money spent (euros)"].sum()
 
             spending = list(visitor_to_spending.values())
 

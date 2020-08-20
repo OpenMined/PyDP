@@ -108,8 +108,13 @@ class AlgorithmBuilder {
     // Set the suffix string
     return (algorithm_to_name[typeid(Algorithm)] + type_to_name[typeid(T)]);
   }
+  std::string get_Summary_algorithm_name() {
+    // Set the suffix string
+    return (std::string("Summary") + algorithm_to_name[typeid(Algorithm)] + type_to_name[typeid(T)]);
+  }
 
   void declare(py::module& m) {
+    py::class_<Summary> Summary1(m, get_Summary_algorithm_name().c_str(), py::module_local());
     py::class_<Algorithm> pyself(m, get_algorithm_name().c_str());
 
     pyself.attr("__module__") = "_algorithms";
@@ -233,10 +238,15 @@ class AlgorithmBuilder {
     // Other methods
     pyself.def("reset", &Algorithm::Reset);
 
-    pyself.def("serialize", &Algorithm::Serialize);
+    Summary1.def("serialize",[](Algorithm& pythis){
+      return pythis.Serialize();
+    } );
 
-    pyself.def("merge", &Algorithm::Merge);
-
+    pyself.def("merge", [](Algorithm& pythis, Summary& merging)
+    {
+      pythis.Merge(merging);
+    });
+    
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
 
     // Percentile special case.

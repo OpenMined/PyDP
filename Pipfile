@@ -11,5 +11,7 @@ black = "*"
 twine = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
+gcovr = "*"
+coverage = "*"
 
 [packages]

@@ -1,0 +1,9 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+data_file = .coveragepy.dat
+source = pydp
+
+[html]
+directory = coverage_report/python
+title = Python code coverage report

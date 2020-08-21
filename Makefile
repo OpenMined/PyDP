@@ -82,6 +82,7 @@ check-coverage-python: ## check for Python code coverage
 
 check-coverage-cpp: ## check for C++ code coverage
 	@ echo "\e[36mChecking C++ code style with MIN_COVERAGE=${MIN_COVERAGE}.\e[0m" && \
+	mkdir -p coverage_report/cpp && \
 	pipenv run gcovr --print-summary --fail-under-line ${MIN_COVERAGE} || \
 	( echo "\e[33mRun \e[34mmake show-coverage\e[33m to see a detailed HTML coverage report.\e[0m"; \
 		exit 1 )

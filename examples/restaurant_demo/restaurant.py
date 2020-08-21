@@ -167,9 +167,9 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.CountInt(self._epsilon)
+            x = dp.CountInt(self._epsilon, l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS)
         else:
-            x = dp.CountInt(epsilon)
+            x = dp.CountInt(epsilon, l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS)
 
         for day in day_visits["Day"].unique():
             day_counts[day] = x.result(
@@ -198,9 +198,9 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1)
+            x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1, l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS)
         else:
-            x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1)
+            x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_1, l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS)
 
         for day in day_visits["Day"].unique():
             day_revenue[day] = int(
@@ -227,9 +227,9 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2)
+            x = dp.BoundedSum(self._epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2, l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS)
         else:
-            x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2)
+            x = dp.BoundedSum(epsilon, MIN_EUROS_SPENT, MAX_EUROS_SPENT_2, l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS)
 
         for day in day_visits["Day"].unique():
             # For each visitor, pre-aggregate their spending for the day.

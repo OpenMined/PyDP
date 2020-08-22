@@ -36,3 +36,9 @@ jobs:
     - name: Run tests
       run: |
         make run-tests-only
+    - name: Check Python code coverage
+      run: |
+        make check-coverage-python
+    - name: Check C++ code coverage
+      run: |
+        make check-coverage-cpp

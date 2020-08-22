@@ -235,8 +235,7 @@ class AlgorithmBuilder {
 
     pyself.def("serialize", &Algorithm::Serialize);
 
-    pyself.def("merge",
-               [](Algorithm& pythis, Summary& merging) { pythis.Merge(merging); });
+    pyself.def("merge", &Algorithm::Merge);
 
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
 

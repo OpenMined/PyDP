@@ -21,4 +21,5 @@ void declareAlgorithm(py::module& m) {
 void init_algorithms_count(py::module& m) {
   declareAlgorithm<int, dp::Count<int>>(m);
   declareAlgorithm<double, dp::Count<double>>(m);
+  declareAlgorithm<long long, dp::Count<long long>>(m);
 }

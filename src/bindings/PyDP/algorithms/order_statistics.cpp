@@ -21,13 +21,17 @@ void declareOrderStat(py::module& m) {
 void init_algorithms_order_statistics(py::module& m) {
   declareOrderStat<int64_t, dp::continuous::Max<int64_t>>(m);
   declareOrderStat<double, dp::continuous::Max<double>>(m);
+  declareOrderStat<long long, dp::continuous::Max<long long>>(m);
 
   declareOrderStat<int64_t, dp::continuous::Min<int64_t>>(m);
   declareOrderStat<double, dp::continuous::Min<double>>(m);
+  declareOrderStat<long long, dp::continuous::Min<long long>>(m);
 
   declareOrderStat<int64_t, dp::continuous::Median<int64_t>>(m);
   declareOrderStat<double, dp::continuous::Median<double>>(m);
+  declareOrderStat<long long, dp::continuous::Median<long long>>(m);
 
   declareOrderStat<int64_t, dp::continuous::Percentile<int64_t>>(m);
   declareOrderStat<double, dp::continuous::Percentile<double>>(m);
+  declareOrderStat<long long, dp::continuous::Percentile<long long>>(m);
 }

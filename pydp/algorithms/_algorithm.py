@@ -27,6 +27,8 @@ class MetaAlgorithm:
             return "Int"
         elif dtype == "float":
             return "Double"
+        elif dtype == "long long":
+            return "LongLong"
         else:
             raise RuntimeError("dtype: {} is not supported".format(dtype))
 

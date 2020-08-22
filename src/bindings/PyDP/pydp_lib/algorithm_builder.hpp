@@ -233,7 +233,7 @@ class AlgorithmBuilder {
     // Other methods
     pyself.def("reset", &Algorithm::Reset);
 
-    pyself.def("serialize", [](Algorithm& pythis) { return pythis.Serialize(); });
+    pyself.def("serialize", &Algorithm::Serialize);
 
     pyself.def("merge",
                [](Algorithm& pythis, Summary& merging) { pythis.Merge(merging); });

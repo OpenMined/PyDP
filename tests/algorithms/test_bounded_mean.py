@@ -21,7 +21,7 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
-def test_serialze_merge():
+def test_serialize_merge():
     bm1 = BoundedMean(1, 1, 10)
     bm2 = BoundedMean(1, 1, 10)
     bm1.add_entries([1 for i in range(100)])

@@ -114,18 +114,19 @@ class MetaAlgorithm:
     # TODO: Wrap Summary class before exposing serialize and merge methods.
     #
     def serialize(self):
-       """
+        """
        Serializes summary data of current entries into Summary proto. This allows results from distributed aggregation to be recorded and later merged.
     
        Returns empty summary for algorithms for which serialize is unimplemented.
        """
-       return self.__algorithm.serialize()
+        return self.__algorithm.serialize()
+
     #
     def merge(self, summary):
-       """
+        """
        Merges serialized summary data into this algorithm. The summary proto must represent data from the same algorithm type with identical parameters. The  data field must contain the algorithm summary type of the corresponding algorithm used. The summary proto cannot be empty.
        """
-       return self.__algorithm.merge(summary)
+        return self.__algorithm.merge(summary)
 
     def noise_confidence_interval(
         self, confidence_level: float, privacy_budget: float

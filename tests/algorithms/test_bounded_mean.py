@@ -21,6 +21,17 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
+def test_serialze_merge():
+    bm1 = BoundedMean(1, 1, 10)
+    bm2 = BoundedMean(1, 1, 10)
+    bm1.add_entries([1 for i in range(100)])
+    bm2.add_entries([10 for i in range(100)])
+
+    serializer = bm1.serialize()
+    bm2.merge(serializer)
+    assert 3 <= bm2.result() <= 7
+
+
 # TODO: port this test
 #
 # TYPED_TEST(BoundedMeanTest, BasicTest) {

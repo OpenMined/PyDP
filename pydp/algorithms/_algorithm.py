@@ -40,7 +40,7 @@ class MetaAlgorithm:
         elif dtype == "float":
             return "Double"
         else:
-            raise RuntimeError("dtype: {} is not supported".format(dtype))
+            raise ValueError("dtype '{}' is not supported.".format(dtype))
 
     @property
     def epsilon(self) -> float:

@@ -32,6 +32,14 @@ def test_serialize_merge():
     assert 3 <= bm2.result() <= 7
 
 
+def test_result_crash():
+    bm1 = BoundedMean(1, 1, 10)
+    bm1.add_entries([1 for i in range(100)])
+    bm1.result()
+    with pytest.raises(RuntimeError):
+        bm1.result()
+
+
 # TODO: port this test
 #
 # TYPED_TEST(BoundedMeanTest, BasicTest) {

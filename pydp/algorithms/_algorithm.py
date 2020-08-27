@@ -66,12 +66,16 @@ class MetaAlgorithm:
     def add_entries(self, data: List[Union[int, float]]) -> None:
         """
         Adds multiple inputs to the algorithm.
+
+        Note: If the data exceeds the overflow limit of storage, the current list passed is not added.
         """
         return self.__algorithm.add_entries(data)
 
     def add_entry(self, value: Union[int, float]) -> None:
         """
         Adds one input to the algorithm.
+
+        Note: If the data exceeds the overflow limit of storage, the current data passed is not added.
         """
         return self.__algorithm.add_entry(value)
 
@@ -80,6 +84,8 @@ class MetaAlgorithm:
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
+        
+        Note: It resets the privacy budget first.
         """
         return self.__algorithm.result(data)
 
@@ -97,6 +103,10 @@ class MetaAlgorithm:
 
         `noise_interval_level` provides the confidence level of the noise confidence interval, which may be included in the algorithm output.
         """
+        if self.privacy_budget_left() == 0:
+            raise RuntimeError(
+                "Privacy Budget left is already 0, you can't do any more operations"
+            )
 
         if privacy_budget is None:
             return self.__algorithm.partial_result()

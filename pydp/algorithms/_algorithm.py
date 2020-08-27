@@ -1,3 +1,5 @@
+import math
+
 from .._pydp import _algorithms
 
 from typing import Union, List
@@ -7,11 +9,14 @@ class MetaAlgorithm:
     def __init__(self, **kwargs):
         dtype = kwargs.pop("dtype")
 
-        # Delete bound params if they are not set to avoid  conflicts with builder
-        if "lower_bound" in kwargs and kwargs["lower_bound"] is None:
-            kwargs.pop("lower_bound")
-        if "upper_bound" in kwargs and kwargs["upper_bound"] is None:
-            kwargs.pop("upper_bound")
+        for arg_name in ["lower_bound", "upper_bound"]:
+            if arg_name in kwargs:
+                if kwargs[arg_name] is None:
+                    # Delete bound params if they are not set to avoid conflicts with builder
+                    kwargs.pop(arg_name)
+                else:
+                    # If they are set, check for edge cases
+                    self.__check_input(name=arg_name, value=kwargs[arg_name])
 
         binded_class = self.__class__.__name__ + self.__map_dtype_str(dtype)
         class_ = getattr(_algorithms, binded_class)
@@ -22,6 +27,13 @@ class MetaAlgorithm:
         self._linf_sensitivity = kwargs.get("linf_sensitivity", "Not set")
 
     @staticmethod
+    def __check_input(name: str, value: float):
+        if math.isnan(value) or math.isinf(value):
+            raise ValueError(
+                "invalid value '{}' for paramater '{}'.".format(value, name)
+            )
+
+    @staticmethod
     def __map_dtype_str(dtype: str):
         if dtype == "int":
             return "Int"
@@ -30,7 +42,7 @@ class MetaAlgorithm:
         elif dtype == "float":
             return "Double"
         else:
-            raise RuntimeError("dtype: {} is not supported".format(dtype))
+            raise ValueError("dtype '{}' is not supported.".format(dtype))
 
     @property
     def epsilon(self) -> float:

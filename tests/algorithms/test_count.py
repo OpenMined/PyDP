@@ -2,7 +2,7 @@ import pytest
 from pydp.algorithms.laplacian import Count
 
 
-@pytest.mark.parametrize("dtype_in", ["int", "float", "long long"])
+@pytest.mark.parametrize("dtype_in", ["int", "int64", "float"])
 class TestPercentile:
     def test_basic(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]

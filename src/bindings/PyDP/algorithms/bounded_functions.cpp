@@ -27,18 +27,18 @@ void declareBoundedAlgorithm(py::module& m) {
 
 void init_algorithms_bounded_functions(py::module& m) {
   declareBoundedAlgorithm<int, dp::BoundedMean<int>>(m);
+  declareBoundedAlgorithm<int64_t, dp::BoundedMean<int64_t>>(m);
   declareBoundedAlgorithm<double, dp::BoundedMean<double>>(m);
-  declareBoundedAlgorithm<long long, dp::BoundedMean<long long>>(m);
 
   declareBoundedAlgorithm<int, dp::BoundedSum<int>>(m);
+  declareBoundedAlgorithm<int64_t, dp::BoundedSum<int64_t>>(m);
   declareBoundedAlgorithm<double, dp::BoundedSum<double>>(m);
-  declareBoundedAlgorithm<long long, dp::BoundedSum<long long>>(m);
 
   declareBoundedAlgorithm<int, dp::BoundedStandardDeviation<int>>(m);
+  declareBoundedAlgorithm<int64_t, dp::BoundedStandardDeviation<int64_t>>(m);
   declareBoundedAlgorithm<double, dp::BoundedStandardDeviation<double>>(m);
-  declareBoundedAlgorithm<long long, dp::BoundedStandardDeviation<long long>>(m);
 
   declareBoundedAlgorithm<int, dp::BoundedVariance<int>>(m);
+  declareBoundedAlgorithm<int64_t, dp::BoundedVariance<int64_t>>(m);
   declareBoundedAlgorithm<double, dp::BoundedVariance<double>>(m);
-  declareBoundedAlgorithm<long long, dp::BoundedVariance<long long>>(m);
 }

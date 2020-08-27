@@ -25,10 +25,10 @@ class MetaAlgorithm:
     def __map_dtype_str(dtype: str):
         if dtype == "int":
             return "Int"
+        elif dtype == "int64":
+            return "Int64"
         elif dtype == "float":
             return "Double"
-        elif dtype == "long long":
-            return "LongLong"
         else:
             raise RuntimeError("dtype: {} is not supported".format(dtype))
 
@@ -116,7 +116,7 @@ class MetaAlgorithm:
     def serialize(self):
         """
         Serializes summary data of current entries into Summary proto. This allows results from distributed aggregation to be recorded and later merged.
-        
+
         Returns empty summary for algorithms for which serialize is unimplemented.
         """
         return self.__algorithm.serialize()

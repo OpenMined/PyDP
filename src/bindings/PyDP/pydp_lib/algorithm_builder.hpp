@@ -92,8 +92,8 @@ class AlgorithmBuilder {
   std::map<std::type_index, std::string> type_to_name = {
       {typeid(double), "Double"},
       {typeid(int), "Int"},
-      {typeid(int64_t), "Int"},
-      {typeid(long long), "LongLong"}};
+      {typeid(int64_t), "Int64"},
+  };
   std::map<std::type_index, std::string> algorithm_to_name = {
       {typeid(dp::BoundedMean<T>), "BoundedMean"},
       {typeid(dp::BoundedSum<T>), "BoundedSum"},

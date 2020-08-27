@@ -25,9 +25,9 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
-def test_bounded_mean_long_long():
+def test_bounded_mean_int64():
     example_list = [5] * 100000000
-    x = BoundedMean(1.0, 0, 10, dtype="long long")
+    x = BoundedMean(1.0, 0, 10, dtype="int64")
     for _ in range(5):
         x.add_entries(example_list)
 

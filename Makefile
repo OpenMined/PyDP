@@ -1,6 +1,6 @@
 include .env # Read .env file
 
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: build clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -106,5 +106,5 @@ dist: clean ## builds source and wheel package
 	pipenv run python setup.py bdist_wheel
 	ls -l dist
 
-install: clean ## install the package to the active Python's site-packages
-	pipenv run python setup.py install
+install: dist ## install the package to the active Python's site-packages
+	pipenv run pip install --upgrade --force-reinstall dist/*.whl

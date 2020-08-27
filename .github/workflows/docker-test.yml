@@ -1,0 +1,38 @@
+on:
+    push:
+      branches:
+      - dev
+    pull_request:
+      types: [opened, synchronize, reopened]
+
+name: Build and Test Docker Image
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8]
+    env:
+      IMAGE: openmined/pydp
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+     
+      - name: Show python version and build image name  
+        id: build_name
+        run: |
+          python -c "import sys; print(sys.version)"
+          echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
+
+      - name: Build images
+        run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg PYTHON_VERSION=${{matrix.python-version}} -f Dockerfile .
+
+   
+

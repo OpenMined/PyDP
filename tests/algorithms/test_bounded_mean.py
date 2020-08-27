@@ -34,6 +34,17 @@ def test_bounded_mean_long_long():
     assert expect_near(5.0, x.result(), 0.1)
 
 
+def test_serialize_merge():
+    bm1 = BoundedMean(1, 1, 10)
+    bm2 = BoundedMean(1, 1, 10)
+    bm1.add_entries([1 for i in range(100)])
+    bm2.add_entries([10 for i in range(100)])
+
+    serializer = bm1.serialize()
+    bm2.merge(serializer)
+    assert 3 <= bm2.result() <= 7
+
+
 # TODO: port this test
 #
 # TYPED_TEST(BoundedMeanTest, BasicTest) {

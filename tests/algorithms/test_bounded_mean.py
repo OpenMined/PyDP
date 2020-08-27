@@ -1,6 +1,10 @@
 import pytest
 from pydp.algorithms.laplacian import BoundedMean
 
+expect_near = lambda expected, actual, tol: (
+    expected + tol >= actual and expected - tol <= actual
+)
+
 
 def test_python_api():
     a = [2, 4, 6, 8]
@@ -19,6 +23,15 @@ def test_bounded_mean():
     bm2 = BoundedMean(epsilon=3.4, dtype="int")
     assert isinstance(bm2, BoundedMean)
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
+
+
+def test_bounded_mean_int64():
+    example_list = [5] * 100000000
+    x = BoundedMean(1.0, 0, 10, dtype="int64")
+    for _ in range(5):
+        x.add_entries(example_list)
+
+    assert expect_near(5.0, x.result(), 0.1)
 
 
 def test_serialize_merge():

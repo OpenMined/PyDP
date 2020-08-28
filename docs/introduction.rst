@@ -18,6 +18,9 @@ This is where “Differential Privacy” comes into the picture, a smarter way t
 .. figure:: https://user-images.githubusercontent.com/19529592/91377299-b58fbf80-e83c-11ea-9b56-a068ea3155c6.png
     :alt: my-picture1
     :align: center
+    :figclass: align-center
+
+    (Privacy Preserving AI (Andrew Trask) | MIT Deep Learning Series )
 
 Why is Differential Privacy so important ?
 ============
@@ -35,8 +38,9 @@ Hence, this process is prone to risk and is considered as fundamentally wrong. N
 .. figure:: https://user-images.githubusercontent.com/19529592/91381064-14a50280-e844-11ea-9dd0-1af088c3924d.png
     :alt: netflix
     :align: center
+    :figclass: align-center
     
-    < a click from Secure AI Course>
+    Image Credits: Secure and Private AI (Udacity)
 
 
 Despite the fact that the dataset was anonymized (no username or movie name was released) yet two Researchers at University of Texas released a `paper <https://www.cs.utexas.edu/~shmat/shmat_oak08netflix.pdf>`_ where they showed how they have de-anonymized a maximum chunk of the daetaset.
@@ -44,6 +48,7 @@ Despite the fact that the dataset was anonymized (no username or movie name was 
 .. figure:: https://user-images.githubusercontent.com/19529592/91381399-ef64c400-e844-11ea-8535-0180f37962de.png
     :alt: research
     :align: center
+    :figclass: align-center
 
 They scraped the IMDB Website and by statistical analysis on these two datasets, they were able to identify the movie names and also the individual names. Ten years down the line they have published yet another `paper <https://www.cs.princeton.edu/~arvindn/publications/de-anonymization-retrospective.pdf>`_  where they have reviewed de-anonymization of datasets in the present world. There are other instances too where such attacks have been made which led to the leakage of private information. 
 
@@ -70,8 +75,9 @@ In local differential privacy the random noise is applied at the start of the pr
 .. figure:: https://user-images.githubusercontent.com/19529592/91381482-1e7b3580-e845-11ea-9419-cd6bdbbd9dbf.png
     :alt: local
     :align: center
+    :figclass: align-center
     
-    (from google images)
+    Image Credit: Google Images
 
 Global Differential Privacy
 -----
@@ -80,6 +86,7 @@ In Global differential privacy the random noise is applied at the global level i
 .. figure:: https://user-images.githubusercontent.com/19529592/91381550-4ec2d400-e845-11ea-8f63-b7a3adb3fde8.png
     :alt: global
     :align: center
+    :figclass: align-center
     
     Image Credits: Google Images
 
@@ -109,7 +116,7 @@ Differential Privacy ensures privacy of all sorts of data which can be used by a
 
 SOME OTHER LIBRARIES FOR DP
 
-* `OpenDp  <https://github.com/opendifferentialprivacy>`_ by Harvard University 
+* `OpenDp  <https://github.com/opendifferentialprivacy>`_ by Harvard University and Microsoft
 * `Diffprivlib <https://github.com/IBM/differential-privacy-library>`_  by IBM
 * Google’s Differential Privacy `Library <https://github.com/IBM/differential-privacy-library>`_ .
 

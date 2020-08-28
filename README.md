@@ -2,77 +2,107 @@
 ![Version](https://img.shields.io/github/v/tag/OpenMined/PyDP?color=green&label=pypi)
 ![License](https://img.shields.io/github/license/OpenMined/PyDP)
 
-
 # PyDP
 
-In today's data-driven world, data analytics is used by researchers or data scientists to create better models or innovative solutions for a better future. These models often tend to handle sensitive or personal data, which brings in some privacy concerns. For example, some AI models can memorize details about the data they've trained on and could leak these details later on. Differential privacy is a mathematical framework for measuring this privacy leakage and reducing the possibility of it happening. 
+In today's data-driven world, more and more researchers and data scientists
+use machine learning to create better models or more innovative solutions for
+a better future.
 
-This is where PyDP comes in. PyDP is a Python wrapper for Google's [Differential Privacy](https://github.com/google/differential-privacy) project. The library provides a set of ε-differentially private algorithms, which can be used to produce aggregate statistics over numeric data sets containing private or sensitive information. Thus, PyDP is helping us achieve better privacy.
+These models often tend to handle sensitive or personal data, which can cause
+privacy issues. For example, some AI models can memorize details about
+the data they've been trained on and could potentially leak these details later
+on.
 
-**Things to remember about PyDP :**
-- :rocket: Features differentially private algorithms including: BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.  
-- All the computation methods mentioned above use Laplace noise only. (Other noise mechanisms will be added soon... :smiley:)
-- :fire: Currently supports Linux and OSX. (Windows coming real soon... :smiley:)
-- :star: Supports all the Python 3+ versions.
+To help measure sensitive data leakage and reduce the possibility of it
+happening, there is a mathematical framework called differential privacy.
+
+In 2020, OpenMined created a Python wrapper for Google's [Differential
+Privacy](https://github.com/google/differential-privacy) project called PyDP.
+The library provides a set of ε-differentially private algorithms, which can be
+used to produce aggregate statistics over numeric data sets containing private
+or sensitive information. Therefore, with PyDP you can control the privacy
+guarantee and accuracy of your model written in Python.
+
+**Things to remember about PyDP:**
+
+- :rocket: Features differentially private algorithms including: BoundedMean,
+BoundedSum, Max, Count Above, Percentile, Min, Median, etc.
+  - All the computation methods mentioned above use Laplace noise only (other
+noise mechanisms will be added soon! :smiley:)
+- :fire: Currently supports Linux and macOS (Windows support coming soon
+:smiley:)
+- :star: Use Python 3.x.
 
 ## Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyDP.
+
+To install PyDP, use the [PiPy](https://pip.pypa.io/en/stable/) package manager:
 
 ```bash
 pip install python-dp
 ```
 
-## Usage
-Refer to [this example](https://github.com/OpenMined/PyDP/tree/dev/examples) to understand PyDP library usage.
+(If you have `pip3` separately for Python 3.x, use `pip3 install python-dp`.)
 
-For usage via code explanation, refer to [Jupyer Notebook](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb) or [Python file](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py) for carrot demo.
+## Examples
 
-Documentation can be found [here](https://openmined.github.io/PyDP/readme.html).
+Refer to the
+[curated list](https://github.com/OpenMined/PyDP/tree/dev/examples)
+of tutorials and sample code to learn more about the PyDP library.
 
-A sample of usage can be found below:
+You can also get started with
+[an introduction to PyDP](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb)
+(a Jupyter notebook) and
+[the carrots demo](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py)
+(a Python file).
+
+Example: calculate the Bounded Mean
 
 ```python
-import pydp as dp # imports the DP library
-from pydp.algorithms.laplacian import BoundedMean
+# Import PyDP
+import pydp as dp
 
-
-# To calculate the Bounded Mean
-# epsilon is a number between 0 and 1 denoting privacy threshold
-# It measures the acceptable loss of privacy (with 0 meaning no loss is acceptable)
-# If both the lower and upper bounds are specified, 
-# x = dp.BoundedMean(epsilon: double, lower: int, upper: int)
+# Calculate the Bounded Mean
+# Structure: `BoundedMean(epsilon: double, lower: int, upper: int)`
+# `epsilon`: a Double, between 0 and 1, denoting the privacy threshold,
+#            measures the acceptable loss of privacy (with 0 meaning no loss is acceptable)
+# `lower` and `upper`: Integers, representing lower and upper bounds, respectively
 x = dp.BoundedMean(0.6, 1, 10)
 
-# If lower and upper bounds are not specified, 
-# DP library automatically calculates these bounds
+# If the lower and upper bounds are not specified,
+# PyDP automatically calculates these bounds
 # x = dp.BoundedMean(epsilon: double)
-x = BoundedMean(0.6)
+x = dp.BoundedMean(0.6)
 
-# To get the result
-# Currently supported data types are integer and float. Future versions will support additional data types
-# Refer to examples/carrots.py for an introduction
-x.quick_result(input_data: list)
-
+# Calculate the result
+# Currently supported data types are integers and floats
+# Future versions will support additional data types
+# (Refer to https://github.com/OpenMined/PyDP/blob/dev/examples/carrots.py)
+x.result(input_data: list)
 ```
 
 ## Learning Resources
-Some of the good learning resources to get started with Python differential privacy (PyDP) project and understand the concepts behind it can be found [here](https://github.com/OpenMined/PyDP/blob/dev/resources.md).
 
-## Support
-For support in using this library, please join the **#lib_pydp** Slack channel. If you’d like to follow along with any code changes to the library, please join the **#code_dp_python** Slack channel. [Click here to join our Slack community!](https://slack.openmined.org)
+Go to [resources]](https://github.com/OpenMined/PyDP/blob/dev/resources.md)
+to learn more about differential privacy.
+
+## Support and Community on Slack
+
+If you have questions about the PyDP library, join
+[OpenMined's Slack](https://slack.openmined.org) and check the
+**#lib_pydp** channel. To follow the code source changes, join
+**#code_dp_python**.
 
 ## Contributing
 
-If you'd like to contribute to this project please read these [guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
+To contribute to the PyDP project, read the
+[guidelines](https://github.com/OpenMined/PyDP/blob/dev/contributing.md).
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. If you want to introduce major changes, please
+open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
-
 <!-- ## Contributors -->
-
 
 ## License
 [Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
-

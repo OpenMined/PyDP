@@ -54,8 +54,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.event.inputs.build_tag }}
-        release_name: Release ${{ github.event.inputs.build_tag }}
+        tag_name: ${{ matrix.python-version }}-${{ github.event.inputs.build_tag }}
+        release_name: Release ${{ matrix.python-version }}-${{ github.event.inputs.build_tag }}
         draft: false
         prerelease: true
     - name: Upload Release Asset

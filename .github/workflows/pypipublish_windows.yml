@@ -35,6 +35,8 @@ jobs:
          python setup.py bdist_wheel
          $version=(python -c "import pydp; print(pydp.__version__)")
          echo "::set-output name=version::$version"
+         $wheel_name=ls .\dist
+         echo "::set-output name=wheel_name::$wheel_name"
       id: build-pydp
     - name: Create Release
       id: create_release
@@ -43,7 +45,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.event.inputs.build_tag }}
-        release_name: "Release ${{ github.event.inputs.build_tag }}"
+        release_name: Release ${{ github.event.inputs.build_tag }}
         draft: false
         prerelease: true
     - name: Upload Release Asset
@@ -53,8 +55,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: .\dist\*.whl
-        asset_name: "python_dp-${{ github.event.inputs.build_tag }}.whl"
+        asset_path: ${{steps.build-pydp.outputs.wheel_name}}
+        asset_name: python_dp-${{ github.event.inputs.build_tag }}.whl
         asset_content_type: application/zip
   
         # - name: Build and publish

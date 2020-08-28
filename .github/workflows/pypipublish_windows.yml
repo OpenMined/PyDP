@@ -32,7 +32,7 @@ jobs:
       run: |
          bazel build --cxxopt='/std:c++17' src/python:bindings_test --verbose_failures
          copy bazel-bin\src\bindings\_pydp.so pydp\_pydp.pyd
-         python3.8 setup.py bdist_wheel
+         python setup.py bdist_wheel
          $version=(python -c "import pydp; print(pydp.__version__)")
          echo "::set-output name=version::$version"
          $wheel_name=ls .\dist

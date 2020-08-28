@@ -6,7 +6,7 @@ on:
       build_tag:
         description: 'The tag and version of the release.'     
         required: true
-        default: '0.x.x-cp38-win_amd64-beta.x'
+        default: '0.x.x-cp38-cp38-win_amd64-beta.x'
 
 jobs:
   build-windows-wheel:
@@ -22,8 +22,8 @@ jobs:
         python-version: 3.8
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine auditwheel
+        python3.8 -m pip install --upgrade pip
+        python3.8 -m pip install setuptools wheel twine auditwheel
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.0.0
     - name: Setup Bazel
@@ -32,7 +32,7 @@ jobs:
       run: |
          bazel build --cxxopt='/std:c++17' src/python:bindings_test --verbose_failures
          copy bazel-bin\src\bindings\_pydp.so pydp\_pydp.pyd
-         python setup.py bdist_wheel
+         python3.8 setup.py bdist_wheel
          $version=(python -c "import pydp; print(pydp.__version__)")
          echo "::set-output name=version::$version"
          $wheel_name=ls .\dist

@@ -60,6 +60,8 @@ Example: calculate the Bounded Mean
 ```python
 # Import PyDP
 import pydp as dp
+# Import the Bounded Mean algorithm
+from pydp.algorithms.laplacian import BoundedMean
 
 # Calculate the Bounded Mean
 # Structure: `BoundedMean(epsilon: double, lower: int, upper: int)`
@@ -77,12 +79,12 @@ x = dp.BoundedMean(0.6)
 # Currently supported data types are integers and floats
 # Future versions will support additional data types
 # (Refer to https://github.com/OpenMined/PyDP/blob/dev/examples/carrots.py)
-x.result(input_data: list)
+x.quick_result(input_data: list)
 ```
 
 ## Learning Resources
 
-Go to [resources]](https://github.com/OpenMined/PyDP/blob/dev/resources.md)
+Go to [resources](https://github.com/OpenMined/PyDP/blob/dev/resources.md)
 to learn more about differential privacy.
 
 ## Support and Community on Slack

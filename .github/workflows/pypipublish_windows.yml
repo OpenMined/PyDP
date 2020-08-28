@@ -40,7 +40,9 @@ jobs:
          echo "::set-output name=version::$version"
          $wheel_path=ls .\dist
          echo "::set-output name=wheel_path::$wheel_path"
-         echo "::set-output name=wheel_name::$wheel_path.name"
+         $wheel_name=(ls .\dist).name
+         echo "::set-output name=wheel_name::$wheel_name"
+
 
       id: build-pydp
     - name: Test the wheel

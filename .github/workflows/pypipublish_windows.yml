@@ -6,24 +6,27 @@ on:
       build_tag:
         description: 'The tag and version of the release.'     
         required: true
-        default: '0.x.x-cp38-cp38-win_amd64-beta.x'
+        default: '0.x.x-win_amd64-beta.x'
 
 jobs:
   build-windows-wheel:
 
     runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
     steps:
     - uses: actions/checkout@v2
       with:
           submodules: true
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python3.8 -m pip install --upgrade pip
-        python3.8 -m pip install setuptools wheel twine auditwheel
+        python -m pip install --upgrade pip
+        python -m pip install setuptools wheel twine auditwheel
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.0.0
     - name: Setup Bazel
@@ -56,7 +59,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
         asset_path: ${{steps.build-pydp.outputs.wheel_name}}
-        asset_name: python_dp-${{ github.event.inputs.build_tag }}.whl
+        asset_name: ${{ steps.build-pydp.outputs.wheel_name.name }}
         asset_content_type: application/zip
   
         # - name: Build and publish

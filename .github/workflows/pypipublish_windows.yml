@@ -1,4 +1,4 @@
-name: Windows Package
+name: Windows Package github deploy
 
 on: 
   workflow_dispatch:

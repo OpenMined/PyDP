@@ -1,16 +1,14 @@
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
 
 pybind_extension(
-    name = "pydp",
+    name = "_pydp",
     srcs = glob([
         "PyDP/*.cpp",
         "PyDP/base/*.cpp",
         "PyDP/algorithms/*.cpp",
         "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
-        "PyDP/proto/*.cpp",
-        "c/*.cc",
-        "c/*.h"
+        "PyDP/proto/*.cpp"
     ]),
 
     visibility = ["//src/python:__pkg__"],

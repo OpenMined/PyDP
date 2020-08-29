@@ -1,25 +1,20 @@
 import pytest
-import pydp as dp
+from pydp.algorithms.laplacian import Count
 
 
-@pytest.mark.parametrize("input_class", [dp.CountInt, dp.CountDouble])
+@pytest.mark.parametrize("dtype_in", ["int", "int64", "float"])
 class TestPercentile:
-    def test_basic(self, input_class):
+    def test_basic(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class()
-        count.result(c)
+        count = Count(epsilon=1.7, dtype=dtype_in)
+        count.quick_result(c)
 
-    def test_basic_epsilon(self, input_class):
+    def test_repeated_result(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
-        count = input_class(1.7)
-        count.result(c)
-
-    def test_repeated_result(self, input_class):
-        c = [1, 2, 3, 4, 2, 3]
-        count = input_class()
+        count = Count(epsilon=1.7, dtype=dtype_in)
         count.add_entries(c)
 
-        count.partial_result(0.5)
+        count.result(0.5)
 
     """
     # TODO: port ConfidenceInterval
@@ -53,24 +48,38 @@ class TestPercentile:
 
 class TestCountDataTypes:
     def test_count_datatypes(self):
-        ci1 = dp.CountInt()
-        ci2 = dp.CountInt(2.0)
-        assert isinstance(ci1, dp.CountInt)
-        assert isinstance(ci2, dp.CountInt)
+        count = Count(2.0, dtype="int")
+        assert isinstance(count, Count)
 
-        ci2ae = ci2.add_entry(2)
-        assert isinstance(ci2ae, type(None))
-        ci2aes = ci2.add_entries([4, 6, 8])
-        assert isinstance(ci2aes, type(None))
-        mem = ci2.memory_used()
+        countae = count.add_entry(2)
+        assert isinstance(countae, type(None))
+        countaes = count.add_entries([4, 6, 8])
+        assert isinstance(countaes, type(None))
+        mem = count.memory_used()
         assert isinstance(mem, int)
-        par = ci2.partial_result()
+        par = count.result()
         assert isinstance(par, int)
         # TODO
-        # par2 = ci2.partial_result(1.0)
+        # par2 = count.partial_result(1.0)
         # assert isinstance(par2, int)
-        res = ci2.result([2])
+
+        res = count.quick_result([2])
         assert isinstance(res, int)
+
+
+@pytest.mark.parametrize("dtype_in", ["int", "float"])
+class TestCount:
+    def test_basic(self, dtype_in):
+        n = 100
+        c = [1 for _ in range(100)]
+        count = Count(epsilon=1, dtype=dtype_in)
+        assert n - 10 < count.quick_result(c) < n + 10
+
+    def test_l0_linf(self, dtype_in):
+        n = 100
+        c = [1 for _ in range(100)]
+        count = Count(epsilon=1, l0_sensitivity=1, linf_sensitivity=1, dtype=dtype_in)
+        assert n - 10 < count.quick_result(c) < n + 10
 
 
 # TODO: port the following tests

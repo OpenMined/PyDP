@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 import pydp as dp  # our privacy library
+from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max
 
 # Creating a class ClassReporter
 
@@ -51,25 +52,27 @@ class CarrotReporter:
         return self._privacy_budget
 
     # Function to return the DP sum of all carrots eaten.
-    def private_sum(self, privacy_budget: float) -> dp.StatusOrO:
-        x = dp.BoundedSum(privacy_budget)
-        return x.result(list(self._df["carrots_eaten"]))
+    def private_sum(self, privacy_budget: float) -> float:
+        x = BoundedSum(privacy_budget, dtype="float")
+        return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.
-    def private_mean(self, privacy_budget: float) -> dp.StatusOrO:
-        x = dp.BoundedMean(privacy_budget)
-        return x.result(list(self._df["carrots_eaten"]))
+    def private_mean(self, privacy_budget: float) -> float:
+        x = BoundedMean(privacy_budget, dtype="float")
+        return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP count of the number of animals who ate more than "limit" carrots.
-    def private_count_above(self, privacy_budget: float, limit: int) -> dp.StatusOrO:
-        x = dp.CountInt(privacy_budget)
-        return x.result(list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"]))
+    def private_count_above(self, privacy_budget: float, limit: int) -> int:
+        x = Count(privacy_budget, dtype="int")
+        return x.quick_result(
+            list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"])
+        )
 
     # Function to return the DP maximum of the number of carrots eaten by any one animal.
-    def private_max(self, privacy_budget: float) -> dp.StatusOrO:
+    def private_max(self, privacy_budget: float) -> int:
         # 0 and 150 are the upper and lower limits for the search bound.
-        x = dp.Max(privacy_budget, 0, 150)
-        return x.result(list(self._df["carrots_eaten"]), privacy_budget)
+        x = Max(privacy_budget, 0, 150, dtype="int")
+        return x.quick_result(list(self._df["carrots_eaten"]))
 
 
 # get absolute path

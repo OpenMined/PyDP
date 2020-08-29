@@ -1,4 +1,6 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+include .env # Read .env file
+
+.PHONY: build clean clean-test clean-pyc clean-build docs help
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -51,6 +53,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
+	find . -name '*.gcov' -exec rm -fr {} +
 
 format-style-python: ## format Python files code style in-place
 	@ pipenv run black ./
@@ -71,10 +74,29 @@ check-style-cpp: ## check for C++ code style in-place
 	( echo "\e[33mRun \e[34mmake format-style-cpp\e[33m to fix style errors.\e[0m"; \
 	  exit 1 )
 
-run-tests-only: install ## run tests without style tests
-	pipenv run pytest tests
+check-coverage-python: ## check for Python code coverage
+	@ echo "\e[36mChecking Python code coverage with MIN_COVERAGE=${MIN_COVERAGE}.\e[0m" && \
+	pipenv run coverage report --fail-under ${MIN_COVERAGE} || \
+	( echo "\e[33mRun \e[34mmake show-coverage\e[33m to see a detailed HTML coverage report.\e[0m"; \
+		exit 1 )
 
-test: check-style-python check-style-cpp run-tests-only ## check style and run tests
+check-coverage-cpp: ## check for C++ code coverage
+	@ echo "\e[36mChecking C++ code style with MIN_COVERAGE=${MIN_COVERAGE}.\e[0m" && \
+	mkdir -p coverage_report/cpp && \
+	pipenv run gcovr --print-summary --fail-under-line ${MIN_COVERAGE} || \
+	( echo "\e[33mRun \e[34mmake show-coverage\e[33m to see a detailed HTML coverage report.\e[0m"; \
+		exit 1 )
+
+run-tests-only: install ## run tests with coverage generation and without style tests
+	pipenv run coverage run -m pytest tests
+
+test: check-style-python check-style-cpp run-tests-only check-coverage-python check-coverage-cpp ## check style and run tests
+
+show-coverage: ## report code coverage
+	echo "\e[36mGenerating code coverage HTML report.\e[0m"
+	pipenv run coverage html -d coverage_report/python
+	pipenv run gcovr --html-details coverage_report/cpp/index.html
+	$(BROWSER) coverage_report/index.html
 
 release: dist ## package and upload a release
 	twine upload dist/*
@@ -84,5 +106,5 @@ dist: clean ## builds source and wheel package
 	pipenv run python setup.py bdist_wheel
 	ls -l dist
 
-install: clean ## install the package to the active Python's site-packages
-	pipenv run python setup.py install
+install: dist ## install the package to the active Python's site-packages
+	pipenv run pip install --upgrade --force-reinstall dist/*.whl

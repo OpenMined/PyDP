@@ -1,4 +1,4 @@
-pydp.so
+_pydp.so
 # bazel files
 bazel-bin
 bazel-out
@@ -43,6 +43,8 @@ wheels/
 htmlcov/
 .coverage
 .coverage.*
+.coveragepy
+.coveragepy.*
 .cache
 nosetests.xml
 coverage.xml
@@ -52,3 +54,6 @@ coverage.xml
 .mypy_cache/
 docs/_build/*
 docs/_generate/*
+*.gcov
+coverage_report/*
+!coverage_report/index.html

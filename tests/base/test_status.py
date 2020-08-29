@@ -2,6 +2,9 @@ import pytest
 
 import pydp as dp
 
+# TODO: Check whether we should delete status public bindings or return status to the user
+pytestmark = pytest.mark.skip(reason="we do not return status to the user.")
+
 
 class TestStatus:
     def test_hello(self):

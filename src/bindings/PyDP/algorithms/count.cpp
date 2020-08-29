@@ -5,46 +5,21 @@
 
 #include "algorithms/count.h"
 
+#include "../pydp_lib/algorithm_builder.hpp"
+
 using namespace std;
 
 namespace py = pybind11;
 namespace dp = differential_privacy;
 
-template <typename T>
-void declareCount(py::module& m, string const& suffix) {
-  using count_builder = typename dp::Count<T>::Builder;
-
-  py::class_<dp::Count<T>> count(m, ("Count" + suffix).c_str());
-  count.attr("__module__") = "pydp";
-  count.def(py::init([]() { return count_builder().Build().ValueOrDie(); }))
-      .def(py::init([](double epsilon) {
-        return count_builder().SetEpsilon(epsilon).Build().ValueOrDie();
-      }))
-      .def("add_entry", &dp::Count<T>::AddEntry)
-      .def("add_entries",
-           [](dp::Count<T>& obj, std::vector<T>& v) {
-             return obj.AddEntries(v.begin(), v.end());
-           })
-      // TODO: port ConfidenceInterval and Summary
-      //.def("noise_confidence_interval", &dp::Count<T>::NoiseConfidenceInterval)
-      //.def("serialize", &dp::Count<T>::Serialize)
-      //.def("merge", &dp::Count<T>::Merge)
-      .def("memory_used", &dp::Count<T>::MemoryUsed)
-      .def("result",
-           [](dp::Count<T>& obj, std::vector<T>& v) {
-             return dp::GetValue<T>(obj.Result(v.begin(), v.end()).ValueOrDie());
-           })
-      .def("partial_result",
-           [](dp::Count<T>& obj) {
-             return dp::GetValue<T>(obj.PartialResult().ValueOrDie());
-           })
-
-      .def("partial_result", [](dp::Count<T>& obj, double privacy_budget) {
-        return dp::GetValue<T>(obj.PartialResult(privacy_budget).ValueOrDie());
-      });
+template <typename T, class Algorithm>
+void declareAlgorithm(py::module& m) {
+  using builder = typename dp::python::AlgorithmBuilder<T, Algorithm>;
+  builder().declare(m);
 }
 
 void init_algorithms_count(py::module& m) {
-  declareCount<int>(m, "Int");
-  declareCount<double>(m, "Double");
+  declareAlgorithm<int, dp::Count<int>>(m);
+  declareAlgorithm<int64_t, dp::Count<int64_t>>(m);
+  declareAlgorithm<double, dp::Count<double>>(m);
 }

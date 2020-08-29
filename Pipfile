@@ -7,9 +7,11 @@ verify_ssl = true
 setuptools = "*"
 bumpversion = "==0.5.3"
 pytest = "*"
-black = "*"
+black = "==19.10b0"
 twine = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
+gcovr = "*"
+coverage = "*"
 
 [packages]

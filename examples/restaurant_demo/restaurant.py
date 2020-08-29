@@ -221,6 +221,8 @@ class RestaurantStatistics:
             )
 
         for day in day_visits["Day"].unique():
+
+            x.reset()
             # Can use either quick_result or a combination of add_entries() and result()
             x.add_entries(
                 data=list(day_visits[day_visits["Day"] == day]["Money spent (euros)"])
@@ -273,6 +275,7 @@ class RestaurantStatistics:
 
             spending = list(visitor_to_spending.values())
 
+            x.reset()
             # Can use either quick_result or a combination of add_entries() and result()
             x.add_entries(data=spending)
             day_revenue[day] = int(x.result())

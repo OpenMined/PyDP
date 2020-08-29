@@ -1,12 +1,10 @@
+import pydp as dp
+from pydp.algorithms.laplacian import BoundedSum, Count
+
 import math
 import statistics as s
-import pydp as dp
 import pandas as pd
 from collections import defaultdict
-import sys
-
-sys.path.append("../pydp")
-
 
 # An hour when visitors start entering the restaurant (900 represents 9:00 AM)
 OPENING_HOUR = 900
@@ -136,13 +134,16 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.CountInt(self._epsilon)
+            x = Count(epsilon=self._epsilon, dtype="int")
         else:
-            x = dp.CountInt(epsilon)
+            x = Count(epsilon=epsilon, dtype="int")
 
         for time in visits["Time entered"].unique():
-            private_hours_count[time] = x.result(
-                list(visits[visits["Time entered"] == time]["Time entered"].astype(int))
+            # Can use either quick_result or a combination of add_entries() and result()
+            private_hours_count[time] = x.quick_result(
+                data=list(
+                    visits[visits["Time entered"] == time]["Time entered"].astype(int)
+                )
             )
 
         return private_hours_count
@@ -167,13 +168,20 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.CountInt(self._epsilon, l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS)
+            x = Count(
+                epsilon=self._epsilon,
+                l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS,
+                dtype="int",
+            )
         else:
-            x = dp.CountInt(epsilon, l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS)
+            x = Count(
+                epsilon=epsilon, l0_sensitivity=COUNT_MAX_CONTRIBUTED_DAYS, dtype="int"
+            )
 
         for day in day_visits["Day"].unique():
-            day_counts[day] = x.result(
-                list(day_visits[day_visits["Day"] == day]["Day"])
+            # Can use either quick_result or a combination of add_entries() and result()
+            day_counts[day] = x.quick_result(
+                data=list(day_visits[day_visits["Day"] == day]["Day"])
             )
 
         return day_counts
@@ -198,14 +206,14 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.BoundedSum(
+            x = BoundedSum(
                 self._epsilon,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
         else:
-            x = dp.BoundedSum(
+            x = BoundedSum(
                 epsilon,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
@@ -213,11 +221,11 @@ class RestaurantStatistics:
             )
 
         for day in day_visits["Day"].unique():
-            day_revenue[day] = int(
-                x.result(
-                    list(day_visits[day_visits["Day"] == day]["Money spent (euros)"])
-                )
+            # Can use either quick_result or a combination of add_entries() and result()
+            x.add_entries(
+                data=list(day_visits[day_visits["Day"] == day]["Money spent (euros)"])
             )
+            day_revenue[day] = int(x.result())
 
         return day_revenue
 
@@ -237,14 +245,14 @@ class RestaurantStatistics:
 
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
-            x = dp.BoundedSum(
+            x = BoundedSum(
                 self._epsilon,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
         else:
-            x = dp.BoundedSum(
+            x = BoundedSum(
                 epsilon,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
@@ -265,7 +273,9 @@ class RestaurantStatistics:
 
             spending = list(visitor_to_spending.values())
 
-            day_revenue[day] = int(x.result(spending))
+            # Can use either quick_result or a combination of add_entries() and result()
+            x.add_entries(data=spending)
+            day_revenue[day] = int(x.result())
 
         return day_revenue
 

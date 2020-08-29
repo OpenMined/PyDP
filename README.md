@@ -68,12 +68,12 @@ from pydp.algorithms.laplacian import BoundedMean
 # `epsilon`: a Double, between 0 and 1, denoting the privacy threshold,
 #            measures the acceptable loss of privacy (with 0 meaning no loss is acceptable)
 # `lower` and `upper`: Integers, representing lower and upper bounds, respectively
-x = dp.BoundedMean(0.6, 1, 10)
+x = BoundedMean(0.6, 1, 10)
 
 # If the lower and upper bounds are not specified,
 # PyDP automatically calculates these bounds
-# x = dp.BoundedMean(epsilon: double)
-x = dp.BoundedMean(0.6)
+# x = BoundedMean(epsilon: double)
+x = BoundedMean(0.6)
 
 # Calculate the result
 # Currently supported data types are integers and floats

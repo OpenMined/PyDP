@@ -2,7 +2,7 @@
 | |Version|
 | |License|
 
-PyDP
+Introduction to PyDP
 ====
 
 | In today's data-driven world, more and more researchers and data

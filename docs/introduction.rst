@@ -1,5 +1,5 @@
 .. class:: center
-INTRODUCTION TO DIFFERENTIAL PRIVACY
+Introduction To Differential Privacy
 ============
 
 
@@ -90,7 +90,7 @@ In Global differential privacy the random noise is applied at the global level i
     
     Image Credits: Google Images
 
-FORMAL DEFINITION OF DIFFERENTIAL PRIVACY
+Formal Definition Of Differential Privacy
 ============
 
 In the book, “`The Algorithmic Foundations of Differential Privacy <https://www.cis.upenn.edu/~aaroth/Papers/privacybook.pdf>`_” by Cynthia Dwork and Aaron Roth. Differential Privacy is formally defined as:
@@ -107,7 +107,7 @@ The Epsilon *(ε)* and *Delta(δ)* parameters measure the threshold for leakage.
 
 This when both Epsilon and Delta is 0, it is called Perfect-Privacy. The values are set in such a way so that the privacy is maintained. This set of values is known as Privacy-Budget. 
 
-DIFFERENTIAL - PRIVACY IN REAL WORLD
+Differential - Privacy In Real World
 ============
 
 Differential Privacy ensures privacy of all sorts of data which can be used by anyone to draw insights which can help them run their business. In the present world, Differentially Private Data Analysis is widely used and these are implemented by using various libraries. 
@@ -144,7 +144,7 @@ Differential Privacy is playing an important role in building Privacy-protected 
 
 
 
-FURTHER READING
+Further Reading
 ============
 
 * `Secure and Private AI Course on Udacity by Andrew Trask <https://www.udacity.com/course/secure-and-private-ai--ud185>`_

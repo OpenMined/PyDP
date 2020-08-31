@@ -44,16 +44,3 @@ else
     echo "installing pipenv"
     pip3 install pipenv
 fi
-
-# Downloading the Google DP library
-git submodule update --init --recursive
-
-# checkout out to particular commit
-cd third_party/differential-privacy && git checkout 1b1dc6639173c0a13613189ec21851604a4c7335
-
-cd -
-# renaming workspace.bazel to workspace
-mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
-
-# Removing the Java part 
-rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java

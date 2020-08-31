@@ -3,7 +3,7 @@ ARG PYTHON_VERSION=3.7
 FROM python:${PYTHON_VERSION}-slim-buster
 
 # must be redefined after FROM
-ARG PYTHON_VERSION=$PYTHON_VERSION 
+ARG PYTHON_VERSION=$PYTHON_VERSION
 ARG BAZEL_VERSION=3.2.0
 ARG BAZEL_INSTALLER=bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh
 ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
@@ -46,19 +46,8 @@ WORKDIR ${PROJECT_DIR}
 # Copy local source over
 COPY . ${PROJECT_DIR}
 
-# Get google dp dependency
-RUN mkdir -p third_party && \
-    cd third_party && \
-    git clone https://github.com/google/differential-privacy.git && \
-    cd differential-privacy && \
-    git checkout ${DP_SHA}
-
-# Remove unused java code
-RUN rm -rf third_party/differential-privacy/java && \ 
-    rm -rf third_party/differential-privacy/examples/java
-
-# This makes the pipenv's virtual environment in the project dir 
-ENV PIPENV_VENV_IN_PROJECT=true 
+# This makes the pipenv's virtual environment in the project dir
+ENV PIPENV_VENV_IN_PROJECT=true
 
 # Build the bindings using Bazel and create a python wheel
 RUN pipenv --python ${PYTHON_VERSION} && \
@@ -67,7 +56,7 @@ RUN pipenv --python ${PYTHON_VERSION} && \
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python setup.py bdist_wheel && \
-    pipenv install dist/*.whl 
+    pipenv install dist/*.whl
 
 # This `activates` the virtual env
 ENV VIRTUAL_ENV=$PROJECT_DIR/.venv

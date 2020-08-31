@@ -24,20 +24,11 @@ python_configure(name = "local_config_python")
 http_archive(
     name = "rules_python",
     url = "https://github.com/bazelbuild/rules_python/releases/download/0.0.2/rules_python-0.0.2.tar.gz",
-    strip_prefix = "rules_python-0.0.2", 
+    strip_prefix = "rules_python-0.0.2",
     sha256 = "b5668cde8bb6e3515057ef465a35ad712214962f0b3a314e551204266c7be90c",
 )
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
-
-# Google DP library and it's dependencies
-local_repository(
-    name = "google_dp",
-    path = "third_party/differential-privacy/cc",
-)
-load("@google_dp//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
-cc_differential_privacy_deps()
-
 
 http_archive(
     name = "com_google_protobuf",
@@ -52,10 +43,23 @@ load(
 )
 protobuf_deps()
 
+# TODO: Find a way to avoid repeating the commit hash
 # Google DP library and it's dependencies
-local_repository(
+http_archive(
     name = "com_google_differential_privacy",
-    path = "third_party/differential-privacy",
+    urls = ["https://github.com/google/differential-privacy/archive/1b1dc6639173c0a13613189ec21851604a4c7335.tar.gz"],
+    sha256 = "03a3c53be6be5dbd05addd2c27ce997aba8635ee89376f7618d01ee628fb6690",
+    strip_prefix = "differential-privacy-1b1dc6639173c0a13613189ec21851604a4c7335",
 )
 load("@com_google_differential_privacy//:differential_privacy_deps.bzl", "differential_privacy_deps")
 differential_privacy_deps()
+
+# Google DP library and it's dependencies
+http_archive(
+    name = "google_dp",
+    urls = ["https://github.com/google/differential-privacy/archive/1b1dc6639173c0a13613189ec21851604a4c7335.tar.gz"],
+    sha256 = "03a3c53be6be5dbd05addd2c27ce997aba8635ee89376f7618d01ee628fb6690",
+    strip_prefix = "differential-privacy-1b1dc6639173c0a13613189ec21851604a4c7335/cc",
+)
+load("@google_dp//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
+cc_differential_privacy_deps()

@@ -2,7 +2,7 @@ import pytest
 from pydp.algorithms.laplacian import Count
 
 
-@pytest.mark.parametrize("dtype_in", ["int", "float"])
+@pytest.mark.parametrize("dtype_in", ["int", "int64", "float"])
 class TestPercentile:
     def test_basic(self, dtype_in):
         c = [1, 2, 3, 4, 2, 3]
@@ -65,6 +65,21 @@ class TestCountDataTypes:
 
         res = count.quick_result([2])
         assert isinstance(res, int)
+
+
+@pytest.mark.parametrize("dtype_in", ["int", "float"])
+class TestCount:
+    def test_basic(self, dtype_in):
+        n = 100
+        c = [1 for _ in range(100)]
+        count = Count(epsilon=1, dtype=dtype_in)
+        assert n - 10 < count.quick_result(c) < n + 10
+
+    def test_l0_linf(self, dtype_in):
+        n = 100
+        c = [1 for _ in range(100)]
+        count = Count(epsilon=1, l0_sensitivity=1, linf_sensitivity=1, dtype=dtype_in)
+        assert n - 10 < count.quick_result(c) < n + 10
 
 
 # TODO: port the following tests

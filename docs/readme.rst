@@ -25,14 +25,11 @@ privacy guarantee and accuracy of your model written in Python.
 **Things to remember about PyDP:**
 
 -  :rocket: Features differentially private algorithms including:
-   BoundedMean,
-   BoundedSum, Max, Count Above, Percentile, Min, Median, etc.
+   BoundedMean, BoundedSum, Max, Count Above, Percentile, Min, Median, etc.
 -  All the computation methods mentioned above use Laplace noise only
-   (other
-   noise mechanisms will be added soon! :smiley:)
+   (other noise mechanisms will be added soon! :smiley:)
 -  :fire: Currently supports Linux and macOS (Windows support coming
-   soon
-   :smiley:)
+   soon :smiley:)
 -  :star: Use Python 3.x.
 
 Installation

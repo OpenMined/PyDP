@@ -144,7 +144,7 @@ Differential Privacy is playing an important role in building Privacy-protected 
 
 
 
-FURTHER READING
+Further Reading
 ============
 
 * `Secure and Private AI Course on Udacity by Andrew Trask <https://www.udacity.com/course/secure-and-private-ai--ud185>`_

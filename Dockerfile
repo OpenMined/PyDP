@@ -51,6 +51,9 @@ ENV PIPENV_VENV_IN_PROJECT=true
 
 # Build the bindings using Bazel and create a python wheel
 RUN pipenv --python ${PYTHON_VERSION} && \
+    mkdir -p third_party && \
+    rm -f third_party/differential-privacy && \
+    run ln -s $(bazel info output_base)/external/com_google_differential_privacy third_party && \
     pipenv run bazel build src/python:bindings_test  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \

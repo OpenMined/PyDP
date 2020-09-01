@@ -2,6 +2,7 @@
 
 ###################################################################
 # Link to repository fetched with bazel git_repository
+mkdir -p third_party
 rm -f third_party/differential-privacy
 ln -s $(bazel info output_base)/external/com_google_differential_privacy third_party/differential-privacy
 ###################################################################

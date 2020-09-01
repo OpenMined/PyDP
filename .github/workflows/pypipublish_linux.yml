@@ -44,6 +44,12 @@ jobs:
           pip install wheel
           pip install setuptools
 
+      - name: Prepare build
+        run: |
+          mkdir -p third_party
+          rm -f third_party/differential-privacy
+          ln -s $(bazel info output_base)/external/com_google_differential_privacy third_party/differential-privacy
+
       - name: Build pydp lib
         run: |
           bazel build src/python:bindings_test  --verbose_failures

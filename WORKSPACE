@@ -43,23 +43,18 @@ load(
 )
 protobuf_deps()
 
-# TODO: Find a way to avoid repeating the commit hash
 # Google DP library and it's dependencies
-http_archive(
+git_repository(
     name = "com_google_differential_privacy",
-    urls = ["https://github.com/google/differential-privacy/archive/1b1dc6639173c0a13613189ec21851604a4c7335.tar.gz"],
-    sha256 = "03a3c53be6be5dbd05addd2c27ce997aba8635ee89376f7618d01ee628fb6690",
-    strip_prefix = "differential-privacy-1b1dc6639173c0a13613189ec21851604a4c7335",
+    remote = "https://github.com/google/differential-privacy.git",
+    commit = "1b1dc6639173c0a13613189ec21851604a4c7335",
 )
 load("@com_google_differential_privacy//:differential_privacy_deps.bzl", "differential_privacy_deps")
 differential_privacy_deps()
 
-# Google DP library and it's dependencies
-http_archive(
+local_repository(
     name = "google_dp",
-    urls = ["https://github.com/google/differential-privacy/archive/1b1dc6639173c0a13613189ec21851604a4c7335.tar.gz"],
-    sha256 = "03a3c53be6be5dbd05addd2c27ce997aba8635ee89376f7618d01ee628fb6690",
-    strip_prefix = "differential-privacy-1b1dc6639173c0a13613189ec21851604a4c7335/cc",
+    path = "third_party/differential-privacy/cc",
 )
 load("@google_dp//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
 cc_differential_privacy_deps()

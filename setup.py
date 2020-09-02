@@ -44,6 +44,7 @@ setup(
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("docs/readme.rst"),
+    long_description_content_type='text/x-rst',
     include_package_data=True,
     keywords="pydp",
     name="python-dp",

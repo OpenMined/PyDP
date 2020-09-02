@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
     branches:
-    - master, dev
+    - windows-build
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -53,6 +53,8 @@ jobs:
         python -m pip install pipenv
         pipenv install setuptools wheel pytest gcovr coverage twine
         pipenv run python setup.py bdist_wheel
+    - name: Check the wheel
+      run: |
         pipenv run twine check dist/*
     - name: Install PyDP
       if: runner.os != 'Windows'

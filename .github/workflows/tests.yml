@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
     branches:
-    - master, dev
+    - windows-build
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -15,8 +15,8 @@ jobs:
       fail-fast: false
       # max-parallel: 6
       matrix:
-        os: [windows-2019, ubuntu-20.04, macOS-10.15] 
-        python-version:  [3.6, 3.7, 3.8] # 3.5 fails as pipenv installs black as a dev dep for which 3.5 is not supported
+        os: [windows-2019] #, ubuntu-20.04, macOS-10.15] 
+        python-version:  [3.5] #, 3.6, 3.7, 3.8] 
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
@@ -54,7 +54,7 @@ jobs:
     - name: Setup and Build PyDP
       run: |
         python -m pip install pipenv
-        pipenv install setuptools wheel pytest gcovr coverage twine
+        pipenv install setuptools wheel pytest gcovr coverage twine --ignore-pipfile --skip-lock
         pipenv run python setup.py bdist_wheel
     - name: Check the wheel
       run: |

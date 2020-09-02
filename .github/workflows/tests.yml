@@ -55,6 +55,8 @@ jobs:
         pipenv run python setup.py bdist_wheel
         pipenv run twine check dist/*
     - name: Install PyDP
+      if: runner.os != 'Windows'
+      run: |
         pipenv run python -m pip install --force-reinstall dist/*.whl
     - name: Install PyDP (windows)
       if: runner.os == 'Windows'

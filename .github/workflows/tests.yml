@@ -3,7 +3,7 @@ name: Tests
 on:
   push:
     branches:
-    - windows-build
+    - master, dev
   pull_request:
     types: [opened, synchronize, reopened]
 

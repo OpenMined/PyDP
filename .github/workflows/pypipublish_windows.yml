@@ -1,12 +1,8 @@
 name: Windows Package github deploy
 
-on: 
-  workflow_dispatch:
-    inputs:
-      build_tag:
-        description: 'The tag and version of the release.'     
-        required: true
-        default: '0.x.x-win_amd64-beta.x'
+on:
+  release:
+    types: [published]
 
 jobs:
   build-windows-wheel:
@@ -14,7 +10,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.6, 3.7, 3.8] # 3.5 Currently 3.5 does not run through the tests.yml CI. Leaving it out until testng is implemented.
     steps:
     - uses: actions/checkout@v2
       with:
@@ -49,32 +45,12 @@ jobs:
       run: |
           python -m pip install ${{steps.build-pydp.outputs.wheel_path}}
           python -m pip install pytest
-          pytest tests/  
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ matrix.python-version }}-${{ github.event.inputs.build_tag }}
-        release_name: Release ${{ matrix.python-version }}-${{ github.event.inputs.build_tag }}
-        draft: false
-        prerelease: true
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ${{steps.build-pydp.outputs.wheel_path}}
-        asset_name: ${{ steps.build-pydp.outputs.wheel_name}}
-        asset_content_type: application/zip
-  
-        # - name: Build and publish
-    #   env:
-    #     TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-    #     TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-    #   run: |
-    #     pip wheel . -w wheel/
-    #     twine upload --skip-existing wheel/*
+          pytest tests/
+          twine check ${{steps.build-pydp.outputs.wheel_path}}  
+    
+    - name: Publishing the wheel
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
+        run: |
+          twine upload --skip-existing ${{steps.build-pydp.outputs.wheel_path}}

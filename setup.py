@@ -21,6 +21,7 @@ def read(fname):
     with open(os.path.join(os.path.dirname(__file__), fname), encoding="utf-8") as fp:
         return fp.read()
 
+
 requirements = []
 
 setup_requirements = []
@@ -44,11 +45,11 @@ setup(
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("docs/readme.rst"),
-    long_description_content_type='text/x-rst',
+    long_description_content_type="text/x-rst",
     include_package_data=True,
     keywords="pydp",
     name="python-dp",
-    package_data={"pydp": ["_pydp.so","_pydp.pyd"],},
+    package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
     packages=find_packages(exclude=["tests"]),  # need to check this
     setup_requires=setup_requirements,
     test_suite="tests",

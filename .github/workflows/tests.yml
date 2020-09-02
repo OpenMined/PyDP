@@ -37,7 +37,10 @@ jobs:
       uses: abhinavsingh/setup-bazel@v3
     - name: Build PyDP with coverage
     # removed c++ coverage for now 
+    # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
+    # Ref: https://github.com/bazelbuild/rules_go/issues/2221  
       run: |
+        bazel clean --expunge 
         bazel build --config ${{runner.os}} src/python:bindings_test --verbose_failures    
     - name: Copy binary to python package(windows)  
       if: runner.os == 'Windows'

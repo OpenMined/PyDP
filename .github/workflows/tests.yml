@@ -29,10 +29,10 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    # - name: Set environment variables
-    #   uses: allenevans/set-env@v1.0.0
-    #   with:
-    #     PIPENV_DEFAULT_PYTHON_VERSION: ${{ matrix.python-version }}
+    - name: Set environment variables
+      uses: allenevans/set-env@v1.0.0
+      with:
+        PIPENV_DEFAULT_PYTHON_VERSION: ${{ matrix.python-version }}
     - name: Setup Bazel
       uses: abhinavsingh/setup-bazel@v3
     - name: Build PyDP with coverage

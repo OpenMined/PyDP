@@ -49,8 +49,8 @@ jobs:
           twine check ${{steps.build-pydp.outputs.wheel_path}}  
     
     - name: Publishing the wheel
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TOKEN }}
-        run: |
-          twine upload --skip-existing ${{steps.build-pydp.outputs.wheel_path}}
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.TOKEN }}
+      run: |
+        twine upload --skip-existing ${{steps.build-pydp.outputs.wheel_path}}

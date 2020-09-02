@@ -61,7 +61,7 @@ jobs:
     - name: Install PyDP (windows)
       if: runner.os == 'Windows'
       run: |
-         $wheel_path=ls .\dist
+         wheel_path=ls .\dist
          pipenv run python -m pip install --force-reinstall ${{wheel_path}}
     - name: Run tests
       run: |

@@ -12,7 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="1b1dc6639173c0a13613189ec21851604a4c7335"
+ENV DP_SHA="613c69ec6a7058c821b52ae6ad0ae04ad28270f1"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -62,12 +62,12 @@ ENV PIPENV_VENV_IN_PROJECT=true
 
 # Build the bindings using Bazel and create a python wheel
 RUN pipenv --python ${PYTHON_VERSION} && \
-    pipenv run bazel build src/python:bindings_test  --verbose_failures
+    pipenv run bazel build --config Linux src/python:bindings_test  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \
     pipenv run python setup.py bdist_wheel && \
-    pipenv install dist/*.whl 
+    pipenv install dist/*.whl
 
 # This `activates` the virtual env
 ENV VIRTUAL_ENV=$PROJECT_DIR/.venv

@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       # max-parallel: 6
       matrix:
-        os: [ubuntu-20.04, macOS-10.15, windows-2019]
+        os: [windows-2019] # [ubuntu-20.04, macOS-10.15, 
         python-version:  [3.6, 3.7, 3.8] # 3.5 fails as pipenv installs black as a dev dep for which 3.5 is not supported
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646

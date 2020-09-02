@@ -48,13 +48,19 @@ jobs:
       run: |
         cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp  
           
-    - name: Setup and Install PyDP
+    - name: Setup and Build PyDP
       run: |
         python -m pip install pipenv
         pipenv install setuptools wheel pytest gcovr coverage twine
         pipenv run python setup.py bdist_wheel
         pipenv run twine check dist/*
+    - name: Install PyDP
         pipenv run python -m pip install --force-reinstall dist/*.whl
+    - name: Install PyDP (windows)
+      if: runner.os == 'Windows'
+      run: |
+         $wheel_path=ls .\dist
+         pipenv run python -m pip install --force-reinstall ${{wheel_path}}
     - name: Run tests
       run: |
         pipenv run coverage run -m pytest tests

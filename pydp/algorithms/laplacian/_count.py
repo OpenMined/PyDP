@@ -5,8 +5,7 @@ from typing import Union
 
 class Count(MetaAlgorithm):
     """
-    Count Explanation
-    TODO
+    Count computes the Count of number of items in the dataset, in a differentially private manner.
     """
 
     def __init__(

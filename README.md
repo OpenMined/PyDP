@@ -35,7 +35,7 @@ noise mechanisms will be added soon! :smiley:)
 
 ## Installation
 
-To install PyDP, use the [PiPy](https://pip.pypa.io/en/stable/) package manager:
+To install PyDP, use the [PyPI](https://pip.pypa.io/en/stable/) package manager:
 
 ```bash
 pip install python-dp

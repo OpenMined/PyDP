@@ -16,3 +16,4 @@ coverage = "*"
 
 [packages]
 pandas = "*"
+jupyter = "*"

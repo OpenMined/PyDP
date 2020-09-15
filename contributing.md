@@ -75,7 +75,7 @@ $ make build
 
 Run the test example:
 ```
-$ pipenv run python examples/carrots.py
+$ pipenv run python examples/carrots_demo/carrots.py
 ```
 
 Build the python wheel:

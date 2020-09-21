@@ -4,7 +4,7 @@ import tempfile
 import glob
 
 # execute notebook in given path
-def _execute_notebook(notebookPath: str) -> bool:
+def _execute_notebook(notebook_path: str) -> bool:
     # convert notebook-under-test in path to a temp notebook and execute it
     with tempfile.NamedTemporaryFile(suffix=".ipynb") as fout:
         args = [
@@ -15,9 +15,9 @@ def _execute_notebook(notebookPath: str) -> bool:
             "--execute",
             "--output",
             fout.name,
-            notebookPath,
+            notebook_path,
         ]
-        subprocess.check_call(args)
+    subprocess.check_call(args)
 
     # return true if execution is successful
     return True
@@ -26,17 +26,17 @@ def _execute_notebook(notebookPath: str) -> bool:
 # return all .ipynb notebooks in a given folder
 def _get_all_notebooks(path: str) -> list:
     # recursively find all .ipynb files in a given path's subdirectories
-    notebookPaths = glob.glob(os.path.join(path, "./**/*.ipynb"), recursive=True)
+    notebook_paths = glob.glob(os.path.join(path, "./**/*.ipynb"), recursive=True)
 
-    return notebookPaths
+    return notebook_paths
 
 
 # test all notebooks in a given path
 def test_all_notebooks(path="examples/"):
     # get all notebooks under path
-    notebookPaths = _get_all_notebooks(path)
+    notebook_paths = _get_all_notebooks(path)
 
     # execute each notebook
-    for notebookPath in notebookPaths:
+    for notebook_path in notebook_paths:
         # make sure notebook is successfully executed
-        assert _execute_notebook(notebookPath)
+        assert _execute_notebook(notebook_path)

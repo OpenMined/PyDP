@@ -15,3 +15,5 @@ gcovr = "*"
 coverage = "*"
 
 [packages]
+jupyter = "*"
+pandas = "*"

@@ -4,9 +4,7 @@
 
 # PyDP
 
-In today's data-driven world, more and more researchers and data scientists
-use machine learning to create better models or more innovative solutions for
-a better future.
+In today's data-driven world, more and more researchers and data scientists use machine learning to create better models or more innovative solutions for a better future.
 
 These models often tend to handle sensitive or personal data, which can cause
 privacy issues. For example, some AI models can memorize details about

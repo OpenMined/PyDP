@@ -79,7 +79,7 @@ jobs:
         MIN_COVERAGE: 80
     - name: Mypy test
       run: |
-        pipenv install mypy
+        pip install mypy
         mypy tests/ pydp/
         mypy examples/carrots_demo examples/restaurant_demo
 

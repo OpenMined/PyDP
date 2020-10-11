@@ -1,6 +1,6 @@
-import pytest
+import pytest  # type: ignore
 
-import pydp as dp
+import pydp as dp  # type: ignore
 
 # TODO: Check whether we should delete status public bindings or return status to the user
 pytestmark = pytest.mark.skip(reason="we do not return status to the user.")

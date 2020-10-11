@@ -1,5 +1,5 @@
-import pytest
-import pydp as dp
+import pytest  # type: ignore
+import pydp as dp  # type: ignore
 
 # TODO: Check whether we should delete logging public binding or allow it
 pytestmark = pytest.mark.skip(reason="we do not return allow user to set up logging.")

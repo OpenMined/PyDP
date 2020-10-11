@@ -79,9 +79,9 @@ jobs:
         MIN_COVERAGE: 80
     - name: Mypy test
       run: |
-        pip install mypy
-        mypy tests/ pydp/
-        mypy examples/carrots_demo examples/restaurant_demo
+        pipenv install mypy
+        pipenv run mypy tests/ pydp/
+        pipenv run mypy examples/carrots_demo examples/restaurant_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

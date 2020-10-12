@@ -67,7 +67,7 @@ RUN poetry env use ${PYTHON_VERSION} && \
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \
     poetry run python setup.py bdist_wheel && \
-    poetry install dist/*.whl
+    poetry add dist/*.whl
 
 # This `activates` the virtual env
 ENV VIRTUAL_ENV=$PROJECT_DIR/.venv

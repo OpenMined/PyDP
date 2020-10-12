@@ -58,7 +58,7 @@ RUN rm -rf third_party/differential-privacy/java && \
     rm -rf third_party/differential-privacy/examples/java
 
 # This makes poetry's virtual environment in the project dir 
-RUN poetry config settings.virtualenvs.in-project true
+RUN poetry config virtualenvs.in-project true
 
 # Build the bindings using Bazel and create a python wheel
 RUN poetry run bazel build --config Linux src/python:bindings_test  --verbose_failures

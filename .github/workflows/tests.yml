@@ -53,24 +53,24 @@ jobs:
           
     - name: Setup and Build PyDP
       run: |
-        python -m pip install pipenv
-        pipenv install setuptools wheel pytest gcovr coverage twine --ignore-pipfile --skip-lock
-        pipenv run python setup.py bdist_wheel
+        python -m pip install poetry
+        poetry install setuptools wheel pytest gcovr coverage twine
+        poetry run python setup.py bdist_wheel
     - name: Check the wheel
       run: |
-        pipenv run twine check dist/*
+        poetry run twine check dist/*
     - name: Install PyDP
       if: runner.os != 'Windows'
       run: |
-        pipenv run python -m pip install --force-reinstall dist/*.whl
+        poetry run python -m pip install --force-reinstall dist/*.whl
     - name: Install PyDP (windows)
       if: runner.os == 'Windows'
       run: |
          $wheel_path=ls .\dist
-         pipenv run python -m pip install --force-reinstall $wheel_path
+         poetry run python -m pip install --force-reinstall $wheel_path
     - name: Run tests
       run: |
-        pipenv run coverage run -m pytest tests
+        poetry run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
       run: |

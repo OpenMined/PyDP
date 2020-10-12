@@ -25,7 +25,7 @@ jobs:
         ./bazel-2.1.0-installer-linux-x86_64.sh --user
         export PATH=/github/home/bin:$PATH
         rm bazel-2.1.0-installer-linux-x86_64.sh
-        pip install pipenv
+        pip install poetry
         ./build_PyDP.sh
          
    

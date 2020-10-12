@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "pydp"
+version = "0.1.0"
+description = ""
+authors = ["Chinmay Shah <chinmayshah3899@gmail.com>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+jupyter = "*"
+pandas = "*"
+
+[tool.poetry.dev-dependencies]
+setuptools = "*"
+bumpversion = "==0.5.3"
+pytest = "*"
+black = "==19.10b0"
+twine = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+gcovr = "*"
+coverage = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

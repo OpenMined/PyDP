@@ -77,6 +77,12 @@ jobs:
         make check-coverage-python
       env:
         MIN_COVERAGE: 80
+    - name: Mypy test
+      run: |
+        pipenv install mypy
+        pipenv run mypy tests/ pydp/
+        pipenv run mypy examples/carrots_demo examples/restaurant_demo
+
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage
     #   if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux

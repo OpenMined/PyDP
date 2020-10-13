@@ -53,12 +53,12 @@ class CarrotReporter:
 
     # Function to return the DP sum of all carrots eaten.
     def private_sum(self, privacy_budget: float) -> float:
-        x = BoundedSum(privacy_budget, dtype="float")
+        x = BoundedSum(privacy_budget, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.
     def private_mean(self, privacy_budget: float) -> float:
-        x = BoundedMean(privacy_budget, dtype="float")
+        x = BoundedMean(privacy_budget, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP count of the number of animals who ate more than "limit" carrots.
@@ -73,7 +73,7 @@ class CarrotReporter:
     # Function to return the DP maximum of the number of carrots eaten by any one animal.
     def private_max(self, privacy_budget: float) -> Union[int, float]:
         # 0 and 150 are the upper and lower limits for the search bound.
-        x = Max(privacy_budget, 0, 150, dtype="int")
+        x = Max(privacy_budget, 0, 100, dtype="int")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
 

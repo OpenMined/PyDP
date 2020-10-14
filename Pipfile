@@ -13,6 +13,7 @@ sphinx = "*"
 sphinx-rtd-theme = "*"
 gcovr = "*"
 coverage = "*"
+mypy = "*"
 
 [packages]
 jupyter = "*"

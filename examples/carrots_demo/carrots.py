@@ -11,13 +11,13 @@ import os
 import statistics as s
 from pathlib import Path
 
-import pandas as pd
-import pydp as dp  # our privacy library
+import pandas as pd  # type: ignore
+import pydp as dp  # this library
 from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max
 
+from typing import Union
+
 # Creating a class ClassReporter
-
-
 class CarrotReporter:
 
     # Function to read the csv file and creating a dataframe
@@ -53,25 +53,27 @@ class CarrotReporter:
 
     # Function to return the DP sum of all carrots eaten.
     def private_sum(self, privacy_budget: float) -> float:
-        x = BoundedSum(privacy_budget, dtype="float")
+        x = BoundedSum(privacy_budget, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.
     def private_mean(self, privacy_budget: float) -> float:
-        x = BoundedMean(privacy_budget, dtype="float")
+        x = BoundedMean(privacy_budget, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP count of the number of animals who ate more than "limit" carrots.
-    def private_count_above(self, privacy_budget: float, limit: int) -> int:
+    def private_count_above(
+        self, privacy_budget: float, limit: int
+    ) -> Union[int, float]:
         x = Count(privacy_budget, dtype="int")
         return x.quick_result(
             list(self._df[self._df.carrots_eaten > limit]["carrots_eaten"])
         )
 
     # Function to return the DP maximum of the number of carrots eaten by any one animal.
-    def private_max(self, privacy_budget: float) -> int:
+    def private_max(self, privacy_budget: float) -> Union[int, float]:
         # 0 and 150 are the upper and lower limits for the search bound.
-        x = Max(privacy_budget, 0, 150, dtype="int")
+        x = Max(privacy_budget, 0, 100, dtype="int")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
 

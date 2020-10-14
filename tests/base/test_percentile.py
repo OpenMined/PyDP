@@ -1,5 +1,5 @@
-import pytest
-import pydp as dp
+import pytest  # type: ignore
+import pydp as dp  # type: ignore
 
 # TODO: check whether to delete this test suit or update it
 pytestmark = pytest.mark.skip(

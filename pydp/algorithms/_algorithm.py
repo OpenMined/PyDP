@@ -1,6 +1,6 @@
 import math
 
-from .._pydp import _algorithms
+from .._pydp import _algorithms  # type: ignore
 
 from typing import Union, List
 

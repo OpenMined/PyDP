@@ -28,4 +28,4 @@ class Percentile(MetaAlgorithm):
         """
         percentile Gets the value that was set in the constructor.
         """
-        return self._MetaAlgorithm__algorithm.percentile
+        return self._MetaAlgorithm__algorithm.percentile  # type: ignore

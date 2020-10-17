@@ -1,3 +1,4 @@
+matplotlib
 python-dp
 sphinx-rtd-theme
 sphinx>=3.2.1

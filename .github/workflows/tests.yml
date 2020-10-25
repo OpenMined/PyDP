@@ -70,6 +70,7 @@ jobs:
          pipenv run python -m pip install --force-reinstall $wheel_path
     - name: Run tests
       run: |
+        pipenv install matplotlib
         pipenv run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
@@ -80,7 +81,6 @@ jobs:
     - name: Mypy test
       run: |
         pipenv install mypy
-        pipenv install matplotlib
         pipenv run mypy tests/ pydp/
         pipenv run mypy examples/carrots_demo examples/restaurant_demo examples/laplace_demo
 

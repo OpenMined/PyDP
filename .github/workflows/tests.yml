@@ -70,7 +70,7 @@ jobs:
          poetry run python -m pip install --force-reinstall $wheel_path
     - name: Run tests
       run: |
-        poetry add matplotlib
+        poetry run pip install matplotlib
         poetry run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux

@@ -12,7 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="613c69ec6a7058c821b52ae6ad0ae04ad28270f1"
+ENV DP_SHA="2b320f8c03ba97215e3de7f7782eb5b8fd0b2354"
 
 # Define working directory
 WORKDIR ${HOME}

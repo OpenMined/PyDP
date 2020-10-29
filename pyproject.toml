@@ -14,7 +14,7 @@ pandas = "*"
 setuptools = "*"
 bumpversion = "==0.5.3"
 pytest = "*"
-black = {version=="19.10b0", python = "^3.6"}
+black = {version=="19.10b0",python =="^3.6"}
 twine = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"

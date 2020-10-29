@@ -6,7 +6,7 @@ authors = ["Chinmay Shah <chinmayshah3899@gmail.com>"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.5"
 jupyter = "*"
 pandas = "*"
 
@@ -14,12 +14,13 @@ pandas = "*"
 setuptools = "*"
 bumpversion = "==0.5.3"
 pytest = "*"
-black = "==19.10b0"
+black = {version=="19.10b0", python = "^3.6"}
 twine = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"
 gcovr = "*"
 coverage = "*"
+mypy = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

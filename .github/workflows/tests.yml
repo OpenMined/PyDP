@@ -70,7 +70,7 @@ jobs:
          poetry run python -m pip install --force-reinstall $wheel_path
     - name: Run tests
       run: |
-        poetry install matplotlib
+        poetry add matplotlib
         poetry run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
@@ -80,9 +80,9 @@ jobs:
         MIN_COVERAGE: 80
     - name: Mypy test
       run: |
-        pipenv install mypy
-        pipenv run mypy tests/ pydp/
-        pipenv run mypy examples/carrots_demo examples/restaurant_demo
+        poetry add mypy
+        poetry run mypy tests/ pydp/
+        poetry run mypy examples/carrots_demo examples/restaurant_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

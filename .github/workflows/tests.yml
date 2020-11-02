@@ -81,9 +81,8 @@ jobs:
     - name: Mypy test
       run: |
         pipenv install mypy
-        pipenv install matplotlib --ignore-pipfile --skip-lock
         pipenv run mypy tests/ pydp/
-        pipenv run mypy examples/carrots_demo examples/restaurant_demo examples/laplace_demo
+        pipenv run mypy examples/carrots_demo examples/restaurant_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

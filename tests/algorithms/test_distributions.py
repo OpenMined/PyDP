@@ -112,8 +112,6 @@ class TestGaussianDistributionDataTypes:
 
 class TestGeometricDistribution:
     def test_ratios(self):
-        from collections import Counter
-
         p = 1e-2
         dist = GeometricDistribution(lambda_=-1.0 * math.log(1 - p))
         counts = [0] * 51

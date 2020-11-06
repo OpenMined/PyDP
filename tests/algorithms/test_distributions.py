@@ -2,7 +2,7 @@ import pytest
 from pydp.distributions import (
     LaplaceDistribution,
     GaussianDistribution,
-    # GeometricDistribution,
+    GeometricDistribution,
 )
 import pydp as dp
 import math

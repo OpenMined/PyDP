@@ -56,7 +56,7 @@ jobs:
         python -m pip install poetry
         poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
         pip install pandas
-        poetry build --format wheel
+        poetry run python setup.py bdist_wheel
     - name: Check the wheel
       run: |
         poetry run twine check dist/*

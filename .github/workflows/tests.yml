@@ -54,7 +54,7 @@ jobs:
     - name: Setup and Build PyDP
       run: |
         python -m pip install poetry
-        poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
+        poetry add setuptools wheel pytest gcovr coverage twine
         poetry run python setup.py bdist_wheel
     - name: Check the wheel
       run: |

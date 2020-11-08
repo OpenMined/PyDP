@@ -36,13 +36,13 @@ else
     brew install clang-format
 fi
 
-# pipenv
-echo "Checking for pipenv"
-if python3 -c "import pipenv" &> /dev/null; then
-    echo "pipenv is already installed"
+# poetry
+echo "Checking for poetry"
+if python3 -c "import poetry" &> /dev/null; then
+    echo "poetry is already installed"
 else
-    echo "installing pipenv"
-    pip3 install pipenv
+    echo "installing poetry"
+    pip3 install poetry
 fi
 
 # Downloading the Google DP library

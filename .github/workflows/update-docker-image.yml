@@ -45,7 +45,7 @@ jobs:
 #       - name: Run tests
 #         run:
 #           | 
-#           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "pipenv install --dev && pipenv run pytest ./tests"
+#           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "poetry install && poetry run pytest ./tests"
       
       - name: Starting to Publish- docker login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin

@@ -7,7 +7,7 @@ verify_ssl = true
 setuptools = "*"
 bumpversion = "==0.5.3"
 pytest = "*"
-black = {version = "19.10b0", makers = "python_version >= 3.6"}
+black "==19.10b0"; python_version >= 3.6
 twine = "*"
 sphinx = "*"
 sphinx-rtd-theme = "*"

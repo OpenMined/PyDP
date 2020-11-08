@@ -7,8 +7,6 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.5"
-jupyter = "*"
-pandas = "*"
 
 [tool.poetry.dev-dependencies]
 setuptools = "*"
@@ -21,6 +19,8 @@ sphinx-rtd-theme = "*"
 gcovr = "*"
 coverage = "*"
 mypy = "*"
+jupyter = "*"
+pandas = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

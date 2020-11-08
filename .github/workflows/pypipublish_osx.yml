@@ -12,15 +12,10 @@ jobs:
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up submodules
-        run: |
-          git submodule update --init --recursive
-          cd third_party/differential-privacy
-          git checkout 2b320f8c03ba97215e3de7f7782eb5b8fd0b2354
-          cd -
-          rm -rf third_party/differential-privacy/java
-          rm -rf third_party/differential-privacy/examples/java
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+            submodules: true
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:

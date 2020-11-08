@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2 
+    - uses: actions/checkout@v2
       with:
-          submodules: 'recursive'
-    - name: Set up Python 
+          submodules: true
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-          python-version: 3.8 
+          python-version: 3.8
     - name: Build python-dp
       run: |
         wget https://github.com/bazelbuild/bazel/releases/download/2.1.0/bazel-2.1.0-installer-linux-x86_64.sh
@@ -27,13 +27,13 @@ jobs:
         rm bazel-2.1.0-installer-linux-x86_64.sh
         pip install poetry
         ./build_PyDP.sh
-         
-   
+
+
     - uses: ammaraskar/sphinx-action@master
       with:
         pre-build-command: "python -m pip install -U pip setuptools wheel && python setup.py bdist_wheel && python -m pip install --ignore-installed dist/*.whl"
         docs-folder: "docs/"
-   
+
     # Publish built docs to gh-pages branch.
     # ===============================
     - name: Commit documentation changes

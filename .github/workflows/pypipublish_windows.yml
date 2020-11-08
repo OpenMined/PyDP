@@ -12,6 +12,7 @@ jobs:
       matrix:
         python-version: [3.5, 3.6, 3.7, 3.8]
     steps:
+    - name: Checkout code
     - uses: actions/checkout@v2
       with:
           submodules: true
@@ -46,8 +47,8 @@ jobs:
           python -m pip install ${{steps.build-pydp.outputs.wheel_path}}
           python -m pip install pytest
           pytest tests/
-          twine check ${{steps.build-pydp.outputs.wheel_path}}  
-    
+          twine check ${{steps.build-pydp.outputs.wheel_path}}
+
     - name: Publishing the wheel
       env:
         TWINE_USERNAME: __token__

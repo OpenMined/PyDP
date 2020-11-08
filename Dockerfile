@@ -40,8 +40,8 @@ RUN wget ${BAZEL_DOWNLOAD_URL}/${BAZEL_VERSION}/${BAZEL_INSTALLER} && \
 RUN pip install --upgrade pip setuptools wheel && \
     pip install pipenv
 
-# Install black
-RUN pip install black
+# Check for python version and install black
+RUN if [ ${PYTHON_VERSION} != 3.5 ]; then pip install black; fi
 
 # Change working dir
 WORKDIR ${PROJECT_DIR}

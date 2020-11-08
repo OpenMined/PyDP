@@ -41,12 +41,7 @@ RUN pip install --upgrade pip setuptools wheel && \
     pip install pipenv
 
 # Check for python version and install black
-
-RUN if [ ${PYTHON_VERSION} != 3.5* ]; then pip install black; fi
-
-# RUN v="$(python3 -c "print(__import__('sys').version_info[2])")" && \
-# if [ $[v] != 5 ]; then pip install black; fi
-
+RUN if [[ ${PYTHON_VERSION} >= 3.6 ]]; then pip install black; fi
 
 # Change working dir
 WORKDIR ${PROJECT_DIR}

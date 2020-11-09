@@ -1,12 +1,11 @@
 # Example using the Differential Privacy Library PyDP
 
-## Restaurant
+## Restaurant Demo
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the
 restaurant and how much time and money they spend there. To ensure that
-visitors' privacy is preserved, Alice decides to use the Differential Privacy
-library.
+visitors' privacy is preserved, Alice decides to use the PyDP library.
 
 ## Installation
 To install PyDP, use the PyPI package manager:
@@ -23,7 +22,7 @@ The output will display Private and Non-Private counts for:
 * Sum-up revenue per day of the week with preaggregation
 
 Non Private Count is the raw counts and output
-Private count is anonymized Counts and output using Differential Privacy library
+Private count is anonymized Counts and output using PyDP library
 
 ## Count visits by hour of day
 
@@ -45,7 +44,7 @@ the day. The calculation is done twice.
 *   First, `CountVisitsPerHour` computes the raw counts and outputs them to
     `non_private_counts_per_hour.csv`.
 *   Next, `CountVisitsPerHour` calculates private (anonymized) counts using the
-    Differential Privacy library and prints them to
+    PyDP library and prints them to
     `private_counts_per_hour.csv`.
 
 The image below illustrates the results. The Orange (right) bars represent the
@@ -121,10 +120,9 @@ Now, let’s take a closer look at the technical details. Speaking in terms of
 for each day of the week. A visitor may enter the restaurant once a day and
 hence contribute to a partition at most once. A visitor may enter the restaurant
 several times a week and hence contribute to up to 7 partitions. The code below
-uses `Count` to calculate the differentially private count of visits for a
-single day.
+uses `Count` to calculate the private count of visits for a single day.
 
-```java
+```
 // Number of days a visitor may contribute to is limited to 3. All exceeding
 // visits will be discarded.
 private static final int COUNT_MAX_CONTRIBUTED_DAYS = 3;
@@ -178,8 +176,7 @@ The results are illustrated in the image below.
 The code below uses `BoundedSum` to calculate the differentially private sums of
 the visitors' spendings for a single day.
 
-```java
-
+```
 # Cap the maximum number of visiting days at 4 per each visitor (any number above will not be taken into account)
 SUM_MAX_CONTRIBUTED_DAYS = 4
 

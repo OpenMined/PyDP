@@ -24,8 +24,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
       run: |
-        python -m pip install --upgrade pip pipenv
-        pipenv install --dev --skip-lock
+        python -m pip install --upgrade pip poetry
+        poetry install
     - name: Black pep8 style
       run: |
         make check-style-python
@@ -46,8 +46,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install python dependencies
       run: |
-        python -m pip install --upgrade pip pipenv
-        pipenv install --dev --skip-lock
+        python -m pip install --upgrade pip poetry
+        poetry install
     - name: Lint with clang-format
       run: |
         make check-style-cpp

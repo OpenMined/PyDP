@@ -2,7 +2,7 @@ import pytest
 from pydp.distributions import (
     LaplaceDistribution,
     GaussianDistribution,
-    # GeometricDistribution,
+    GeometricDistribution,
 )
 import pydp as dp
 import math
@@ -111,19 +111,15 @@ class TestGaussianDistributionDataTypes:
 
 
 class TestGeometricDistribution:
-    @pytest.mark.skip(reason="This test should pass, see comments")
     def test_ratios(self):
-        """
-        This test fails. It's a replica of
-         https://github.com/google/differential-privacy/blob/9923ad4ee1b84a7002085e50345fcc05f2b21bcb/cc/algorithms/distributions_test.cc#L208 and should pass.
-        """
-        from collections import Counter
-
         p = 1e-2
         dist = GeometricDistribution(lambda_=-1.0 * math.log(1 - p))
-        samples = [dist.sample() for _ in range(k_num_geometric_samples)]
-        counts = list(Counter([s for s in samples if s < 51]).values())
-        ratios = [c_i / c_j for c_i, c_j in zip(counts[:-1], counts[1:])]
+        counts = [0] * 51
+        for i in range(k_num_geometric_samples):
+            sample = dist.sample()
+            if sample < len(counts):
+                counts[sample] += 1
+        ratios = [c_j / c_i for c_i, c_j in zip(counts[:-1], counts[1:])]
 
         assert expect_near(p, dp.util.mean(ratios), p / 1e-2)
 

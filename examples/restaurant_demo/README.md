@@ -3,6 +3,7 @@
 ## Restaurant Demo
 
 Refer Notebook for demo https://github.com/OpenMined/PyDP/blob/dev/examples/restaurant_demo/restaurant_demo.ipynb
+
 Google's readme: https://github.com/google/differential-privacy/tree/main/examples/java
 
 Imagine a fictional restaurant owner named Alice who would like to share

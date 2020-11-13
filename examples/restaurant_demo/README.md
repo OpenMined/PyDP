@@ -2,7 +2,7 @@
 
 ## Restaurant Demo
 
-Referance - Google's readme: https://github.com/google/differential-privacy/tree/main/examples/java
+Refer Notebook https://github.com/OpenMined/PyDP/blob/dev/examples/restaurant_demo/restaurant_demo.ipynb
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the

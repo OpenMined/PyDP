@@ -2,6 +2,8 @@
 
 ## Restaurant Demo
 
+Referance - Google's readme: https://github.com/google/differential-privacy/tree/main/examples/java
+
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the
 restaurant and how much time and money they spend there. To ensure that
@@ -19,7 +21,6 @@ The output will display Private and Non-Private counts for:
 * Count visits by hour of day
 * Count visits by day of week
 * Sum-up revenue per day of the week
-* Sum-up revenue per day of the week with preaggregation
 
 Non Private Count is the raw counts and output
 Private count is anonymized Counts and output using PyDP library
@@ -90,11 +91,10 @@ once per day. This implies three *contribution bounds*:
 Why is this important? Differential Privacy adjusts the amount of noise to mask
 contributions of each visitor. More contributions require more noise.
 
-Next, we analyse for the remaining three cases:
+Next, we analyse for the remaining two cases:
 
 * Count visits by day of week
 * Sum-up revenue per day of the week
-* Sum-up revenue per day of the week with preaggregation
 
 ## Count visits by day of week
 

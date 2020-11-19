@@ -21,4 +21,4 @@
 
 [PyBind11](https://pybind11.readthedocs.io/en/stable/intro.html)
 
-[Bazel and pybind11]()
+[Bazel and pybind11](https://github.com/pybind/pybind11_bazel)

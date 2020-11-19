@@ -4,6 +4,6 @@ py_binary(
     name = "bindings_test",
     srcs = ["__init__.py"],
     main = "__init__.py",
-    data = ["//src/bindings:_pydp.so"]
-    deps = [":_pydp_algo"]
+    data = ["//src/bindings:_pydp.so"],
+    deps = ["//src/pydp:_pydp_algo"],
 )

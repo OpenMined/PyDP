@@ -5,4 +5,5 @@ py_binary(
     srcs = ["__init__.py"],
     main = "__init__.py",
     data = ["//src/bindings:_pydp.so"]
+    deps = [":_pydp_algo"]
 )

@@ -37,7 +37,7 @@ jobs:
         run: |
           bazel build --config macOS src/python:bindings_test  --verbose_failures
           rm -f _pydp.so
-          cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
 
       - name: Build wheel

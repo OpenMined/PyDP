@@ -66,6 +66,7 @@ jobs:
     - name: Run tests
       run: |
         poetry run pip install matplotlib
+        poetry run pip install seaborn
         poetry run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux

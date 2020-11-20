@@ -8,37 +8,79 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  pytest:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
-      max-parallel: 4
+      fail-fast: false
+      # max-parallel: 6
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        os: [windows-2019, ubuntu-20.04, macOS-10.15] 
+        python-version:  [3.5, 3.6, 3.7, 3.8] 
+
+    # Timeout: https://stackoverflow.com/a/59076067/4521646
+    timeout-minutes: 35
 
     steps:
     - uses: actions/checkout@v2
+      with:
+          submodules: true
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Set environment variables
-      uses: allenevans/set-env@v1.0.0
-      with:
-        PIPENV_DEFAULT_PYTHON_VERSION: ${{ matrix.python-version }}
-    - name: Install pre-requisites
+    - name: Setup Bazel
+      uses: abhinavsingh/setup-bazel@v3
+    - name: Build PyDP with coverage
+    # removed c++ coverage for now 
+    # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
+    # Ref: https://github.com/bazelbuild/rules_go/issues/2221  
       run: |
-        sudo apt-get update
-        bash ./prereqs_linux.sh
-    - name: Build pydp lib
+        bazel clean --expunge 
+        bazel build --config ${{runner.os}} src/python:bindings_test --verbose_failures    
+    - name: Copy binary to python package(windows)  
+      if: runner.os == 'Windows'
       run: |
-        bash ./build_PyDP.sh
+        copy bazel-bin\src\bindings\_pydp.so pydp\_pydp.pyd
+    - name: Copy binary to python package   
+      if: runner.os != 'Windows'
+      run: |
+        cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp  
+    - name: Setup and Build PyDP
+      run: |
+        python -m pip install poetry
+        poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
+        poetry run python setup.py bdist_wheel
+    - name: Check the wheel
+      run: |
+        poetry run twine check dist/*
+    - name: Install PyDP
+      if: runner.os != 'Windows'
+      run: |
+        poetry run python -m pip install --force-reinstall dist/*.whl
+    - name: Install PyDP (windows)
+      if: runner.os == 'Windows'
+      run: |
+         $wheel_path=ls .\dist
+         poetry run python -m pip install --force-reinstall $wheel_path
     - name: Run tests
       run: |
-        make run-tests-only
+        poetry run pip install matplotlib
+        poetry run coverage run -m pytest tests
     - name: Check Python code coverage
+      if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
       run: |
         make check-coverage-python
-    - name: Check C++ code coverage
+      env:
+        MIN_COVERAGE: 80
+    - name: Mypy test
       run: |
-        make check-coverage-cpp
+        poetry add mypy
+        poetry run mypy tests/ pydp/
+        poetry run mypy examples/carrots_demo examples/restaurant_demo
+
+    # Need to see how to run the c++ code coverage
+    # - name: Check C++ code coverage
+    #   if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
+    #   run: |
+    #     make check-coverage-cpp

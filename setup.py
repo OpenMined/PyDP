@@ -18,7 +18,8 @@ class BinaryDistribution(Distribution):
 
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    with open(os.path.join(os.path.dirname(__file__), fname), encoding="utf-8") as fp:
+        return fp.read()
 
 
 requirements = []
@@ -44,14 +45,15 @@ setup(
     install_requires=requirements,
     license="Apache-2.0",
     long_description=read("docs/readme.rst"),
+    long_description_content_type="text/x-rst",
     include_package_data=True,
     keywords="pydp",
     name="python-dp",
-    package_data={"pydp": ["_pydp.so"],},
+    package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
     packages=find_packages(exclude=["tests"]),  # need to check this
     setup_requires=setup_requirements,
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="0.1.7",
+    version="1.0.1",
     zip_safe=False,
 )

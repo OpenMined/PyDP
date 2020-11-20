@@ -1,4 +1,6 @@
-from .._pydp import _algorithms
+import math
+
+from .._pydp import _algorithms  # type: ignore
 
 from typing import Union, List
 
@@ -7,11 +9,14 @@ class MetaAlgorithm:
     def __init__(self, **kwargs):
         dtype = kwargs.pop("dtype")
 
-        # Delete bound params if they are not set to avoid  conflicts with builder
-        if "lower_bound" in kwargs and kwargs["lower_bound"] is None:
-            kwargs.pop("lower_bound")
-        if "upper_bound" in kwargs and kwargs["upper_bound"] is None:
-            kwargs.pop("upper_bound")
+        for arg_name in ["lower_bound", "upper_bound"]:
+            if arg_name in kwargs:
+                if kwargs[arg_name] is None:
+                    # Delete bound params if they are not set to avoid conflicts with builder
+                    kwargs.pop(arg_name)
+                else:
+                    # If they are set, check for edge cases
+                    self.__check_input(name=arg_name, value=kwargs[arg_name])
 
         binded_class = self.__class__.__name__ + self.__map_dtype_str(dtype)
         class_ = getattr(_algorithms, binded_class)
@@ -22,13 +27,22 @@ class MetaAlgorithm:
         self._linf_sensitivity = kwargs.get("linf_sensitivity", "Not set")
 
     @staticmethod
+    def __check_input(name: str, value: float):
+        if math.isnan(value) or math.isinf(value):
+            raise ValueError(
+                "invalid value '{}' for paramater '{}'.".format(value, name)
+            )
+
+    @staticmethod
     def __map_dtype_str(dtype: str):
         if dtype == "int":
             return "Int"
+        elif dtype == "int64":
+            return "Int64"
         elif dtype == "float":
             return "Double"
         else:
-            raise RuntimeError("dtype: {} is not supported".format(dtype))
+            raise ValueError("dtype '{}' is not supported.".format(dtype))
 
     @property
     def epsilon(self) -> float:
@@ -66,12 +80,16 @@ class MetaAlgorithm:
     def add_entries(self, data: List[Union[int, float]]) -> None:
         """
         Adds multiple inputs to the algorithm.
+
+        Note: If the data exceeds the overflow limit of storage, the current list passed is not added.
         """
         return self.__algorithm.add_entries(data)
 
     def add_entry(self, value: Union[int, float]) -> None:
         """
         Adds one input to the algorithm.
+
+        Note: If the data exceeds the overflow limit of storage, the current data passed is not added.
         """
         return self.__algorithm.add_entry(value)
 
@@ -80,6 +98,8 @@ class MetaAlgorithm:
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
+        
+        Note: It resets the privacy budget first.
         """
         return self.__algorithm.result(data)
 
@@ -97,6 +117,10 @@ class MetaAlgorithm:
 
         `noise_interval_level` provides the confidence level of the noise confidence interval, which may be included in the algorithm output.
         """
+        if self.privacy_budget_left() == 0:
+            raise RuntimeError(
+                "Privacy Budget left is already 0, you can't do any more operations"
+            )
 
         if privacy_budget is None:
             return self.__algorithm.partial_result()
@@ -114,7 +138,7 @@ class MetaAlgorithm:
     def serialize(self):
         """
         Serializes summary data of current entries into Summary proto. This allows results from distributed aggregation to be recorded and later merged.
-        
+
         Returns empty summary for algorithms for which serialize is unimplemented.
         """
         return self.__algorithm.serialize()

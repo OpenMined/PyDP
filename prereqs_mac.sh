@@ -36,24 +36,26 @@ else
     brew install clang-format
 fi
 
-# pipenv
-echo "Checking for pipenv"
-if python3 -c "import pipenv" &> /dev/null; then
-    echo "pipenv is already installed"
+# poetry
+echo "Checking for poetry"
+if python3 -c "import poetry" &> /dev/null; then
+    echo "poetry is already installed"
 else
-    echo "installing pipenv"
-    pip3 install pipenv
+    echo "installing poetry"
+    pip3 install poetry
 fi
 
 # Downloading the Google DP library
 git submodule update --init --recursive
 
 # checkout out to particular commit
-cd third_party/differential-privacy && git checkout 1b1dc6639173c0a13613189ec21851604a4c7335
-
+cd third_party/differential-privacy && git checkout 2b320f8c03ba97215e3de7f7782eb5b8fd0b2354 && \
 cd -
 # renaming workspace.bazel to workspace
 mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
 
-# Removing the Java part 
+# Removing the java part
 rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java
+
+# Removing the Go part
+rm -rf third_party/differential-privacy/go third_party/differential-privacy/examples/go

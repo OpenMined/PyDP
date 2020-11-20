@@ -3,6 +3,10 @@ from typing import Union
 
 
 class Percentile(MetaAlgorithm):
+    """
+    Perencetile finds the value in the dataset with that percentile, in a differentially private manner.
+    """
+
     def __init__(
         self,
         epsilon: float = 1.0,
@@ -24,4 +28,4 @@ class Percentile(MetaAlgorithm):
         """
         percentile Gets the value that was set in the constructor.
         """
-        return self._MetaAlgorithm__algorithm.percentile
+        return self._MetaAlgorithm__algorithm.percentile  # type: ignore

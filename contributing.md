@@ -63,9 +63,9 @@ $ ./prereqs_mac.sh
 
 To achieve clean builds of different python versions we are using a virtualenv to isolate
 the build process from system python and system libraries. Since python2 is deprecated
-pipenv should be looking for a python3 binary to create the virtualenv from by default.
+poetry should be looking for a python3 binary to create the virtualenv from by default.
 If you want to use a specific version of python3 please refer to the
-[pipenv documentation](https://pipenv-fork.readthedocs.io/en/latest/).
+[poetry documentation](https://python-poetry.org/docs/).
 
 Build the python library:
 
@@ -75,13 +75,13 @@ $ make build
 
 Run the test example:
 ```
-$ pipenv run python examples/carrots.py
+$ poetry run python examples/carrots_demo/carrots.py
 ```
 
 Build the python wheel:
 
 ```
-$ pipenv run python setup.py bdist_wheel
+$ poetry run python setup.py bdist_wheel
 ```
 
 Install wheel:

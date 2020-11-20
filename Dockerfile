@@ -12,7 +12,7 @@ ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="1b1dc6639173c0a13613189ec21851604a4c7335"
+ENV DP_SHA="2b320f8c03ba97215e3de7f7782eb5b8fd0b2354"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -36,9 +36,9 @@ RUN apt-get update && \
 RUN wget ${BAZEL_DOWNLOAD_URL}/${BAZEL_VERSION}/${BAZEL_INSTALLER} && \
     chmod +x ${BAZEL_INSTALLER} && ./${BAZEL_INSTALLER} --user && rm ${BAZEL_INSTALLER}
 
-# Update pip and setuptools and install pipenv
+# Update pip and setuptools and install poetry 
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install pipenv
+    pip install poetry
 
 # Change working dir
 WORKDIR ${PROJECT_DIR}
@@ -57,17 +57,17 @@ RUN mkdir -p third_party && \
 RUN rm -rf third_party/differential-privacy/java && \ 
     rm -rf third_party/differential-privacy/examples/java
 
-# This makes the pipenv's virtual environment in the project dir 
-ENV PIPENV_VENV_IN_PROJECT=true 
+# This makes poetry's virtual environment in the project dir 
+RUN poetry config virtualenvs.in-project true
 
 # Build the bindings using Bazel and create a python wheel
-RUN pipenv --python ${PYTHON_VERSION} && \
-    pipenv run bazel build src/python:bindings_test  --verbose_failures
+RUN poetry env use ${PYTHON_VERSION} && \
+    poetry run bazel build --config Linux src/python:bindings_test  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \
-    pipenv run python setup.py bdist_wheel && \
-    pipenv install dist/*.whl 
+    poetry run python setup.py bdist_wheel && \
+    poetry add dist/*.whl
 
 # This `activates` the virtual env
 ENV VIRTUAL_ENV=$PROJECT_DIR/.venv

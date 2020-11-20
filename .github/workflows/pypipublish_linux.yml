@@ -17,7 +17,7 @@ jobs:
         run: |
           git submodule update --init --recursive
           cd third_party/differential-privacy
-          git checkout 1b1dc6639173c0a13613189ec21851604a4c7335
+          git checkout 2b320f8c03ba97215e3de7f7782eb5b8fd0b2354
           cd -
           rm -rf third_party/differential-privacy/java
           rm -rf third_party/differential-privacy/examples/java
@@ -54,7 +54,7 @@ jobs:
 
       - name: Build pydp lib
         run: |
-          bazel build src/python:bindings_test  --verbose_failures
+          bazel build --config Linux src/python:bindings_test  --verbose_failures
           rm -f _pydp.so
           cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp
 

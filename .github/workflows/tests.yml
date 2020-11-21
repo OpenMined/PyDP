@@ -66,6 +66,7 @@ jobs:
     - name: Run tests
       run: |
         poetry run pip install matplotlib
+        poetry run pip install seaborn
         poetry run coverage run -m pytest tests
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
@@ -77,7 +78,7 @@ jobs:
       run: |
         poetry add mypy
         poetry run mypy tests/ pydp/
-        poetry run mypy examples/carrots_demo examples/restaurant_demo
+        poetry run mypy examples/Tutorial_1-carrots_demo examples/Tutorial_2-restaurant_demo examples/Tutorial_3-Titanic_demo examples/Tutorial_3-Titanic_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

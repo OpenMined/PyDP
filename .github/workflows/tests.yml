@@ -66,6 +66,7 @@ jobs:
     - name: Check Python path
       run: |
          echo $PYTHONPATH
+         echo $PATH
     - name: Run tests
       run: |
         poetry run pip install matplotlib

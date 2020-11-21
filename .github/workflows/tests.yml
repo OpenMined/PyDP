@@ -78,7 +78,7 @@ jobs:
       run: |
         poetry add mypy
         poetry run mypy tests/ pydp/
-        poetry run mypy examples/carrots_demo examples/restaurant_demo
+        poetry run mypy examples/Tutorial_1-carrots_demo examples/Tutorial_2-restaurant_demo examples/Tutorial_3-Titanic_demo examples/Tutorial_3-Titanic_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

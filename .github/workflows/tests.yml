@@ -63,6 +63,9 @@ jobs:
       run: |
          $wheel_path=ls .\dist
          poetry run python -m pip install --force-reinstall $wheel_path
+    - name: Check Python path
+      run: |
+         echo $PYTHONPATH
     - name: Run tests
       run: |
         poetry run pip install matplotlib

@@ -62,6 +62,10 @@ jobs:
         run: |
           python setup.py bdist_wheel
 
+      - name: Check the wheel
+        run: |
+          twine check dist/*
+
       - name: Renaming wheel
         run: |
           find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;

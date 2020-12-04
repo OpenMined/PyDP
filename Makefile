@@ -87,10 +87,10 @@ check-coverage-cpp: ## check for C++ code coverage
 	( echo "\e[33mRun \e[34mmake show-coverage\e[33m to see a detailed HTML coverage report.\e[0m"; \
 		exit 1 )
 
-run-tests-only: install ## run tests with coverage generation and without style tests
+run-tests-only: ## run tests with coverage generation and without style tests
 	poetry run coverage run -m pytest tests
 
-test: check-style-python check-style-cpp run-tests-only check-coverage-python check-coverage-cpp ## check style and run tests
+test: check-style-python check-style-cpp install run-tests-only check-coverage-python check-coverage-cpp ## check style and run tests
 
 show-coverage: ## report code coverage
 	echo "\e[36mGenerating code coverage HTML report.\e[0m"

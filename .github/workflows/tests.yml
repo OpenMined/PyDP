@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       # max-parallel: 6
       matrix:
-        os: [windows-2019, ubuntu-20.04, macOS-10.15]
+        os: [ubuntu-20.04, macOS-10.15, windows-2019]
         python-version:  [3.5, 3.6, 3.7, 3.8]
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646
@@ -25,64 +25,83 @@ jobs:
     - uses: actions/checkout@v2
       with:
           submodules: true
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
+
     - name: Setup Bazel
       uses: abhinavsingh/setup-bazel@v3
-    - name: Build PyDP with coverage
-    # removed c++ coverage for now
-    # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
-    # Ref: https://github.com/bazelbuild/rules_go/issues/2221
-      run: |
-        bazel clean --expunge
-        bazel build --config ${{runner.os}} src/python:bindings_test --verbose_failures
-    - name: Copy binary to python package(windows)
-      if: runner.os == 'Windows'
-      run: |
-        copy bazel-bin\src\bindings\_pydp.so src\pydp\_pydp.pyd
-    - name: Copy binary to python package
-      if: runner.os != 'Windows'
-      run: |
-        cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
-    - name: Setup and Build PyDP
+
+    - name: Set up poetry
       run: |
         python -m pip install poetry
         poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
-        poetry run python setup.py bdist_wheel
-    - name: Check the wheel
-      run: |
-        poetry run twine check dist/*
-    - name: Install PyDP
+
+    - name: Build PyDP with coverage (Unix)
       if: runner.os != 'Windows'
+      # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
+      # Ref: https://github.com/bazelbuild/rules_go/issues/2221
       run: |
-        poetry run python -m pip install --force-reinstall dist/*.whl
-    - name: Install PyDP (windows)
+        poetry run bazel clean --expunge
+        make build
+    - name: Build PyDP with coverage (Windows)
       if: runner.os == 'Windows'
       run: |
-         $wheel_path=ls .\dist
-         poetry run python -m pip install --force-reinstall $wheel_path
-    - name: Check Python path
+        bazel clean --expunge
+
+        $PYTHONHOME=$(poetry run python -c 'import sys; print(sys.executable);').Replace('\', '/')
+        $PYTHONPATH=$PYTHONHOME.Replace('/Scripts/python.exe', '/lib/site-packages')
+
+        echo "PYTHONHOME=$PYTHONHOME"
+        echo "PYTHONPATH=$PYTHONPATH"
+
+        bazel build src/python:bindings_test `
+          --config Windows `
+          --verbose_failures `
+          --action_env=PYTHON_BIN_PATH=$PYTHONHOME `
+          --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+
+        copy bazel-bin\src\bindings\_pydp.so src\pydp\_pydp.pyd
+
+    - name: Install PyDP (Unix)
+      if: runner.os != 'Windows'
       run: |
-         echo $PYTHONPATH
-         echo $PATH
+        make install
+    - name: Install PyDP (windows)
+      if: runner.os == 'Windows'
+      # There seems to be an issue with poetry and windows in this case. We need to
+      # install again to make pydp importable.
+      # Related ref: https://github.com/python-poetry/poetry/issues/3075
+      run: |
+        make dist
+
+        poetry run python -m pip install --upgrade --force-reinstall (get-item .\dist\*.whl)
+        poetry install
+
     - name: Run tests
       run: |
         poetry run pip install matplotlib
         poetry run pip install seaborn
-        poetry run coverage run -m pytest tests
+        make run-tests-only
+
     - name: Check Python code coverage
       if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
       run: |
         make check-coverage-python
       env:
         MIN_COVERAGE: 80
+
     - name: Mypy test
       run: |
         poetry add mypy
-        poetry run mypy tests/ pydp/
-        poetry run mypy examples/Tutorial_1-carrots_demo examples/Tutorial_2-restaurant_demo examples/Tutorial_3-Titanic_demo examples/Tutorial_3-Titanic_demo
+        poetry run mypy tests/ src/pydp/
+        poetry run mypy examples/Tutorial_1-carrots_demo
+        poetry run mypy examples/Tutorial_2-restaurant_demo
+
+      # Currently failing
+      #  poetry run mypy examples/Tutorial_3-Titanic_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage

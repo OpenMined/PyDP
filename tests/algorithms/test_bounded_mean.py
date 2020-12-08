@@ -27,14 +27,16 @@ def test_bounded_mean():
     assert isinstance(bm2, BoundedMean)
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
+
 @pytest.fixture(scope="function")
 def make_loaded_object(request):
     dir_path = os.path.dirname(os.path.realpath(__file__))
+
     def _make_loaded_object(value, size, iter):
         dump_filepath = os.path.join(
             dir_path,
             request.module.__name__,
-            "{}_data.proto".format(request.function.__name__)
+            "{}_data.proto".format(request.function.__name__),
         )
 
         # Algorithm to initialize
@@ -58,6 +60,7 @@ def make_loaded_object(request):
         return x
 
     return _make_loaded_object
+
 
 def test_bounded_mean_int64(make_loaded_object):
     x = make_loaded_object(5, 100000000, 5)

@@ -122,3 +122,58 @@ class Laplace(DPMechanism):
         sample = dist.sample(scale=scale)
 
         return value - sample
+
+
+class LaplaceTruncated(Laplace, TruncationAndFoldingMixin):
+    """
+    The truncated Laplace mechanism, where values outside a pre-described domain are mapped to the closest point
+    within the domain.
+    """
+    def __init__(self):
+        super().__init__()
+        TruncationAndFoldingMixin.__init__(self)
+
+    def __repr__(self):
+        output = super().__repr__()
+        output += TruncationAndFoldingMixin.__repr__(self)
+
+        return output
+
+    @copy_docstring(Laplace.get_bias)
+    def get_bias(self, value):
+        self.check_inputs(value)
+
+        shape = self._sensitivity / self._epsilon
+
+        return shape / 2 * (np.exp((self._lower_bound - value) / shape) - np.exp((value - self._upper_bound) / shape))
+
+    @copy_docstring(Laplace.get_variance)
+    def get_variance(self, value):
+        self.check_inputs(value)
+
+        shape = self._sensitivity / self._epsilon
+
+        variance = value ** 2 + shape * (self._lower_bound * np.exp((self._lower_bound - value) / shape)
+                                         - self._upper_bound * np.exp((value - self._upper_bound) / shape))
+        variance += (shape ** 2) * (2 - np.exp((self._lower_bound - value) / shape)
+                                    - np.exp((value - self._upper_bound) / shape))
+
+        variance -= (self.get_bias(value) + value) ** 2
+
+        return variance
+
+    @copy_docstring(Laplace.check_inputs)
+    def check_inputs(self, value):
+        super().check_inputs(value)
+        TruncationAndFoldingMixin.check_inputs(self, value)
+
+        return True
+
+    @copy_docstring(Laplace.randomise)
+    def randomise(self, value):
+        TruncationAndFoldingMixin.check_inputs(self, value)
+
+        noisy_value = super().randomise(value)
+        return self._truncate(noisy_value)
+
+

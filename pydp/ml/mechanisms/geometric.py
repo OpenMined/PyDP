@@ -118,3 +118,52 @@ class Geometric(DPMechanism):
         dist = GeometricDistribution(lambda_=lambda_)
         sample = dist.sample(-self._scale)
         return value + sample
+
+class GeometricTruncated(Geometric, TruncationAndFoldingMixin):
+    """
+    The truncated geometric mechanism, where values that fall outside a pre-described range are mapped back to the
+    closest point within the range.
+    """
+    def __init__(self):
+        super().__init__()
+        TruncationAndFoldingMixin.__init__(self)
+
+    def __repr__(self):
+        output = super().__repr__()
+        output += TruncationAndFoldingMixin.__repr__(self)
+
+        return output
+
+    def set_bounds(self, lower, upper):
+        """Sets the lower and upper bounds of the mechanism.
+        For the truncated geometric mechanism, `lower` and `upper` must be integer-valued.  Must have
+        `lower` <= `upper`.
+        Parameters
+        ----------
+        lower : int
+            The lower bound of the mechanism.
+        upper : int
+            The upper bound of the mechanism.
+        Returns
+        -------
+        self : class
+        """
+        if not isinstance(lower, Integral) or not isinstance(upper, Integral):
+            raise TypeError("Bounds must be integers")
+
+        return super().set_bounds(lower, upper)
+
+    @copy_docstring(DPMechanism.get_bias)
+    def get_bias(self, value):
+        raise NotImplementedError
+
+    @copy_docstring(DPMechanism.get_bias)
+    def get_variance(self, value):
+        raise NotImplementedError
+
+    @copy_docstring(Geometric.randomise)
+    def randomise(self, value):
+        TruncationAndFoldingMixin.check_inputs(self, value)
+
+        noisy_value = super().randomise(value)
+        return int(np.round(self._truncate(noisy_value)))

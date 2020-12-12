@@ -35,6 +35,28 @@ def copy_docstring(source):
         return target
     return copy_func
 
+def warn_unused_args(args):
+    """Warn the user about supplying unused `args` to a pydp model.
+    Arguments can be supplied as a string, a list of strings, or a dictionary as supplied to kwargs.
+    Parameters
+    ----------
+    args : str or list or dict
+        Arguments for which warnings should be thrown.
+    Returns
+    -------
+    None
+    """
+    if isinstance(args, str):
+        args = [args]
+
+    if not isinstance(args, (dict, list)):
+        raise ValueError("args must be a string, a list of strings or a dictionary, got type '%s'." % type(args))
+
+    for arg in args:
+        warnings.warn("Parameter '%s' is not functional in pydp.  Remove this parameter to suppress this "
+                      "warning." % arg, PyDPCompatibilityWarning)
+
+
 class Budget(tuple):
     """Custom tuple subclass for privacy budgets of the form (epsilon, delta).
     The ``Budget`` class allows for correct comparison/ordering of privacy budget, ensuring that both epsilon and delta

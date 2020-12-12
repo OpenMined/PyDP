@@ -97,3 +97,30 @@ def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
         upper = np.ones(shape, dtype=dtype) * upper.item()
 
     return lower, upper
+
+def clip_to_norm(array, clip):
+    """Clips the examples of a 2-dimensional array to a given maximum norm.
+    Parameters
+    ----------
+    array : np.ndarray
+        Array to be clipped.  After clipping, all examples have a 2-norm of at most `clip`.
+    clip : float
+        Norm at which to clip each example
+    Returns
+    -------
+    array : np.ndarray
+        The clipped array.
+    """
+    if not isinstance(array, np.ndarray):
+        raise TypeError("Input array must be a numpy array, got {}.".format(type(array)))
+    if array.ndim != 2:
+        raise ValueError("input array must be 2-dimensional, got {} dimensions.".format(array.ndim))
+    if not isinstance(clip, Real):
+        raise TypeError("Clip value must be numeric, got {}.".format(type(clip)))
+    if clip <= 0:
+        raise ValueError("Clip value must be strictly positive, got {}.".format(clip))
+
+    norms = np.linalg.norm(array, axis=1) / clip
+    norms[norms < 1] = 1
+
+    return array / norms[:, np.newaxis]

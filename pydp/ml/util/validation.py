@@ -124,3 +124,39 @@ def clip_to_norm(array, clip):
     norms[norms < 1] = 1
 
     return array / norms[:, np.newaxis]
+
+def clip_to_bounds(array, bounds):
+    """Clips the examples of a 2-dimensional array to given bounds.
+    Parameters
+    ----------
+    array : np.ndarray
+        Array to be clipped.  After clipping, all examples have a 2-norm of at most `clip`.
+    bounds : tuple
+        Tuple of bounds of the form (min, max) which the array is to be clipped to. `min` and `max` must be scalar,
+        unless array is 2-dimensional.
+    Returns
+    -------
+    array : np.ndarray
+        The clipped array.
+    """
+    if not isinstance(array, np.ndarray):
+        raise TypeError("Input array must be a numpy array, got {}.".format(type(array)))
+
+    if np.shape(bounds[0]) != np.shape(bounds[1]):
+        raise ValueError("Bounds must be of the same shape, got {} and {}.".format(np.shape(bounds[0]),
+                                                                                   np.shape(bounds[1])))
+
+    lower, upper = check_bounds(bounds, np.size(bounds[0]), min_separation=0)
+    clipped_array = array.copy()
+
+    if np.allclose(lower, np.min(lower)) and np.allclose(upper, np.max(upper)):
+        clipped_array = np.clip(clipped_array, np.min(lower), np.max(upper))
+    else:
+        if array.ndim != 2:
+            raise ValueError("For non-scalar bounds, input array must be 2-dimensional. Got %d dimensions." %
+                             array.ndim)
+
+        for feature in range(array.shape[1]):
+            clipped_array[:, feature] = np.clip(array[:, feature], lower[feature], upper[feature])
+
+    return clipped_array

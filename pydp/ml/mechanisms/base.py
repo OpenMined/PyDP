@@ -208,3 +208,74 @@ class DPMechanism(DPMachine, abc.ABC):
         return True
 
 
+class TruncationAndFoldingMixin:
+    """
+    Mixin for truncating or folding the outputs of a mechanism.  Must be instantiated with a :class:`.DPMechanism`.
+    """
+    def __init__(self):
+        if not isinstance(self, DPMechanism):
+            raise TypeError("TruncationAndFoldingMachine must be implemented alongside a :class:`.DPMechanism`")
+
+        self._lower_bound = None
+        self._upper_bound = None
+
+    def __repr__(self):
+        output = ".set_bounds(" + str(self._lower_bound) + ", " + str(self._upper_bound) + ")" \
+            if self._lower_bound is not None else ""
+
+        return output
+
+    def set_bounds(self, lower, upper):
+        """Sets the lower and upper bounds of the mechanism.
+        Must have lower <= upper.
+        Parameters
+        ----------
+        lower : float
+            The lower bound of the mechanism.
+        upper : float
+            The upper bound of the mechanism.
+        Returns
+        -------
+        self : class
+        """
+        if not isinstance(lower, Real) or not isinstance(upper, Real):
+            raise TypeError("Bounds must be numeric")
+
+        if lower > upper:
+            raise ValueError("Lower bound must not be greater than upper bound")
+
+        self._lower_bound = float(lower)
+        self._upper_bound = float(upper)
+
+        return self
+
+    def check_inputs(self, value):
+        """Checks that all parameters of the mechanism have been initialised correctly, and that the mechanism is ready
+        to be used.
+        Parameters
+        ----------
+        value : float
+        Returns
+        -------
+        True if the mechanism is ready to be used.
+        """
+        del value
+        if (self._lower_bound is None) or (self._upper_bound is None):
+            raise ValueError("Upper and lower bounds must be set")
+        return True
+
+    def _truncate(self, value):
+        if value > self._upper_bound:
+            return self._upper_bound
+        if value < self._lower_bound:
+            return self._lower_bound
+
+        return value
+
+    def _fold(self, value):
+        if value < self._lower_bound:
+            return self._fold(2 * self._lower_bound - value)
+        if value > self._upper_bound:
+            return self._fold(2 * self._upper_bound - value)
+
+        return value

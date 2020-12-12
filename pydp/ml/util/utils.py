@@ -93,3 +93,9 @@ class PrivacyLeakWarning(RuntimeWarning):
           :class:`.GaussianNB`).
         - inputs data to a model that falls outside the bounds or range originally specified.
     """
+
+class PyDPWarning(RuntimeWarning):
+    """Custom warning to capture inherited class arguments that are not compatible with pydp.
+    The purpose of the warning is to alert the user of the incompatibility, but to continue execution having fixed the
+    incompatibility at runtime.
+    """

@@ -76,3 +76,12 @@ class Budget(tuple):
 
     def __repr__(self):
         return "(epsilon=%r, delta=%r)" % self
+
+class BudgetError(ValueError):
+    """Custom exception to capture the privacy budget being exceeded, typically controlled by a
+    :class:`.BudgetAccountant`.
+    For example, this exception may be raised when the user:
+        - Attempts to execute a query which would exceed the privacy budget of the accountant.
+        - Attempts to change the slack of the accountant in such a way that the existing budget spends would exceed the
+          accountant's budget.
+    """

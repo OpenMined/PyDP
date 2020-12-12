@@ -85,3 +85,11 @@ class BudgetError(ValueError):
         - Attempts to change the slack of the accountant in such a way that the existing budget spends would exceed the
           accountant's budget.
     """
+
+class PrivacyLeakWarning(RuntimeWarning):
+    """Custom warning to capture privacy leaks resulting from incorrect parameter setting.
+    For example, this warning may occur when the user:
+        - fails to specify the bounds or range of data to a model where required (e.g., `bounds=None` to
+          :class:`.GaussianNB`).
+        - inputs data to a model that falls outside the bounds or range originally specified.
+    """

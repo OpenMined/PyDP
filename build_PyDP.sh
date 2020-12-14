@@ -23,14 +23,11 @@ case $PLATFORM in
 esac
 
 # Search specific python bin and lib folders to compile against the poetry env
-PYTHONHOME=$(poetry run which python)
-PYTHONPATH=$(poetry run python -c 'import sys; print([x for x in sys.path if "site-packages" in x][0]);')
+PYTHONHOME=$(which python)
+PYTHONPATH=$(python -c 'import sys; print([x for x in sys.path if "site-packages" in x][0]);')
 
 # Give user feedback
-echo -e "Running bazel with:\n\tPLATFORM=$PLATFORM\n\tPYTHONHOME=$PYTHONHOME"
-
-# Setup poetry env
-poetry install
+echo -e "Running bazel with:\n\tPLATFORM=$PLATFORM\n\tPYTHONHOME=$PYTHONHOME\n\tPYTHONPATH=$PYTHONPATH"
 
 # Compile code
 bazel coverage src/python:bindings_test \

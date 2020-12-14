@@ -1,4 +1,4 @@
-name: Tests
+name: Tests-py35
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
       # max-parallel: 6
       matrix:
         os: [ubuntu-20.04, macOS-10.15, windows-2019]
-        python-version:  [3.6, 3.7, 3.8]
+        python-version:  [3.5]
 
     # Timeout: https://stackoverflow.com/a/59076067/4521646
     timeout-minutes: 35
@@ -34,25 +34,24 @@ jobs:
     - name: Setup Bazel
       uses: abhinavsingh/setup-bazel@v3
 
-    - name: Set up poetry
+    - name: Set up packages
       run: |
         python -m pip install --upgrade pip
-        python -m pip install poetry==1.1.0
-        poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
+        python -m pip install setuptools wheel pytest gcovr coverage twine==1.15.0
 
     - name: Build PyDP with coverage (Unix)
       if: runner.os != 'Windows'
       # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
       # Ref: https://github.com/bazelbuild/rules_go/issues/2221
       run: |
-        poetry run bazel clean --expunge
-        make build
+        bazel clean --expunge
+        ./build_PyDP.sh
     - name: Build PyDP with coverage (Windows)
       if: runner.os == 'Windows'
       run: |
         bazel clean --expunge
 
-        $PYTHONHOME=$(poetry run python -c 'import sys; print(sys.executable);').Replace('\', '/')
+        $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').Replace('\', '/')
         $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").Replace('\', '/')
 
         echo "PYTHONHOME=$PYTHONHOME"
@@ -68,8 +67,8 @@ jobs:
 
     - name: Make wheel
       run: |
-        poetry run python setup.py sdist
-        poetry run python setup.py bdist_wheel
+        python setup.py sdist
+        python setup.py bdist_wheel
 
     - name: Upload dist folder as artifact
       uses: actions/upload-artifact@v2
@@ -87,18 +86,17 @@ jobs:
 
     - name: Mypy test
       run: |
-        poetry add mypy
-        poetry run mypy tests/ src/pydp/
-        poetry run mypy examples/Tutorial_1-carrots_demo
-        poetry run mypy examples/Tutorial_2-restaurant_demo
-
-      # Currently failing
-      #  poetry run mypy examples/Tutorial_3-Titanic_demo
-
+        python -m pip install mypy
+        mypy tests/ src/pydp/
+        mypy examples/Tutorial_1-carrots_demo
+        mypy examples/Tutorial_2-restaurant_demo
 
 ####################################################################
 #####
 ####################################################################
+
+      # Currently failing
+      #  poetry run mypy examples/Tutorial_3-Titanic_demo
 
     # Need to see how to run the c++ code coverage
     # - name: Check C++ code coverage
@@ -113,7 +111,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, macOS-10.15, windows-2019]
-        python-version:  [3.6, 3.7, 3.8]
+        python-version:  [3.5]
     timeout-minutes: 35
 
     steps:
@@ -121,7 +119,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-
+        
     - name: Install needed packages
       run: |
         python -m pip install --upgrade pip

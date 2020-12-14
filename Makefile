@@ -32,7 +32,8 @@ help:
 	@poetry run python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 build: ## compile bindings and genearte Python module
-	./build_PyDP.sh
+	poetry install
+	poetry run ./build_PyDP.sh
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 

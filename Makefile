@@ -103,9 +103,7 @@ release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	poetry run python setup.py sdist
-	poetry run python setup.py bdist_wheel
-	ls -l dist
+	./make_dist.sh
 
 install: dist ## install the package to the active Python's site-packages
 	poetry run pip install --upgrade --force-reinstall dist/*.whl

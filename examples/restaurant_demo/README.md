@@ -1,15 +1,26 @@
-# Example using the Differential Privacy Library PyDP
-
 ## Restaurant Demo
 
-Refer Notebook for demo https://github.com/OpenMined/PyDP/blob/dev/examples/restaurant_demo/restaurant_demo.ipynb
-
-Google's readme: https://github.com/google/differential-privacy/tree/main/examples/java
+PyDP library version for Google's Java Differential Privacy Library example - 
+https://github.com/google/differential-privacy/tree/master/examples/java.
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the
 restaurant and how much time and money they spend there. To ensure that
-visitors' privacy is preserved, Alice decides to use the PyDP library.
+visitors' privacy is preserved, Alice decides to use the Differential Privacy
+library in this case PyDP library.
+
+Alice wants to share the information with potential clients which include 3 main scenarios in total.
+
+```
+Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
+Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
+Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
+Sum-up revenue per day of the week with preaggregation
+```
+    
+Both the Non-private and the Private values for the above cases are calculated down below along with the graphical representation of the results and their comparisons.
+
+Notebook Implementation for the same can be found https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb
 
 ## Installation
 To install PyDP, use the PyPI package manager:
@@ -23,14 +34,15 @@ The output will display Private and Non-Private counts for:
 * Count visits by hour of day
 * Count visits by day of week
 * Sum-up revenue per day of the week
+* Sum-up revenue per day of the week with preaggregation
 
 Non Private Count is the raw counts and output
-Private count is anonymized Counts and output using PyDP library
+Private count is anonymized Counts and output using Differential Privacy library
 
 ## Count visits by hour of day
 
 In this example Alice wants to share this information with potential clients in
-order to let them know the busiest times in the restaurant. For this, we will
+order to let them know the busiest times in the restaurant. For this, you will
 count how many visitors enter the restaurant at every hour of a particular day.
 For simplicity, assume that a visitor comes to the restaurant at most once a
 day. In other words, a visitor is present at most once in the whole dataset.
@@ -47,7 +59,7 @@ the day. The calculation is done twice.
 *   First, `CountVisitsPerHour` computes the raw counts and outputs them to
     `non_private_counts_per_hour.csv`.
 *   Next, `CountVisitsPerHour` calculates private (anonymized) counts using the
-    PyDP library and prints them to
+    PYDP and prints them to
     `private_counts_per_hour.csv`.
 
 The image below illustrates the results. The Orange (right) bars represent the
@@ -63,7 +75,7 @@ data, so your results will most likely be slightly different.
 
 ## Partitions and contributions
 
-We say that the resulting aggregated data is split into *partitions*. The bar
+Let's say that the resulting aggregated data is split into *partitions*. The bar
 chart for the private and non-private counts each have 11 partitions, one for
 each entry hour.
 
@@ -71,7 +83,7 @@ More generally, a single partition represents a subset of aggregated data
 corresponding to a given value of the aggregation criterion. Graphically, a
 single partition is represented as a bar on the aggregated bar chart.
 
-We say that a visitor *contributes* to a given partition if their data matches
+Now a visitor *contributes* to a given partition if their data matches
 the partition criterion. For example, if a visitor enters between 8 AM and 9 AM,
 they *contribute* to the *8 AM partition*.
 
@@ -83,7 +95,7 @@ once per day. This implies three *contribution bounds*:
     other words, there is at most one time-slot when a visitor with a given id
     can enter the restaurant.
 *   *Maximum contributed value*: what is the maximum value that can be
-    contributed by a visitor to a partition? In our example, we count the number
+    contributed by a visitor to a partition? In our example, you have to count the number
     of visits, so the maximum contributed value is simply *1*.
 *   *Maximum contributions per partition*: how many times can a visitor
     contribute to a partition? In our example, a visitor can contribute to a
@@ -93,10 +105,11 @@ once per day. This implies three *contribution bounds*:
 Why is this important? Differential Privacy adjusts the amount of noise to mask
 contributions of each visitor. More contributions require more noise.
 
-Next, we analyse for the remaining two cases:
+Next, analyse for the remaining three cases:
 
 * Count visits by day of week
 * Sum-up revenue per day of the week
+* Sum-up revenue per day of the week with preaggregation
 
 ## Count visits by day of week
 
@@ -122,7 +135,8 @@ Now, let’s take a closer look at the technical details. Speaking in terms of
 for each day of the week. A visitor may enter the restaurant once a day and
 hence contribute to a partition at most once. A visitor may enter the restaurant
 several times a week and hence contribute to up to 7 partitions. The code below
-uses `Count` to calculate the private count of visits for a single day.
+uses `Count` to calculate the differentially private count of visits for a
+single day.
 
 ```
 // Number of days a visitor may contribute to is limited to 3. All exceeding
@@ -151,19 +165,24 @@ partitions a visitor may contribute to. You might notice that the value of
 Differential Privacy adds some amount of random noise to hide contributions of
 an individual. The more contributions an individual has, the larger the noise
 is. This affects the utility of the data. In order to preserve the data utility,
-we made an approximate estimate of how many times a week a person may visit a
+you have to made an approximate estimate of how many times a week a person may visit a
 restaurant on average, and assumed that the value is around 3 instead of scaling
 the noise by the factor of 7.
 
-We also pre-processed the input data and discarded all exceeding visits. The
+You have also pre-processed the input data and discarded all exceeding visits. The
 preprocessing is done by `bound_visits_per_week(self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)`. It is important
 to keep in mind that the library allows you to specify maximum amount of
 contributions, but doesn't validate that it is respected.
 
+Next, analyse for the remaining three cases:
+
+* Sum-up revenue per day of the week
+* Sum-up revenue per day of the week with preaggregation
+
 ## Sum-up revenue per day of the week
 
 The previous example demonstrates how the contributed partitions are bounded.
-Now, we will demonstrate how individual contributions are clamped. Imagine Alice
+Now, you will demonstrate how individual contributions are clamped. Imagine Alice
 decides to calculate the sum of the restaurant revenue per week day in a
 differentially private way. For this she needs to sum up the visitors’ daily
 spending at the restaurant. For simplicity, let’s assume a visitor enters the
@@ -179,6 +198,7 @@ The code below uses `BoundedSum` to calculate the differentially private sums of
 the visitors' spendings for a single day.
 
 ```
+
 # Cap the maximum number of visiting days at 4 per each visitor (any number above will not be taken into account)
 SUM_MAX_CONTRIBUTED_DAYS = 4
 
@@ -210,7 +230,7 @@ LN_3 = math.log(3)
   result = x.result();
 ```
 
-### Clamping individual contributions
+### Sum-up revenue per day of the week with preaggregation
 
 The usage of `SUM_MAX_CONTRIBUTED_DAYS` in `BoundedSum` is similar to its usage
 in `Count (COUNT_MAX_CONTRIBUTED_DAYS)`, which is explained in the previous example. This section focuses on
@@ -230,7 +250,7 @@ the other hand, setting the min and max bound close to zero may mean that
 the input values are clamped more aggressively, which can decrease utility as
 well.
 
-We also set the `upper` bound of`BoundedSum` to 65 to reflect the approximate
+Let's set the `upper` bound of`BoundedSum` to 65 to reflect the approximate
 maximum cumulative amount a visitor may spend on breakfast, lunch, and dinner.
 
 Visit data for a week is stored in the `week_data.csv` file.

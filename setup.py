@@ -49,8 +49,9 @@ setup(
     include_package_data=True,
     keywords="pydp",
     name="python-dp",
-    package_data={"pydp": ["src/pydp/_pydp.so", "src/pydp/_pydp.pyd"],},
-    packages=find_packages(exclude=["tests"]),  # need to check this
+    package_dir={"": "src"},
+    package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
+    packages=find_packages(where="src", exclude=["tests"]),
     setup_requires=setup_requirements,
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",

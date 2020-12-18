@@ -27,6 +27,7 @@ RUN apt-get update && \
     software-properties-common \
     gcc \
     g++ \
+    clang-format \
     build-essential \
     python3-distutils \
     pkg-config \

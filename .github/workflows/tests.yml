@@ -49,6 +49,9 @@ jobs:
         make build
     - name: Build PyDP with coverage (Windows)
       if: runner.os == 'Windows'
+      # There seems to be an issue with poetry and windows in this case. We need to
+      # install again to make pydp importable.
+      # Related ref: https://github.com/python-poetry/poetry/issues/3075
       run: |
         bazel clean --expunge
 

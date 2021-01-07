@@ -12,8 +12,8 @@ import statistics as s
 from pathlib import Path
 
 import pandas as pd  # type: ignore
-import pydp as dp  # this library
-from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max
+import pydp as dp  # type: ignore # this library
+from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max  # type: ignore
 
 from typing import Union
 

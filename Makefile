@@ -32,7 +32,8 @@ help:
 	@poetry run python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
 build: ## compile bindings and genearte Python module
-	./build_PyDP.sh
+	poetry install
+	poetry run ./build_PyDP.sh
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
@@ -87,10 +88,10 @@ check-coverage-cpp: ## check for C++ code coverage
 	( echo "\e[33mRun \e[34mmake show-coverage\e[33m to see a detailed HTML coverage report.\e[0m"; \
 		exit 1 )
 
-run-tests-only: install ## run tests with coverage generation and without style tests
+run-tests-only: ## run tests with coverage generation and without style tests
 	poetry run coverage run -m pytest tests
 
-test: check-style-python check-style-cpp run-tests-only check-coverage-python check-coverage-cpp ## check style and run tests
+test: check-style-python check-style-cpp install run-tests-only check-coverage-python check-coverage-cpp ## check style and run tests
 
 show-coverage: ## report code coverage
 	echo "\e[36mGenerating code coverage HTML report.\e[0m"
@@ -102,9 +103,7 @@ release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	poetry run python setup.py sdist
-	poetry run python setup.py bdist_wheel
-	ls -l dist
+	./make_dist.sh
 
 install: dist ## install the package to the active Python's site-packages
 	poetry run pip install --upgrade --force-reinstall dist/*.whl

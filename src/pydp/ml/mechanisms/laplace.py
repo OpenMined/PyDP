@@ -1,12 +1,12 @@
 from numbers import Real
 
-import numpy as np
-from numpy.random import random
+import numpy as np # type: ignore
+from numpy.random import random # type: ignore
 
 from .base import DPMechanism, TruncationAndFoldingMixin
 from ..util.utils import copy_docstring
-from pydp.distributions import LaplaceDistribution
-from pydp.util import UniformDouble
+from pydp.distributions import LaplaceDistribution # type: ignore
+from pydp.util import UniformDouble # type: ignore
 
 
 class Laplace(DPMechanism):

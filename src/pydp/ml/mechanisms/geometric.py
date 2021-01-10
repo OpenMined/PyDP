@@ -1,11 +1,11 @@
 import math
 from numbers import Integral
 
-import numpy as np
-from numpy.random import random
+import numpy as np # type: ignore
+from numpy.random import random # type: ignore
 
 from .base import DPMechanism, TruncationAndFoldingMixin
-from pydp.distributions import GeometricDistribution
+from pydp.distributions import GeometricDistribution # type: ignores
 from ..util.utils import copy_docstring
 
 

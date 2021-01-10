@@ -1,9 +1,9 @@
 import warnings
 
-import numpy as np # type: ignore
-import sklearn.naive_bayes as sk_nb # type: ignore
-from sklearn.utils import check_X_y # type: ignore
-from sklearn.utils.multiclass import _check_partial_fit_first_call # type: ignore
+import numpy as np  # type: ignore
+import sklearn.naive_bayes as sk_nb  # type: ignore
+from sklearn.utils import check_X_y  # type: ignore
+from sklearn.utils.multiclass import _check_partial_fit_first_call  # type: ignore
 
 from .util.accountant import BudgetAccountant
 from .util.utils import PrivacyLeakWarning, warn_unused_args

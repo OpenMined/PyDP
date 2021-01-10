@@ -1,6 +1,6 @@
 from numbers import Real, Integral
 
-import numpy as np # type: ignore
+import numpy as np  # type: ignore
 
 
 def check_epsilon_delta(epsilon, delta, allow_zero=False):

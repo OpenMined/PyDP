@@ -1,6 +1,6 @@
 from numbers import Integral
 
-import numpy as  # type: ignore
+import numpy as np  # type: ignore
 
 from .utils import Budget, BudgetError
 from .validation import check_epsilon_delta

@@ -1,6 +1,6 @@
 import warnings
 
-import numpy as np # type: ignore
+import numpy as np  # type: ignore
 
 from .validation import check_epsilon_delta
 

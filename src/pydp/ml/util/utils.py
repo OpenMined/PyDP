@@ -2,7 +2,7 @@ import warnings
 
 import numpy as np  # type: ignore
 
-from .validation import check_epsilon_delta
+from .validation import check_epsilon_delta # type: ignore
 
 
 def global_seed(seed):

@@ -29,6 +29,7 @@ def check_epsilon_delta(epsilon, delta, allow_zero=False):
     if not allow_zero and epsilon + delta == 0:
         raise ValueError("Epsilon and Delta cannot both be zero")
 
+
 def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
     """Input validation for the ``bounds`` parameter.
     Checks that ``bounds`` is composed of a list of tuples of the form (lower, upper), where lower <= upper and both
@@ -50,9 +51,15 @@ def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
     bounds : tuple
     """
     if not isinstance(bounds, tuple):
-        raise TypeError("Bounds must be specified as a tuple of (min, max), got {}.".format(type(bounds)))
+        raise TypeError(
+            "Bounds must be specified as a tuple of (min, max), got {}.".format(
+                type(bounds)
+            )
+        )
     if not isinstance(shape, Integral):
-        raise TypeError("shape parameter must be integer-valued, got {}.".format(type(shape)))
+        raise TypeError(
+            "shape parameter must be integer-valued, got {}.".format(type(shape))
+        )
 
     lower, upper = bounds
 
@@ -66,9 +73,15 @@ def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
     if lower.shape != upper.shape:
         raise ValueError("lower and upper bounds must be the same shape array")
     if lower.ndim > 1:
-        raise ValueError("lower and upper bounds must be scalar or a 1-dimensional array")
+        raise ValueError(
+            "lower and upper bounds must be scalar or a 1-dimensional array"
+        )
     if lower.size != shape and lower.size != 1:
-        raise ValueError("lower and upper bounds must have {} element(s), got {}.".format(shape or 1, lower.size))
+        raise ValueError(
+            "lower and upper bounds must have {} element(s), got {}.".format(
+                shape or 1, lower.size
+            )
+        )
 
     n_bounds = lower.shape[0]
 
@@ -77,12 +90,18 @@ def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
         _upper = upper[i]
 
         if not isinstance(_lower, Real) or not isinstance(_upper, Real):
-            raise TypeError("Each bound must be numeric, got {} ({}) and {} ({}).".format(_lower, type(_lower),
-                                                                                          _upper, type(_upper)))
+            raise TypeError(
+                "Each bound must be numeric, got {} ({}) and {} ({}).".format(
+                    _lower, type(_lower), _upper, type(_upper)
+                )
+            )
 
         if _lower > _upper:
-            raise ValueError("For each bound, lower bound must be smaller than upper bound, got {}, {})".format(
-                lower, upper))
+            raise ValueError(
+                "For each bound, lower bound must be smaller than upper bound, got {}, {})".format(
+                    lower, upper
+                )
+            )
 
         if _upper - _lower < min_separation:
             mid = (_upper + _lower) / 2
@@ -98,6 +117,7 @@ def check_bounds(bounds, shape=0, min_separation=0.0, dtype=float):
 
     return lower, upper
 
+
 def clip_to_norm(array, clip):
     """Clips the examples of a 2-dimensional array to a given maximum norm.
     Parameters
@@ -112,9 +132,13 @@ def clip_to_norm(array, clip):
         The clipped array.
     """
     if not isinstance(array, np.ndarray):
-        raise TypeError("Input array must be a numpy array, got {}.".format(type(array)))
+        raise TypeError(
+            "Input array must be a numpy array, got {}.".format(type(array))
+        )
     if array.ndim != 2:
-        raise ValueError("input array must be 2-dimensional, got {} dimensions.".format(array.ndim))
+        raise ValueError(
+            "input array must be 2-dimensional, got {} dimensions.".format(array.ndim)
+        )
     if not isinstance(clip, Real):
         raise TypeError("Clip value must be numeric, got {}.".format(type(clip)))
     if clip <= 0:
@@ -124,6 +148,7 @@ def clip_to_norm(array, clip):
     norms[norms < 1] = 1
 
     return array / norms[:, np.newaxis]
+
 
 def clip_to_bounds(array, bounds):
     """Clips the examples of a 2-dimensional array to given bounds.
@@ -140,11 +165,16 @@ def clip_to_bounds(array, bounds):
         The clipped array.
     """
     if not isinstance(array, np.ndarray):
-        raise TypeError("Input array must be a numpy array, got {}.".format(type(array)))
+        raise TypeError(
+            "Input array must be a numpy array, got {}.".format(type(array))
+        )
 
     if np.shape(bounds[0]) != np.shape(bounds[1]):
-        raise ValueError("Bounds must be of the same shape, got {} and {}.".format(np.shape(bounds[0]),
-                                                                                   np.shape(bounds[1])))
+        raise ValueError(
+            "Bounds must be of the same shape, got {} and {}.".format(
+                np.shape(bounds[0]), np.shape(bounds[1])
+            )
+        )
 
     lower, upper = check_bounds(bounds, np.size(bounds[0]), min_separation=0)
     clipped_array = array.copy()
@@ -153,10 +183,14 @@ def clip_to_bounds(array, bounds):
         clipped_array = np.clip(clipped_array, np.min(lower), np.max(upper))
     else:
         if array.ndim != 2:
-            raise ValueError("For non-scalar bounds, input array must be 2-dimensional. Got %d dimensions." %
-                             array.ndim)
+            raise ValueError(
+                "For non-scalar bounds, input array must be 2-dimensional. Got %d dimensions."
+                % array.ndim
+            )
 
         for feature in range(array.shape[1]):
-            clipped_array[:, feature] = np.clip(array[:, feature], lower[feature], upper[feature])
+            clipped_array[:, feature] = np.clip(
+                array[:, feature], lower[feature], upper[feature]
+            )
 
     return clipped_array

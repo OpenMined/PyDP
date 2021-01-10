@@ -34,6 +34,7 @@ class BudgetAccountant:
     spent_budget : list of tuples of the form (epsilon, delta)
         The list of privacy spends recorded by the accountant.  Can be used in the initialisation of a new accountant.
     """
+
     _default = None
 
     def __init__(self, epsilon=float("inf"), delta=1.0, slack=0.0, spent_budget=None):
@@ -64,7 +65,10 @@ class BudgetAccountant:
 
         if self.spent_budget:
             if len(self.spent_budget) > n_budget_max:
-                params.append("spent_budget=%s" % str(self.spent_budget[:n_budget_max] + ["..."]).replace("'", ""))
+                params.append(
+                    "spent_budget=%s"
+                    % str(self.spent_budget[:n_budget_max] + ["..."]).replace("'", "")
+                )
             else:
                 params.append("spent_budget=%s" % str(self.spent_budget))
 
@@ -94,12 +98,18 @@ class BudgetAccountant:
     @slack.setter
     def slack(self, slack):
         if not 0 <= slack <= self.delta:
-            raise ValueError("Slack must be between 0 and delta ({}), inclusive. Got {}.".format(self.delta, slack))
+            raise ValueError(
+                "Slack must be between 0 and delta ({}), inclusive. Got {}.".format(
+                    self.delta, slack
+                )
+            )
 
         epsilon_spent, delta_spent = self.total(slack=slack)
 
         if self.epsilon < epsilon_spent or self.delta < delta_spent:
-            raise BudgetError("Privacy budget will be exceeded by changing slack to {}.".format(slack))
+            raise BudgetError(
+                "Privacy budget will be exceeded by changing slack to {}.".format(slack)
+            )
 
         self.__slack = slack
 
@@ -146,7 +156,11 @@ class BudgetAccountant:
         if slack is None:
             slack = self.slack
         elif not 0 <= slack <= self.delta:
-            raise ValueError("Slack must be between 0 and delta ({}), inclusive. Got {}.".format(self.delta, slack))
+            raise ValueError(
+                "Slack must be between 0 and delta ({}), inclusive. Got {}.".format(
+                    self.delta, slack
+                )
+            )
 
         epsilon_sum, epsilon_exp_sum, epsilon_sq_sum = 0, 0, 0
 
@@ -161,11 +175,16 @@ class BudgetAccountant:
         if slack == 0:
             return Budget(total_epsilon_naive, total_delta)
 
-        total_epsilon_drv = epsilon_exp_sum + np.sqrt(2 * epsilon_sq_sum * np.log(1 / slack))
-        total_epsilon_kov = epsilon_exp_sum + np.sqrt(2 * epsilon_sq_sum *
-                                                      np.log(np.exp(1) + np.sqrt(epsilon_sq_sum) / slack))
+        total_epsilon_drv = epsilon_exp_sum + np.sqrt(
+            2 * epsilon_sq_sum * np.log(1 / slack)
+        )
+        total_epsilon_kov = epsilon_exp_sum + np.sqrt(
+            2 * epsilon_sq_sum * np.log(np.exp(1) + np.sqrt(epsilon_sq_sum) / slack)
+        )
 
-        return Budget(min(total_epsilon_naive, total_epsilon_drv, total_epsilon_kov), total_delta)
+        return Budget(
+            min(total_epsilon_naive, total_epsilon_drv, total_epsilon_kov), total_delta
+        )
 
     def check(self, epsilon, delta):
         """Checks if the provided (epsilon,delta) can be spent without exceeding the accountant's budget ceiling.
@@ -189,16 +208,23 @@ class BudgetAccountant:
             return True
 
         if 0 < epsilon < self.__min_epsilon:
-            raise ValueError("Epsilon must be at least {} if non-zero, got {}.".format(self.__min_epsilon, epsilon))
+            raise ValueError(
+                "Epsilon must be at least {} if non-zero, got {}.".format(
+                    self.__min_epsilon, epsilon
+                )
+            )
 
         spent_budget = self.spent_budget + [(epsilon, delta)]
 
         if Budget(self.epsilon, self.delta) >= self.total(spent_budget=spent_budget):
             return True
 
-        raise BudgetError("Privacy spend of ({},{}) not permissible; will exceed remaining privacy budget. "
-                          "Use {}.{}() to check remaining budget.".format(epsilon, delta, self.__class__.__name__,
-                                                                          self.remaining.__name__))
+        raise BudgetError(
+            "Privacy spend of ({},{}) not permissible; will exceed remaining privacy budget. "
+            "Use {}.{}() to check remaining budget.".format(
+                epsilon, delta, self.__class__.__name__, self.remaining.__name__
+            )
+        )
 
     def remaining(self, k=1):
         """Calculates the budget that remains to be spent.
@@ -221,7 +247,11 @@ class BudgetAccountant:
             raise ValueError("k must be at least 1, got {}.".format(k))
 
         _, spent_delta = self.total()
-        delta = 1 - ((1 - self.delta) / (1 - spent_delta)) ** (1 / k) if spent_delta < 1.0 else 1.0
+        delta = (
+            1 - ((1 - self.delta) / (1 - spent_delta)) ** (1 / k)
+            if spent_delta < 1.0
+            else 1.0
+        )
         # delta = 1 - np.exp((np.log(1 - self.delta) - np.log(1 - spent_delta)) / k)
 
         lower = 0
@@ -312,7 +342,11 @@ class BudgetAccountant:
             return BudgetAccountant._default
 
         if not isinstance(accountant, BudgetAccountant):
-            raise TypeError("Accountant must be of type BudgetAccountant, got {}".format(type(accountant)))
+            raise TypeError(
+                "Accountant must be of type BudgetAccountant, got {}".format(
+                    type(accountant)
+                )
+            )
 
         return accountant
 

@@ -8,6 +8,7 @@ from ..util.utils import copy_docstring
 from pydp.distributions import LaplaceDistribution
 from pydp.util import UniformDouble
 
+
 class Laplace(DPMechanism):
     r"""
     The classic Laplace mechanism in differential privacy, as first proposed by Dwork, McSherry, Nissim and Smith.
@@ -15,13 +16,18 @@ class Laplace(DPMechanism):
     Includes extension to (relaxed) :math:`(\epsilon,\delta)`-differential privacy, as proposed by Holohan et al.
     Paper link: https://arxiv.org/pdf/1402.6124.pdf
     """
+
     def __init__(self):
         super().__init__()
         self._sensitivity = None
 
     def __repr__(self):
         output = super().__repr__()
-        output += ".set_sensitivity(" + str(self._sensitivity) + ")" if self._sensitivity is not None else ""
+        output += (
+            ".set_sensitivity(" + str(self._sensitivity) + ")"
+            if self._sensitivity is not None
+            else ""
+        )
 
         return output
 
@@ -110,16 +116,16 @@ class Laplace(DPMechanism):
         """
         self.check_inputs(value)
 
-#         scale = self._sensitivity / (self._epsilon - np.log(1 - self._delta))
+        #         scale = self._sensitivity / (self._epsilon - np.log(1 - self._delta))
 
-#         unif_rv = random() - 0.5
+        #         unif_rv = random() - 0.5
 
-#         return value - scale * np.sign(unif_rv) * np.log(1 - 2 * np.abs(unif_rv))
+        #         return value - scale * np.sign(unif_rv) * np.log(1 - 2 * np.abs(unif_rv))
 
         scale = self._sensitivity / (self._epsilon - np.log(1 - self._delta))
-        
+
         dist = LaplaceDistribution(epsilon=self._epsilon, sensitivity=self._sensitivity)
-        
+
         sample = dist.sample(scale=scale)
 
         return value - sample
@@ -130,6 +136,7 @@ class LaplaceTruncated(Laplace, TruncationAndFoldingMixin):
     The truncated Laplace mechanism, where values outside a pre-described domain are mapped to the closest point
     within the domain.
     """
+
     def __init__(self):
         super().__init__()
         TruncationAndFoldingMixin.__init__(self)
@@ -146,7 +153,14 @@ class LaplaceTruncated(Laplace, TruncationAndFoldingMixin):
 
         shape = self._sensitivity / self._epsilon
 
-        return shape / 2 * (np.exp((self._lower_bound - value) / shape) - np.exp((value - self._upper_bound) / shape))
+        return (
+            shape
+            / 2
+            * (
+                np.exp((self._lower_bound - value) / shape)
+                - np.exp((value - self._upper_bound) / shape)
+            )
+        )
 
     @copy_docstring(Laplace.get_variance)
     def get_variance(self, value):
@@ -154,10 +168,15 @@ class LaplaceTruncated(Laplace, TruncationAndFoldingMixin):
 
         shape = self._sensitivity / self._epsilon
 
-        variance = value ** 2 + shape * (self._lower_bound * np.exp((self._lower_bound - value) / shape)
-                                         - self._upper_bound * np.exp((value - self._upper_bound) / shape))
-        variance += (shape ** 2) * (2 - np.exp((self._lower_bound - value) / shape)
-                                    - np.exp((value - self._upper_bound) / shape))
+        variance = value ** 2 + shape * (
+            self._lower_bound * np.exp((self._lower_bound - value) / shape)
+            - self._upper_bound * np.exp((value - self._upper_bound) / shape)
+        )
+        variance += (shape ** 2) * (
+            2
+            - np.exp((self._lower_bound - value) / shape)
+            - np.exp((value - self._upper_bound) / shape)
+        )
 
         variance -= (self.get_bias(value) + value) ** 2
 
@@ -183,6 +202,7 @@ class LaplaceFolded(Laplace, TruncationAndFoldingMixin):
     The folded Laplace mechanism, where values outside a pre-described domain are folded around the domain until they
     fall within.
     """
+
     def __init__(self):
         super().__init__()
         TruncationAndFoldingMixin.__init__(self)
@@ -199,8 +219,12 @@ class LaplaceFolded(Laplace, TruncationAndFoldingMixin):
 
         shape = self._sensitivity / self._epsilon
 
-        bias = shape * (np.exp((self._lower_bound + self._upper_bound - 2 * value) / shape) - 1)
-        bias /= np.exp((self._lower_bound - value) / shape) + np.exp((self._upper_bound - value) / shape)
+        bias = shape * (
+            np.exp((self._lower_bound + self._upper_bound - 2 * value) / shape) - 1
+        )
+        bias /= np.exp((self._lower_bound - value) / shape) + np.exp(
+            (self._upper_bound - value) / shape
+        )
 
         return bias
 
@@ -222,18 +246,22 @@ class LaplaceFolded(Laplace, TruncationAndFoldingMixin):
         noisy_value = super().randomise(value)
         return self._fold(noisy_value)
 
+
 class LaplaceBoundedDomain(LaplaceTruncated):
     """
     The bounded Laplace mechanism on a bounded domain.  The mechanism draws values directly from the domain, without any
     post-processing.
     """
+
     def __init__(self):
         super().__init__()
         self._scale = None
 
     def _find_scale(self):
         if self._epsilon is None or self._delta is None:
-            raise ValueError("Epsilon and Delta must be set before calling _find_scale().")
+            raise ValueError(
+                "Epsilon and Delta must be set before calling _find_scale()."
+            )
 
         eps = self._epsilon
         delta = self._delta
@@ -243,7 +271,9 @@ class LaplaceBoundedDomain(LaplaceTruncated):
         def _delta_c(shape):
             if shape == 0:
                 return 2.0
-            return (2 - np.exp(- delta_q / shape) - np.exp(- (diam - delta_q) / shape)) / (1 - np.exp(- diam / shape))
+            return (
+                2 - np.exp(-delta_q / shape) - np.exp(-(diam - delta_q) / shape)
+            ) / (1 - np.exp(-diam / shape))
 
         def _f(shape):
             return delta_q / (eps - np.log(_delta_c(shape)) - np.log(1 - delta))
@@ -296,10 +326,16 @@ class LaplaceBoundedDomain(LaplaceTruncated):
         if self._scale is None:
             self._scale = self._find_scale()
 
-        bias = (self._scale - self._lower_bound + value) / 2 * np.exp((self._lower_bound - value) / self._scale) \
-            - (self._scale + self._upper_bound - value) / 2 * np.exp((value - self._upper_bound) / self._scale)
-        bias /= 1 - np.exp((self._lower_bound - value) / self._scale) / 2 \
+        bias = (self._scale - self._lower_bound + value) / 2 * np.exp(
+            (self._lower_bound - value) / self._scale
+        ) - (self._scale + self._upper_bound - value) / 2 * np.exp(
+            (value - self._upper_bound) / self._scale
+        )
+        bias /= (
+            1
+            - np.exp((self._lower_bound - value) / self._scale) / 2
             - np.exp((value - self._upper_bound) / self._scale) / 2
+        )
 
         return bias
 
@@ -310,15 +346,29 @@ class LaplaceBoundedDomain(LaplaceTruncated):
         if self._scale is None:
             self._scale = self._find_scale()
 
-        variance = value**2
-        variance -= (np.exp((self._lower_bound - value) / self._scale) * (self._lower_bound ** 2)
-                     + np.exp((value - self._upper_bound) / self._scale) * (self._upper_bound ** 2)) / 2
-        variance += self._scale * (self._lower_bound * np.exp((self._lower_bound - value) / self._scale)
-                                   - self._upper_bound * np.exp((value - self._upper_bound) / self._scale))
-        variance += (self._scale ** 2) * (2 - np.exp((self._lower_bound - value) / self._scale)
-                                          - np.exp((value - self._upper_bound) / self._scale))
-        variance /= 1 - (np.exp(-(value - self._lower_bound) / self._scale)
-                         + np.exp(-(self._upper_bound - value) / self._scale)) / 2
+        variance = value ** 2
+        variance -= (
+            np.exp((self._lower_bound - value) / self._scale) * (self._lower_bound ** 2)
+            + np.exp((value - self._upper_bound) / self._scale)
+            * (self._upper_bound ** 2)
+        ) / 2
+        variance += self._scale * (
+            self._lower_bound * np.exp((self._lower_bound - value) / self._scale)
+            - self._upper_bound * np.exp((value - self._upper_bound) / self._scale)
+        )
+        variance += (self._scale ** 2) * (
+            2
+            - np.exp((self._lower_bound - value) / self._scale)
+            - np.exp((value - self._upper_bound) / self._scale)
+        )
+        variance /= (
+            1
+            - (
+                np.exp(-(value - self._lower_bound) / self._scale)
+                + np.exp(-(self._upper_bound - value) / self._scale)
+            )
+            / 2
+        )
 
         variance -= (self.get_bias(value) + value) ** 2
 
@@ -335,7 +385,9 @@ class LaplaceBoundedDomain(LaplaceTruncated):
         value = max(value, self._lower_bound)
 
         unif_rv = UniformDouble()
-        unif_rv *= self._cdf(self._upper_bound - value) - self._cdf(self._lower_bound - value)
+        unif_rv *= self._cdf(self._upper_bound - value) - self._cdf(
+            self._lower_bound - value
+        )
         unif_rv += self._cdf(self._lower_bound - value)
         unif_rv -= 0.5
 

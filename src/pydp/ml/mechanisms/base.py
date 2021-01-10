@@ -7,6 +7,7 @@ class DPMachine(abc.ABC):
     """
     Parent class for :class:`.DPMechanism` and :class:`.DPTransformer`, providing and specifying basic functionality.
     """
+
     @abc.abstractmethod
     def randomise(self, value):
         """Randomise `value` with the mechanism.
@@ -83,6 +84,7 @@ class DPMechanism(DPMachine, abc.ABC):
     * When new methods are added, `__repr__` should be updated accordingly in the mechanism.
     * Each mechanism's
     """
+
     def __init__(self):
         self._epsilon = None
         self._delta = None
@@ -91,7 +93,13 @@ class DPMechanism(DPMachine, abc.ABC):
         output = str(self.__module__) + "." + str(self.__class__.__name__) + "()"
 
         if self._epsilon is not None and self._delta is not None and self._delta > 0.0:
-            output += ".set_epsilon_delta(" + str(self._epsilon) + "," + str(self._delta) + ")"
+            output += (
+                ".set_epsilon_delta("
+                + str(self._epsilon)
+                + ","
+                + str(self._delta)
+                + ")"
+            )
         elif self._epsilon is not None:
             output += ".set_epsilon(" + str(self._epsilon) + ")"
 
@@ -212,16 +220,26 @@ class TruncationAndFoldingMixin:
     """
     Mixin for truncating or folding the outputs of a mechanism.  Must be instantiated with a :class:`.DPMechanism`.
     """
+
     def __init__(self):
         if not isinstance(self, DPMechanism):
-            raise TypeError("TruncationAndFoldingMachine must be implemented alongside a :class:`.DPMechanism`")
+            raise TypeError(
+                "TruncationAndFoldingMachine must be implemented alongside a :class:`.DPMechanism`"
+            )
 
         self._lower_bound = None
         self._upper_bound = None
 
     def __repr__(self):
-        output = ".set_bounds(" + str(self._lower_bound) + ", " + str(self._upper_bound) + ")" \
-            if self._lower_bound is not None else ""
+        output = (
+            ".set_bounds("
+            + str(self._lower_bound)
+            + ", "
+            + str(self._upper_bound)
+            + ")"
+            if self._lower_bound is not None
+            else ""
+        )
 
         return output
 

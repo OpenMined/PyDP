@@ -5,12 +5,12 @@ import sklearn.naive_bayes as sk_nb  # type: ignore
 from sklearn.utils import check_X_y  # type: ignore
 from sklearn.utils.multiclass import _check_partial_fit_first_call  # type: ignore
 
-from .util.accountant import BudgetAccountant # type: ignore
-from .util.utils import PrivacyLeakWarning, warn_unused_args # type: ignore
-from .util.validation import check_bounds, clip_to_bounds # type: ignore
+from .util.accountant import BudgetAccountant  # type: ignore
+from .util.utils import PrivacyLeakWarning, warn_unused_args  # type: ignore
+from .util.validation import check_bounds, clip_to_bounds  # type: ignore
 
-from .mechanisms.laplace import LaplaceBoundedDomain, LaplaceTruncated # type: ignore
-from .mechanisms.geometric import GeometricTruncated # type: ignore
+from .mechanisms.laplace import LaplaceBoundedDomain, LaplaceTruncated  # type: ignore
+from .mechanisms.geometric import GeometricTruncated  # type: ignore
 
 
 class GaussianNB(sk_nb.GaussianNB):

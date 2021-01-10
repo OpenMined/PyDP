@@ -3,10 +3,11 @@ from numbers import Real
 import numpy as np  # type: ignore
 from numpy.random import random  # type: ignore
 
-from .base import DPMechanism, TruncationAndFoldingMixin # type: ignore
-from ..util.utils import copy_docstring # type: ignore
+from .base import DPMechanism, TruncationAndFoldingMixin  # type: ignore
+from ..util.utils import copy_docstring  # type: ignore
 from pydp.distributions import LaplaceDistribution  # type: ignore
 from pydp.util import UniformDouble  # type: ignore
+
 
 class Laplace(DPMechanism):
     r"""

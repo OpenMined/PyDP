@@ -2,11 +2,11 @@ import math
 from numbers import Integral
 
 import numpy as np  # type: ignore
-from numpy.random import random # type: ignore
+from numpy.random import random  # type: ignore
 
-from .base import DPMechanism, TruncationAndFoldingMixin # type: ignore
+from .base import DPMechanism, TruncationAndFoldingMixin  # type: ignore
 from pydp.distributions import GeometricDistribution  # type: ignore
-from ..util.utils import copy_docstring # type: ignore
+from ..util.utils import copy_docstring  # type: ignore
 
 
 class Geometric(DPMechanism):

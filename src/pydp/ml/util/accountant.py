@@ -2,8 +2,8 @@ from numbers import Integral
 
 import numpy as np  # type: ignore
 
-from .utils import Budget, BudgetError # type: ignore
-from .validation import check_epsilon_delta # type: ignore
+from .utils import Budget, BudgetError  # type: ignore
+from .validation import check_epsilon_delta  # type: ignore
 
 
 class BudgetAccountant:

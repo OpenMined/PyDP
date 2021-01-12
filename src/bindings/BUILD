@@ -6,7 +6,6 @@ pybind_extension(
         "PyDP/*.cpp",
         "PyDP/base/*.cpp",
         "PyDP/algorithms/*.cpp",
-        "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
         "PyDP/proto/*.cpp"
     ]),

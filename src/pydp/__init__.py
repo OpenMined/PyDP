@@ -8,5 +8,7 @@ import sys
 
 # assert sys.version_info >= (3, 6)
 if sys.version_info < (3, 6):
-    print("WARN: Support for Python 3.5 and below is being deprecated. \
-        Please upgrade your version.")
+    print(
+        "WARN: Support for Python 3.5 and below is being deprecated. \
+        Please upgrade your version."
+    )

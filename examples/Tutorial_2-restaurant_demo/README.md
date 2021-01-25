@@ -23,7 +23,7 @@ Notebook Implementation for the same can be found [here](https://github.com/Open
 Install PyDP, using the PyPI package manager:
 
 `pip install python-dp` 
-or if you have pip3 separately for Python 3.x, `use pip3 install python-dp`
+or if you have pip3 separately for Python 3.x, use `pip3 install python-dp`
 
 Navigate to `PyDP/examples/restaurant_demo` folder and execute `Python restaurant.py`
 

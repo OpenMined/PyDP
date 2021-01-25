@@ -11,10 +11,10 @@ library in this case PyDP library.
 Alice wants to share the information with potential clients which include 4 main scenarios in total.
 
 
-#### Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
-#### Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
-#### Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
-#### Sum-up revenue per day of the week with preaggregation
+#### 1) Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
+#### 2) Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
+#### 3) Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
+#### 4) Sum-up revenue per day of the week with preaggregation
 
     
 Notebook Implementation for the same can be found [here](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb)

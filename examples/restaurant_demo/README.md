@@ -1,7 +1,6 @@
 ## Restaurant Demo
 
-PyDP library version for Google's Java Differential Privacy Library example - 
-https://github.com/google/differential-privacy/tree/master/examples/java.
+PyDP library version for Google's Java Differential Privacy Library example can be found [here](https://github.com/google/differential-privacy/tree/master/examples/java).
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the
@@ -9,24 +8,21 @@ restaurant and how much time and money they spend there. To ensure that
 visitors' privacy is preserved, Alice decides to use the Differential Privacy
 library in this case PyDP library.
 
-Alice wants to share the information with potential clients which include 3 main scenarios in total.
+Alice wants to share the information with potential clients which include 4 main scenarios in total.
 
-```
-Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
-Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
-Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
-Sum-up revenue per day of the week with preaggregation
-```
+
+#### Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
+#### Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
+#### Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
+#### Sum-up revenue per day of the week with preaggregation
+
     
-Both the Non-private and the Private values for the above cases are calculated down below along with the graphical representation of the results and their comparisons.
+Notebook Implementation for the same can be found [here](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb)
 
-Notebook Implementation for the same can be found https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb
-
-## Installation
+## To Run the Demo
 To install PyDP, use the PyPI package manager:
 
-pip install python-dp
-(If you have pip3 separately for Python 3.x, use pip3 install python-dp.)
+`pip install python-dp` (If you have pip3 separately for Python 3.x, use pip3 install python-dp.)
 
 Navigate to `PyDP/examples/restaurant_demo` folder. Execute `Python restaurant.py`
 
@@ -36,8 +32,7 @@ The output will display Private and Non-Private counts for:
 * Sum-up revenue per day of the week
 * Sum-up revenue per day of the week with preaggregation
 
-Non Private Count is the raw counts and output
-Private count is anonymized Counts and output using Differential Privacy library
+Non-Private Count is the raw count whereas the Private Count is anonymized Count generated using PyDP library.
 
 ## Count visits by hour of day
 
@@ -50,17 +45,6 @@ day. In other words, a visitor is present at most once in the whole dataset.
 Visit data for a single day is stored in the `day_data.csv` file. It includes
 the visitor’s ID, the visit duration (in minutes), and the money spent at the
 restaurant.
-
-
-This triggers the logic of `CountVisitsPerHour`. It reads the daily statistics
-and calculates the number of visitors that entered the restaurant every hour of
-the day. The calculation is done twice.
-
-*   First, `CountVisitsPerHour` computes the raw counts and outputs them to
-    `non_private_counts_per_hour.csv`.
-*   Next, `CountVisitsPerHour` calculates private (anonymized) counts using the
-    PYDP and prints them to
-    `private_counts_per_hour.csv`.
 
 The image below illustrates the results. The Orange (right) bars represent the
 counts without anonymization while blue (left) bars correspond to the private
@@ -104,12 +88,6 @@ once per day. This implies three *contribution bounds*:
 
 Why is this important? Differential Privacy adjusts the amount of noise to mask
 contributions of each visitor. More contributions require more noise.
-
-Next, analyse for the remaining three cases:
-
-* Count visits by day of week
-* Sum-up revenue per day of the week
-* Sum-up revenue per day of the week with preaggregation
 
 ## Count visits by day of week
 
@@ -165,26 +143,18 @@ partitions a visitor may contribute to. You might notice that the value of
 Differential Privacy adds some amount of random noise to hide contributions of
 an individual. The more contributions an individual has, the larger the noise
 is. This affects the utility of the data. In order to preserve the data utility,
-you have to made an approximate estimate of how many times a week a person may visit a
+you have to make an approximate estimate of how many times a week a person may visit a
 restaurant on average, and assumed that the value is around 3 instead of scaling
 the noise by the factor of 7.
 
-You have also pre-processed the input data and discarded all exceeding visits. The
-preprocessing is done by `bound_visits_per_week(self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)`. It is important
-to keep in mind that the library allows you to specify maximum amount of
-contributions, but doesn't validate that it is respected.
-
-Next, analyse for the remaining three cases:
-
-* Sum-up revenue per day of the week
-* Sum-up revenue per day of the week with preaggregation
+The input data can be pre-processed discarding all the exceeding visits using `bound_visits_per_week(self._day_visits, COUNT_MAX_CONTRIBUTED_DAYS)`. It is important to keep in mind that the library allows you to specify maximum amount of contributions, but doesn't validate that it is respected.
 
 ## Sum-up revenue per day of the week
 
 The previous example demonstrates how the contributed partitions are bounded.
 Now, you will demonstrate how individual contributions are clamped. Imagine Alice
 decides to calculate the sum of the restaurant revenue per week day in a
-differentially private way. For this she needs to sum up the visitors’ daily
+differentially private way. For this, she needs to sum up the <b>visitor's</b> daily
 spending at the restaurant. For simplicity, let’s assume a visitor enters the
 restaurant at most once a day but multiple times a week.
 
@@ -194,8 +164,7 @@ The results are illustrated in the image below.
 
 ![Daily sums](img/sums_per_day.png)
 
-The code below uses `BoundedSum` to calculate the differentially private sums of
-the visitors' spendings for a single day.
+`BoundedSum` is used to calculate the differentially private sums of the <b>visitor's</b> spendings for a single day.
 
 ```
 
@@ -250,7 +219,7 @@ the other hand, setting the min and max bound close to zero may mean that
 the input values are clamped more aggressively, which can decrease utility as
 well.
 
-Let's set the `upper` bound of`BoundedSum` to 65 to reflect the approximate
+The `upper` bound of `BoundedSum` is set to 65 to reflect the approximate
 maximum cumulative amount a visitor may spend on breakfast, lunch, and dinner.
 
 Visit data for a week is stored in the `week_data.csv` file.

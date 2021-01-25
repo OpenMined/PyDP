@@ -1,6 +1,6 @@
 ## Restaurant Demo
 
-PyDP library version for [Google's Java Differential Privacy Library -  - Restaurant Example](https://github.com/google/differential-privacy/tree/master/examples/java).
+PyDP library version for [Google's Java Differential Privacy Library - Restaurant Example](https://github.com/google/differential-privacy/tree/master/examples/java).
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the

@@ -11,4 +11,4 @@ This is the first example using the PyDP, about animals using the library to agg
 
 ### Example
 
-* [Error Handling in PyDP](Sample_code/error_handling.py)
+* [Error Handling in PyDP](Sample_code/error_handing.py)

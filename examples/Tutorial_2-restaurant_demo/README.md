@@ -1,6 +1,6 @@
 ## Restaurant Demo
 
-PyDP library version for Google's Java Differential Privacy Library example can be found [here](https://github.com/google/differential-privacy/tree/master/examples/java).
+PyDP library version for [Google's Java Differential Privacy Library - Restaurant Example](https://github.com/google/differential-privacy/tree/master/examples/java).
 
 Imagine a fictional restaurant owner named Alice who would like to share
 business statistics with her visitors. Alice knows when visitors enter the
@@ -11,20 +11,21 @@ library in this case PyDP library.
 Alice wants to share the information with potential clients which include 4 main scenarios in total.
 
 
-#### 1) Count visits by an hour of the day: Count how many visitors enter the restaurant at every hour of a particular day.
-#### 2) Count visits by day of the week: Count how many visitors enter the restaurant each day in a week. This includes two cases:
-#### 3) Sum-up revenue per day of the week: Calculate the sum of the restaurant revenue per weekday.
-#### 4) Sum-up revenue per day of the week with preaggregation
+* <b>Count visits by an hour of the day:</b> Count how many visitors enter the restaurant at every hour of a particular day.
+* <b>Count visits by day of the week:</b> Count how many visitors enter the restaurant each day in a week.
+* <b>Sum-up revenue per day of the week:</b> Calculate the sum of the restaurant revenue per weekday.
+* <b>Sum-up revenue per day of the week with preaggregation.</b>
 
     
 Notebook Implementation for the same can be found [here](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb)
 
 ## To Run the Demo
-To install PyDP, use the PyPI package manager:
+Install PyDP, using the PyPI package manager:
 
-`pip install python-dp` (If you have pip3 separately for Python 3.x, use pip3 install python-dp.)
+`pip install python-dp` 
+or if you have pip3 separately for Python 3.x, use `pip3 install python-dp`
 
-Navigate to `PyDP/examples/restaurant_demo` folder. Execute `Python restaurant.py`
+Navigate to `PyDP/examples/restaurant_demo` folder and execute `Python restaurant.py`
 
 The output will display Private and Non-Private counts for:
 * Count visits by hour of day
@@ -154,7 +155,7 @@ The input data can be pre-processed discarding all the exceeding visits using `b
 The previous example demonstrates how the contributed partitions are bounded.
 Now, you will demonstrate how individual contributions are clamped. Imagine Alice
 decides to calculate the sum of the restaurant revenue per week day in a
-differentially private way. For this, she needs to sum up the <b>visitor's</b> daily
+differentially private way. For this, she needs to sum up the visitor's daily
 spending at the restaurant. For simplicity, let’s assume a visitor enters the
 restaurant at most once a day but multiple times a week.
 
@@ -164,7 +165,7 @@ The results are illustrated in the image below.
 
 ![Daily sums](img/sums_per_day.png)
 
-`BoundedSum` is used to calculate the differentially private sums of the <b>visitor's</b> spendings for a single day.
+`BoundedSum` is used to calculate the differentially private sums of the visitor's spendings for a single day.
 
 ```
 

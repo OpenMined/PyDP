@@ -42,7 +42,7 @@ Hence, this process is prone to risk and is considered as fundamentally wrong. N
     Image Credits: Secure and Private AI (Udacity)
 
 
-Despite the fact that the dataset was anonymized (no username or movie name was released) yet two Researchers at University of Texas released a `paper <https://www.cs.utexas.edu/~shmat/shmat_oak08netflix.pdf>`_ where they showed how they have de-anonymized a maximum chunk of the daetaset.
+Despite the fact that the dataset was anonymized (no username or movie name was released) yet two Researchers at University of Texas released a `paper <https://www.cs.utexas.edu/~shmat/shmat_oak08netflix.pdf>`_ where they showed how they have de-anonymized a maximum chunk of the dataset.
 
 .. figure:: https://user-images.githubusercontent.com/19529592/91381399-ef64c400-e844-11ea-8535-0180f37962de.png
     :alt: research

@@ -39,6 +39,7 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     description="Python API for Google's Differential Privacy library",
     distclass=BinaryDistribution,
@@ -49,12 +50,13 @@ setup(
     include_package_data=True,
     keywords="pydp",
     name="python-dp",
+    package_dir={"": "src"},
     package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
-    packages=find_packages(exclude=["tests"]),  # need to check this
+    packages=find_packages(where="src", exclude=["tests"]),
     setup_requires=setup_requirements,
     python_requires=">=3.6",
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="1.0.1",
+    version="1.0.2",
     zip_safe=False,
 )

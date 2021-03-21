@@ -48,7 +48,6 @@ void declareGaussianDistribution(py::module &m) {
                              R"pbdoc(Returns stddev)pbdoc");
 }
 
-/*
 void declareGeometricDistribution(py::module &m) {
   py::class_<dpi::GeometricDistribution> geometric_dist(m, "GeometricDistribution");
   geometric_dist.attr("__module__") = "pydp";
@@ -70,9 +69,9 @@ before the first success where the success probability is as defined above. lamb
           the maximum int64_t, which means that users should be careful around the edges
           of their distribution)pbdoc";
 }
-*/
+
 void init_algorithms_distributions(py::module &m) {
   declareLaplaceDistribution(m);
   declareGaussianDistribution(m);
-  // declareGeometricDistribution(m);
+  declareGeometricDistribution(m);
 }

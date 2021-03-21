@@ -22,13 +22,13 @@ else
     sudo apt-get install python3.6
 fi
 
-# checking for pipenv
-echo "Checking for pipenv"
-if python3 -c "import pipenv" &> /dev/null; then
-    echo "pipenv is already installed"
+# checking for poetry 
+echo "Checking for poetry"
+if python3 -c "import poetry" &> /dev/null; then
+    echo "poetry is already installed"
 else
-    echo "Installing pipenv"
-    pip3 install pipenv
+    echo "Installing poetry"
+    pip3 install poetry
 fi
 
 # bazel

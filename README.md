@@ -50,9 +50,9 @@ Refer to the
 of tutorials and sample code to learn more about the PyDP library.
 
 You can also get started with
-[an introduction to PyDP](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb)
+[an introduction to PyDP](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots_demo.ipynb)
 (a Jupyter notebook) and
-[the carrots demo](https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py)
+[the carrots demo](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots.py)
 (a Python file).
 
 Example: calculate the Bounded Mean

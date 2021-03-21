@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
 
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
         run: |
           bazel build --config macOS src/python:bindings_test  --verbose_failures
           rm -f _pydp.so
-          cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
 
       - name: Build wheel

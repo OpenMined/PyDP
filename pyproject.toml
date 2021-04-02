@@ -7,7 +7,6 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-matplotlib = "^3.3.4"
 
 [tool.poetry.dev-dependencies]
 setuptools = "*"
@@ -25,6 +24,7 @@ pandas= [
     {version = "<0.25.0", python = "<3.8"},
     {version = "^0.25.0", python = "^3.8"}
 ]
+matplotlib = "^3.3.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

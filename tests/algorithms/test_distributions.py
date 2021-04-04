@@ -19,9 +19,9 @@ k_one_over_log2 = 1.44269504089
 
 def skew(samples: List[float], mu: float, sigma: float):
     """Unfortunately this is implemented in third_party/differential-privacy/cc/algorithms/distributions_test.cc
-       and we don't want to pull the test files in. I'm assuming it'll be moved to
-       third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
-       Until then this should suffice. #FIXME: when possible we can fix this.
+    and we don't want to pull the test files in. I'm assuming it'll be moved to
+    third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
+    Until then this should suffice. #FIXME: when possible we can fix this.
     """
     skew = list(
         accumulate(samples, lambda lhs, rhs: lhs + (rhs - mu) * (rhs - mu) * (rhs - mu))
@@ -31,9 +31,9 @@ def skew(samples: List[float], mu: float, sigma: float):
 
 def kurtosis(samples: List[float], mu: float, var: float):
     """Unfortunately this is implemented in third_party/differential-privacy/cc/algorithms/distributions_test.cc
-       and we don't want to pull the test files in. I'm assuming it'll be moved to
-       third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
-       Until then this should suffice. #FIXME: when possible we can fix this.
+    and we don't want to pull the test files in. I'm assuming it'll be moved to
+    third_party/differential-privacy/cc/algorithms/util.h If they (upstream) move it we can use it.
+    Until then this should suffice. #FIXME: when possible we can fix this.
     """
     kurt = list(
         accumulate(samples, lambda lhs, rhs: lhs + ((rhs - mu) * (rhs - mu)) ** 2)

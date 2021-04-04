@@ -98,7 +98,7 @@ class MetaAlgorithm:
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
-        
+
         Note: It resets the privacy budget first.
         """
         return self.__algorithm.result(data)

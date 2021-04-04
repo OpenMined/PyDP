@@ -112,8 +112,7 @@ class BudgetAccountant:
 
     @property
     def slack(self):
-        """Slack parameter for composition.
-        """
+        """Slack parameter for composition."""
         return self.__slack
 
     @slack.setter
@@ -136,20 +135,17 @@ class BudgetAccountant:
 
     @property
     def spent_budget(self):
-        """List of tuples of the form (epsilon, delta) of spent privacy budget.
-        """
+        """List of tuples of the form (epsilon, delta) of spent privacy budget."""
         return self.__spent_budget.copy()
 
     @property
     def epsilon(self):
-        """Epsilon privacy ceiling of the accountant.
-        """
+        """Epsilon privacy ceiling of the accountant."""
         return self.__epsilon
 
     @property
     def delta(self):
-        """Delta privacy ceiling of the accountant.
-        """
+        """Delta privacy ceiling of the accountant."""
         return self.__delta
 
     def total(self, spent_budget=None, slack=None):

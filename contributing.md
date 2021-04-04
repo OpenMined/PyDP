@@ -75,7 +75,7 @@ $ make build
 
 Run the test example:
 ```
-$ poetry run python examples/carrots_demo/carrots.py
+$ poetry run python examples/Tutorial_1-carrots_demo/carrots.py
 ```
 
 Build the python wheel:

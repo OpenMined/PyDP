@@ -22,7 +22,7 @@ mypy = "*"
 jupyter = "*"
 pandas= [
     {version = "<0.25.0", python = "<3.8"},
-    {version = "^0.25.0", python = "^3.8"}
+    {version = "^1.2.3", python = "^3.8"},
 ]
 matplotlib = "^3.3.4"
 

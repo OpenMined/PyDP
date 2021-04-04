@@ -35,9 +35,9 @@ LN_3 = math.log(3)
 
 class RestaurantStatistics:
     """Class to replicate the restaurant example from Google's DP library.
-       Includes both Count and Sum operations.
-       Original code in java:
-        - https://github.com/google/differential-privacy/tree/main/examples/java"""
+    Includes both Count and Sum operations.
+    Original code in java:
+     - https://github.com/google/differential-privacy/tree/main/examples/java"""
 
     def __init__(self, hours_filename, days_filename, epsilon=LN_3):
 

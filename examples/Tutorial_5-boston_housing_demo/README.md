@@ -34,4 +34,4 @@ The features can be summarized as follows:
 
 ## Data
 
-Dataset is downloaded from `sklearn.datasets`.
+Dataset is available as `boston_housing_price.csv`

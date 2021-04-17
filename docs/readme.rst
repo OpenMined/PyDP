@@ -31,7 +31,6 @@ privacy guarantee and accuracy of your model written in Python.
 -  ::fire: Currently supports Linux and macOS (Windows support coming soon :smiley:)
 -  ::star: Use Python 3.6+. Support for Python 3.5 and below is deprecated.
 
-
 Installation
 ------------
 

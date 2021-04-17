@@ -65,7 +65,8 @@ To achieve clean builds of different python versions we are using a virtualenv t
 the build process from system python and system libraries. Since python2 is deprecated
 poetry should be looking for a python3 binary to create the virtualenv from by default.
 If you want to use a specific version of python3 please refer to the
-[poetry documentation](https://python-poetry.org/docs/).
+[poetry documentation](https://python-poetry.org/docs/). If you use bazel, use 3.8.0 and below.
+
 
 Build the python library:
 

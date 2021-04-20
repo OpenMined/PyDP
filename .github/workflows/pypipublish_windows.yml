@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install setuptools wheel twine auditwheel
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.0.0
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Setup Bazel
       uses: abhinavsingh/setup-bazel@v3
     - name: Build PyDP

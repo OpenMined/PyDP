@@ -2,7 +2,11 @@ import os
 import subprocess
 import tempfile
 import glob
-import nbqa, mypy, black, flake8
+import nbqa
+import pycodestyle
+import mypy
+import black
+import flake8
 
 # execute notebook in given path
 def _execute_notebook(notebook_path: str) -> bool:
@@ -58,3 +62,7 @@ def test_all_notebooks(path="examples/"):
     for notebook_path in notebook_paths:
         # flake-8 tests for all notebooks in a given path
         subprocess.run('nbqa flake8 ' + notebook_path, shell=True)
+
+    for notebook_path in notebook_paths:
+        # pycodestyle tests for all notebooks in a given path
+        subprocess.run('nbqa pycodestyle ' + notebook_path, shell=True)

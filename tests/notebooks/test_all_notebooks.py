@@ -47,13 +47,12 @@ def test_all_notebooks(path="examples/"):
     # execute each notebook
     for notebook_path in notebook_paths:
         # mypy tests for all notebooks in a given path
-        subprocess.run('nbqa mypy ' + notebook_path, shell=True)
+        subprocess.run("nbqa mypy " + notebook_path, shell=True)
 
     for notebook_path in notebook_paths:
         # black tests to search for differences for all notebooks in a given path
-        subprocess.run('nbqa black ' + notebook_path + ' --nbqa-diff', shell=True)
+        subprocess.run("nbqa black " + notebook_path + " --nbqa-diff", shell=True)
 
     for notebook_path in notebook_paths:
         # black tests to modify the outputs for all notebooks in a given path
-        subprocess.run('nbqa black ' + notebook_path + ' --nbqa-mutate', shell=True)
-
+        subprocess.run("nbqa black " + notebook_path + " --nbqa-mutate", shell=True)

@@ -2,6 +2,9 @@ import os
 import subprocess
 import tempfile
 import glob
+import nbqa
+import mypy
+import black
 
 # execute notebook in given path
 def _execute_notebook(notebook_path: str) -> bool:
@@ -40,3 +43,16 @@ def test_all_notebooks(path="examples/"):
     for notebook_path in notebook_paths:
         # make sure notebook is successfully executed
         assert _execute_notebook(notebook_path)
+
+    # execute each notebook
+    for notebook_path in notebook_paths:
+        # mypy tests for all notebooks in a given path
+        subprocess.run("nbqa mypy " + notebook_path, shell=True)
+
+    for notebook_path in notebook_paths:
+        # black tests to search for differences for all notebooks in a given path
+        subprocess.run("nbqa black " + notebook_path + " --nbqa-diff", shell=True)
+
+    for notebook_path in notebook_paths:
+        # black tests to modify the outputs for all notebooks in a given path
+        subprocess.run("nbqa black " + notebook_path + " --nbqa-mutate", shell=True)

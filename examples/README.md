@@ -18,7 +18,7 @@ This example uses the infamous Titanic dataset and finds what sorts of people we
 
 #### Launch Demo
 
-In this example, two copies of one database are created where they differ by one record. This is for demonstrating the general principle used by all differentially private algorithms to protect users from MIA(Membership Inference Attack). More about it [here](Tutorial_4-Launch_demo/DP proof.ipynb).
+In this example, two copies of one database are created where they differ by one record. This is for demonstrating the general principle used by all differentially private algorithms to protect users from MIA(Membership Inference Attack). More about it [here](Tutorial_4-Launch_demo/DP_proof.ipynb).
 
 #### Laplace Demo
 

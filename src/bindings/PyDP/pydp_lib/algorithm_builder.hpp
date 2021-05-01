@@ -59,6 +59,7 @@ template <typename T, class Algorithm>
 class AlgorithmBuilder {
  public:
   std::unique_ptr<Algorithm> build(double epsilon,
+                                   double delta,
                                    std::optional<double> percentile = std::nullopt,
                                    std::optional<T> lower_bound = std::nullopt,
                                    std::optional<T> upper_bound = std::nullopt,
@@ -69,8 +70,11 @@ class AlgorithmBuilder {
     if constexpr (is_percentile<T, Algorithm>()) {
       if (percentile.has_value()) builder.SetPercentile(percentile.value());
     }
+    
     builder.SetEpsilon(epsilon);
 
+    builder.SetDelta(delta.value_or(0));
+    
     if (l0_sensitivity.has_value())
       builder.SetMaxPartitionsContributed(l0_sensitivity.value());
     if (linf_sensitivity.has_value())
@@ -122,37 +126,38 @@ class AlgorithmBuilder {
       if constexpr (is_percentile<T, Algorithm>()) {
         // Explicit percentile constructor
         pyself.def(
-            py::init([this](double epsilon, double percentile, T lower_bound,
+            py::init([this](double epsilon, double delta,double percentile, T lower_bound,
                             T upper_bound, int l0_sensitivity, int linf_sensitivity) {
-              return this->build(epsilon, percentile, lower_bound, upper_bound,
+              return this->build(epsilon, delta, percentile, lower_bound, upper_bound,
                                  l0_sensitivity, linf_sensitivity);
             }),
-            py::arg("epsilon"), py::arg("percentile"), py::arg("lower_bound"),
+            py::arg("epsilon"), py::arg("delta") = 0, py::arg("percentile"), py::arg("lower_bound"),
             py::arg("upper_bound"), py::arg("l0_sensitivity") = 1,
             py::arg("linf_sensitivity") = 1);
       }
       // Explicit bounds constructor
-      pyself.def(py::init([this](double epsilon, T lower_bound, T upper_bound,
+      pyself.def(py::init([this](double epsilon, double delta, T lower_bound, T upper_bound,
                                  int l0_sensitivity, int linf_sensitivity) {
-                   return this->build(epsilon, std::nullopt /*percentile*/, lower_bound,
+                   return this->build(epsilon, delta, std::nullopt /*percentile*/, lower_bound,
                                       upper_bound, l0_sensitivity, linf_sensitivity);
                  }),
-                 py::arg("epsilon"), py::arg("lower_bound"), py::arg("upper_bound"),
+                 py::arg("epsilon"),  py::arg("delta") = 0, py::arg("lower_bound"), py::arg("upper_bound"),
                  py::arg("l0_sensitivity") = 1, py::arg("linf_sensitivity") = 1);
     }
 
-    // No bounds constructor
+    // // No bounds constructor
     pyself.def(
-        py::init([this](double epsilon, int l0_sensitivity, int linf_sensitivity) {
-          return this->build(epsilon, std::nullopt /*percentile*/,
+        py::init([this](double epsilon, double delta, int l0_sensitivity, int linf_sensitivity) {
+          return this->build(epsilon, delta, std::nullopt /*percentile*/,
                              std::nullopt /*lower_bound*/, std::nullopt /*upper_bound*/,
                              l0_sensitivity, linf_sensitivity);
         }),
-        py::arg("epsilon"), py::arg("l0_sensitivity") = 1,
+        py::arg("epsilon"), py::arg("delta") = 0, py::arg("l0_sensitivity") = 1,
         py::arg("linf_sensitivity") = 1);
 
     // Getters
     pyself.def_property_readonly("epsilon", &Algorithm::GetEpsilon);
+    pyself.def_property_readonly("delta", &Algorithm::GetDelta);
 
     pyself.def("privacy_budget_left", &Algorithm::RemainingPrivacyBudget);
 

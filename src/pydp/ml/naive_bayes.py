@@ -88,11 +88,31 @@ class GaussianNB(sk_nb.GaussianNB):
         self.accountant = BudgetAccountant.load_default(accountant)
 
     def _partial_fit(self, X, y, classes=None, _refit=False, sample_weight=None):
+
+    """Incremental fit on a batch of samples.
+    This method is expected to be called several times consecutively on different chunks of a dataset so as toimplement out-of-core or online learning.
+    This is especially useful when the whole dataset is too big to fit in memory at once.
+    Parameters
+    ----------
+    X : array-like, shape (n_samples, n_features)
+        Training vectors
+    y : array-like, shape (n_samples,)
+        Target values
+    classes : array-like, shape (n_classes,), optional (default=None)
+        List of all classes that can possibly appear in the y vector. Must be provided at the first call to partial_fit, can be omitted in subsequent calls.
+    sample_weight : array-like, shape (n_samples,), optional (default=None)
+        Weights applied to individual samples(1. for unweighted).
+   """
+
+        # Checks if the provided epsilon, delta values can be spent without exceeding the accountant's budget.
         self.accountant.check(self.epsilon, 0)
 
         if sample_weight is not None:
             warn_unused_args("sample_weight")
 
+        # Checks X and y for consistent length, enforces X to be 2D and y 1D.
+        # By default, X is checked to be non-empty and containing only finite values.
+        # Standard input checks are also applied to y, such as checking that y does not have np.nan or np.inf targets.
         X, y = check_X_y(X, y)
 
         if self.bounds is None:
@@ -104,7 +124,10 @@ class GaussianNB(sk_nb.GaussianNB):
             )
             self.bounds = (np.min(X, axis=0), np.max(X, axis=0))
 
+        # Checks ``bounds`` is a list of tuples as (lower, upper), where lower<=upper and both numeric.
+        # Checks for appropriate number of dimensions in ``bounds``.
         self.bounds = check_bounds(self.bounds, shape=X.shape[1])
+        # Clips a 2-D array to given bounds.
         X = clip_to_bounds(X, self.bounds)
 
         self.epsilon_ = self.var_smoothing
@@ -112,6 +135,7 @@ class GaussianNB(sk_nb.GaussianNB):
         if _refit:
             self.classes_ = None
 
+        # Checks if number of classes is assigned to ``n_classes`` for first call to partial_fit.
         if _check_partial_fit_first_call(self, classes):
             n_features = X.shape[1]
             n_classes = len(self.classes_)
@@ -144,7 +168,9 @@ class GaussianNB(sk_nb.GaussianNB):
 
         classes = self.classes_
 
+        # Finds unique target values
         unique_y = np.unique(y)
+        # Checks if each element of 1-D array is also present in the first instance of ``classes``
         unique_y_in_classes = np.in1d(unique_y, classes)
 
         if not np.all(unique_y_in_classes):
@@ -153,8 +179,10 @@ class GaussianNB(sk_nb.GaussianNB):
                 % (unique_y[~unique_y_in_classes], classes)
             )
 
+        # Adds noise to number of training samples observed in each class
         noisy_class_counts = self._noisy_class_counts(y)
 
+        # Updates mean, variance after adding noise to ``class_counts``
         for _i, y_i in enumerate(unique_y):
             i = classes.searchsorted(y_i)
             X_i = X[y == y_i, :]
@@ -180,6 +208,7 @@ class GaussianNB(sk_nb.GaussianNB):
             # Empirical prior, with sample_weight taken into account
             self.class_prior_ = self.class_count_ / self.class_count_.sum()
 
+        # Instructs the accountant to spend given epsilon, delta privacy budget
         self.accountant.spend(self.epsilon, 0)
 
         return self
@@ -286,6 +315,18 @@ class GaussianNB(sk_nb.GaussianNB):
         return total_mu, total_var
 
     def _noisy_class_counts(self, y):
+
+        """Adds noise to the number of training samples observed in each class.
+        Parameters
+        ----------
+        y : array-like, shape (n_samples,)
+            Target values
+        Returns
+        -------
+        noisy_counts : array-like
+            Returns after adding geometric noise to number of training samples
+        """
+
         unique_y = np.unique(y)
         n_total = y.shape[0]
 

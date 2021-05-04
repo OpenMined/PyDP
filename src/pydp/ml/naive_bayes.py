@@ -89,20 +89,20 @@ class GaussianNB(sk_nb.GaussianNB):
 
     def _partial_fit(self, X, y, classes=None, _refit=False, sample_weight=None):
 
-    """Incremental fit on a batch of samples.
-    This method is expected to be called several times consecutively on different chunks of a dataset so as toimplement out-of-core or online learning.
-    This is especially useful when the whole dataset is too big to fit in memory at once.
-    Parameters
-    ----------
-    X : array-like, shape (n_samples, n_features)
-        Training vectors
-    y : array-like, shape (n_samples,)
-        Target values
-    classes : array-like, shape (n_classes,), optional (default=None)
-        List of all classes that can possibly appear in the y vector. Must be provided at the first call to partial_fit, can be omitted in subsequent calls.
-    sample_weight : array-like, shape (n_samples,), optional (default=None)
-        Weights applied to individual samples(1. for unweighted).
-   """
+        """Incremental fit on a batch of samples.
+        This method is expected to be called several times consecutively on different chunks of a dataset so as toimplement out-of-core or online learning.
+        This is especially useful when the whole dataset is too big to fit in memory at once.
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Training vectors
+        y : array-like, shape (n_samples,)
+            Target values
+        classes : array-like, shape (n_classes,), optional (default=None)
+            List of all classes that can possibly appear in the y vector. Must be provided at the first call to partial_fit, can be omitted in subsequent calls.
+        sample_weight : array-like, shape (n_samples,), optional (default=None)
+            Weights applied to individual samples(1. for unweighted).
+        """
 
         # Checks if the provided epsilon, delta values can be spent without exceeding the accountant's budget.
         self.accountant.check(self.epsilon, 0)

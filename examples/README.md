@@ -24,6 +24,10 @@ In this example, two copies of one database are created where they differ by one
 
 This demo shows it is required to add noise to make data private. Laplace distribution makes it easy to satisfy ε-differential privacy by setting the b parameter to 1/ε. Hence, Laplace noise is used for making the data differentially private. More about it [here](laplace_demo/laplace.ipynb).
 
+#### Naive Bayes Demo
+
+This demo compares the results of scikit-learn's verses PyDP's Naive Bayes algorithm on various datasets. More about it [here](Naive_Bayes_Iris_demo/PyDP_Naive_Bayes.ipynb) and [here](Naive_Bayes_Iris_demo/PyDP_Naive_Bayes_Comparison.ipynb).
+
 ### Example
 
 * [Error Handling in PyDP](Sample_code/error_handling.py)

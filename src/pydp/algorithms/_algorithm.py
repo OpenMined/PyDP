@@ -50,7 +50,7 @@ class MetaAlgorithm:
         Returns the epsilon set at initialization.
         """
         return self.__algorithm.epsilon
-    
+
     @property
     def delta(self) -> float:
         """

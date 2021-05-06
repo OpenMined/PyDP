@@ -76,14 +76,13 @@ void init_base_status(py::module &m) {
                  kDoNotUseReservedForFutureExpansionUseDefaultInSwitchInstead_);
 
   // converts a status code  to a nice string
-  status.def("status_code_to_string", &dpb::StatusCodeToString,
-             "converts status code to string");
+  // status.def("status_code_to_string", &dpb::StatusCodeToString,
+  //            "converts status code to string");
 
   // canonical errors
   status.def("aborted_error", &dpb::AbortedError);
   status.def("aborted_error", &dpb::AbortedError);
   status.def("already_exists_error", &dpb::AlreadyExistsError);
-  status.def("cancelled_error", &dpb::CancelledError);
   status.def("data_loss_error", &dpb::DataLossError);
   status.def("deadline_exceeded_error", &dpb::DeadlineExceededError);
   status.def("failed_precondition_error", &dpb::FailedPreconditionError);

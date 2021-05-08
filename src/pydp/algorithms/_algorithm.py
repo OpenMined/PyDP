@@ -52,6 +52,13 @@ class MetaAlgorithm:
         return self.__algorithm.epsilon
 
     @property
+    def delta(self) -> float:
+        """
+        Returns the epsilon set at initialization.
+        """
+        return self.__algorithm.delta
+
+    @property
     def l0_sensitivity(self) -> float:
         """
         Returns the l0_sensitivity set at initialization.
@@ -172,6 +179,7 @@ class BoundedAlgorithm(MetaAlgorithm):
     def __init__(
         self,
         epsilon: float = 1.0,
+        delta: float = 0,
         lower_bound: Union[int, float, None] = None,
         upper_bound: Union[int, float, None] = None,
         l0_sensitivity: int = 1,

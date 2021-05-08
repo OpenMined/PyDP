@@ -40,7 +40,7 @@ def make_loaded_object(request):
         )
 
         # Algorithm to initialize
-        x = BoundedMean(1.0, 0, 10, dtype="int64")
+        x = BoundedMean(1.0, 0, 0, 10, dtype="int64")
 
         if os.path.exists(dump_filepath):
             # Search for data dump to import
@@ -68,8 +68,8 @@ def test_bounded_mean_int64(make_loaded_object):
 
 
 def test_serialize_merge():
-    bm1 = BoundedMean(1, 1, 10)
-    bm2 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
+    bm2 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm2.add_entries([10 for i in range(100)])
 
@@ -79,7 +79,7 @@ def test_serialize_merge():
 
 
 def test_result_crash():
-    bm1 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm1.result()
     with pytest.raises(RuntimeError):

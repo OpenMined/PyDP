@@ -53,7 +53,7 @@ class CarrotReporter:
 
     # Function to return the DP sum of all carrots eaten.
     def private_sum(self, privacy_budget: float) -> float:
-        x = BoundedSum(privacy_budget, 0, 100, dtype="float")
+        x = BoundedSum(privacy_budget, 0, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.

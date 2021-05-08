@@ -228,6 +228,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -235,6 +236,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -269,6 +271,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -276,6 +279,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,

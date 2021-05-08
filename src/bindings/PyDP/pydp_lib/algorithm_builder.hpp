@@ -86,7 +86,7 @@ class AlgorithmBuilder {
 
     base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
-      throw std::runtime_error("error");
+      throw std::runtime_error(obj.status().ToString());
     }
 
     return std::move(obj.ValueOrDie());
@@ -177,7 +177,7 @@ class AlgorithmBuilder {
       auto result = pythis.Result(v.begin(), v.end());
 
       if (!result.ok()) {
-        throw std::runtime_error("result.status().error_message(");
+        throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
         return dp::GetValue<T>(result.ValueOrDie());
@@ -191,7 +191,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult();
 
       if (!result.ok()) {
-        throw std::runtime_error("result.status().error_message()");
+        throw std::runtime_error(result.status().ToString());
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
@@ -210,7 +210,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult(privacy_budget);
 
       if (!result.ok()) {
-        throw std::runtime_error("result.status().error_message()");
+        throw std::runtime_error(result.status().ToString());
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
@@ -230,7 +230,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult(privacy_budget, noise_interval_level);
 
       if (!result.ok()) {
-        throw std::runtime_error("result.status().error_message()");
+        throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
         return dp::GetValue<T>(result.ValueOrDie());

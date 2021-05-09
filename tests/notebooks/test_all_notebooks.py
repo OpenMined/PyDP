@@ -2,9 +2,9 @@ import os
 import subprocess
 import tempfile
 import glob
-import nbqa   #type: ignore
+import nbqa  # type: ignore
 import mypy
-import black    #type: ignore
+import black  # type: ignore
 
 # execute notebook in given path
 def _execute_notebook(notebook_path: str) -> bool:

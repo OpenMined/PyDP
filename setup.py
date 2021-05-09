@@ -51,7 +51,9 @@ setup(
     keywords="pydp",
     name="python-dp",
     package_dir={"": "src"},
-    package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
+    package_data={
+        "pydp": ["_pydp.so", "_pydp.pyd"],
+    },
     packages=find_packages(where="src", exclude=["tests"]),
     setup_requires=setup_requirements,
     python_requires=">=3.6",

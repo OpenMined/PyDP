@@ -1,5 +1,5 @@
 import pytest
-from pydp.util import Geometric, UniformDouble #type: ignore
+from pydp.util import Geometric, UniformDouble  # type: ignore
 
 
 def test_rand_UniformDouble():

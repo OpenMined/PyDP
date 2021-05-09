@@ -98,6 +98,7 @@ jobs:
     - name: Mypy test
       run: |
         poetry add mypy
+        poetry add nbqa
         poetry run mypy tests/ src/pydp/
         poetry run mypy examples/Tutorial_1-carrots_demo
         poetry run mypy examples/Tutorial_2-restaurant_demo

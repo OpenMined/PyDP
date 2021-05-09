@@ -113,7 +113,7 @@ class TestGaussianDistributionDataTypes:
 class TestGeometricDistribution:
     def test_ratios(self):
         p = 1e-2
-        dist = GeometricDistribution(lambda_=-1.0 * math.log(1 - p))
+        dist = GeometricDistribution(-1.0 * math.log(1 - p))
         counts = [0] * 51
         for i in range(k_num_geometric_samples):
             sample = dist.sample()

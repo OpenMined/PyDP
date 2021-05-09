@@ -94,6 +94,7 @@ jobs:
     - name: Mypy test
       run: |
         python -m pip install mypy
+        python -m pip install nbqa
         mypy tests/ src/pydp/
         mypy examples/Tutorial_1-carrots_demo
         mypy examples/Tutorial_2-restaurant_demo

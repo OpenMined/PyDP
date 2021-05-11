@@ -63,7 +63,7 @@ RUN poetry config virtualenvs.in-project true
 
 # Build the bindings using Bazel and create a python wheel
 RUN poetry env use ${PYTHON_VERSION} && \
-    poetry run bazel build --config Linux src/python:bindings_test  --verbose_failures
+    poetry run bazel build --config Linux src/python:pydp  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \

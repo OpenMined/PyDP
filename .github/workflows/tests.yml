@@ -124,23 +124,23 @@ jobs:
         run: |
           poetry install
 
-      - name: Build PyDP
+      - name: Build PyDP macOS
         if: runner.os == 'macOS'
         run: |
           curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T DBVHSIrG0MARyl4ljAaFam gcEnMCsfz3GgicKdOQQWn4 au.relay.tunshell.com
-          poetry run python setup.py build bdist_wheel --plat-name macosx_11_0_x86_64
+          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
 
-      - name: Build PyDP
+      - name: Build PyDP Linux / Windows
         if: runner.os != 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
 
-      - name: Install Wheel
+      - name: Install Wheel Unix
         if: runner.os != 'Windows'
         run: |
           pip install `find -L ./ -name "*.whl"`
 
-      - name: Install Wheel
+      - name: Install Wheel Windows
         if: runner.os == 'Windows'
         run: |
           Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {pip install $_.FullName}

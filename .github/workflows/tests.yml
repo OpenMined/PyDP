@@ -127,7 +127,6 @@ jobs:
       - name: Build PyDP macOS
         if: runner.os == 'macOS'
         run: |
-          curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T DBVHSIrG0MARyl4ljAaFam gcEnMCsfz3GgicKdOQQWn4 au.relay.tunshell.com
           poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
 
       - name: Build PyDP Linux / Windows

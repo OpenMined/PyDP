@@ -73,6 +73,14 @@ jobs:
         if: startsWith(runner.os, 'Windows') == true
         uses: microsoft/setup-msbuild@v1.0.2
 
+      - name: Cache multiple paths
+        if: startsWith(runner.os, 'ubuntu') == true
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cache/bazel
+          key: ${{ runner.os }}-${{ hashFiles('**/BUILD') }}
+
       - name: Build Google DP Unix
         if: startsWith(runner.os, 'Windows') != true
         run: |
@@ -125,12 +133,18 @@ jobs:
           poetry run python setup.py build bdist_wheel
 
       - name: Install Wheel
+        if: startsWith(runner.os, 'Windows') != true
         run: |
           pip install `find -L ./ -name "*.whl"`
 
+      - name: Install Wheel
+        if: startsWith(runner.os, 'Windows') == true
+        run: |
+          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {pip install $_.FullName}
+
       - name: Import Package
         run: |
-          python -c "import pydp; print(pydp.__verision)"
+          python -c "import pydp; print(pydp.__version__)"
 
       - name: Run Pytest
         run: |

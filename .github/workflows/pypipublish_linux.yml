@@ -54,7 +54,7 @@ jobs:
 
       - name: Build pydp lib
         run: |
-          bazel build --config { matrix.os } src/python:pydp  --verbose_failures
+          bazel build --config ${{ matrix.os }} src/python:pydp  --verbose_failures
           rm -f _pydp.so
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 

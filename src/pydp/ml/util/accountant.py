@@ -19,11 +19,15 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/accountant.py
 
+# stdlib
 from numbers import Integral
 
+# third party
 import numpy as np  # type: ignore
 
-from .utils import Budget, BudgetError  # type: ignore
+# pydp relative
+from .utils import Budget  # type: ignore
+from .utils import BudgetError
 from .validation import check_epsilon_delta  # type: ignore
 
 
@@ -76,13 +80,13 @@ class BudgetAccountant:
     def __repr__(self, n_budget_max=5):
         params = []
         if self.epsilon != float("inf"):
-            params.append("epsilon=%g" % self.epsilon)
+            params.append(f"epsilon={self.epsilon:g}")
 
         if self.delta != 1:
-            params.append("delta=%g" % self.delta)
+            params.append(f"delta={self.delta:g}")
 
         if self.slack > 0:
-            params.append("slack=%g" % self.slack)
+            params.append(f"slack={self.slack:g}")
 
         if self.spent_budget:
             if len(self.spent_budget) > n_budget_max:
@@ -91,7 +95,7 @@ class BudgetAccountant:
                     % str(self.spent_budget[:n_budget_max] + ["..."]).replace("'", "")
                 )
             else:
-                params.append("spent_budget=%s" % str(self.spent_budget))
+                params.append(f"spent_budget={str(self.spent_budget)}")
 
         return "BudgetAccountant(" + ", ".join(params) + ")"
 
@@ -128,7 +132,7 @@ class BudgetAccountant:
 
         if self.epsilon < epsilon_spent or self.delta < delta_spent:
             raise BudgetError(
-                "Privacy budget will be exceeded by changing slack to {}.".format(slack)
+                f"Privacy budget will be exceeded by changing slack to {slack}."
             )
 
         self.__slack = slack
@@ -261,7 +265,7 @@ class BudgetAccountant:
         if not isinstance(k, Integral):
             raise TypeError("k must be integer-valued, got {}.".format(type(k)))
         if k < 1:
-            raise ValueError("k must be at least 1, got {}.".format(k))
+            raise ValueError(f"k must be at least 1, got {k}.")
 
         _, spent_delta = self.total()
         delta = (

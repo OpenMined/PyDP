@@ -1,18 +1,18 @@
 # Pull base image
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.9
 FROM python:${PYTHON_VERSION}-slim-buster
 
 # must be redefined after FROM
-ARG PYTHON_VERSION=$PYTHON_VERSION 
-ARG BAZEL_VERSION=3.2.0
-ARG BAZEL_INSTALLER=bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh
-ARG BAZEL_DOWNLOAD_URL=https://github.com/bazelbuild/bazel/releases/download
+ARG PYTHON_VERSION=$PYTHON_VERSION
+ARG BAZELISK_VERSION=v1.8.1
+ARG BAZELISK_BINARY=bazelisk-linux-amd64
+ARG BAZELISK_DOWNLOAD_URL=https://github.com/bazelbuild/bazelisk/releases/download/
 
 # Set environment variables
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="2b320f8c03ba97215e3de7f7782eb5b8fd0b2354"
+ENV DP_SHA="78d3fb8f63ea904ea6449a8276b9070254c650ec"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -33,11 +33,11 @@ RUN apt-get update && \
     pkg-config \
     zlib1g-dev
 
-# Download and Install Bazel
-RUN wget ${BAZEL_DOWNLOAD_URL}/${BAZEL_VERSION}/${BAZEL_INSTALLER} && \
-    chmod +x ${BAZEL_INSTALLER} && ./${BAZEL_INSTALLER} --user && rm ${BAZEL_INSTALLER}
+# Download and Install Bazelisk
+RUN wget ${BAZELISK_DOWNLOAD_URL}/${BAZELISK_VERSION}/${BAZELISK_BINARY} && \
+    chmod +x ${BAZELISK_BINARY}
 
-# Update pip and setuptools and install poetry 
+# Update pip and setuptools and install poetry
 RUN pip install --upgrade pip setuptools wheel && \
     pip install poetry
 
@@ -55,15 +55,15 @@ RUN mkdir -p third_party && \
     git checkout ${DP_SHA}
 
 # Remove unused java code
-RUN rm -rf third_party/differential-privacy/java && \ 
+RUN rm -rf third_party/differential-privacy/java && \
     rm -rf third_party/differential-privacy/examples/java
 
-# This makes poetry's virtual environment in the project dir 
+# This makes poetry's virtual environment in the project dir
 RUN poetry config virtualenvs.in-project true
 
 # Build the bindings using Bazel and create a python wheel
 RUN poetry env use ${PYTHON_VERSION} && \
-    poetry run bazel build --config Linux src/python:pydp  --verbose_failures
+    poetry run ${BAZEL_BINARY} build --config linux src/python:pydp  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \

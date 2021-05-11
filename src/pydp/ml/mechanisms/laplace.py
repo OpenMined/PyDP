@@ -19,15 +19,21 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/mechanisms/laplace.py
 
+# stdlib
 from numbers import Real
 
-import numpy as np  # type: ignore
-from numpy.random import random  # type: ignore
+# third party
+import numpy as np
+from numpy.random import random
 
-from .base import DPMechanism, TruncationAndFoldingMixin  # type: ignore
-from ..util.utils import copy_docstring  # type: ignore
+# pydp absolute
 from pydp.distributions import LaplaceDistribution  # type: ignore
 from pydp.util import UniformDouble  # type: ignore
+
+# pydp relative
+from ..util.utils import copy_docstring
+from .base import DPMechanism
+from .base import TruncationAndFoldingMixin
 
 
 class Laplace(DPMechanism):

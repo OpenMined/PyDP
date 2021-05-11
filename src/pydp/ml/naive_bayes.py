@@ -19,19 +19,24 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/models/naive_bayes.py
 
+# stdlib
 import warnings
 
-import numpy as np  # type: ignore
-import sklearn.naive_bayes as sk_nb  # type: ignore
-from sklearn.utils import check_X_y  # type: ignore
-from sklearn.utils.multiclass import _check_partial_fit_first_call  # type: ignore
+# third party
+import numpy as np
+import sklearn.naive_bayes as sk_nb
+from sklearn.utils import check_X_y
+from sklearn.utils.multiclass import _check_partial_fit_first_call
 
-from .util.accountant import BudgetAccountant  # type: ignore
-from .util.utils import PrivacyLeakWarning, warn_unused_args  # type: ignore
-from .util.validation import check_bounds, clip_to_bounds  # type: ignore
-
-from .mechanisms.laplace import LaplaceBoundedDomain, LaplaceTruncated  # type: ignore
-from .mechanisms.geometric import GeometricTruncated  # type: ignore
+# pydp relative
+from .mechanisms.geometric import GeometricTruncated
+from .mechanisms.laplace import LaplaceBoundedDomain
+from .mechanisms.laplace import LaplaceTruncated
+from .util.accountant import BudgetAccountant
+from .util.utils import PrivacyLeakWarning
+from .util.utils import warn_unused_args
+from .util.validation import check_bounds
+from .util.validation import clip_to_bounds
 
 
 class GaussianNB(sk_nb.GaussianNB):

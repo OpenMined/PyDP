@@ -1,2 +1,4 @@
 .git
 /third_party
+/build
+/bazel-*

@@ -3,11 +3,15 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
-from setuptools.dist import Distribution
-from setuptools.command.install import install
-
+# stdlib
 import os
+from typing import List
+
+# third party
+from setuptools import find_packages
+from setuptools import setup
+from setuptools.command.install import install
+from setuptools.dist import Distribution
 
 
 class BinaryDistribution(Distribution):
@@ -22,9 +26,8 @@ def read(fname):
         return fp.read()
 
 
-requirements = []
-
-setup_requirements = []
+requirements: List[str] = []
+setup_requirements: List[str] = []
 
 
 setup(

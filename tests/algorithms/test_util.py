@@ -1,6 +1,8 @@
-import pytest
-import pydp as dp
+# stdlib
 import math
+
+# pydp absolute
+import pydp as dp
 
 
 def test_default_epsilon():

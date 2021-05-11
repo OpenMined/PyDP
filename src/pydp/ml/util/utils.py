@@ -19,10 +19,13 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/utils.py
 
+# stdlib
 import warnings
 
+# third party
 import numpy as np  # type: ignore
 
+# pydp relative
 from .validation import check_epsilon_delta  # type: ignore
 
 

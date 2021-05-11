@@ -16,13 +16,13 @@ Alice wants to share the information with potential clients which include 4 main
 * <b>Sum-up revenue per day of the week:</b> Calculate the sum of the restaurant revenue per weekday.
 * <b>Sum-up revenue per day of the week with preaggregation.</b>
 
-    
+
 Notebook Implementation for the same can be found [here](https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_2-restaurant_demo/restaurant_demo.ipynb)
 
 ## To Run the Demo
 Install PyDP, using the PyPI package manager:
 
-`pip install python-dp` 
+`pip install python-dp`
 or if you have pip3 separately for Python 3.x, use `pip3 install python-dp`
 
 Navigate to `PyDP/examples/restaurant_demo` folder and execute `Python restaurant.py`

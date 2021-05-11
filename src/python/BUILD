@@ -1,9 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_binary")
 
 py_binary(
-    name = "bindings_test",
+    name = "pydp",
     srcs = ["__init__.py"],
-    main = "__init__.py",
     data = ["//src/bindings:_pydp.so"],
+    main = "__init__.py",
     deps = ["//src/pydp:_pydp_algo"],
 )

@@ -1,175 +1,139 @@
 name: Tests
 
 on:
-  push:
-    branches:
-    - master, dev
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches:
+      - dev
+    paths:
+      - "*.bazel"
+      - "*.cpp"
+      - "*.c"
+      - "*.cc"
+      - "*.hpp"
+      - "*.h"
+      - "*.py"
+      - "*.go"
+      - "*.mod"
+      - "*.toml"
+      - "*.txt"
+      - "setup.cfg"
+      - ".github/workflows/*.yml"
 
 jobs:
-  build:
+  linting:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install python dependencies
+        run: |
+          pip install black mypy
+      - name: Black
+        run: |
+          black .
+      - name: MyPY
+        run: |
+          mypy --exclude 'build/*|third_party/*' .
+      - name: Run clang-format style check for C/C++ programs.
+        uses: jidicula/clang-format-action@v3.3.0
+        with:
+          clang-format-version: "13"
+          check-path: "/src/bindings/"
+          fallback-style: "Google" # optional
 
+  build:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      # max-parallel: 6
+      max-parallel: 12
       matrix:
-        os: [ubuntu-20.04, macOS-10.15, windows-2019]
-        python-version:  [3.6, 3.7, 3.8, 3.9]
-
-    # Timeout: https://stackoverflow.com/a/59076067/4521646
-    timeout-minutes: 35
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        # python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v2
-      with:
+      - uses: actions/checkout@v2
+        with:
           submodules: true
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Setup Bazel
-      uses: abhinavsingh/setup-bazel@v3
+      # - name: Setup Bazel
+      #   uses: abhinavsingh/setup-bazel@v3
+      #   with:
+      #     version: 3.7.2
 
-    - name: Set up poetry
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install poetry==1.1.0
-        poetry add setuptools wheel pytest gcovr coverage twine==1.15.0
+      # - name: Use Bazel (Windows only)
+      #   if: matrix.os == 'windows'
+      #   run: |
+      #     ./bazel.exe --version
 
-    - name: Build PyDP with coverage (Unix)
-      if: runner.os != 'Windows'
-      # --expunge is needed as there is an intermittent error on macOS for which this seems to be the solution
-      # Ref: https://github.com/bazelbuild/rules_go/issues/2221
-      run: |
-        poetry run bazel clean --expunge
-        make build
-    - name: Build PyDP with coverage (Windows)
-      if: runner.os == 'Windows'
-      # There seems to be an issue with poetry and windows in this case. We need to
-      # install again to make pydp importable.
-      # Related ref: https://github.com/python-poetry/poetry/issues/3075
-      run: |
-        bazel clean --expunge
+      - name: Use Bazelisk
+        if: matrix.os != 'windows'
+        run: |
+          which bazelisk
 
-        $PYTHONHOME=$(poetry run python -c 'import sys; print(sys.executable);').Replace('\', '/')
-        $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").Replace('\', '/')
+      - name: Use Bazelisk
+        if: matrix.os == 'windows'
+        run: |
+          where bazelisk
 
-        echo "PYTHONHOME=$PYTHONHOME"
-        echo "PYTHONPATH=$PYTHONPATH"
+      - name: Build Google DP CPP
+        if: matrix.os != 'windows'
+        run: |
+          echo "Running: { matrix.os }"
+          bazelisk build --config {matrix.os} src/python:pydp
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
-        bazel build src/python:bindings_test `
-          --config Windows `
-          --verbose_failures `
-          --action_env=PYTHON_BIN_PATH=$PYTHONHOME `
-          --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade --user pip
 
-        copy bazel-bin\src\bindings\_pydp.so src\pydp\_pydp.pyd
+      - name: Install Poetry
+        run: |
+          pip install poetry
 
-    - name: Make wheel (linux and windows)
-      if: runner.os != 'macOS'
-      run: |
-        poetry run python setup.py sdist
-        poetry run python setup.py bdist_wheel
+      - name: Get poetry cache dir
+        id: poetry-cache
+        run: |
+          echo "::set-output name=dir::$(poetry config cache-dir)"
 
-    - name: Make wheel (macOS)
-      if: runner.os == 'macOS'
-      run: |
-        poetry run python setup.py sdist
-        poetry run python setup.py bdist_wheel --plat-name macosx_10_15_x86_64
+      - name: poetry cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.poetry-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-py${{ matrix.python-version }}-
 
-    - name: Upload dist folder as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: dist-${{matrix.os}}-${{matrix.python-version}}
-        path: dist
-        retention-days: 3
+      - name: Install dependencies
+        run: |
+          poetry install
 
-    - name: Upload test folder as artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: tests-${{matrix.os}}-${{matrix.python-version}}
-        path: tests
-        retention-days: 3
+      - name: Build PyDP
+        if: matrix.os == 'macos'
+        run: |
+          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
 
-    - name: Mypy test
-      run: |
-        poetry add mypy
-        poetry add nbqa
-        poetry run mypy tests/ src/pydp/
-        poetry run mypy examples/Tutorial_1-carrots_demo
-        poetry run mypy examples/Tutorial_2-restaurant_demo
+      - name: Build PyDP
+        if: matrix.os != 'macos'
+        run: |
+          poetry run python setup.py build bdist_wheel
 
-      # Currently failing
-      #  poetry run mypy examples/Tutorial_3-Titanic_demo
+      - name: Install Wheel
+        run: |
+          pip install `find -L ./ -name "*.whl"`
 
-
-####################################################################
-#####
-####################################################################
-
-    # Need to see how to run the c++ code coverage
-    # - name: Check C++ code coverage
-    #   if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
-    #   run: |
-    #     make check-coverage-cpp
-
-  fresh-wheel-install:
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-20.04, macOS-10.15, windows-2019]
-        python-version:  [3.6, 3.7, 3.8, 3.9]
-    timeout-minutes: 35
-
-    steps:
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install needed packages
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install setuptools wheel pytest gcovr coverage twine==1.15.0
-        python -m pip install matplotlib
-        python -m pip install seaborn
-        python -m pip install coverage
-
-    - name: Download dist folder as artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: dist-${{matrix.os}}-${{matrix.python-version}}
-        path: dist
-
-    - name: Download test folder as artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: tests-${{matrix.os}}-${{matrix.python-version}}
-        path: tests
-
-    - name: Install PyDP wheel (Unix)
-      if: runner.os != 'Windows'
-      run: |
-        python -m pip install --upgrade --force-reinstall ./dist/*.whl
-
-    - name: Install PyDP wheel (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        python -m pip install --upgrade --force-reinstall (get-item .\dist\*.whl)
-
-    - name: Run tests
-      run: |
-        coverage run -m pytest tests
-
-    - name: Check Python code coverage
-      if: runner.os == 'Linux' # Coverage will be the same on all systems so only running the check on Linux
-      run: |
-        coverage report --fail-under ${MIN_COVERAGE}
-      env:
-        MIN_COVERAGE: 75
+      - name: Import Package
+        run: |
+          python -c "import pydp; print(pydp.__verision)"

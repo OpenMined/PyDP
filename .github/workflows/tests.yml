@@ -73,11 +73,13 @@ jobs:
         if: startsWith(runner.os, 'Windows') != true
         run: |
           which bazelisk
+          which bazel
 
       - name: Use Bazelisk
         if: startsWith(runner.os, 'Windows')
         run: |
           where bazelisk
+          where bazel
 
       - name: Setup msbuild
         if: startsWith(runner.os, 'Windows') == true
@@ -98,7 +100,7 @@ jobs:
           $Env:BAZEL_CONFIG_OS="windows"
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazelisk.exe build --config $BAZEL_CONFIG_OS src/python:pydp
+          bazel.exe build --config $BAZEL_CONFIG_OS src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
 
       - name: Upgrade pip

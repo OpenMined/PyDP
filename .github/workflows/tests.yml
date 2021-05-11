@@ -57,7 +57,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         # python-version: [3.6, 3.7, 3.8, 3.9]
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
 
     steps:
       - uses: actions/checkout@v2
@@ -70,11 +70,11 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Setup msbuild
-        if: startsWith(runner.os, 'Windows') == true
+        if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Cache multiple paths
-        if: startsWith(runner.os, 'ubuntu') == true
+      - name: Cache Bazel
+        if: runner.os == 'Linux'
         uses: actions/cache@v2
         with:
           path: |
@@ -82,7 +82,8 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/BUILD') }}
 
       - name: Build Google DP Unix
-        if: startsWith(runner.os, 'Windows') != true
+        if: runner.os != 'Windows'
+        timeout-minutes: 20
         run: |
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
@@ -91,7 +92,8 @@ jobs:
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Build Google DP Windows
-        if: startsWith(runner.os, 'Windows') == true
+        if: runner.os == 'Windows'
+        timeout-minutes: 20
         run: |
           echo "Running: ${{ matrix.os }}"
           bazel.exe build --config windows src/python:pydp
@@ -123,22 +125,22 @@ jobs:
           poetry install
 
       - name: Build PyDP
-        if: startsWith(runner.os, 'macos') == true
+        if: runner.os == 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel --plat-name macosx_11_0_x86_64
 
       - name: Build PyDP
-        if: startsWith(runner.os, 'macos') != true
+        if: runner.os != 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
 
       - name: Install Wheel
-        if: startsWith(runner.os, 'Windows') != true
+        if: runner.os != 'Windows'
         run: |
           pip install `find -L ./ -name "*.whl"`
 
       - name: Install Wheel
-        if: startsWith(runner.os, 'Windows') == true
+        if: runner.os == 'Windows'
         run: |
           Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {pip install $_.FullName}
 
@@ -148,4 +150,4 @@ jobs:
 
       - name: Run Pytest
         run: |
-          pytest tests -n auto
+          poetry run pytest tests -n auto

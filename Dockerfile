@@ -34,8 +34,10 @@ RUN apt-get update && \
     zlib1g-dev
 
 # Download and Install Bazelisk
-RUN wget ${BAZELISK_DOWNLOAD_URL}/${BAZELISK_VERSION}/${BAZELISK_BINARY} && \
+RUN wget "${BAZELISK_DOWNLOAD_URL}/${BAZELISK_VERSION}/${BAZELISK_BINARY}" && \
     chmod +x ${BAZELISK_BINARY}
+
+RUN ./${BAZELISK_BINARY} --version
 
 # Update pip and setuptools and install poetry
 RUN pip install --upgrade pip setuptools wheel && \
@@ -63,7 +65,7 @@ RUN poetry config virtualenvs.in-project true
 
 # Build the bindings using Bazel and create a python wheel
 RUN poetry env use ${PYTHON_VERSION} && \
-    poetry run ${BAZEL_BINARY} build --config linux src/python:pydp  --verbose_failures
+    ${HOME}/${BAZELISK_BINARY} build --config linux src/python:pydp  --verbose_failures
 
 RUN cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp && \
     rm -rf dist/ && \

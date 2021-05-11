@@ -50,7 +50,7 @@ This script automates the installation of the prerequisite packages to get you s
 If you are on Linux
 
 ```
-$ ./prereqs_linux.sh  
+$ ./prereqs_linux.sh
 
 ```
 If you are on OSX
@@ -197,5 +197,5 @@ We are using (Sphinx)[https://www.sphinx-doc.org/en/master/] to generate the doc
 Run
 ```
 cd docs/ && make html && make serve
-``` 
+```
 and navigate to `localhost:8000` in a browser to view the docs.

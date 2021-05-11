@@ -29,7 +29,7 @@ jobs:
       # - name: Get the version #
       #   id: get_version
       #   run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: Show python version and build image name  
+      - name: Show python version and build image name
         id: build_name
         run: |
           python -c "import sys; print(sys.version)"
@@ -44,9 +44,9 @@ jobs:
 # Pausing this temporary as we don't have verified tests
 #       - name: Run tests
 #         run:
-#           | 
+#           |
 #           docker run ${{steps.build_name.outputs.image_name}}:latest /bin/bash -c  "poetry install && poetry run pytest ./tests"
-      
+
       - name: Starting to Publish- docker login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
 
@@ -56,13 +56,13 @@ jobs:
 #         run: |
 #           docker tag $IMAGE $IMAGE:latest-py${{ matrix.python-version }}
 #           docker push $IMAGE:latest-py${{ matrix.python-version }}
-      
+
       - name: tag and push release image
 #         if: github.event_name == 'release'
         run: |
           docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
           docker push $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
-      
+
       - name: push latest stable image for python 3.7
 #         if: github.event_name == 'release' && matrix.python-version == '3.7'
         if: matrix.python-version == '3.7'

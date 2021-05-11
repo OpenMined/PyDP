@@ -19,15 +19,21 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/mechanisms/geometric.py
 
+# stdlib
 import math
 from numbers import Integral
 
-import numpy as np  # type: ignore
-from numpy.random import random  # type: ignore
+# third party
+import numpy as np
+from numpy.random import random
 
-from .base import DPMechanism, TruncationAndFoldingMixin  # type: ignore
+# pydp absolute
 from pydp.distributions import GeometricDistribution  # type: ignore
-from ..util.utils import copy_docstring  # type: ignore
+
+# pydp relative
+from ..util.utils import copy_docstring
+from .base import DPMechanism
+from .base import TruncationAndFoldingMixin
 
 
 class Geometric(DPMechanism):

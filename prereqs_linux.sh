@@ -22,7 +22,7 @@ else
     sudo apt-get install python3.6
 fi
 
-# checking for poetry 
+# checking for poetry
 echo "Checking for poetry"
 if python3 -c "import poetry" &> /dev/null; then
     echo "poetry is already installed"

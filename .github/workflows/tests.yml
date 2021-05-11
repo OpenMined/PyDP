@@ -40,7 +40,7 @@ jobs:
           black .
       - name: MyPY
         run: |
-          mypy --exclude 'build/*|third_party/*' .
+          mypy src tests
       - name: Run clang-format style check for C/C++ programs.
         uses: jidicula/clang-format-action@v3.3.0
         with:
@@ -79,20 +79,20 @@ jobs:
       #     ./bazel.exe --version
 
       - name: Use Bazelisk
-        if: matrix.os != 'windows'
+        if: ${{ matrix.os }} != 'windows'
         run: |
           which bazelisk
 
       - name: Use Bazelisk
-        if: matrix.os == 'windows'
+        if: ${{ matrix.os }} == 'windows'
         run: |
           where bazelisk
 
       - name: Build Google DP CPP
-        if: matrix.os != 'windows'
+        if: ${{ matrix.os }} != 'windows'
         run: |
-          echo "Running: { matrix.os }"
-          bazelisk build --config {matrix.os} src/python:pydp
+          echo "Running: ${{ matrix.os }}"
+          bazelisk build --config ${{ matrix.os }} src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Upgrade pip
@@ -121,12 +121,12 @@ jobs:
           poetry install
 
       - name: Build PyDP
-        if: matrix.os == 'macos'
+        if: ${{ matrix.os }} == 'macos'
         run: |
           poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
 
       - name: Build PyDP
-        if: matrix.os != 'macos'
+        if: ${{ matrix.os }} != 'macos'
         run: |
           poetry run python setup.py build bdist_wheel
 
@@ -137,3 +137,7 @@ jobs:
       - name: Import Package
         run: |
           python -c "import pydp; print(pydp.__verision)"
+
+      - name: Run Pytest
+        run: |
+          pytest tests -n auto

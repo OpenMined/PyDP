@@ -1,10 +1,15 @@
-import pydp as dp  # type: ignore
-from pydp.algorithms.laplacian import BoundedSum, Count  # type: ignore
-
+# stdlib
+from collections import defaultdict
 import math
 import statistics as s
-import pandas as pd  # type: ignore
-from collections import defaultdict
+
+# third party
+import pandas as pd
+
+# pydp absolute
+import pydp as dp
+from pydp.algorithms.laplacian import BoundedSum
+from pydp.algorithms.laplacian import Count
 
 # Assumptions:
 

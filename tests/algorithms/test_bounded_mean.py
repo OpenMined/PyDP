@@ -1,5 +1,8 @@
+import os
 import pytest
 from pydp.algorithms.laplacian import BoundedMean
+from pydp._pydp import Summary  # type: ignore
+
 
 expect_near = lambda expected, actual, tol: (
     expected + tol >= actual and expected - tol <= actual
@@ -25,18 +28,48 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
-def test_bounded_mean_int64():
-    example_list = [5] * 100000000
-    x = BoundedMean(1.0, 0, 10, dtype="int64")
-    for _ in range(5):
-        x.add_entries(example_list)
+@pytest.fixture(scope="function")
+def make_loaded_object(request):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
 
+    def _make_loaded_object(value, size, iter):
+        dump_filepath = os.path.join(
+            dir_path,
+            request.module.__name__,
+            "{}_data.proto".format(request.function.__name__),
+        )
+
+        # Algorithm to initialize
+        x = BoundedMean(1.0, 0, 0, 10, dtype="int64")
+
+        if os.path.exists(dump_filepath):
+            # Search for data dump to import
+            data = Summary()
+            data.load(dump_filepath)
+            x.merge(data)
+        else:
+            # No data dump found, we have to init the alforithm from scratch
+            # Add entries into algorithm
+            example_list = [value] * size
+            for _ in range(iter):
+                x.add_entries(example_list)
+
+            # Dump the initialized algorithm data to retrieve in future tests
+            x.serialize().save(dump_filepath)
+
+        return x
+
+    return _make_loaded_object
+
+
+def test_bounded_mean_int64(make_loaded_object):
+    x = make_loaded_object(5, 100000000, 5)
     assert expect_near(5.0, x.result(), 0.1)
 
 
 def test_serialize_merge():
-    bm1 = BoundedMean(1, 1, 10)
-    bm2 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
+    bm2 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm2.add_entries([10 for i in range(100)])
 
@@ -46,7 +79,7 @@ def test_serialize_merge():
 
 
 def test_result_crash():
-    bm1 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm1.result()
     with pytest.raises(RuntimeError):

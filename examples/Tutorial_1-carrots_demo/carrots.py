@@ -12,8 +12,8 @@ import statistics as s
 from pathlib import Path
 
 import pandas as pd  # type: ignore
-import pydp as dp  # this library
-from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max
+import pydp as dp  # type: ignore # this library
+from pydp.algorithms.laplacian import BoundedSum, BoundedMean, Count, Max  # type: ignore
 
 from typing import Union
 
@@ -53,7 +53,7 @@ class CarrotReporter:
 
     # Function to return the DP sum of all carrots eaten.
     def private_sum(self, privacy_budget: float) -> float:
-        x = BoundedSum(privacy_budget, 0, 100, dtype="float")
+        x = BoundedSum(privacy_budget, 0, 0, 100, dtype="float")
         return x.quick_result(list(self._df["carrots_eaten"]))
 
     # Function to return the DP mean of all carrots eaten.

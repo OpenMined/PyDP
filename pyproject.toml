@@ -6,7 +6,7 @@ authors = ["Chinmay Shah <chinmayshah3899@gmail.com>"]
 license = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 
 [tool.poetry.dev-dependencies]
 setuptools = "*"
@@ -22,8 +22,9 @@ mypy = "*"
 jupyter = "*"
 pandas= [
     {version = "<0.25.0", python = "<3.8"},
-    {version = "^0.25.0", python = "^3.8"}
+    {version = "^1.2.3", python = "^3.8"},
 ]
+matplotlib = "^3.3.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

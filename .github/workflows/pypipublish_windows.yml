@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -24,13 +24,13 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install setuptools wheel twine auditwheel
     - name: Setup msbuild
-      uses: microsoft/setup-msbuild@v1.0.0
+      uses: microsoft/setup-msbuild@v1.0.2
     - name: Setup Bazel
       uses: abhinavsingh/setup-bazel@v3
     - name: Build PyDP
       run: |
          bazel build --cxxopt='/std:c++17' src/python:bindings_test --verbose_failures
-         copy bazel-bin\src\bindings\_pydp.so pydp\_pydp.pyd
+         copy bazel-bin\src\bindings\_pydp.so src\pydp\_pydp.pyd
          python setup.py bdist_wheel
          $version=(python -c "import pydp; print(pydp.__version__)")
          echo "::set-output name=version::$version"

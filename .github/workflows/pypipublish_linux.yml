@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.5, 3.6, 3.7, 3.8]
+        python-version: [3.5, 3.6, 3.7, 3.8, 3.9]
 
     steps:
       - uses: actions/checkout@v2
@@ -56,11 +56,15 @@ jobs:
         run: |
           bazel build --config Linux src/python:bindings_test  --verbose_failures
           rm -f _pydp.so
-          cp -f ./bazel-bin/src/bindings/_pydp.so ./pydp
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Build wheel
         run: |
           python setup.py bdist_wheel
+
+      - name: Check the wheel
+        run: |
+          twine check dist/*
 
       - name: Renaming wheel
         run: |

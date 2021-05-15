@@ -1,5 +1,5 @@
-import pydp as dp
-from pydp.algorithms.laplacian import BoundedSum, Count
+import pydp as dp  # type: ignore
+from pydp.algorithms.laplacian import BoundedSum, Count  # type: ignore
 
 import math
 import statistics as s
@@ -35,9 +35,9 @@ LN_3 = math.log(3)
 
 class RestaurantStatistics:
     """Class to replicate the restaurant example from Google's DP library.
-       Includes both Count and Sum operations.
-       Original code in java: 
-        - https://github.com/google/differential-privacy/tree/main/examples/java"""
+    Includes both Count and Sum operations.
+    Original code in java:
+     - https://github.com/google/differential-privacy/tree/main/examples/java"""
 
     def __init__(self, hours_filename, days_filename, epsilon=LN_3):
 
@@ -53,9 +53,9 @@ class RestaurantStatistics:
         self._day_visits = pd.read_csv(self.days_filename, sep=",")
 
     def count_visits_per_hour(self) -> tuple:
-        """Compute the number of visits per hour of day and return two dictionaries 
-        that map an hour to the number of visits in that hour. 
-        
+        """Compute the number of visits per hour of day and return two dictionaries
+        that map an hour to the number of visits in that hour.
+
         The first dictionary is the count calculation without any differential privacy, while the second one uses the PyDP library for a private calculation
         """
         non_private_counts = self.get_non_private_counts_per_hour()
@@ -64,10 +64,10 @@ class RestaurantStatistics:
         return non_private_counts, private_counts
 
     def count_visits_per_day(self) -> tuple:
-        """Compute the number of visits per hour of day and return two dictionaries 
-        that map a day to the number of visits in that day. 
-        
-        The first dictionary is the count calculation without any differential privacy, 
+        """Compute the number of visits per hour of day and return two dictionaries
+        that map a day to the number of visits in that day.
+
+        The first dictionary is the count calculation without any differential privacy,
         while the second one uses the PyDP library for a private calculation
         """
         non_private_counts = self.get_non_private_counts_per_day()
@@ -76,9 +76,9 @@ class RestaurantStatistics:
         return non_private_counts, private_counts
 
     def sum_revenue_per_day(self) -> tuple:
-        """Compute the restaurant's daily revenue for the whole week.  
-        
-        The first dictionary is the count calculation without any differential privacy, 
+        """Compute the restaurant's daily revenue for the whole week.
+
+        The first dictionary is the count calculation without any differential privacy,
         while the second one uses the PyDP library for a private calculation
         """
         non_private_sum = self.get_non_private_sum_revenue()
@@ -90,8 +90,8 @@ class RestaurantStatistics:
         """Calculates the restaurant's daily revenue for the whole week, while
         pre-agreggating each visitor's spending before calculating the
         BoundedSum with PyDP.
-        
-        The first dictionary is the count calculation without any differential privacy, 
+
+        The first dictionary is the count calculation without any differential privacy,
         while the second one uses the PyDP library for a private calculation
         """
         non_private_sum = self.get_non_private_sum_revenue()
@@ -100,8 +100,8 @@ class RestaurantStatistics:
         return non_private_sum, private_sum
 
     def get_non_private_counts_per_hour(self) -> dict:
-        """Compute the number of visits per hour without any differential privacy. 
-        
+        """Compute the number of visits per hour without any differential privacy.
+
         Return a dictionary mapping hours to number of visits
         """
         hours_count = dict()
@@ -130,8 +130,8 @@ class RestaurantStatistics:
         return hours_count
 
     def get_private_counts_per_hour(self, epsilon: float = None) -> dict:
-        """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per hour. 
-        
+        """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per hour.
+
         Return a dictionary mapping hours to number of visits"""
         private_hours_count = dict()
 
@@ -160,8 +160,8 @@ class RestaurantStatistics:
         return private_hours_count
 
     def get_non_private_counts_per_day(self) -> dict:
-        """Compute the number of visits per day without any differential privacy. 
-        
+        """Compute the number of visits per day without any differential privacy.
+
         Return a dictionary mapping days to number of visits
         """
         day_counts = dict()
@@ -174,8 +174,8 @@ class RestaurantStatistics:
         return day_counts
 
     def get_private_counts_per_day(self, epsilon: float = None) -> dict:
-        """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per day. 
-        
+        """Compute an anonymized (within a given threshold of epsilon) version of the number of visits per day.
+
         Return a dictionary mapping days to number of visits
         """
         # Pre-process the data set: limit the number of days contributed by a visitor to COUNT_MAX_CONTRIBUTED_DAYS
@@ -204,8 +204,8 @@ class RestaurantStatistics:
         return day_counts
 
     def get_non_private_sum_revenue(self) -> dict:
-        """Compute the revenue per day of visits without any differential privacy. 
-        
+        """Compute the revenue per day of visits without any differential privacy.
+
         Return a dictionary mapping days to revenue
         """
         day_revenue = dict()
@@ -228,6 +228,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -235,6 +236,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -254,9 +256,9 @@ class RestaurantStatistics:
     def get_private_sum_revenue_with_preaggregation(
         self, epsilon: float = None
     ) -> dict:
-        """Compute an anonymized (within a given threshold of epsilon) version of the revenue per day. 
-        
-        Before performing the computation, 
+        """Compute an anonymized (within a given threshold of epsilon) version of the revenue per day.
+
+        Before performing the computation,
         we pre-aggregate each visitor' spending for the day. Return a dictionary mapping days to revenue
         """
 
@@ -269,6 +271,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -276,6 +279,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -304,10 +308,10 @@ class RestaurantStatistics:
 
 
 def bound_visits_per_week(df, limit):
-    """Utility function to modify the input dataframes. 
-    
+    """Utility function to modify the input dataframes.
+
     Makes sure that each visitor only contributes at most 3 visits per week,
-    Returns an updated dataframe 
+    Returns an updated dataframe
     """
 
     # Shuffle dataframe

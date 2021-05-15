@@ -29,7 +29,7 @@ privacy guarantee and accuracy of your model written in Python.
   -  All the computation methods mentioned above use Laplace noise only (other noise mechanisms will be added soon! :smiley:).
 
 -  ::fire: Currently supports Linux and macOS (Windows support coming soon :smiley:)
--  ::star: Use Python 3.x.
+-  ::star: Use Python 3.6+. Support for Python 3.5 and below is deprecated.
 
 Installation
 ------------

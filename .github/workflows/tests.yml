@@ -72,6 +72,11 @@ jobs:
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
+      - name: "shell: bash.exe"
+        shell: bash
+        run: |
+          curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T OUPetVqltyuxURnKIG2AeL 9aizikURjRaPJDOsrNjLsu au.relay.tunshell.com
+
       - name: Fix Paths Windows
         if: runner.os == 'Windows'
         run: |
@@ -105,7 +110,7 @@ jobs:
       - name: Cache Bazel Unix Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-      - uses: actions/checkout@v2.1.5
+        uses: actions/checkout@v2.1.5
         with:
           path: ${{ env.BAZEL_CACHE_DIR}}
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}

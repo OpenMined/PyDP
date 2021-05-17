@@ -73,7 +73,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Cache Bazel
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.4
         with:
           path: |
             ./bazel-PyD

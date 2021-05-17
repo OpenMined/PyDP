@@ -70,10 +70,10 @@ jobs:
         if: runner.os == 'Windows'
         # See:
         #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        #   - On problems with `tar.exe`: https://github.com/actions/toolkit/issues/632
+        #   - On problems with `tar.exe`: https://github.com/actions/cache/issues/576
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-          echo "C:\msys64\usr\bin" >> $env:GITHUB_PATH
+          echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
       - name: Mount bazel cache Windows
         if: runner.os == 'Windows'

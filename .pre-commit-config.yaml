@@ -12,7 +12,6 @@ repos:
       - id: check-executables-have-shebangs
       - id: debug-statements
       - id: name-tests-test
-        exclude: ^(tests/syft/lib/allowlist_report.py)
       - id: requirements-txt-fixer
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.9.2

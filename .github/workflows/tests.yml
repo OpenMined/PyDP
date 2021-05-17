@@ -79,7 +79,7 @@ jobs:
 
       - name: Cache Bazel
         # Not working on Windows: https://github.com/actions/cache/issues/576
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.5
         with:
           path: |
             ./bazel-PyDP
@@ -164,11 +164,3 @@ jobs:
       - name: Run Pytest
         run: |
           poetry run pytest tests -n auto
-
-      - name: Cat log
-        if: runner.os == 'Windows'
-        run: |
-          ls
-          cd D:/a/PyDP/PyDP/
-          ls
-          cat D:/a/PyDP/PyDP/manifest.txt

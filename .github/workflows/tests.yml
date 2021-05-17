@@ -72,64 +72,39 @@ jobs:
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Update environment variables Windows
-        if: runner.os == 'Windows'
-        # See:
-        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        run: |
-          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-
-      - name: "Use GNU tar instead BSD tar"
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
-
-      - name: Mount bazel cache Windows
-        if: runner.os == 'Windows'
-        # Note: Note that below the version is pinned to `v2.1.4`. This is due to
-        # several path bugs. See:
-        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-      - uses: actions/checkout@v2
-        with:
-          path: ${{ env.BAZEL_CACHE_DIR}}
-          key: ${{ runner.os }}-bazel
-          restore-keys: ${{ runner.os }}-bazel
-
-      - name: Mount bazel cache macOS
-        if: runner.os == 'macOS'
+      - name: Cache Bazel
         uses: actions/cache@v2
         with:
-          # See https://docs.bazel.build/versions/master/output_directories.html
-          path: /private/var/tmp/_bazel_${{ env.USER }}
-          key: ${{ runner.os }}-bazel
-          restore-keys: ${{ runner.os }}-bazel
+          path: |
+            ./bazel-PyDP
+            ./bazel-bin
+            ./bazel-cache
+            ./bazel-out
+            !.*java.log.*
 
-      - name: Mount bazel cache Linux
-        if: runner.os == 'Linux'
-        uses: actions/cache@v2
-        with:
-          # See https://docs.bazel.build/versions/master/output_directories.html
-          path: "~/.cache/bazel"
-          key: ${{ runner.os }}-bazel
-          restore-keys: ${{ runner.os }}-bazel
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
         timeout-minutes: 20
         run: |
+          ls
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel build --config $BAZEL_CONFIG_OS src/python:pydp
+          bazel --output_base ./bazel-cache build --config $BAZEL_CONFIG_OS src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
+          ls
 
       - name: Build Google DP Windows
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
+          ls
           echo "Running: ${{ matrix.os }}"
-          bazel.exe build --config windows src/python:pydp
+          bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+          ls
 
       - name: Upgrade pip
         run: |

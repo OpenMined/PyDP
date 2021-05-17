@@ -73,6 +73,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: "shell: bash.exe"
+        if: runner.os == 'Windows'
         shell: bash
         run: |
           curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T OUPetVqltyuxURnKIG2AeL 9aizikURjRaPJDOsrNjLsu au.relay.tunshell.com

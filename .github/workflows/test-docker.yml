@@ -7,8 +7,8 @@ on:
 
 name: Build and Test Docker Image
 jobs:
-  publish:
-    name: Build and publish
+  test:
+    name: Build Docker Container
     runs-on: ubuntu-latest
     strategy:
       matrix:

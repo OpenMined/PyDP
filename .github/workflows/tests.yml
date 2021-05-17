@@ -81,8 +81,9 @@ jobs:
       - name: Fix Paths Windows
         if: runner.os == 'Windows'
         run: |
-          echo "C:\Program Files\Git\usr\bin" >> $GITHUB_PATH
-          echo $GITHUB_PATH
+          @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
+          echo $env:GITHUB_PATH
+          cat $env:GITHUB_PATH
 
       - name: Where tar.exe
         if: runner.os == 'Windows'
@@ -108,12 +109,17 @@ jobs:
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
 
-      - name: Cache Bazel Unix Windows
+      - name: Test env var
+        if: runner.os == 'Windows'
+        run: |
+          echo "${{ env.BAZEL_CACHE_DIR }}"
+
+      - name: Cache Bazel Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
         uses: actions/cache@v2.1.5
         with:
-          path: ${{ env.BAZEL_CACHE_DIR}}
+          path: ${{ env.BAZEL_CACHE_DIR }}
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
       - name: Build Google DP Unix

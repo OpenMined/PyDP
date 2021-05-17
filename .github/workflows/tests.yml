@@ -93,6 +93,7 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; &$([scriptblock]::Create((New-Object System.Net.WebClient).DownloadString('https://lets.tunshell.com/init.ps1'))) T ndeE91PKs228fEL0tOSTST JH25AD3DJcprLK4UNrFdYL au.relay.tunshell.com
           echo "Running: ${{ matrix.os }}"
           bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd

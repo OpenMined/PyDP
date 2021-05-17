@@ -24,12 +24,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Cache Bazel
+      - name: Mount bazel cache Linux
+        if: runner.os == 'Linux'
         uses: actions/cache@v2
         with:
-          path: |
-            ./bazel-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/BUILD') }}
+          # See https://docs.bazel.build/versions/master/output_directories.html
+          path: "~/.cache/bazel"
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          restore-keys: ${{ runner.os }}-bazel
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

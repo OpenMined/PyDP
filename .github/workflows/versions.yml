@@ -62,16 +62,47 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Setup msbuild
+      - name: Setup msbuild Windows
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Cache Bazel
+      - name: Update environment variables Windows
+        if: runner.os == 'Windows'
+        # See:
+        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
+        #   - On problems with `tar.exe`: https://github.com/actions/toolkit/issues/632
+        run: |
+          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
+          echo "C:\msys64\usr\bin" >> $env:GITHUB_PATH
+
+      - name: Mount bazel cache Windows
+        if: runner.os == 'Windows'
+        # Note: Note that below the version is pinned to `v2.1.4`. This is due to
+        # several path bugs. See:
+        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
+        uses: actions/cache@v2.1.4
+        with:
+          path: ${{ env.BAZEL_CACHE_DIR}}
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          restore-keys: ${{ runner.os }}-bazel
+
+      - name: Mount bazel cache macOS
+        if: runner.os == 'macOS'
         uses: actions/cache@v2
         with:
-          path: |
-            ./bazel-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/BUILD') }}
+          # See https://docs.bazel.build/versions/master/output_directories.html
+          path: /private/var/tmp/_bazel_${{ env.USER }}
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          restore-keys: ${{ runner.os }}-bazel
+
+      - name: Mount bazel cache
+        if: runner.os == 'Linux'
+        uses: actions/cache@v2
+        with:
+          # See https://docs.bazel.build/versions/master/output_directories.html
+          path: "~/.cache/bazel"
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          restore-keys: ${{ runner.os }}-bazel
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

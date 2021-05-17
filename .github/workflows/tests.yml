@@ -72,23 +72,11 @@ jobs:
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: "shell: bash.exe"
-        if: runner.os == 'Windows'
-        shell: bash
-        run: |
-          curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T OUPetVqltyuxURnKIG2AeL 9aizikURjRaPJDOsrNjLsu au.relay.tunshell.com
-
       - name: Fix Paths Windows
+        # Make sure that tar.exe from Git is used not from Windows
         if: runner.os == 'Windows'
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
-          echo $env:GITHUB_PATH
-          cat $env:GITHUB_PATH
-
-      - name: Where tar.exe
-        if: runner.os == 'Windows'
-        run: |
-          where tar.exe
 
       - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
@@ -109,11 +97,6 @@ jobs:
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
 
-      - name: Test env var
-        if: runner.os == 'Windows'
-        run: |
-          echo "${{ env.BAZEL_CACHE_DIR }}"
-
       - name: Cache Bazel Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
@@ -126,23 +109,19 @@ jobs:
         if: runner.os != 'Windows'
         timeout-minutes: 20
         run: |
-          ls
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
           bazel --output_base ./bazel-cache build --config $BAZEL_CONFIG_OS src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
-          ls
 
       - name: Build Google DP Windows
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          ls
           echo "Running: ${{ matrix.os }}"
           bazel.exe build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
-          ls
 
       - name: Upgrade pip
         run: |

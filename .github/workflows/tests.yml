@@ -76,9 +76,16 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           echo "C:\Program Files\Git\usr\bin" >> $GITHUB_PATH
+          echo $GITHUB_PATH
 
-      - name: Cache Bazel
+      - name: Where tar.exe
+        if: runner.os == 'Windows'
+        run: |
+          where tar.exe
+
+      - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
+        if: runner.os != 'Windows'
         uses: actions/cache@v2.1.5
         with:
           path: |
@@ -86,8 +93,21 @@ jobs:
             ./bazel-bin
             ./bazel-cache
             ./bazel-out
-            !./bazel-cache/**/.*java.log.*
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
+      - name: Update environment variables Windows
+        if: runner.os == 'Windows'
+        # See:
+        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
+        run: |
+          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
+
+      - name: Cache Bazel Unix Windows
+        if: runner.os == 'Windows'
+        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
+      - uses: actions/checkout@v2.1.5
+        with:
+          path: ${{ env.BAZEL_CACHE_DIR}}
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
       - name: Build Google DP Unix
@@ -108,7 +128,7 @@ jobs:
         run: |
           ls
           echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
+          bazel.exe build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
           ls
 

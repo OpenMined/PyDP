@@ -1,3 +1,4 @@
+name: Build Docker Image
 on:
   pull_request:
     branches:
@@ -5,9 +6,8 @@ on:
     paths:
       - "Dockerfile"
 
-name: Build and Test Docker Image
 jobs:
-  test:
+  build:
     name: Build Docker Container
     runs-on: ubuntu-latest
     strategy:

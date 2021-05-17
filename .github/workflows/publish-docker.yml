@@ -1,8 +1,8 @@
+name: Publish Docker Image
 on:
   release:
     types: [published]
 
-name: Publish Docker Image
 jobs:
   publish:
     name: Build Docker Container

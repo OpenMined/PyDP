@@ -6,7 +6,7 @@
 name: Version Tests
 on:
   schedule:
-    - cron: "30 20 * * *" # 7:30pm UTC, 1am IST
+    - cron: "10 * * * *" # 7:30pm UTC, 1am IST
   pull_request:
     branches:
       - dev

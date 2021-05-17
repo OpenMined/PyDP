@@ -1,4 +1,4 @@
-name: PyPI Deploy
+name: Publish PyDP
 
 on:
   release:

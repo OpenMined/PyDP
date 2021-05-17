@@ -76,20 +76,23 @@ jobs:
         if: runner.os == 'Windows'
         # See:
         #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        #   - On problems with `tar.exe`: https://github.com/actions/cache/issues/576
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-          echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
+
+      - name: "Use GNU tar instead BSD tar"
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
       - name: Mount bazel cache Windows
         if: runner.os == 'Windows'
         # Note: Note that below the version is pinned to `v2.1.4`. This is due to
         # several path bugs. See:
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/cache@v2.1.4
+      - uses: actions/checkout@v2
         with:
           path: ${{ env.BAZEL_CACHE_DIR}}
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          key: ${{ runner.os }}-bazel
           restore-keys: ${{ runner.os }}-bazel
 
       - name: Mount bazel cache macOS
@@ -98,7 +101,7 @@ jobs:
         with:
           # See https://docs.bazel.build/versions/master/output_directories.html
           path: /private/var/tmp/_bazel_${{ env.USER }}
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          key: ${{ runner.os }}-bazel
           restore-keys: ${{ runner.os }}-bazel
 
       - name: Mount bazel cache Linux
@@ -107,7 +110,7 @@ jobs:
         with:
           # See https://docs.bazel.build/versions/master/output_directories.html
           path: "~/.cache/bazel"
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+          key: ${{ runner.os }}-bazel
           restore-keys: ${{ runner.os }}-bazel
 
       - name: Build Google DP Unix

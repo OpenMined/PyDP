@@ -50,7 +50,7 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: [linting]
+    # needs: [linting]
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -110,7 +110,7 @@ jobs:
       - name: Cache Bazel Unix Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/checkout@v2.1.5
+        uses: actions/cache@v2.1.5
         with:
           path: ${{ env.BAZEL_CACHE_DIR}}
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}

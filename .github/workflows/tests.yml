@@ -102,7 +102,8 @@ jobs:
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
         uses: actions/cache@v2.1.5
         with:
-          path: ${{ env.BAZEL_CACHE_DIR }}
+          path: |
+            ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
       - name: Build Google DP Unix
@@ -120,7 +121,7 @@ jobs:
         timeout-minutes: 20
         run: |
           echo "Running: ${{ matrix.os }}"
-          bazel.exe build --config windows src/python:pydp
+          bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
 
       - name: Upgrade pip

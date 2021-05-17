@@ -111,7 +111,7 @@ jobs:
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel --output_base ./bazel-cache build --config $BAZEL_CONFIG_OS src/python:pydp
+          bazel build --config $BAZEL_CONFIG_OS src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Build Google DP Windows
@@ -119,7 +119,7 @@ jobs:
         timeout-minutes: 20
         run: |
           echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
+          bazel.exe build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
 
       - name: Upgrade pip

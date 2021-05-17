@@ -32,6 +32,8 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
+# this loads a protobuf with the cached data for this calculation
+# see discussion here: https://github.com/OpenMined/PyDP/pull/363
 @pytest.fixture(scope="function")
 def make_loaded_object(request):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -66,6 +68,7 @@ def make_loaded_object(request):
     return _make_loaded_object
 
 
+# uses: ./tests/algorithms/test_bounded_mean/test_bounded_mean_int64_data.proto
 def test_bounded_mean_int64(make_loaded_object):
     x = make_loaded_object(5, 100000000, 5)
     res = x.result()

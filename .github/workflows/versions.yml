@@ -47,7 +47,7 @@ jobs:
     # needs: [linting]  # don't require linting to pass
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 12
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
@@ -67,7 +67,6 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Cache Bazel
-        if: runner.os == 'Linux'
         uses: actions/cache@v2
         with:
           path: |

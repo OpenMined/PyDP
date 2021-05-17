@@ -66,43 +66,39 @@ jobs:
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
+      - name: Fix Paths Windows
+        # Make sure that tar.exe from Git is used not from Windows
+        if: runner.os == 'Windows'
+        run: |
+          @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
+
+      - name: Cache Bazel Unix
+        # Not working on Windows: https://github.com/actions/cache/issues/576
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ./bazel-PyDP
+            ./bazel-bin
+            ./bazel-cache
+            ./bazel-out
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+
       - name: Update environment variables Windows
         if: runner.os == 'Windows'
         # See:
         #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        #   - On problems with `tar.exe`: https://github.com/actions/cache/issues/576
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-          echo C:\Program Files\Git\usr\bin>>"%GITHUB_PATH%"
 
-      - name: Mount bazel cache Windows
+      - name: Cache Bazel Windows
         if: runner.os == 'Windows'
-        # Note: Note that below the version is pinned to `v2.1.4`. This is due to
-        # several path bugs. See:
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.5
         with:
-          path: ${{ env.BAZEL_CACHE_DIR}}
+          path: |
+            ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-          restore-keys: ${{ runner.os }}-bazel
-
-      - name: Mount bazel cache macOS
-        if: runner.os == 'macOS'
-        uses: actions/cache@v2
-        with:
-          # See https://docs.bazel.build/versions/master/output_directories.html
-          path: /private/var/tmp/_bazel_${{ env.USER }}
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-          restore-keys: ${{ runner.os }}-bazel
-
-      - name: Mount bazel cache
-        if: runner.os == 'Linux'
-        uses: actions/cache@v2
-        with:
-          # See https://docs.bazel.build/versions/master/output_directories.html
-          path: "~/.cache/bazel"
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-          restore-keys: ${{ runner.os }}-bazel
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
@@ -111,7 +107,7 @@ jobs:
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel build --config $BAZEL_CONFIG_OS src/python:pydp
+          bazel --output_base ./bazel-cache build --config $BAZEL_CONFIG_OS src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Build Google DP Windows
@@ -119,7 +115,7 @@ jobs:
         timeout-minutes: 20
         run: |
           echo "Running: ${{ matrix.os }}"
-          bazel.exe build --config windows src/python:pydp
+          bazel.exe --output_base ./bazel-cache build --config windows src/python:pydp
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
 
       - name: Upgrade pip

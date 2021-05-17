@@ -24,23 +24,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Mount bazel cache Linux
-        if: runner.os == 'Linux'
-        uses: actions/cache@v2
+      - name: Cache Bazel Unix
+        uses: actions/cache@v2.1.5
         with:
-          # See https://docs.bazel.build/versions/master/output_directories.html
-          path: "~/.cache/bazel"
+          path: |
+            ./bazel-PyDP
+            ./bazel-bin
+            ./bazel-cache
+            ./bazel-out
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-          restore-keys: ${{ runner.os }}-bazel
 
       - name: Build Google DP Unix
-        if: runner.os != 'Windows'
         timeout-minutes: 20
         run: |
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel build --config $BAZEL_CONFIG_OS src/python:pydp
+          bazel --output_base ./bazel-cache build --config $BAZEL_CONFIG_OS src/python:pydp
           cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
 
       - name: Upgrade pip

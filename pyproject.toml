@@ -34,6 +34,7 @@ sklearn          = "*"
 sphinx           = "*"
 sphinx-rtd-theme = "*"
 twine            = "*"
+wheel            = "*"
 
 [build-system]
 requires      = ["poetry-core>=1.0.0"]

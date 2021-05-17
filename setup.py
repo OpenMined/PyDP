@@ -10,7 +10,6 @@ from typing import List
 # third party
 from setuptools import find_packages
 from setuptools import setup
-from setuptools.command.install import install
 from setuptools.dist import Distribution
 
 
@@ -34,11 +33,10 @@ setup(
     author="Chinmay Shah",
     author_email="chinmayshah3899@gmail.com",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
@@ -62,6 +60,6 @@ setup(
     python_requires=">=3.6",
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="1.0.2",
+    version="1.0.3",
     zip_safe=False,
 )

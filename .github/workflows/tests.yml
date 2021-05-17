@@ -72,7 +72,13 @@ jobs:
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
+      - name: Fix Paths Windows
+        if: runner.os == 'Windows'
+        run: |
+          echo "C:\Program Files\Git\usr\bin" >> $GITHUB_PATH
+
       - name: Cache Bazel
+        # Not working on Windows: https://github.com/actions/cache/issues/576
         uses: actions/cache@v2
         with:
           path: |
@@ -80,7 +86,7 @@ jobs:
             ./bazel-bin
             ./bazel-cache
             ./bazel-out
-            !.*java.log.*
+            !./bazel-cache/**/.*java.log.*
 
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
@@ -158,3 +164,11 @@ jobs:
       - name: Run Pytest
         run: |
           poetry run pytest tests -n auto
+
+      - name: Cat log
+        if: runner.os == 'Windows'
+        run: |
+          ls
+          cd D:/a/PyDP/PyDP/
+          ls
+          cat D:/a/PyDP/PyDP/manifest.txt

@@ -1,15 +1,10 @@
 #!/bin/bash
 
-## Set variables
-source ./get_platform.sh
-
-poetry run python setup.py sdist
-case $PLATFORM in
-    *"linux"*)
-        poetry run python setup.py bdist_wheel
-    ;;
-    *"macos"* | *"darwin"*)
-        poetry run python setup.py bdist_wheel --plat-name macosx_10_14_x86_64
-    ;;
-esac
+PLATFORM=$(python scripts/get_platform.py)
+BUILD_ARGS=""
+if [ $PLATFORM == "macos" ]; then
+    BUILD_ARGS="--plat-name macosx_10_14_x86_64"
+fi
+echo $BUILD_ARGS
+poetry run python setup.py bdist_wheel $BUILD_ARGS
 ls -l dist

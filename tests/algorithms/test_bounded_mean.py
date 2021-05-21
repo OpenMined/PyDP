@@ -42,7 +42,7 @@ def make_loaded_object(request):
         dump_filepath = os.path.join(
             dir_path,
             request.module.__name__,
-            f"{request.function.__name__}_data.proto",
+            f"{request.function.__name__}_data.bin",
         )
 
         # Algorithm to initialize
@@ -68,12 +68,10 @@ def make_loaded_object(request):
     return _make_loaded_object
 
 
-# uses: ./tests/algorithms/test_bounded_mean/test_bounded_mean_int64_data.proto
+# uses: ./tests/algorithms/test_bounded_mean/test_bounded_mean_int64_data.bin
 def test_bounded_mean_int64(make_loaded_object):
     x = make_loaded_object(5, 100000000, 5)
-    res = x.result()
-    print(x, type(x), res, type(res))
-    assert expect_near(5.0, res, 0.1)
+    assert expect_near(5.0, x.result(), 0.1)
 
 
 def test_serialize_merge():

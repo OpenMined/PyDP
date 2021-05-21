@@ -1,16 +1,7 @@
 #!/bin/bash
 
 ## Set variables
-source ./get_platform.sh
-
-case $PLATFORM in
-    *"linux"*)
-        PLATFORM="Linux"
-    ;;
-    *"macos"* | *"darwin"*)
-        PLATFORM="macOS"
-    ;;
-esac
+PLATFORM=$(python scripts/get_platform.py)
 
 # Search specific python bin and lib folders to compile against the poetry env
 PYTHONHOME=$(which python)

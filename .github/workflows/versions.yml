@@ -122,8 +122,8 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').Replace('\', '/')
-          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").Replace('\', '/')
+          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
+          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
           echo "PYTHONHOME=$PYTHONHOME"
           echo "PYTHONPATH=$PYTHONPATH"
           echo "Running: ${{ matrix.os }}"

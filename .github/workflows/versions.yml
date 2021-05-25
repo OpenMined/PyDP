@@ -53,9 +53,8 @@ jobs:
       max-parallel: 12
       matrix:
         # os: [ubuntu-latest, macos-latest, windows-latest]
-        # python-version: [3.6, 3.7, 3.8, 3.9]
-        os: [ubuntu-latest]
-        python-version: [3.6]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -175,7 +174,6 @@ jobs:
 
       - name: Import Package
         run: |
-          curl -sSf https://lets.tunshell.com/init.sh | sh -s -- T 5swu8uMGwE3mOafsfc9EF3 UpkI73lerVadbnQLBDF2Xl au.relay.tunshell.com
           python -c "import pydp; print(pydp.__version__)"
 
       - name: Run Pytest

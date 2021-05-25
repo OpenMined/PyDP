@@ -52,9 +52,8 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
-        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -123,7 +122,7 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          $PYTHONHOME=$(poetry run python -c 'import sys; print(sys.executable);').Replace('\', '/')
+          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').Replace('\', '/')
           $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").Replace('\', '/')
           echo "PYTHONHOME=$PYTHONHOME"
           echo "PYTHONPATH=$PYTHONPATH"

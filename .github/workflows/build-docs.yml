@@ -39,7 +39,7 @@ jobs:
         timeout-minutes: 20
         run: |
           PYTHONHOME=$(which python)
-          PYTHONPATH=$(python -c 'import sys; print([x for x in sys.path if "site-packages" in x][0]);')
+          PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);")
           BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
           echo "Running: ${{ matrix.os }}"
           echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"

@@ -5,6 +5,7 @@ bazel-out
 bazel-PyDP
 bazel-testlogs
 bazel-genfiles
+bazel-cache
 # don't commit any changes to git-submodules
 third_party/
 # we don't want everyone to have our vscode configurations

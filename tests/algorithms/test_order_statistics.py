@@ -1,11 +1,16 @@
-import pytest
+# stdlib
+import math
 
 # verify with actual value
 import statistics
-import math
 
+# third party
+from conftest import expect_near
+from conftest import percentile
+import pytest
+
+# pydp absolute
 import pydp as dp
-from conftest import expect_near, percentile
 
 kDataSize = 10000
 data_floats = [200.0 * i / kDataSize for i in range(kDataSize)]

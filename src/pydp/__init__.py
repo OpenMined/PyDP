@@ -1,10 +1,13 @@
-from pydp import algorithms, distributions, util
+# stdlib
+import sys
 
+# pydp absolute
+from pydp import algorithms
+from pydp import distributions
+from pydp import util
 
 __version__ = "1.0.2"
 
-
-import sys
 
 # assert sys.version_info >= (3, 6)
 if sys.version_info < (3, 6):

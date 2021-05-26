@@ -1,3 +1,4 @@
+# pydp absolute
 from pydp.algorithms.laplacian import BoundedStandardDeviation
 
 

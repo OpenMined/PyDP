@@ -14,7 +14,7 @@ A restaurant owner would share business statistics with her visitors or potentia
 
 #### Titanic Demo
 
-This example uses the infamous Titanic dataset and finds what sorts of people were more likely to survive by finding demographic of people on the ship using differentially private statistical methods. More about it [here](Tutorial_3-Titanic_demo/Titanic_notebook.ipynb).
+This example uses the infamous Titanic dataset and finds what sorts of people were more likely to survive by finding demographic of people on the ship using differentially private statistical methods. More about it [here](Tutorial_3-Titanic_demo/titanic_notebook.ipynb).
 
 #### Launch Demo
 
@@ -23,6 +23,10 @@ In this example, two copies of one database are created where they differ by one
 #### Laplace Demo
 
 This demo shows it is required to add noise to make data private. Laplace distribution makes it easy to satisfy ε-differential privacy by setting the b parameter to 1/ε. Hence, Laplace noise is used for making the data differentially private. More about it [here](laplace_demo/laplace.ipynb).
+
+#### Naive Bayes Demo
+
+This demo compares the results of scikit-learn's verses PyDP's Naive Bayes algorithm on various datasets. More about it [here](Naive_Bayes_Iris_demo/PyDP_Naive_Bayes.ipynb) and [here](Naive_Bayes_Iris_demo/PyDP_Naive_Bayes_Comparison.ipynb).
 
 ### Example
 

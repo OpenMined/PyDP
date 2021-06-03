@@ -1,23 +1,20 @@
-name: Tests
-
+# Version Tests
+# To speed up development we don't run all the tests when opening and updating a PR.
+# This test will run older versions of Python so we don't consume a lot of extra actions
+# when we don't need to. It's important to keep this in sync with tests.yml so that
+# they are essentially doing the same thing only this runs on a schedule.
+name: Version Tests
 on:
+  schedule:
+    - cron: "30 20 * * *" # 7:30pm UTC, 1am IST
   pull_request:
     branches:
       - dev
-    paths:
-      - "*.bazel"
-      - "*.cpp"
-      - "*.c"
-      - "*.cc"
-      - "*.hpp"
-      - "*.h"
-      - "*.py"
-      - "*.go"
-      - "*.mod"
-      - "*.toml"
-      - "*.txt"
-      - "setup.cfg"
-      - ".github/workflows/*.yml"
+  workflow_dispatch:
+    inputs:
+      none:
+        description: "Run Version Tests Manually"
+        required: false
 
 jobs:
   linting:
@@ -50,13 +47,13 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: [linting]
+    # needs: [linting]  # don't require linting to pass
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 12
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
       - uses: actions/checkout@v2

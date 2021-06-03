@@ -16,10 +16,12 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# stdlib
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/mechanisms/base.py
 import abc
-from copy import copy, deepcopy
+from copy import copy
+from copy import deepcopy
 from numbers import Real
 
 

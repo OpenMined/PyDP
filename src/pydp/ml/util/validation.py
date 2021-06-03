@@ -19,8 +19,11 @@
 # Source:
 # https://github.com/IBM/differential-privacy-library/blob/main/diffprivlib/validation.py
 
-from numbers import Real, Integral
+# stdlib
+from numbers import Integral
+from numbers import Real
 
+# third party
 import numpy as np  # type: ignore
 
 
@@ -158,12 +161,12 @@ def clip_to_norm(array, clip):
         )
     if array.ndim != 2:
         raise ValueError(
-            "input array must be 2-dimensional, got {} dimensions.".format(array.ndim)
+            f"input array must be 2-dimensional, got {array.ndim} dimensions."
         )
     if not isinstance(clip, Real):
         raise TypeError("Clip value must be numeric, got {}.".format(type(clip)))
     if clip <= 0:
-        raise ValueError("Clip value must be strictly positive, got {}.".format(clip))
+        raise ValueError(f"Clip value must be strictly positive, got {clip}.")
 
     norms = np.linalg.norm(array, axis=1) / clip
     norms[norms < 1] = 1

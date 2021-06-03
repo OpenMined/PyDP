@@ -1,8 +1,10 @@
+# stdlib
 import math
+from typing import List
+from typing import Union
 
-from .._pydp import _algorithms  # type: ignore
-
-from typing import Union, List
+# pydp relative
+from .._pydp import _algorithms
 
 
 class MetaAlgorithm:
@@ -29,9 +31,7 @@ class MetaAlgorithm:
     @staticmethod
     def __check_input(name: str, value: float):
         if math.isnan(value) or math.isinf(value):
-            raise ValueError(
-                "invalid value '{}' for paramater '{}'.".format(value, name)
-            )
+            raise ValueError(f"invalid value '{value}' for paramater '{name}'.")
 
     @staticmethod
     def __map_dtype_str(dtype: str):
@@ -42,7 +42,7 @@ class MetaAlgorithm:
         elif dtype == "float":
             return "Double"
         else:
-            raise ValueError("dtype '{}' is not supported.".format(dtype))
+            raise ValueError(f"dtype '{dtype}' is not supported.")
 
     @property
     def epsilon(self) -> float:

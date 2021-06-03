@@ -1,4 +1,7 @@
+# third party
 import pytest
+
+# pydp absolute
 from pydp.algorithms.laplacian import BoundedSum
 
 

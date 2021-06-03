@@ -1,8 +1,12 @@
+# stdlib
 import os
-import pytest
-from pydp.algorithms.laplacian import BoundedMean
-from pydp._pydp import Summary  # type: ignore
 
+# third party
+import pytest
+
+# pydp absolute
+from pydp._pydp import Summary
+from pydp.algorithms.laplacian import BoundedMean
 
 expect_near = lambda expected, actual, tol: (
     expected + tol >= actual and expected - tol <= actual
@@ -28,6 +32,8 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
+# this loads a protobuf with the cached data for this calculation
+# see discussion here: https://github.com/OpenMined/PyDP/pull/363
 @pytest.fixture(scope="function")
 def make_loaded_object(request):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -36,7 +42,7 @@ def make_loaded_object(request):
         dump_filepath = os.path.join(
             dir_path,
             request.module.__name__,
-            "{}_data.proto".format(request.function.__name__),
+            f"{request.function.__name__}_data.bin",
         )
 
         # Algorithm to initialize
@@ -62,6 +68,7 @@ def make_loaded_object(request):
     return _make_loaded_object
 
 
+# uses: ./tests/algorithms/test_bounded_mean/test_bounded_mean_int64_data.bin
 def test_bounded_mean_int64(make_loaded_object):
     x = make_loaded_object(5, 100000000, 5)
     assert expect_near(5.0, x.result(), 0.1)

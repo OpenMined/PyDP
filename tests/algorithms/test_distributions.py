@@ -1,11 +1,16 @@
-import pytest
-from pydp.distributions import LaplaceDistribution, GaussianDistribution, GeometricDistribution  # type: ignore
-import pydp as dp
-import math
-from typing import List
+# stdlib
 from itertools import accumulate
 import math
+from typing import List
 
+# third party
+import pytest
+
+# pydp absolute
+import pydp as dp
+from pydp.distributions import GaussianDistribution  # type: ignore
+from pydp.distributions import GeometricDistribution  # type: ignore
+from pydp.distributions import LaplaceDistribution  # type: ignore
 
 k_num_samples = 10000000
 k_num_geometric_samples = 1000000

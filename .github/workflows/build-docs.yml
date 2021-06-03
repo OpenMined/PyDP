@@ -1,0 +1,112 @@
+name: Build Dev Docs
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-docs:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache Bazel Unix
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ./bazel-PyDP
+            ./bazel-bin
+            ./bazel-cache
+            ./bazel-out
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+
+      - name: Build Google DP Unix
+        if: runner.os != 'Windows'
+        timeout-minutes: 20
+        run: |
+          PYTHONHOME=$(which python)
+          PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);")
+          BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
+          echo "Running: ${{ matrix.os }}"
+          echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
+          bazel --output_base ./bazel-cache build src/python:pydp \
+                --config $BAZEL_CONFIG_OS \
+                --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME \
+                --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
+
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade --user pip
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Get poetry cache dir
+        id: poetry-cache
+        run: |
+          echo "::set-output name=dir::$(poetry config cache-dir)"
+
+      - name: poetry cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.poetry-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-py${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Build PyDP Linux / Windows
+        if: runner.os != 'macOS'
+        run: |
+          poetry run python setup.py build bdist_wheel
+
+      - name: Install Wheel Unix
+        if: runner.os != 'Windows'
+        run: |
+          pip install `find -L ./ -name "*.whl"`
+
+      - name: Import Package
+        run: |
+          python -c "import pydp; print(pydp.__version__)"
+
+      - uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"
+
+      - name: Commit documentation changes
+        run: |
+          git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
+          cp -r docs/_build/html/* gh-pages/
+          cd gh-pages
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update documentation" -a || true
+          # The above command will fail if no changes were present, so we ignore that
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          force: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}

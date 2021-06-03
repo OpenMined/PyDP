@@ -219,4 +219,3 @@ serve:
 	@echo
 	@echo "Serving docs on localhost:8000"
 	cd _build/html && python -m http.server 8000
-	

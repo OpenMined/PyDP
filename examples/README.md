@@ -14,7 +14,7 @@ A restaurant owner would share business statistics with her visitors or potentia
 
 #### Titanic Demo
 
-This example uses the infamous Titanic dataset and finds what sorts of people were more likely to survive by finding demographic of people on the ship using differentially private statistical methods. More about it [here](Tutorial_3-Titanic_demo/Titanic_notebook.ipynb).
+This example uses the infamous Titanic dataset and finds what sorts of people were more likely to survive by finding demographic of people on the ship using differentially private statistical methods. More about it [here](Tutorial_3-Titanic_demo/titanic_notebook.ipynb).
 
 #### Launch Demo
 

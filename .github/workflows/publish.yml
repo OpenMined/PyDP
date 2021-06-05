@@ -157,9 +157,9 @@ jobs:
         run: |
           find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
 
-      # - name: Publishing the wheel
-      #   env:
-      #     TWINE_USERNAME: __token__
-      #     TWINE_PASSWORD: ${{ secrets.TOKEN }}
-      #   run: |
-      #     twine upload --skip-existing dist/*.whl
+      - name: Publishing the wheel
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
+        run: |
+          twine upload --skip-existing dist/*.whl

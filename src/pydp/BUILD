@@ -7,7 +7,8 @@ py_library(
         "algorithms/*.py",
         "algorithms/*/*.py",
         "distributions/*.py",
-        "utils/*.py"
+        "utils/*.py",
+        "ml/*.py"
     ]),
     visibility = ["//src/python:__pkg__"],
 )

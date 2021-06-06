@@ -39,34 +39,4 @@ void init_algorithms_util(py::module& m) {
       R"pbdoc(Filtering a vector using a logical operatio with only values selected using true output in their positions.)pbdoc");
   m.def("vector_to_string", &dp::VectorToString<double>,
         R"pbdoc(Conversion of a vector to a string data type.)pbdoc");
-  m.def(
-      "round_to_nearest_multiple", &dp::RoundToNearestMultiple,
-      R"pbdoc(Returns closest multiple of n that is greater than the given number.)pbdoc");
-  m.def(
-      "safe_add",
-      [](int64_t i, int64_t j) {
-        int64_t k;
-        bool result = dp::SafeAdd(i, j, &k);
-        if (result) return k;
-        throw std::runtime_error("Result of addition will overflow.");
-      },
-      R"pbdoc(Addition performed with safety to cater to overflow conditions.)pbdoc");
-  m.def(
-      "safe_subtract",
-      [](int64_t i, int64_t j) {
-        int64_t k;
-        bool result = dp::SafeSubtract(i, j, &k);
-        if (result) return k;
-        throw std::runtime_error("Result of subtraction will overflow.");
-      },
-      R"pbdoc(Subtraction performed with safety to cater to overflow conditions.)pbdoc");
-  m.def(
-      "safe_square",
-      [](int64_t i) {
-        int64_t k;
-        bool result = dp::SafeSquare(i, &k);
-        if (result) return k;
-        throw std::runtime_error("Result of squaring will overflow.");
-      },
-      R"pbdoc(A number squared, with safety to cater to overflow conditions.)pbdoc");
 }

@@ -1,62 +1,18 @@
-name: Tests
+name: Publish PyDP
 
 on:
-  pull_request:
-    branches:
-      - dev
-    paths:
-      - "*.bazel"
-      - "*.cpp"
-      - "*.c"
-      - "*.cc"
-      - "*.hpp"
-      - "*.h"
-      - "*.py"
-      - "*.go"
-      - "*.mod"
-      - "*.toml"
-      - "*.txt"
-      - "setup.cfg"
-      - ".github/workflows/*.yml"
+  release:
+    types: [published]
 
 jobs:
-  linting:
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
-      matrix:
-        python-version: [3.9]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install python dependencies
-        run: |
-          pip install black mypy
-      - name: Black
-        run: |
-          black .
-      - name: MyPY
-        run: |
-          mypy src tests
-      - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v3.3.0
-        with:
-          clang-format-version: "11"
-          check-path: "/src/bindings/"
-          fallback-style: "Google" # optional
-
-  build:
-    runs-on: ${{ matrix.os }}
-    needs: [linting]
+  deploy:
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 12
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
@@ -185,3 +141,25 @@ jobs:
       - name: Run Pytest
         run: |
           poetry run pytest tests -n auto
+
+      - name: Check Wheel Unix
+        if: runner.os != 'Windows'
+        run: |
+          twine check `find -L ./ -name "*.whl"`
+
+      - name: Check Wheel Windows
+        if: runner.os == 'Windows'
+        run: |
+          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {twine check $_.FullName}
+
+      - name: Renaming wheel
+        if: runner.os == 'Linux'
+        run: |
+          find . -name '*linux*.whl' -type f -exec bash -c 'mv "$1" "${1/linux/manylinux1}"' -- {} \;
+
+      - name: Publishing the wheel
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.TOKEN }}
+        run: |
+          twine upload --skip-existing dist/*.whl

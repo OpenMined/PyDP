@@ -1,15 +1,16 @@
-import pytest
-from pydp.distributions import (
-    LaplaceDistribution,
-    GaussianDistribution,
-    GeometricDistribution,
-)
-import pydp as dp
-import math
-from typing import List
+# stdlib
 from itertools import accumulate
 import math
+from typing import List
 
+# third party
+import pytest
+
+# pydp absolute
+import pydp as dp
+from pydp.distributions import GaussianDistribution  # type: ignore
+from pydp.distributions import GeometricDistribution  # type: ignore
+from pydp.distributions import LaplaceDistribution  # type: ignore
 
 k_num_samples = 10000000
 k_num_geometric_samples = 1000000
@@ -113,7 +114,7 @@ class TestGaussianDistributionDataTypes:
 class TestGeometricDistribution:
     def test_ratios(self):
         p = 1e-2
-        dist = GeometricDistribution(lambda_=-1.0 * math.log(1 - p))
+        dist = GeometricDistribution(-1.0 * math.log(1 - p))
         counts = [0] * 51
         for i in range(k_num_geometric_samples):
             sample = dist.sample()

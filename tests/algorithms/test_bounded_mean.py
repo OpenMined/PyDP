@@ -1,8 +1,12 @@
+# stdlib
 import os
-import pytest
-from pydp.algorithms.laplacian import BoundedMean
-from pydp._pydp import Summary
 
+# third party
+import pytest
+
+# pydp absolute
+from pydp._pydp import Summary
+from pydp.algorithms.laplacian import BoundedMean
 
 expect_near = lambda expected, actual, tol: (
     expected + tol >= actual and expected - tol <= actual
@@ -28,6 +32,8 @@ def test_bounded_mean():
     # assert isinstance(bm2.quick_result([1.5, 2, 2.5]), float)
 
 
+# this loads a protobuf with the cached data for this calculation
+# see discussion here: https://github.com/OpenMined/PyDP/pull/363
 @pytest.fixture(scope="function")
 def make_loaded_object(request):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -36,11 +42,11 @@ def make_loaded_object(request):
         dump_filepath = os.path.join(
             dir_path,
             request.module.__name__,
-            "{}_data.proto".format(request.function.__name__),
+            f"{request.function.__name__}_data.bin",
         )
 
         # Algorithm to initialize
-        x = BoundedMean(1.0, 0, 10, dtype="int64")
+        x = BoundedMean(1.0, 0, 0, 10, dtype="int64")
 
         if os.path.exists(dump_filepath):
             # Search for data dump to import
@@ -62,14 +68,15 @@ def make_loaded_object(request):
     return _make_loaded_object
 
 
+# uses: ./tests/algorithms/test_bounded_mean/test_bounded_mean_int64_data.bin
 def test_bounded_mean_int64(make_loaded_object):
     x = make_loaded_object(5, 100000000, 5)
     assert expect_near(5.0, x.result(), 0.1)
 
 
 def test_serialize_merge():
-    bm1 = BoundedMean(1, 1, 10)
-    bm2 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
+    bm2 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm2.add_entries([10 for i in range(100)])
 
@@ -79,7 +86,7 @@ def test_serialize_merge():
 
 
 def test_result_crash():
-    bm1 = BoundedMean(1, 1, 10)
+    bm1 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm1.result()
     with pytest.raises(RuntimeError):

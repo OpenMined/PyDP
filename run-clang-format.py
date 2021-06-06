@@ -29,14 +29,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from __future__ import print_function, unicode_literals
+# future
+from __future__ import print_function
+from __future__ import unicode_literals
 
+# stdlib
 import argparse
 import codecs
 import difflib
-import fnmatch
-import io
 import errno
+import fnmatch
+from functools import partial
+import io
 import multiprocessing
 import os
 import signal
@@ -44,9 +48,8 @@ import subprocess
 import sys
 import traceback
 
-from functools import partial
-
 try:
+    # stdlib
     from subprocess import DEVNULL  # py3k
 except ImportError:
     DEVNULL = open(os.devnull, "wb")
@@ -116,8 +119,8 @@ def make_diff(file, original, reformatted):
         difflib.unified_diff(
             original,
             reformatted,
-            fromfile="{}\t(original)".format(file),
-            tofile="{}\t(reformatted)".format(file),
+            fromfile=f"{file}\t(original)",
+            tofile=f"{file}\t(reformatted)",
             n=3,
         )
     )
@@ -143,7 +146,7 @@ def run_clang_format_diff_wrapper(args, file):
     except DiffError:
         raise
     except Exception as e:
-        raise UnexpectedError("{}: {}: {}".format(file, e.__class__.__name__, e), e)
+        raise UnexpectedError(f"{file}: {e.__class__.__name__}: {e}", e)
 
 
 def run_clang_format_diff(args, file):
@@ -182,13 +185,11 @@ def run_clang_format_diff(args, file):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,
-            **encoding_py3
+            **encoding_py3,
         )
     except OSError as exc:
         raise DiffError(
-            "Command '{}' failed to start: {}".format(
-                subprocess.list2cmdline(invocation), exc
-            )
+            f"Command '{subprocess.list2cmdline(invocation)}' failed to start: {exc}"
         )
     proc_stdout = proc.stdout
     proc_stderr = proc.stderr
@@ -255,7 +256,7 @@ def print_trouble(prog, message, use_colors):
     error_text = "error:"
     if use_colors:
         error_text = bold_red(error_text)
-    print("{}: {} {}".format(prog, error_text, message), file=sys.stderr)
+    print(f"{prog}: {error_text} {message}", file=sys.stderr)
 
 
 def main():
@@ -268,9 +269,7 @@ def main():
     )
     parser.add_argument(
         "--extensions",
-        help="comma separated list of file extensions (default: {})".format(
-            DEFAULT_EXTENSIONS
-        ),
+        help=f"comma separated list of file extensions (default: {DEFAULT_EXTENSIONS})",
         default=DEFAULT_EXTENSIONS,
     )
     parser.add_argument(

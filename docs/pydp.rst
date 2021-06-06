@@ -6,24 +6,24 @@ Algorithms
 ##########
 .. currentmodule:: pydp.algorithms.laplacian
 .. autoclass:: BoundedMean
-   :inherited-members: 
+   :inherited-members:
 
 .. autoclass::  BoundedSum
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  BoundedStandardDeviation
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  BoundedVariance
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  Max
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  Min
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  Median
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  Count
-   :inherited-members: 
+   :inherited-members:
 .. autoclass::  Percentile
-   :inherited-members: 
+   :inherited-members:
 
 
 
@@ -39,4 +39,10 @@ Util
 ##########
 .. automodule:: pydp.util
    :members: Geometric, UniformDouble, correlation, get_next_power_of_two, mean, order_statistics, qnorm, round_to_nearest_multiple, safe_add, safe_square, safe_subtract, standard_deviation, variance, vector_filter, vector_to_string, xor_strings
-   
+
+
+ML
+##########
+.. automodule:: pydp.ml.naive_bayes
+.. autoclass::  GaussianNB
+   :members:

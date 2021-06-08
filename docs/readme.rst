@@ -49,7 +49,7 @@ Examples
 Refer to the `curated list <https://github.com/OpenMined/PyDP/tree/dev/examples>`__ of tutorials and sample code to learn more about the PyDP library.
 
 You can also get started with `an introduction to
-PyDP <https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb>`__ (a Jupyter notebook) and `the carrots demo <https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py>`__ (a Python file).
+PyDP <https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots_demo.ipynb>`__ (a Jupyter notebook) and `the carrots demo <https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots.py>`__ (a Python file).
 
 Example: calculate the Bounded Mean
 

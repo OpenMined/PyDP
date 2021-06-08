@@ -39,3 +39,10 @@ Util
 ##########
 .. automodule:: pydp.util
    :members: Geometric, UniformDouble, correlation, get_next_power_of_two, mean, order_statistics, qnorm, round_to_nearest_multiple, safe_add, safe_square, safe_subtract, standard_deviation, variance, vector_filter, vector_to_string, xor_strings
+
+
+ML
+##########
+.. automodule:: pydp.ml.naive_bayes
+.. autoclass::  GaussianNB
+   :members:

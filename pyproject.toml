@@ -1,10 +1,9 @@
 [tool.poetry]
 name        = "pydp"
-version     = "1.0.2"
+version     = "1.1.0rc1"
 description = ""
 authors     = [
     "Chinmay Shah <chinmayshah3899@gmail.com>",
-    "Madhava Jay <me@madhavajay.com>",
 ]
 license     = "Apache-2.0"
 

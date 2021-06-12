@@ -91,7 +91,7 @@ jobs:
       - uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
-          pre-build-command: "add-apt-repository ppa:ubuntu-toolchain-r/test && apt-get update -y && apt-get -y install gcc-9"
+          pre-build-command: "apt-get -y install software-properties-common && add-apt-repository ppa:ubuntu-toolchain-r/test && apt-get update -y && apt-get -y install gcc-9"
 
       - name: Commit documentation changes
         run: |

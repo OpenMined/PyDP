@@ -89,9 +89,9 @@ jobs:
           python -c "import pydp; print(pydp.__version__)"
 
       - uses: ammaraskar/sphinx-action@master
-        pre-build-command: "apt-get update -y && apt-get -y install libstdc++6"
         with:
           docs-folder: "docs/"
+          pre-build-command: "apt-get update -y && apt-get -y install libstdc++6"
 
       - name: Commit documentation changes
         run: |

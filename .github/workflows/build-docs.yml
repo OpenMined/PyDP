@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       max-parallel: 1
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-18.04]
         python-version: [3.9]
     runs-on: ${{ matrix.os }}
     steps:
@@ -91,7 +91,7 @@ jobs:
       - uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
-          pre-build-command: "apt-get -y update && apt-get -y install gcc"
+          # pre-build-command: "apt-get -y update && apt-get -y install gcc"
 
       - name: Commit documentation changes
         run: |

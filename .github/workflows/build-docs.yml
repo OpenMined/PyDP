@@ -91,14 +91,14 @@ jobs:
       - uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
-          pre-build-command: "apt-get -y update && apt-get install -y software-properties-common && add-apt-repository ppa:ubuntu-toolchain-r/test && apt-get update -y && apt-get -y install gcc-9"
+          pre-build-command: "apt-get -y update && apt-get -y install gcc"
 
       - name: Commit documentation changes
         run: |
           git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
           cp -r docs/_build/html/* gh-pages/
           cd gh-pages
-          git config --local user.email "action@github.com"
+          git config --local user.email "action
           git config --local user.name "GitHub Action"
           git add .
           git commit -m "Update documentation" -a || true

@@ -6,5 +6,5 @@ from pydp import algorithms
 from pydp import distributions
 from pydp import util
 
-__version__ = "1.0.3"
+__version__ = "1.0.2"
 

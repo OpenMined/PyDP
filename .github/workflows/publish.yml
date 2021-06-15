@@ -150,7 +150,7 @@ jobs:
       - name: Check Wheel Windows
         if: runner.os == 'Windows'
         run: |
-          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {twine check $_.FullName}
+          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {poetry shell twine check $_.FullName}
 
       - name: Renaming wheel
         if: runner.os == 'Linux'

@@ -145,12 +145,12 @@ jobs:
       - name: Check Wheel Unix
         if: runner.os != 'Windows'
         run: |
-          twine check `find -L ./ -name "*.whl"`
+          poetry run twine check `find -L ./ -name "*.whl"`
 
       - name: Check Wheel Windows
         if: runner.os == 'Windows'
         run: |
-          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {twine check $_.FullName}
+          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {poetry run twine check $_.FullName}
 
       - name: Renaming wheel
         if: runner.os == 'Linux'
@@ -162,4 +162,4 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.TOKEN }}
         run: |
-          twine upload --skip-existing dist/*.whl
+          poetry run twine upload --skip-existing dist/*.whl

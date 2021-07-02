@@ -12,6 +12,8 @@ void init_base_logging(py::module &);
 void init_algorithms_bounded_functions(py::module &);
 void init_algorithms_count(py::module &);
 
+void init_algorithms_partition_selection_strategies(py::module &);
+
 // util
 void init_algorithms_util(py::module &);
 
@@ -39,6 +41,7 @@ PYBIND11_MODULE(_pydp, m) {
   init_algorithms_bounded_functions(malgorithms);
   init_algorithms_count(malgorithms);
   init_algorithms_order_statistics(malgorithms);
+  init_algorithms_partition_selection_strategies(malgorithms);
 
   auto mdistributions = m.def_submodule("_distributions");
   init_algorithms_distributions(mdistributions);

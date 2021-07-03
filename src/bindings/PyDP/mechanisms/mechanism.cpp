@@ -14,70 +14,73 @@ namespace py = pybind11;
 namespace dp = differential_privacy;
 
 
-dp.attr("kMaxOverflowProbability") = &dp::kMaxOverflowProbability;
-dp.attr("kGaussianSigmaAccuracy") = &dp::kGaussianSigmaAccuracy;
+dp.attr("kMaxOverflowProbability") = std::pow(2.0, -64);
+dp.attr("kGaussianSigmaAccuracy") = 1e-3;
 
-void declareNumericalMechanism(py::module& m) {
-  using builder = typename dp::python::AlgorithmBuilder<Algorithm>;
-  builder().declare(m);
-}
+class declareNumericalMechanismClass {
+ public: 
+  void declareNumericalMechanism(py::module &m) {
+    py::class_<dp::NumericalMechanism> numerical_mech(m, "NumericalMechanism");
+    numerical_mech.attr("__module__") = "pydp";
+    numerical_mech
+        .def(py::init<double>()
+        .def("AddNoise", &AddNoise<int, double>)
+        .def("AddNoise", &AddNoise<int64_t, double>)
+        .def("AddNoise", &AddNoise<double, double>)
+        .def("AddNoise", &AddNoise<int>)
+        .def("AddNoise", &AddNoise<int64_t>)
+        .def("AddNoise", &AddNoise<double>)
+        .def("NoisedValueAboveThreshold", &dp::NumericalMechanism::NoisedValueAboveThreshold<double, double>)
+        .def("MemoryUsed", &dp::NumericalMechanism::MemoryUsed)
+        .def("NoiseConfidenceInterval", py::overload_cast<double, double, double>(&dp::NumericalMechanism::<dp::ConfidenceInterval>NoiseConfidenceInterval),
+            py::arg("confidence_level"), py::arg("privacy_budget"), py::arg("noised_result"))
+        .def("NoiseConfidenceInterval", py::overload_cast<double, double>(&dp::NumericalMechanism::<dp::ConfidenceInterval>NoiseConfidenceInterval),
+            py::arg("confidence_level"), py::arg("privacy_budget"))
+        .def("GetEpsilon", &dp::NumericalMechanism::GetEpsilon)
+        .def("GetVariance", &dp::NumericalMechanism::GetVariance)
+        .def("AddDoubleNoise", &dp::NumericalMechanism::AddDoubleNoise<double, double>)
+        .def("AddDoubleNoise", &dp::NumericalMechanism::AddInt64Noise<double, double>)
+        .def("CheckConfidenceLevel", &dp::NumericalMechanism::CheckConfidenceLevel<double>)
+        .def("CheckPrivacyBudget", &dp::NumericalMechanism::CheckPrivacyBudget<double>)
+        .def("CheckAndClampBudget", &dp::NumericalMechanism::CheckAndClampBudget<double>)
+        .def_property_readonly("epsilon", &dp::NumericalMechanism::epsilon);
+  } 
+};
 
-class declareLaplaceDistributionClass {
- public:
-  std::unique_ptr<dp::LaplaceDistribution> build(double epsilon, std::optional<double> sensitivity= std::nullopt) {
-    dp::LaplaceDistribution::Builder builder;
-    builder.SetEpsilon(epsilon);
-    if (sensitivity.has_value())
-      builder.SetMaxPartitionsContributed(l0sensitivity.value());
-    if (sensitivity){
-    builder.SetSensitivity(sensitivity.value());
-    }
+class declareNumericalMechanismBuilder {
+  public:
+    std::unique_ptr<dp::NumericalMechanism> build() {
+    dp::NumericalMechanism builder;
     return std::move(builder.Build().value());
   };
-  void declareLaplaceDistribution(py::module &m) {
-    py::class_<dp::LaplaceDistribution> laplace_dist(m, "LaplaceDistribution");
-    laplace_dist.attr("__module__") = "pydp";
-    laplace_dist
-        .def(py::init([this](double epsilon, double sensitivity) {
-               return this->build(epsilon, sensitivity);
-             }),
-             py::arg("epsilon") = 0., py::arg("sensitivity"))
-        .def("get_uniform_double", &dp::LaplaceDistribution::GetUniformDouble,
-             R"pbdoc(Returns a uniform random integer of in range [0, 2^53).)pbdoc")
-        .def("sample", py::overload_cast<double>(&dp::LaplaceDistribution::Sample),
-             py::arg("scale") = 1.0,
-             R"pbdoc(
-                         Samples the Laplacian distribution Laplace(u, scale*b).
-                         Parameters
-                         ----------
-                         scale
-                              A factor to scale b.
-                    )pbdoc");
-    laplace_dist.def("get_diversity", &dp::LaplaceDistribution::GetDiversity,
-                     R"pbdoc(
-                    Returns the parameter defining this distribution, often labeled b.
-               )pbdoc");
-    laplace_dist.attr("__doc__") = "Draws samples from the Laplacian distribution.";
+    std::unique_ptr<dp::NumericalMechanismBuilder> clone(val) {
+    dp::NumericalMechanismBuilder cloner;
+    cloner.SetEpsilon(val);
+    cloner.SetDelta(val);
+    cloner.SetL0Sensitivity(val);
+    cloner.SetInfSensitivity(val);
+    return std::move(cloner.Clone().value());
+  };
+    void declareNumericalMechanismBuilder(py::module &m) {
+    py::class_<dp::NumericalMechanismBuilder> num_mech_builder(m, "NumericalMechanismBuilder");
+    num_mech_builder.attr("__module__") = "pydp";
+    num_mech_builder
+        .def(py::init([this](double val) { return this->clone(val); }),
+             py::arg("epsilon"), py::arg("delta"), py::arg("l0_sensitivity"), py::arg("linf_sensitivity"))
+        .def("DeltaIsSetAndValid", &dp::NumericalMechanismBuilder::DeltaIsSetAndValid)
+        .def_property_readonly("epslion", &dp::NumericalMechanismBuilder::epsilon)
+        .def_property_readonly("delta", &dp::NumericalMechanismBuilder::delta)
+        .def_property_readonly("l0_sensitivity", &dp::NumericalMechanismBuilder::l0_sensitivity)
+        .def_property_readonly("linf_sensitivity", &dp::NumericalMechanismBuilder::linf_sensitivity);
   }
 };
+
+class 
 
 void init_mechanisms_mechanism(py::module& m) {
   declareNumericalMechanism(m);
   m.def(py::init<>())
-  m.def("AddNoise", &AddNoise<int, double>)
-  m.def("AddNoise", &AddNoise<int64_t, double>)
-  m.def("AddNoise", &AddNoise<double, double>)
-  m.def("AddNoise", &AddNoise<int>)
-  m.def("AddNoise", &AddNoise<int64_t>)
-  m.def("AddNoise", &AddNoise<double>)
-  m.def("NoisedValueAboveThreshold", &dp::NoisedValueAboveThreshold<double, double>=0)
-  m.def("NoiseConfidenceInterval", &dp::NoiseConfidenceInterval<double, double, double>=0)
-  m.def("NoiseConfidenceInterval", &dp::NoiseConfidenceInterval<double, double>=0)
-  m.def("GetEpsilon", &dp::GetEpsilon)
-  m.def("GetVariance", &dp::GetVariance)
-  m.def("CheckConfidenceLevel", &dp::CheckConfidenceLevel<double>)
-  m.def("CheckPrivacyBudget", &dp::CheckPrivacyBudget<double>)
-  m.def("CheckAndClampBudget", &dp::CheckAndClampBudget<double>);
+
   declareLaplaceDistributionClass laplace_obj = declareLaplaceDistributionClass();
   laplace_obj.declareLaplaceDistribution(m);
   declareGaussianDistributionClass gaussian_obj = declareGaussianDistributionClass();

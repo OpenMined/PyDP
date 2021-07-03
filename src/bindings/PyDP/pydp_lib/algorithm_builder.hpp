@@ -106,8 +106,7 @@ class AlgorithmBuilder {
       {typeid(dp::continuous::Min<T>), "Min"},
       {typeid(dp::continuous::Max<T>), "Max"},
       {typeid(dp::continuous::Median<T>), "Median"},
-      {typeid(dp::continuous::Percentile<T>), "Percentile"},
-      {typeid(dp::NumericalMechanism), "NumericalMechanism"}
+      {typeid(dp::continuous::Percentile<T>), "Percentile"}
 
   };
 

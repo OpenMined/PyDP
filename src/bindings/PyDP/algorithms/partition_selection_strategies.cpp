@@ -5,11 +5,7 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "algorithms/algorithm.h"
 #include "algorithms/partition-selection.h"
-
-#include "../pydp_lib/algorithm_builder.hpp"
-#include "../pydp_lib/casting.hpp"  // our caster helper library
 
 using namespace std;
 
@@ -19,28 +15,49 @@ namespace dp = differential_privacy;
 typedef std::unique_ptr<dp::PartitionSelectionStrategy> PyPartitionSelectionStrategy;
 
 PyPartitionSelectionStrategy create_truncted_geometric_partition_strategy(
-    double epsilon, double delta, int max_partitions, double adjusted_delta) {
-  return std::make_unique<dp::PreaggPartitionSelection>(epsilon, delta, max_partitions,
-                                                        adjusted_delta);
+    double epsilon, double delta, int max_partitions_contributed) {
+  dp::PreaggPartitionSelection::Builder builder;
+  builder.SetEpsilon(epsilon);
+  builder.SetDelta(delta);
+  builder.SetMaxPartitionsContributed(max_partitions_contributed);
+
+  auto obj = builder.Build();
+  if (!obj.ok()) {
+    throw std::runtime_error(obj.status().ToString());
+  }
+  return std::move(obj.ValueOrDie());
 }
 
 PyPartitionSelectionStrategy create_laplace_partition_strategy(
-    double epsilon, double delta, int64_t max_partitions_contributed,
-    double adjusted_delta, double threshold,
-    std::unique_ptr<dp::NumericalMechanism> laplace) {
+    double epsilon, double delta, int max_partitions_contributed, 
+    std::unique_ptr<dp::LaplaceMechanism::Builder> laplace_builder = nullptr) {
+  dp::LaplacePartitionSelection::Builder builder;
+  builder.SetEpsilon(epsilon);
+  builder.SetDelta(delta);
+  builder.SetMaxPartitionsContributed(max_partitions_contributed);
+  builder.SetLaplaceMechanism(std::move(laplace_builder));
 
-  return std::make_unique<dp::LaplacePartitionSelection>(
-      epsilon, delta, max_partitions_contributed, adjusted_delta, threshold, laplace);
+  auto obj = builder.Build();
+  if (!obj.ok()) {
+    throw std::runtime_error(obj.status().ToString());
+  }
+  return std::move(obj.ValueOrDie());
 }
 
 PyPartitionSelectionStrategy create_gaussian_partition_strategy(
-    double epsilon, double delta, double threshold_delta, double noise_delta,
-    int64_t max_partitions_contributed, double adjusted_delta, double threshold,
-    std::unique_ptr<dp::NumericalMechanism> gaussian) {
+    double epsilon, double delta, int max_partitions_contributed,
+    std::unique_ptr<dp::GaussianMechanism::Builder> gaussian_builder = nullptr) {
+  dp::GaussianPartitionSelection::Builder builder;
+  builder.SetEpsilon(epsilon);
+  builder.SetDelta(delta);
+  builder.SetMaxPartitionsContributed(max_partitions_contributed);
+  builder.SetGaussianMechanism(std::move(gaussian_builder));
 
-  return std::make_unique<dp::GaussianPartitionSelection>(
-      epsilon, delta, threshold_delta, noise_delta, max_partitions_contributed,
-      adjusted_delta, threshold, gaussian);
+  auto obj = builder.Build();
+  if (!obj.ok()) {
+    throw std::runtime_error(obj.status().ToString());
+  }
+  return std::move(obj.ValueOrDie());
 }
 
 void init_algorithms_partition_selection_strategies(py::module& m) {
@@ -48,7 +65,7 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
       .def("ShouldKeep", &dp::PartitionSelectionStrategy::ShouldKeep);
 
   m.def("create_truncted_geometric_partition_strategy",
-        create_truncted_geometric_partition_strategy);
-  m.def("create_laplace_partition_strategy", create_laplace_partition_strategy);
-  m.def("create_gaussian_partition_strategy", create_gaussian_partition_strategy);
+        &create_truncted_geometric_partition_strategy);
+  m.def("create_laplace_partition_strategy", &create_laplace_partition_strategy);
+  m.def("create_gaussian_partition_strategy", &create_gaussian_partition_strategy);
 }

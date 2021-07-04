@@ -29,13 +29,13 @@ PyPartitionSelectionStrategy create_truncted_geometric_partition_strategy(
 }
 
 PyPartitionSelectionStrategy create_laplace_partition_strategy(
-    double epsilon, double delta, int max_partitions_contributed, 
-    std::unique_ptr<dp::LaplaceMechanism::Builder> laplace_builder = nullptr) {
+    double epsilon, double delta, int max_partitions_contributed
+    ) {
   dp::LaplacePartitionSelection::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
   builder.SetMaxPartitionsContributed(max_partitions_contributed);
-  builder.SetLaplaceMechanism(std::move(laplace_builder));
+  // builder.SetLaplaceMechanism(std::move(laplace_builder));
 
   auto obj = builder.Build();
   if (!obj.ok()) {
@@ -45,13 +45,13 @@ PyPartitionSelectionStrategy create_laplace_partition_strategy(
 }
 
 PyPartitionSelectionStrategy create_gaussian_partition_strategy(
-    double epsilon, double delta, int max_partitions_contributed,
-    std::unique_ptr<dp::GaussianMechanism::Builder> gaussian_builder = nullptr) {
+    double epsilon, double delta, int max_partitions_contributed
+    ) {
   dp::GaussianPartitionSelection::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
   builder.SetMaxPartitionsContributed(max_partitions_contributed);
-  builder.SetGaussianMechanism(std::move(gaussian_builder));
+  // builder.SetGaussianMechanism(std::move(gaussian_builder));
 
   auto obj = builder.Build();
   if (!obj.ok()) {
@@ -61,8 +61,9 @@ PyPartitionSelectionStrategy create_gaussian_partition_strategy(
 }
 
 void init_algorithms_partition_selection_strategies(py::module& m) {
-  py::class_<dp::PartitionSelectionStrategy>(m, "PartitionSelectionStrategy")
-      .def("ShouldKeep", &dp::PartitionSelectionStrategy::ShouldKeep);
+  py::class_<dp::PartitionSelectionStrategy, PyPartitionSelectionStrategy>(m, "PartitionSelectionStrategy")
+      .def("ShouldKeep", &dp::PartitionSelectionStrategy::ShouldKeep)
+      .attr("__module__") = "_algorithms";
 
   m.def("create_truncted_geometric_partition_strategy",
         &create_truncted_geometric_partition_strategy);

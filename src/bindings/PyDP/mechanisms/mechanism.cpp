@@ -167,7 +167,7 @@ class declareGaussianMechanism {
 
 class declareMinVarianceMechanismBuilder {
   public:
-    /* some work around here */
+    /* need some work around here */
     std::unique_ptr<dp::NumericalMechanism> build(double l2_sensitivity) {
     dp::NumericalMechanismBuilder::Builder builder;
     builder.SetL2Sensitivity(l2_sensitivity);
@@ -188,10 +188,6 @@ class declareMinVarianceMechanismBuilder {
 };
 
 void init_mechanisms_mechanism(py::module& m) {
-  declareNumericalMechanism num_obj = declareNumericalMechanism();
-  num_obj.declareNumericalMechanism(m);
-  declareNumericalMechanismBuilder num_build_obj = declareNumericalMechanismBuilder();
-  num_build_obj.declareNumericalMechanismBuilder(m);
   declareLaplaceMechanism laplace_obj = declareLaplaceMechanism();
   laplace_obj.declareLaplaceMechanism(m);
   declareGaussianMechanism gaussian_obj = declareGaussianMechanism();

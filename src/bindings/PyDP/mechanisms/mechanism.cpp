@@ -188,6 +188,8 @@ class declareMinVarianceMechanismBuilder {
 };
 
 void init_mechanisms_mechanism(py::module& m) {
+  declareNumericalMechanismBuilder num_builder_obj = declareNumericalMechanismBuilder();
+  num_builder_obj.declareNumericalMechanismBuilder(m);
   declareLaplaceMechanism laplace_obj = declareLaplaceMechanism();
   laplace_obj.declareLaplaceMechanism(m);
   declareGaussianMechanism gaussian_obj = declareGaussianMechanism();

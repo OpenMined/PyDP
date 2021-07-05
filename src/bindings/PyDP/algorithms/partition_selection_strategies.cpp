@@ -7,14 +7,13 @@
 
 #include "algorithms/partition-selection.h"
 
-using namespace std;
 
 namespace py = pybind11;
 namespace dp = differential_privacy;
 
-typedef std::unique_ptr<dp::PartitionSelectionStrategy> PyPartitionSelectionStrategy;
+using PyPartitionSelectionStrategy = std::unique_ptr<dp::PartitionSelectionStrategy>;
 
-PyPartitionSelectionStrategy create_truncted_geometric_partition_strategy(
+PyPartitionSelectionStrategy CreateTruncatedGeometricPartitionStrategy(
     double epsilon, double delta, int max_partitions_contributed) {
   dp::PreaggPartitionSelection::Builder builder;
   builder.SetEpsilon(epsilon);
@@ -28,14 +27,13 @@ PyPartitionSelectionStrategy create_truncted_geometric_partition_strategy(
   return std::move(obj.ValueOrDie());
 }
 
-PyPartitionSelectionStrategy create_laplace_partition_strategy(
+PyPartitionSelectionStrategy CreateLaplacePartitionStrategy(
     double epsilon, double delta, int max_partitions_contributed
     ) {
   dp::LaplacePartitionSelection::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
   builder.SetMaxPartitionsContributed(max_partitions_contributed);
-  // builder.SetLaplaceMechanism(std::move(laplace_builder));
 
   auto obj = builder.Build();
   if (!obj.ok()) {
@@ -44,14 +42,13 @@ PyPartitionSelectionStrategy create_laplace_partition_strategy(
   return std::move(obj.ValueOrDie());
 }
 
-PyPartitionSelectionStrategy create_gaussian_partition_strategy(
+PyPartitionSelectionStrategy CreateGaussianPartitionStrategy(
     double epsilon, double delta, int max_partitions_contributed
     ) {
   dp::GaussianPartitionSelection::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
   builder.SetMaxPartitionsContributed(max_partitions_contributed);
-  // builder.SetGaussianMechanism(std::move(gaussian_builder));
 
   auto obj = builder.Build();
   if (!obj.ok()) {
@@ -62,11 +59,13 @@ PyPartitionSelectionStrategy create_gaussian_partition_strategy(
 
 void init_algorithms_partition_selection_strategies(py::module& m) {
   py::class_<dp::PartitionSelectionStrategy, PyPartitionSelectionStrategy>(m, "PartitionSelectionStrategy")
-      .def("ShouldKeep", &dp::PartitionSelectionStrategy::ShouldKeep)
-      .attr("__module__") = "_algorithms";
+      .def("should_keep", &dp::PartitionSelectionStrategy::ShouldKeep)
+      .attr("__module__") = "_partition_selection";
 
   m.def("create_truncted_geometric_partition_strategy",
-        &create_truncted_geometric_partition_strategy);
-  m.def("create_laplace_partition_strategy", &create_laplace_partition_strategy);
-  m.def("create_gaussian_partition_strategy", &create_gaussian_partition_strategy);
+        &CreateTruncatedGeometricPartitionStrategy);
+  m.def("create_laplace_partition_strategy", 
+        &CreateLaplacePartitionStrategy);
+  m.def("create_gaussian_partition_strategy", 
+        &CreateGaussianPartitionStrategy);
 }

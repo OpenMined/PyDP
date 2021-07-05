@@ -41,7 +41,9 @@ PYBIND11_MODULE(_pydp, m) {
   init_algorithms_bounded_functions(malgorithms);
   init_algorithms_count(malgorithms);
   init_algorithms_order_statistics(malgorithms);
-  init_algorithms_partition_selection_strategies(malgorithms);
+
+  auto mpartitionselections = m.def_submodule("_partition_selection");
+  init_algorithms_partition_selection_strategies(mpartitionselections);
 
   auto mdistributions = m.def_submodule("_distributions");
   init_algorithms_distributions(mdistributions);

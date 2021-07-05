@@ -1,9 +1,9 @@
 from .._pydp._partition_selection import *
 
 def create_partition_strategy(strategy: str,
-							  epsilon: float,
-							  delta: float,
-							  max_partitions_contributed: int) -> PartitionSelectionStrategy:
+                              epsilon: float,
+                              delta: float,
+                              max_partitions_contributed: int) -> PartitionSelectionStrategy:
 	if strategy.lower() == "truncated_geometric":
 		return create_truncted_geometric_partition_strategy(epsilon, delta, max_partitions_contributed)
 	if strategy.lower() == "laplace":

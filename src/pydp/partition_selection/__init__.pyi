@@ -39,9 +39,9 @@ def create_gaussian_partition_strategy(epsilon: float,
 	...
 
 def create_partition_strategy(strategy: str,
-							  epsilon: float,
-							  delta: float,
-							  max_partitions_contributed: int) -> PartitionSelectionStrategy:
+                              epsilon: float,
+                              delta: float,
+                              max_partitions_contributed: int) -> PartitionSelectionStrategy:
 	"""
 	Factory for creating PartitionSelectionStrategy.
 	"""

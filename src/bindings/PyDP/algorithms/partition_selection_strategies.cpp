@@ -58,8 +58,16 @@ PyPartitionSelectionStrategy CreateGaussianPartitionStrategy(
 }
 
 void init_algorithms_partition_selection_strategies(py::module& m) {
-  py::class_<dp::PartitionSelectionStrategy, PyPartitionSelectionStrategy>(m, "PartitionSelectionStrategy")
-      .def("should_keep", &dp::PartitionSelectionStrategy::ShouldKeep)
+  auto pyClass = py::class_<dp::PartitionSelectionStrategy, PyPartitionSelectionStrategy>(m, "PartitionSelectionStrategy",
+      R"pbdoc(
+        Base class for all (Ɛ, 𝛿)-differenially private partition selection strategies.
+      )pbdoc");
+  pyClass.def("should_keep",
+            &dp::PartitionSelectionStrategy::ShouldKeep,
+            py::arg("num_users"),
+            R"pbdoc(
+              Decides whether or not to keep a partition with `num_users` based on differential privacy parameters and strategy.
+            )pbdoc")
       .attr("__module__") = "_partition_selection";
 
   m.def("create_truncted_geometric_partition_strategy",

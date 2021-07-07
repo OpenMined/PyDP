@@ -49,7 +49,7 @@ ML
 
 Partition Selection
 ###################
-.. currentmodule:: pydp.algorithms
+.. currentmodule:: pydp.algorithms.partition_selection
 .. autoclass:: PartitionSelectionStrategy
    :members: 
 .. autofunction:: create_partition_strategy

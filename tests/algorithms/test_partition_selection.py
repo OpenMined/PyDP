@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 import pydp as dp
-from pydp.algorithms import create_partition_strategy
+from pydp.algorithms.partition_selection import create_partition_strategy
 
 k_N_SIMS = 1000000
 k_THRESHOLD = 1e-1

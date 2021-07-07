@@ -2,6 +2,8 @@ import numpy as np
 import pytest
 import pydp as dp
 from pydp.algorithms.partition_selection import create_partition_strategy
+# TODO - wait for NumericalMechanism implementation to use those for testing Laplace/Gaussian Partition Selection.
+# from pydp._pydp._mechanisms import LaplaceMechanism, GaussianMechanism
 
 k_N_SIMS = 1000000
 k_THRESHOLD = 1e-1

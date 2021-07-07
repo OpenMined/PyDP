@@ -22,6 +22,7 @@ pybind_extension(
         "@google_dp//algorithms:bounded-mean",
         "@google_dp//algorithms:bounded-sum",
         "@google_dp//algorithms:bounded-standard-deviation",
+        "@google_dp//algorithms:partition-selection",
         "@google_dp//algorithms:count",
         "@google_dp//algorithms:order-statistics",
         "@google_dp//proto:util-lib"

@@ -46,3 +46,10 @@ ML
 .. automodule:: pydp.ml.naive_bayes
 .. autoclass::  GaussianNB
    :members:
+
+Partition Selection
+###################
+.. currentmodule:: pydp.algorithms.partition_selection
+.. autoclass:: PartitionSelectionStrategy
+   :members: 
+.. autofunction:: create_partition_strategy

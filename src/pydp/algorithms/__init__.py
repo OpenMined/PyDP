@@ -2,6 +2,4 @@
 from . import laplacian
 from . import partition_selection
 
-__all__ = [
-    "laplacian",
-]
+__all__ = ["laplacian", "partition_selection"]

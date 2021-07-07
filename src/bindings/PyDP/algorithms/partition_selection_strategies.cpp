@@ -69,7 +69,7 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
             )pbdoc")
       .attr("__module__") = "_partition_selection";
 
-  m.def("create_truncted_geometric_partition_strategy",
+  m.def("create_truncated_geometric_partition_strategy",
         &CreateTruncatedGeometricPartitionStrategy);
   m.def("create_laplace_partition_strategy", &CreateLaplacePartitionStrategy);
   m.def("create_gaussian_partition_strategy", &CreateGaussianPartitionStrategy);

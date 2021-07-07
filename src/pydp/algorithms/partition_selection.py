@@ -1,4 +1,10 @@
-from .._pydp._partition_selection import *
+from .._pydp._partition_selection import (
+    create_truncated_geometric_partition_strategy,  # type: ignore
+    create_laplace_partition_strategy,  # type: ignore
+    create_gaussian_partition_strategy,  # type: ignore
+)
+
+__all__ = ["PartitionSelectionStrategy", "create_partition_strategy"]
 
 
 class PartitionSelectionStrategy:
@@ -36,7 +42,7 @@ def create_partition_strategy(
         The maximum amount of partitions contributed by the strategy.
     """
     if strategy.lower() == "truncated_geometric":
-        return create_truncted_geometric_partition_strategy(
+        return create_truncated_geometric_partition_strategy(
             epsilon, delta, max_partitions_contributed
         )
     if strategy.lower() == "laplace":

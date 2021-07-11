@@ -9,12 +9,14 @@ namespace dpi = differential_privacy::internal;
 
 class declareLaplaceDistributionClass {
  public:
-  std::unique_ptr<dpi::LaplaceDistribution> build(double epsilon, double sensitivity) {
-    dpi::LaplaceDistribution::Builder builder;
-    builder.SetEpsilon(epsilon);
-    builder.SetSensitivity(sensitivity);
-    return std::move(builder.Build().value());
-  };
+   class Builder {
+      std::unique_ptr<dpi::LaplaceDistribution> build(double epsilon, double sensitivity) {
+      dpi::LaplaceDistribution::Builder builder;
+      builder.SetEpsilon(epsilon);
+      builder.SetSensitivity(sensitivity);
+      return std::move(builder.Build().value());
+      }
+    };
   void declareLaplaceDistribution(py::module &m) {
     py::class_<dpi::LaplaceDistribution> laplace_dist(m, "LaplaceDistribution");
     laplace_dist.attr("__module__") = "pydp";
@@ -46,11 +48,13 @@ class declareLaplaceDistributionClass {
 
 class declareGaussianDistributionClass {
  public:
-  std::unique_ptr<dpi::GaussianDistribution> build(double stddev) {
-    dpi::GaussianDistribution::Builder builder;
-    builder.SetStddev(stddev);
-    return std::move(builder.Build().value());
+   class Builder {
+      std::unique_ptr<dpi::GaussianDistribution> build(double stddev) {
+      dpi::GaussianDistribution::Builder builder;
+      builder.SetStddev(stddev);
+      return std::move(builder.Build().value());
   };
+}
   void declareGaussianDistribution(py::module &m) {
     py::class_<dpi::GaussianDistribution> gauss_dist(m, "GaussianDistribution");
 
@@ -73,11 +77,13 @@ class declareGaussianDistributionClass {
 
 class declareGeometricDistributionClass {
  public:
-  std::unique_ptr<dpi::GeometricDistribution> build(double lambda_) {
+   class Builder {
+    std::unique_ptr<dpi::GeometricDistribution> build(double lambda_) {
     dpi::GeometricDistribution::Builder builder;
     builder.SetLambda(lambda_);
     return std::move(builder.Build().value());
   };
+  }
   void declareGeometricDistribution(py::module &m) {
     py::class_<dpi::GeometricDistribution> geometric_dist(m, "GeometricDistribution");
     geometric_dist.attr("__module__") = "pydp";

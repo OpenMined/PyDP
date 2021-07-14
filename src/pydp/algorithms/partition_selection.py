@@ -4,7 +4,13 @@ from .._pydp._partition_selection import (
     create_gaussian_partition_strategy,  # type: ignore
 )
 
-__all__ = ["PartitionSelectionStrategy", "create_partition_strategy"]
+__all__ = [
+    "PartitionSelectionStrategy",
+    "create_partition_strategy",
+    "create_truncated_geometric_partition_strategy",
+    "create_laplace_partition_strategy",
+    "create_gaussian_partition_strategy",
+]
 
 
 class PartitionSelectionStrategy:

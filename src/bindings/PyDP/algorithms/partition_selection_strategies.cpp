@@ -12,37 +12,10 @@ namespace dp = differential_privacy;
 
 using PyPartitionSelectionStrategy = std::unique_ptr<dp::PartitionSelectionStrategy>;
 
-PyPartitionSelectionStrategy CreateTruncatedGeometricPartitionStrategy(
-    double epsilon, double delta, int max_partitions_contributed) {
-  dp::PreaggPartitionSelection::Builder builder;
-  builder.SetEpsilon(epsilon);
-  builder.SetDelta(delta);
-  builder.SetMaxPartitionsContributed(max_partitions_contributed);
-
-  auto obj = builder.Build();
-  if (!obj.ok()) {
-    throw std::runtime_error(obj.status().ToString());
-  }
-  return std::move(obj.ValueOrDie());
-}
-
-PyPartitionSelectionStrategy CreateLaplacePartitionStrategy(
-    double epsilon, double delta, int max_partitions_contributed) {
-  dp::LaplacePartitionSelection::Builder builder;
-  builder.SetEpsilon(epsilon);
-  builder.SetDelta(delta);
-  builder.SetMaxPartitionsContributed(max_partitions_contributed);
-
-  auto obj = builder.Build();
-  if (!obj.ok()) {
-    throw std::runtime_error(obj.status().ToString());
-  }
-  return std::move(obj.ValueOrDie());
-}
-
-PyPartitionSelectionStrategy CreateGaussianPartitionStrategy(
-    double epsilon, double delta, int max_partitions_contributed) {
-  dp::GaussianPartitionSelection::Builder builder;
+template <class Strategy>
+PyPartitionSelectionStrategy CreatePartitionStrategy(double epsilon, double delta,
+                                                     int max_partitions_contributed) {
+  typename Strategy::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
   builder.SetMaxPartitionsContributed(max_partitions_contributed);
@@ -70,7 +43,9 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
       .attr("__module__") = "_partition_selection";
 
   m.def("create_truncated_geometric_partition_strategy",
-        &CreateTruncatedGeometricPartitionStrategy);
-  m.def("create_laplace_partition_strategy", &CreateLaplacePartitionStrategy);
-  m.def("create_gaussian_partition_strategy", &CreateGaussianPartitionStrategy);
+        &CreatePartitionStrategy<dp::PreaggPartitionSelection>);
+  m.def("create_laplace_partition_strategy",
+        &CreatePartitionStrategy<dp::LaplacePartitionSelection>);
+  m.def("create_gaussian_partition_strategy",
+        &CreatePartitionStrategy<dp::GaussianPartitionSelection>);
 }

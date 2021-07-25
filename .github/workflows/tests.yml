@@ -2,8 +2,6 @@ name: Tests
 
 on:
   pull_request:
-    branches:
-      - dev
     paths:
       - "*.bazel"
       - "*.cpp"
@@ -12,6 +10,7 @@ on:
       - "*.hpp"
       - "*.h"
       - "*.py"
+      - "*.ipynb"
       - "*.go"
       - "*.mod"
       - "*.toml"

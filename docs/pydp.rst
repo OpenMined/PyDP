@@ -31,7 +31,12 @@ Numerical Mechanisms
 .. currentmodule:: pydp.algorithms.numerical_mechanisms
 .. autoclass:: NumericalMechanism
    :members: 
-
+.. autoclass:: LaplaceMechanism
+   :members:
+   :show-inheritance:
+.. autoclass:: GaussianMechanism
+   :members:
+   :show-inheritance:
 
 Distributions
 #############

@@ -57,7 +57,10 @@ std::unique_ptr<T> downcast_unique_ptr(std::unique_ptr<U> u_ptr) {
 class NumericalMechanismBinder {
  public:
   static void DeclareIn(py::module& m) {
-    py::class_<dp::NumericalMechanism> numerical_mech(m, "NumericalMechanism");
+    py::class_<dp::NumericalMechanism> numerical_mech(m, "NumericalMechanism",
+                                                      R"pbdoc(
+        Base class for all (Ɛ, 𝛿)-differenially private additive noise numerical mechanisms.
+      )pbdoc");
     numerical_mech.attr("__module__") = "pydp";
     DefPyAddNoise<int, double>(numerical_mech);
     DefPyAddNoise<int64_t, double>(numerical_mech);
@@ -67,7 +70,10 @@ class NumericalMechanismBinder {
     DefPyAddNoise<double>(numerical_mech);
     numerical_mech
         .def("noised_value_above_threshold",
-             &dp::NumericalMechanism::NoisedValueAboveThreshold)
+             &dp::NumericalMechanism::NoisedValueAboveThreshold,
+             R"pbdoc(
+               Quickly determines if `result` with added noise is above certain `threshold`.
+             )pbdoc")
         .def("memory_used", &dp::NumericalMechanism::MemoryUsed)
         .def(
             "noise_confidence_interval",
@@ -77,8 +83,15 @@ class NumericalMechanismBinder {
               return result.ValueOrDie();
             },
             py::arg("confidence_level"), py::arg("privacy_budget"),
-            py::arg("noised_result"))
-        .def_property_readonly("epsilon", &dp::NumericalMechanism::GetEpsilon);
+            py::arg("noised_result"),
+            R"pbdoc(
+              Returns the confidence interval of the specified confidence level of the
+              noise that AddNoise() would add with the specified privacy budget.
+              If the returned value is <x,y>, then the noise added has a confidence_level
+              chance of being in the domain [x,y]
+            )pbdoc")
+        .def_property_readonly("epsilon", &dp::NumericalMechanism::GetEpsilon,
+                               "The Ɛ of the numerical mechanism");
   }
 };
 
@@ -111,9 +124,10 @@ class LaplaceMechanismBinder {
         .def("get_uniform_double", &dp::LaplaceMechanism::GetUniformDouble)
         // .def("deserialize", &dp::LaplaceMechanism::Deserialize)
         // .def("serialize", &dp::LaplaceMechanism::Serialize)
-        .def("memory_used", &dp::LaplaceMechanism::MemoryUsed)
-        .def_property_readonly("sensitivity", &dp::LaplaceMechanism::GetSensitivity)
-        .def_property_readonly("diversity", &dp::LaplaceMechanism::GetDiversity);
+        .def_property_readonly("sensitivity", &dp::LaplaceMechanism::GetSensitivity,
+                               "The L1 sensitivity of the query.")
+        .def_property_readonly("diversity", &dp::LaplaceMechanism::GetDiversity,
+                               "The diversity of the Laplace mechanism.");
   }
 };
 
@@ -144,22 +158,27 @@ class GaussianMechanismBinder {
         }))
         // .def("deserialize", &dp::GaussianMechanism::Deserialize)
         // .def("serialize", &dp::GaussianMechanism::Serialize)
-        .def("memory_used", &dp::GaussianMechanism::MemoryUsed)
-        .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta)
-        .def_property_readonly("std",
-                               [](const dp::GaussianMechanism& self) {
-                                 return dp::GaussianMechanism::CalculateStddev(
-                                     self.GetEpsilon(), self.GetDelta(),
-                                     self.GetL2Sensitivity());
-                               })
+        .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta,
+                               "The 𝛿 of the Gaussian mechanism.")
+        .def_property_readonly(
+            "std",
+            [](const dp::GaussianMechanism& self) {
+              return dp::GaussianMechanism::CalculateStddev(
+                  self.GetEpsilon(), self.GetDelta(), self.GetL2Sensitivity());
+            },
+            R"pbdoc( 
+              The standard deviation parameter of the 
+              Gaussian mechanism underlying distribution. 
+            )pbdoc")
         .def_property_readonly("l2_sensitivity",
-                               &dp::GaussianMechanism::GetL2Sensitivity);
+                               &dp::GaussianMechanism::GetL2Sensitivity,
+                               "The L2 sensitivity of the query.");
   }
 };
 
 void init_mechanisms_mechanism(py::module& m) {
-  NumericalMechanismBinder::DeclareIn(m);
   ConfidenceIntervalBinder::DeclareIn(m);
+  NumericalMechanismBinder::DeclareIn(m);
   LaplaceMechanismBinder::DeclareIn(m);
   GaussianMechanismBinder::DeclareIn(m);
 }

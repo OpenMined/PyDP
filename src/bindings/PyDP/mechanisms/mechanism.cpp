@@ -14,6 +14,21 @@ using namespace std;
 namespace py = pybind11;
 namespace dp = differential_privacy;
 
+class ConfidenceIntervalBinder {
+ public:
+  static void DeclareIn(py::module& m) {
+    py::class_<dp::ConfidenceInterval> confidence_interval(m, "ConfidenceInterval");
+    confidence_interval.attr("__module__") = "pydp";
+    confidence_interval
+        .def_property("lower_bound", &dp::ConfidenceInterval::lower_bound,
+                      &dp::ConfidenceInterval::set_lower_bound)
+        .def_property("upper_bound", &dp::ConfidenceInterval::upper_bound,
+                      &dp::ConfidenceInterval::set_upper_bound)
+        .def_property("confidence_level", &dp::ConfidenceInterval::confidence_level,
+                      &dp::ConfidenceInterval::set_confidence_level);
+  }
+};
+
 template <typename T>
 py::class_<dp::NumericalMechanism>& DefPyAddNoise(
     py::class_<dp::NumericalMechanism>& pyclass) {
@@ -54,11 +69,15 @@ class NumericalMechanismBinder {
         .def("noised_value_above_threshold",
              &dp::NumericalMechanism::NoisedValueAboveThreshold)
         .def("memory_used", &dp::NumericalMechanism::MemoryUsed)
-        .def("noise_confidence_interval",
-             py::overload_cast<double, double, double>(
-                 &dp::NumericalMechanism::NoiseConfidenceInterval),
-             py::arg("confidence_level"), py::arg("privacy_budget"),
-             py::arg("noised_result"))
+        .def(
+            "noise_confidence_interval",
+            [](dp::NumericalMechanism& self, double cl, double pb,
+               double nr) -> dp::ConfidenceInterval {
+              auto result = self.NoiseConfidenceInterval(cl, pb, nr);
+              return result.ValueOrDie();
+            },
+            py::arg("confidence_level"), py::arg("privacy_budget"),
+            py::arg("noised_result"))
         .def_property_readonly("epsilon", &dp::NumericalMechanism::GetEpsilon);
   }
 };
@@ -90,14 +109,14 @@ class LaplaceMechanismBinder {
              }),
              py::arg("epsilon"), py::arg("sensitivity") = 1.0)
         .def("deserialize", &dp::LaplaceMechanism::Deserialize)
-        .def("noised_value_above_threshold",
-             &dp::LaplaceMechanism::NoisedValueAboveThreshold)
+        // .def("noised_value_above_threshold",
+        //      &dp::LaplaceMechanism::NoisedValueAboveThreshold)
         .def("get_uniform_double", &dp::LaplaceMechanism::GetUniformDouble)
-        .def("noise_confidence_interval",
-             py::overload_cast<double, double, double>(
-                 &dp::LaplaceMechanism::NoiseConfidenceInterval),
-             py::arg("confidence_level"), py::arg("privacy_budget"),
-             py::arg("noised_result"))
+        // .def("noise_confidence_interval",
+        //      py::overload_cast<double, double, double>(
+        //          &dp::LaplaceMechanism::NoiseConfidenceInterval),
+        //      py::arg("confidence_level"), py::arg("privacy_budget"),
+        //      py::arg("noised_result"))
         .def("serialize", &dp::LaplaceMechanism::Serialize)
         .def("memory_used", &dp::LaplaceMechanism::MemoryUsed)
         .def_property_readonly("sensitivity", &dp::LaplaceMechanism::GetSensitivity)
@@ -131,17 +150,24 @@ class GaussianMechanismBinder {
           return build(epsilon, delta, l2_sensitivity);
         }))
         .def("deserialize", &dp::GaussianMechanism::Deserialize)
-        .def("noised_value_above_threshold",
-             &dp::GaussianMechanism::NoisedValueAboveThreshold)
-        .def("noise_confidence_interval",
-             py::overload_cast<double, double, double>(
-                 &dp::GaussianMechanism::NoiseConfidenceInterval),
-             py::arg("confidence_level"), py::arg("privacy_budget"),
-             py::arg("noised_result"))
+        // .def("noised_value_above_threshold",
+        //      &dp::GaussianMechanism::NoisedValueAboveThreshold)
+        // .def("noise_confidence_interval",
+        //      py::overload_cast<double, double, double>(
+        //          &dp::GaussianMechanism::NoiseConfidenceInterval),
+        //      py::arg("confidence_level"), py::arg("privacy_budget"),
+        //      py::arg("noised_result"))
         .def("serialize", &dp::GaussianMechanism::Serialize)
         .def("memory_used", &dp::GaussianMechanism::MemoryUsed)
-        .def("calculate_stddev", &dp::GaussianMechanism::CalculateStddev)
-        .def("calculate_delta", &dp::GaussianMechanism::CalculateDelta)
+        // .def("calculate_stddev", &dp::GaussianMechanism::CalculateStddev)
+        // .def("calculate_delta", &dp::GaussianMechanism::CalculateDelta)
+        .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta)
+        .def_property_readonly("std",
+                               [](const dp::GaussianMechanism& self) {
+                                 return dp::GaussianMechanism::CalculateStddev(
+                                     self.GetEpsilon(), self.GetDelta(),
+                                     self.GetL2Sensitivity());
+                               })
         .def_property_readonly("l2_sensitivity",
                                &dp::GaussianMechanism::GetL2Sensitivity);
   }
@@ -149,6 +175,7 @@ class GaussianMechanismBinder {
 
 void init_mechanisms_mechanism(py::module& m) {
   NumericalMechanismBinder::DeclareIn(m);
+  ConfidenceIntervalBinder::DeclareIn(m);
   LaplaceMechanismBinder::DeclareIn(m);
   GaussianMechanismBinder::DeclareIn(m);
 }

@@ -26,6 +26,12 @@ Algorithms
    :inherited-members:
 
 
+Numerical Mechanisms
+####################
+.. currentmodule:: pydp.algorithms.numerical_mechanisms
+.. autoclass:: NumericalMechanism
+   :members: 
+
 
 Distributions
 #############

@@ -1,5 +1,14 @@
+import numpy as np
 import pytest
 import pydp.algorithms.numerical_mechanisms as num_mech
+from scipy.special import erfinv
+
+
+REL_ERR_TOL = 1e-5
+
+
+def assert_almost_eq(val_true, val_pred):
+    return np.abs((val_true - val_pred) / val_true) < REL_ERR_TOL
 
 
 def test_basic():
@@ -18,9 +27,9 @@ def test_basic():
     obj = num_mech.LaplaceMechanism(epsilon, sensitivity)
     assert num_mech_methods.issubset(set(dir(obj)))
     assert {
-        "deserialize",
+        # "deserialize",
+        # "serialize",
         "get_uniform_double",
-        "serialize",
         "memory_used",
         "sensitivity",
         "diversity",
@@ -28,8 +37,8 @@ def test_basic():
     obj = num_mech.GaussianMechanism(epsilon, delta, sensitivity)
     assert num_mech_methods.issubset(set(dir(obj)))
     assert {
-        "deserialize",
-        "serialize",
+        # "deserialize",
+        # "serialize",
         "memory_used",
         "l2_sensitivity",
         "std",
@@ -50,6 +59,39 @@ def test_laplace_mechanism():
     assert type(value) is float
     value = laplace.add_noise(value, 0.1)
     assert type(value) is float
-    print(laplace.noise_confidence_interval.__doc__)
+    conf_level = 0.5
+    priv_budg = 0.1
     interval = laplace.noise_confidence_interval(0.5, 0.1, value)
-    print(type(interval))
+    assert type(interval) is num_mech.ConfidenceInterval
+    bound = laplace.diversity * np.log(1 - conf_level) / priv_budg
+    lower_bound, upper_bound = value - bound, value + bound
+    assert_almost_eq(lower_bound, interval.lower_bound)
+    assert_almost_eq(upper_bound, interval.upper_bound)
+    assert conf_level == interval.confidence_level
+
+
+def test_gaussian_mechanism():
+    epsilon, delta, l2_sensitivity = 1, 1e-5, 3.0
+    gaussian = num_mech.GaussianMechanism(epsilon, delta, l2_sensitivity)
+    value = 0
+    value = gaussian.add_noise(value)
+    assert type(value) is int
+    value = gaussian.add_noise(value, 0.1)
+    assert type(value) is int
+    value = 0.0
+    value = gaussian.add_noise(value)
+    assert type(value) is float
+    value = gaussian.add_noise(value, 0.1)
+    assert type(value) is float
+    conf_level = 0.5
+    priv_budg = 0.1
+    interval = gaussian.noise_confidence_interval(0.5, 0.1, value)
+    local_gaussian = num_mech.GaussianMechanism(
+        priv_budg * epsilon, priv_budg * delta, l2_sensitivity
+    )
+    assert type(interval) is num_mech.ConfidenceInterval
+    bound = erfinv(-conf_level) * local_gaussian.std * (2 ** 0.5)
+    lower_bound, upper_bound = value - bound, value + bound
+    assert_almost_eq(lower_bound, interval.lower_bound)
+    assert_almost_eq(upper_bound, interval.upper_bound)
+    assert conf_level == interval.confidence_level

@@ -108,16 +108,9 @@ class LaplaceMechanismBinder {
                return build(epsilon, sensitivity);
              }),
              py::arg("epsilon"), py::arg("sensitivity") = 1.0)
-        .def("deserialize", &dp::LaplaceMechanism::Deserialize)
-        // .def("noised_value_above_threshold",
-        //      &dp::LaplaceMechanism::NoisedValueAboveThreshold)
         .def("get_uniform_double", &dp::LaplaceMechanism::GetUniformDouble)
-        // .def("noise_confidence_interval",
-        //      py::overload_cast<double, double, double>(
-        //          &dp::LaplaceMechanism::NoiseConfidenceInterval),
-        //      py::arg("confidence_level"), py::arg("privacy_budget"),
-        //      py::arg("noised_result"))
-        .def("serialize", &dp::LaplaceMechanism::Serialize)
+        // .def("deserialize", &dp::LaplaceMechanism::Deserialize)
+        // .def("serialize", &dp::LaplaceMechanism::Serialize)
         .def("memory_used", &dp::LaplaceMechanism::MemoryUsed)
         .def_property_readonly("sensitivity", &dp::LaplaceMechanism::GetSensitivity)
         .def_property_readonly("diversity", &dp::LaplaceMechanism::GetDiversity);
@@ -149,18 +142,9 @@ class GaussianMechanismBinder {
         .def(py::init([](double epsilon, double delta, double l2_sensitivity) {
           return build(epsilon, delta, l2_sensitivity);
         }))
-        .def("deserialize", &dp::GaussianMechanism::Deserialize)
-        // .def("noised_value_above_threshold",
-        //      &dp::GaussianMechanism::NoisedValueAboveThreshold)
-        // .def("noise_confidence_interval",
-        //      py::overload_cast<double, double, double>(
-        //          &dp::GaussianMechanism::NoiseConfidenceInterval),
-        //      py::arg("confidence_level"), py::arg("privacy_budget"),
-        //      py::arg("noised_result"))
-        .def("serialize", &dp::GaussianMechanism::Serialize)
+        // .def("deserialize", &dp::GaussianMechanism::Deserialize)
+        // .def("serialize", &dp::GaussianMechanism::Serialize)
         .def("memory_used", &dp::GaussianMechanism::MemoryUsed)
-        // .def("calculate_stddev", &dp::GaussianMechanism::CalculateStddev)
-        // .def("calculate_delta", &dp::GaussianMechanism::CalculateDelta)
         .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta)
         .def_property_readonly("std",
                                [](const dp::GaussianMechanism& self) {

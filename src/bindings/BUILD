@@ -7,7 +7,8 @@ pybind_extension(
         "PyDP/base/*.cpp",
         "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
-        "PyDP/proto/*.cpp"
+        "PyDP/proto/*.cpp",
+        "PyDP/mechanisms/*.cpp"
     ]),
 
     visibility = ["//src/python:__pkg__"],
@@ -23,6 +24,7 @@ pybind_extension(
         "@google_dp//algorithms:bounded-sum",
         "@google_dp//algorithms:bounded-standard-deviation",
         "@google_dp//algorithms:partition-selection",
+        "@google_dp//algorithms:numerical-mechanisms",
         "@google_dp//algorithms:count",
         "@google_dp//algorithms:order-statistics",
         "@google_dp//proto:util-lib"

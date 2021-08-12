@@ -49,19 +49,20 @@ http_archive(
 
 # Google DP library and it's dependencies
 local_repository(
-    name = "com_google_differential_privacy",
-    path = "third_party/differential-privacy",
+    name = "google_dp",
+    path = "third_party/differential-privacy/cc",
 )
 
+load("@google_dp//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
+
+cc_differential_privacy_deps()
+
+# Google DP library and it's dependencies
 local_repository(
-    name = "com_google_cc_differential_privacy",
-    path = "third_party/differential-privacy/cc",
+    name = "com_google_differential_privacy",
+    path = "third_party/differential-privacy",
 )
 
 load("@com_google_differential_privacy//:differential_privacy_deps.bzl", "differential_privacy_deps")
 
 differential_privacy_deps()
-
-load("@com_google_cc_differential_privacy//:cc_differential_privacy_deps.bzl", "cc_differential_privacy_deps")
-
-cc_differential_privacy_deps()

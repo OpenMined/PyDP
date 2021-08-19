@@ -29,7 +29,7 @@ guarantee and accuracy of your model written in Python.
 BoundedSum, Max, Count Above, Percentile, Min, Median, etc.
   - All the computation methods mentioned above use Laplace noise only (other
 noise mechanisms will be added soon! :smiley:)
-- :fire: Compatible with all three types of Operating Systems - Linux, macOS, and Windows smiley:
+- :fire: Compatible with all three types of Operating Systems - Linux, macOS, and Windows :smiley:
 - :star: Use Python 3.x.
 
 ## Installation

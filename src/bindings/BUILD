@@ -17,7 +17,7 @@ pybind_extension(
         "@google_dp//base:logging",
         "@google_dp//base:statusor_internals",
         "@google_dp//base:status",
-        "@google_dp//base:canonical_errors",
+        # "@google_dp//base:canonical_errors",
         "@google_dp//base:statusor",
         "@google_dp//algorithms:algorithm",
         "@google_dp//algorithms:bounded-mean",

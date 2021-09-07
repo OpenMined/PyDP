@@ -107,7 +107,7 @@ jobs:
       # Temporarily Fix
       - name: BUILD file configuration
         run: |
-          perl -pi -e 's/@com_google_cc_differential_privacy//g' third_party/differential-privacy/cc/algorithms/BUILD
+          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
         timeout-minutes: 20

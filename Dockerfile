@@ -60,6 +60,8 @@ RUN mkdir -p third_party && \
 RUN rm -rf third_party/differential-privacy/java && \
     rm -rf third_party/differential-privacy/examples/java
 
+RUN sed -i -e 's/@com_google_cc_differential_privacy//g' third_party/differential-privacy/cc/algorithms/BUILD
+
 # This makes poetry's virtual environment in the project dir
 RUN poetry config virtualenvs.in-project true
 

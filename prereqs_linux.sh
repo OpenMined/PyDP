@@ -20,7 +20,7 @@ if command -v python3 &>/dev/null; then
     elif command python --version | grep -q 'Python 3'; then
     echo "Python 3 already installed"
 else
-    echo "Installing Python 3 is not installed"
+    echo "Installing Python 3 is not installed"  
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt-get update
     sudo apt-get install python3.6
@@ -60,10 +60,20 @@ git submodule update --init --recursive
 
 
 # checkout out to particular commit
-cd third_party/differential-privacy && git checkout 78d3fb8f63ea904ea6449a8276b9070254c650ec
+cd third_party/differential-privacy && git checkout e224a8635728026fb3aa9409ab3a98b9a3f5566a && \
 cd -
 # renaming workspace.bazel to workspace
 mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
 
+# replacing `@com_google_cc_differential_privacy` in cc/alorithms BUILD file with empty string
+# Note: this is a temporary fix
+perl -pi -e 's/@com_google_cc_differential_privacy//g' third_party/differential-privacy/cc/algorithms/BUILD
+
 # Removing the java part
 rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java
+
+# Removing the Go part
+rm -rf third_party/differential-privacy/go third_party/differential-privacy/examples/go
+
+# Removing the Privacy on Beam  
+rm -rf third_party/differential-privacy/privacy-on-beam

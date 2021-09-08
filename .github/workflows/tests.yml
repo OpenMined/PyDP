@@ -77,6 +77,11 @@ jobs:
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
 
+      # Temporarily Fix
+      - name: BUILD file configuration
+        run: |
+          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
+
       - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
         if: runner.os != 'Windows'
@@ -95,11 +100,6 @@ jobs:
         #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-
-      # Temporarily Fix
-      - name: BUILD file configuration
-        run: |
-          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
 
       - name: Cache Bazel Windows
         if: runner.os == 'Windows'

@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-18.04, macos-latest, windows-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
     runs-on: ${{ matrix.os }}
 
@@ -33,6 +33,11 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
+
+      # Temporarily Fix
+      - name: BUILD file configuration
+        run: |
+          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
 
       - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
@@ -61,11 +66,6 @@ jobs:
           path: |
             ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-
-      # Temporarily Fix
-      - name: BUILD file configuration
-        run: |
-          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

@@ -96,6 +96,11 @@ jobs:
         run: |
           echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
 
+      # Temporarily Fix
+      - name: BUILD file configuration
+        run: |
+          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
+
       - name: Cache Bazel Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
@@ -104,10 +109,7 @@ jobs:
           path: |
             ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-      # Temporarily Fix
-      - name: BUILD file configuration
-        run: |
-          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
+
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
         timeout-minutes: 20

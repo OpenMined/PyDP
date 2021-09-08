@@ -34,6 +34,11 @@ jobs:
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
 
+      # Temporarily Fix
+      - name: BUILD file configuration
+        run: |
+          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
+
       - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
         if: runner.os != 'Windows'
@@ -61,11 +66,6 @@ jobs:
           path: |
             ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-
-      # Temporarily Fix
-      - name: BUILD file configuration
-        run: |
-          sed -i -e 's/@com_google_cc_differential_privacy//g' ./third_party/differential-privacy/cc/algorithms/BUILD
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

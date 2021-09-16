@@ -65,10 +65,6 @@ cd -
 # renaming workspace.bazel to workspace
 mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE
 
-# replacing `@com_google_cc_differential_privacy` in cc/alorithms BUILD file with empty string
-# Note: this is a temporary fix
-perl -pi -e 's/@com_google_cc_differential_privacy//g' third_party/differential-privacy/cc/algorithms/BUILD
-
 # Removing the java part
 rm -rf third_party/differential-privacy/java third_party/differential-privacy/examples/java
 

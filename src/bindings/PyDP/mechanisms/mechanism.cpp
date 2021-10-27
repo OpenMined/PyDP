@@ -121,9 +121,6 @@ class LaplaceMechanismBinder {
                return build(epsilon, sensitivity);
              }),
              py::arg("epsilon"), py::arg("sensitivity") = 1.0)
-        .def("get_uniform_double", &dp::LaplaceMechanism::GetUniformDouble)
-        // .def("deserialize", &dp::LaplaceMechanism::Deserialize)
-        // .def("serialize", &dp::LaplaceMechanism::Serialize)
         .def_property_readonly("sensitivity", &dp::LaplaceMechanism::GetSensitivity,
                                "The L1 sensitivity of the query.")
         .def_property_readonly("diversity", &dp::LaplaceMechanism::GetDiversity,
@@ -154,10 +151,9 @@ class GaussianMechanismBinder {
     gaus_mech.attr("__module__") = "pydp";
     gaus_mech
         .def(py::init([](double epsilon, double delta, double l2_sensitivity) {
-          return build(epsilon, delta, l2_sensitivity);
-        }))
-        // .def("deserialize", &dp::GaussianMechanism::Deserialize)
-        // .def("serialize", &dp::GaussianMechanism::Serialize)
+               return build(epsilon, delta, l2_sensitivity);
+             }),
+             py::arg("epsilon"), py::arg("delta"), py::arg("sensitivity") = 1.0)
         .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta,
                                "The 𝛿 of the Gaussian mechanism.")
         .def_property_readonly(

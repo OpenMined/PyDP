@@ -27,9 +27,6 @@ def test_basic():
     obj = num_mech.LaplaceMechanism(epsilon, sensitivity)
     assert num_mech_methods.issubset(set(dir(obj)))
     assert {
-        # "deserialize",
-        # "serialize",
-        "get_uniform_double",
         "memory_used",
         "sensitivity",
         "diversity",
@@ -37,8 +34,6 @@ def test_basic():
     obj = num_mech.GaussianMechanism(epsilon, delta, sensitivity)
     assert num_mech_methods.issubset(set(dir(obj)))
     assert {
-        # "deserialize",
-        # "serialize",
         "memory_used",
         "l2_sensitivity",
         "std",

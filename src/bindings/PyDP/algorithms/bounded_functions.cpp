@@ -12,7 +12,6 @@
 #include "algorithms/bounded-variance.h"
 
 #include "../pydp_lib/algorithm_builder.hpp"
-#include "../pydp_lib/casting.hpp"  // our caster helper library
 
 using namespace std;
 

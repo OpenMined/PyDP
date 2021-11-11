@@ -48,8 +48,8 @@ def test_median(data, dtype):
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
 
-    assert median.quick_result(data) == pytest.approx(statistics.median(data),
-                                                      abs=20)
+    assert median.quick_result(data) == pytest.approx(statistics.median(data), abs=20)
+
 
 @pytest.mark.parametrize("dtype", ["int", "float"])
 def test_percentile_getter(dtype):

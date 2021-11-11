@@ -5,7 +5,7 @@
 
 #include "pybind11/pybind11.h"
 
-#include "base/logging.h"           // the header file associated with logging.cc
+#include "base/logging.h"  // the header file associated with logging.cc
 
 namespace py = pybind11;
 namespace dpb = differential_privacy::base;

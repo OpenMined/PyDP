@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "pybind11/operators.h"     // for overloading the operators
+#include "pybind11/operators.h"  // for overloading the operators
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 

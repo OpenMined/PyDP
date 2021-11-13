@@ -2,14 +2,12 @@
 
 #include <string>
 
-#include "../pydp_lib/casting.hpp"  // our caster helper library
-#include "pybind11/operators.h"     // for overloading the operators
+#include "pybind11/operators.h"  // for overloading the operators
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
 #include "base/status.h"    // the header file associated with status.cc
 #include "base/statusor.h"  //header file associated with statusor.cc
-// #include "differential_privacy/proto/data.pb.h"  // for Output type
 
 using namespace std;
 

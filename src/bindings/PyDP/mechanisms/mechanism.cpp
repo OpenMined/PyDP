@@ -3,11 +3,9 @@
 #include "pybind11/functional.h"
 #include "pybind11/stl.h"
 
-#include "algorithms/distributions.h"
 #include "algorithms/numerical-mechanisms.h"
 
 #include "../pydp_lib/algorithm_builder.hpp"
-#include "../pydp_lib/casting.hpp"
 
 using namespace std;
 
@@ -107,11 +105,6 @@ class LaplaceMechanismBinder {
         builder.Build().value());
   }
 
-  static std::unique_ptr<dp::NumericalMechanismBuilder> clone() {
-    dp::LaplaceMechanism::Builder cloner;
-    return std::move(cloner.Clone());
-  }
-
   static void DeclareIn(py::module& m) {
     py::class_<dp::LaplaceMechanism, dp::NumericalMechanism> lap_mech(
         m, "LaplaceMechanism");
@@ -138,11 +131,6 @@ class GaussianMechanismBinder {
     builder.SetL2Sensitivity(l2_sensitivity);
     return downcast_unique_ptr<dp::GaussianMechanism, dp::NumericalMechanism>(
         builder.Build().value());
-  };
-
-  static std::unique_ptr<dp::NumericalMechanismBuilder> clone() {
-    dp::GaussianMechanism::Builder cloner;
-    return std::move(cloner.Clone());
   };
 
   static void DeclareIn(py::module& m) {

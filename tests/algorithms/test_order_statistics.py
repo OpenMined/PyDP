@@ -1,12 +1,7 @@
-# stdlib
-import math
-
 # verify with actual value
 import statistics
 
 # third party
-from conftest import expect_near
-from conftest import percentile
 import pytest
 
 # pydp absolute
@@ -32,8 +27,8 @@ def test_min(data, dtype):
     minn = dp.algorithms.laplacian.Min(
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
-    assert expect_near(min(data), minn.quick_result(data), 10)
-    assert expect_near(0, minn.quick_result(data), 10)
+    assert minn.quick_result(data) == pytest.approx(min(data), abs=10)
+    assert minn.quick_result(data) == pytest.approx(0, abs=10)
 
 
 @pytest.mark.parametrize("dtype, data", [("int", data_ints), ("float", data_floats)])
@@ -43,7 +38,7 @@ def test_max(data, dtype):
     )
     assert 190 < maxx.quick_result(data) < 210
 
-    assert expect_near(max(data), maxx.quick_result(data), 10)
+    assert maxx.quick_result(data) == pytest.approx(max(data), abs=10)
 
 
 @pytest.mark.parametrize("dtype, data", [("int", data_ints), ("float", data_floats)])
@@ -53,7 +48,7 @@ def test_median(data, dtype):
         dtype=dtype, epsilon=1.0, lower_bound=0, upper_bound=200
     )
 
-    assert expect_near(statistics.median(data), median.quick_result(data), 20)
+    assert median.quick_result(data) == pytest.approx(statistics.median(data), abs=20)
 
 
 @pytest.mark.parametrize("dtype", ["int", "float"])

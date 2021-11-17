@@ -7,8 +7,6 @@
 
 #include "../pydp_lib/algorithm_builder.hpp"
 
-using namespace std;
-
 namespace py = pybind11;
 namespace dp = differential_privacy;
 

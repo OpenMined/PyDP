@@ -12,7 +12,7 @@ ARG BAZELISK_DOWNLOAD_URL=https://github.com/bazelbuild/bazelisk/releases/downlo
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="78d3fb8f63ea904ea6449a8276b9070254c650ec"
+ENV DP_SHA="e224a8635728026fb3aa9409ab3a98b9a3f5566a"
 
 # Define working directory
 WORKDIR ${HOME}
@@ -59,6 +59,8 @@ RUN mkdir -p third_party && \
 # Remove unused java code
 RUN rm -rf third_party/differential-privacy/java && \
     rm -rf third_party/differential-privacy/examples/java
+
+RUN sed -i -e 's/@com_google_cc_differential_privacy//g' third_party/differential-privacy/cc/algorithms/BUILD
 
 # This makes poetry's virtual environment in the project dir
 RUN poetry config virtualenvs.in-project true

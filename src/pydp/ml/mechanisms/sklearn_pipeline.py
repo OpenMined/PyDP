@@ -14,7 +14,7 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         Paper link: https://link.springer.com/content/pdf/10.1007/11681878_14.pdf
     """
     
-    def __init__(self, epsilon=1.0, sensitivity=1, accountant=None):
+    def __init__(self, epsilon=1.0, sensitivity=1, accountant=None, cat_feat_idxs=None, cat_sensitivity=None):
         
         """
         Checks that all parameters of the mechanism have been initialised correctly, and that the mechanism is ready
@@ -29,8 +29,14 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         sensitivity : float or int
             The sensitivity of the mechanism.  Must satisfy `sensitivity` > 0.
             
-        accountant : BudgetAccountant, optional
+        accountant : BudgetAccountant or None, optional
             Accountant to keep track of privacy budget.
+            
+        cat_feat_idxs : list or None, optional
+            List of integers identifying indicies of categorical features.
+            
+        cat_feat_idxs : list or None, optional
+            List of integers identifying indicies of categorical features.
             
             
         Attributes
@@ -43,7 +49,12 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         
         accountant
             Accountant to keep track of privacy budget.
-        
+            
+        cat_feat_idxs
+            List of indicies that identifies categorical features.
+            
+        cat_sensitivty
+            Sensitivity of the mechanism to calculate noise for categorical data.
         Raises
         ------
         TypeError
@@ -72,10 +83,26 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         self.sensitivity = sensitivity
         self.accountant = BudgetAccountant.load_default(accountant)
         
-        self.laplace = None # If sensitivity is callable, set lapalace to None
+        if (cat_feat_idxs is not None and cat_sensitivity is None) or (cat_feat_idxs is None and cat_sensitivity is not None):
+            raise ValueError("cat_feat_idxs cannot be None if cat_sensitivity, and vice versa.")
         
-        if not callable(sensitivity):
-                self.laplace = Laplace()
+        # Check arguments for categorical support is provided
+        self.categorical_exists = cat_feat_idxs is not None and cat_sensitivity is not None
+            
+        if self.categorical_exists:
+            
+            if not isinstance(sensitivity, numbers.Number):
+                if not callable(sensitivity):
+                    raise TypeError(f"Sensitivity  must be a number or callable. Got type {type(sensitivity)}.")
+                    
+            if isinstance(sensitivity, numbers.Number) and sensitivity <= 0:
+                raise ValueError("Sensitivity must be at least larger than 0.")
+                
+            if len(cat_feat_idxs) == 0:
+                raise ValueError("At least 1 categorical feature index must be provided.")
+                
+        self.cat_feat_idxs = cat_feat_idxs
+        self.cat_sensitivity = cat_sensitivity
     
     def sensitivity_calculation(self, X):
         """
@@ -96,7 +123,6 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         
         n_feature = X.shape[-1]
         n_data = X.shape[0]
-
         
         for data_idx in range(n_data):
             self.accountant.check(self.epsilon, 0)
@@ -106,7 +132,18 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
                 feature = np.concatenate((X[:data_idx,feature_idx],X[data_idx + 1:,feature_idx]))
                 
                 # Calculate sensitivity
-                sensitivity_ = self.sensitivity(feature)
+                if  self.categorical_exists and feature_idx in self.cat_feat_idxs: # Categorical support
+                    
+                    if isinstance(self.cat_sensitivity, numbers.Number):
+                        sensitivity_ = self.cat_sensitivity
+                    else:
+                        sensitivity_ = self.cat_sensitivity(feature)
+                        
+                else:
+                    if isinstance(self.sensitivity, numbers.Number):
+                        sensitivity_ = self.sensitivity
+                    else:
+                        sensitivity_ = self.sensitivity(feature)
                 
                 # Initialized Laplace mechanism instance
                 laplace = Laplace().set_epsilon(self.epsilon).set_sensitivity(sensitivity_)
@@ -120,16 +157,9 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
                 self.accountant.spend(self.epsilon, 0)
         return X
     
-    
     def fit(self, X, y=None):
         return self
 
     def transform(self, X, y=None):
-        if self.laplace is not None:
-            self.laplace.set_epsilon(self.epsilon).set_sensitivity(self.sensitivity)
-            vector_randomise = np.vectorize(self.laplace.randomise)
-            noised_array = vector_randomise(X)
-            return noised_array
-        else:
-            X = self.sensitivity_calculation( X)
-            return X
+        X = self.sensitivity_calculation( X)
+        return X

@@ -12,8 +12,11 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
+# stdlib
 import os
+import sys
+
+# pydp absolute
 import pydp
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -56,7 +59,7 @@ master_doc = "index"
 # General information about the project.
 project = u"PyDP"
 copyright = u"2020, OpenMined"
-author = u"OpenMind"
+author = u"OpenMined"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

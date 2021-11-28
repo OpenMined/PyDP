@@ -1,0 +1,184 @@
+# Version Tests
+# To speed up development we don't run all the tests when opening and updating a PR.
+# This test will run older versions of Python so we don't consume a lot of extra actions
+# when we don't need to. It's important to keep this in sync with tests.yml so that
+# they are essentially doing the same thing only this runs on a schedule.
+name: Version Tests
+on:
+  schedule:
+    - cron: "30 20 * * *" # 7:30pm UTC, 1am IST
+  pull_request:
+    branches:
+      - dev
+  workflow_dispatch:
+    inputs:
+      none:
+        description: "Run Version Tests Manually"
+        required: false
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install python dependencies
+        run: |
+          pip install black mypy
+      - name: Black
+        run: |
+          black .
+      - name: MyPY
+        run: |
+          mypy src tests
+      - name: Run clang-format style check for C/C++ programs.
+        uses: jidicula/clang-format-action@v3.3.0
+        with:
+          clang-format-version: "11"
+          check-path: "/src/bindings/"
+          fallback-style: "Google" # optional
+
+  build:
+    runs-on: ${{ matrix.os }}
+    # needs: [linting]  # don't require linting to pass
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Setup msbuild Windows
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Fix Paths Windows
+        # Make sure that tar.exe from Git is used not from Windows
+        if: runner.os == 'Windows'
+        run: |
+          @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
+
+      - name: Cache Bazel Unix
+        # Not working on Windows: https://github.com/actions/cache/issues/576
+        if: runner.os != 'Windows'
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ./bazel-PyDP
+            ./bazel-bin
+            ./bazel-cache
+            ./bazel-out
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+
+      - name: Update environment variables Windows
+        if: runner.os == 'Windows'
+        # See:
+        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
+        run: |
+          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
+
+      - name: Cache Bazel Windows
+        if: runner.os == 'Windows'
+        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ./bazel-cache
+          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+
+      - name: Build Google DP Unix
+        if: runner.os != 'Windows'
+        timeout-minutes: 20
+        run: |
+          PYTHONHOME=$(which python)
+          PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);")
+          BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
+          echo "Running: ${{ matrix.os }}"
+          echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
+          bazel --output_base ./bazel-cache build src/python:pydp \
+                --config $BAZEL_CONFIG_OS \
+                --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME \
+                --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
+
+      - name: Build Google DP Windows
+        if: runner.os == 'Windows'
+        timeout-minutes: 20
+        run: |
+          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
+          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
+          echo "PYTHONHOME=$PYTHONHOME"
+          echo "PYTHONPATH=$PYTHONPATH"
+          echo "Running: ${{ matrix.os }}"
+          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade --user pip
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Get poetry cache dir
+        id: poetry-cache
+        run: |
+          echo "::set-output name=dir::$(poetry config cache-dir)"
+
+      - name: poetry cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.poetry-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-py${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Build PyDP macOS
+        if: runner.os == 'macOS'
+        run: |
+          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
+
+      - name: Build PyDP Linux / Windows
+        if: runner.os != 'macOS'
+        run: |
+          poetry run python setup.py build bdist_wheel
+
+      - name: Install Wheel Unix
+        if: runner.os != 'Windows'
+        run: |
+          pip install `find -L ./ -name "*.whl"`
+
+      - name: Install Wheel Windows
+        if: runner.os == 'Windows'
+        run: |
+          Get-ChildItem -Path ./ -Filter "*.whl" -Recurse -File | foreach {pip install $_.FullName}
+
+      - name: Import Package
+        run: |
+          python -c "import pydp; print(pydp.__version__)"
+
+      - name: Run Pytest
+        run: |
+          poetry run pytest tests -n auto

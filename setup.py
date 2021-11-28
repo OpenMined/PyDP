@@ -3,11 +3,14 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
-from setuptools.dist import Distribution
-from setuptools.command.install import install
-
+# stdlib
 import os
+from typing import List
+
+# third party
+from setuptools import find_packages
+from setuptools import setup
+from setuptools.dist import Distribution
 
 
 class BinaryDistribution(Distribution):
@@ -22,23 +25,22 @@ def read(fname):
         return fp.read()
 
 
-requirements = []
-
-setup_requirements = []
+requirements: List[str] = []
+setup_requirements: List[str] = []
 
 
 setup(
     author="Chinmay Shah",
     author_email="chinmayshah3899@gmail.com",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
     ],
     description="Python API for Google's Differential Privacy library",
     distclass=BinaryDistribution,
@@ -50,11 +52,14 @@ setup(
     keywords="pydp",
     name="python-dp",
     package_dir={"": "src"},
-    package_data={"pydp": ["_pydp.so", "_pydp.pyd"],},
+    package_data={
+        "pydp": ["_pydp.so", "_pydp.pyd"],
+    },
     packages=find_packages(where="src", exclude=["tests"]),
     setup_requires=setup_requirements,
+    python_requires=">=3.6",
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="1.0.1",
+    version="1.1.0",
     zip_safe=False,
 )

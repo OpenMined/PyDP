@@ -29,7 +29,7 @@ privacy guarantee and accuracy of your model written in Python.
   -  All the computation methods mentioned above use Laplace noise only (other noise mechanisms will be added soon! :smiley:).
 
 -  ::fire: Currently supports Linux and macOS (Windows support coming soon :smiley:)
--  ::star: Use Python 3.x.
+-  ::star: Use Python 3.6+. Support for Python 3.5 and below is deprecated.
 
 Installation
 ------------
@@ -49,7 +49,7 @@ Examples
 Refer to the `curated list <https://github.com/OpenMined/PyDP/tree/dev/examples>`__ of tutorials and sample code to learn more about the PyDP library.
 
 You can also get started with `an introduction to
-PyDP <https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots_demo.ipynb>`__ (a Jupyter notebook) and `the carrots demo <https://github.com/OpenMined/PyDP/blob/dev/examples/carrots_demo/carrots.py>`__ (a Python file).
+PyDP <https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots_demo.ipynb>`__ (a Jupyter notebook) and `the carrots demo <https://github.com/OpenMined/PyDP/blob/dev/examples/Tutorial_1-carrots_demo/carrots.py>`__ (a Python file).
 
 Example: calculate the Bounded Mean
 

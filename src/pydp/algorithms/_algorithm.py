@@ -1,8 +1,10 @@
+# stdlib
 import math
+from typing import List
+from typing import Union
 
-from .._pydp import _algorithms  # type: ignore
-
-from typing import Union, List
+# pydp relative
+from .._pydp import _algorithms
 
 
 class MetaAlgorithm:
@@ -29,9 +31,7 @@ class MetaAlgorithm:
     @staticmethod
     def __check_input(name: str, value: float):
         if math.isnan(value) or math.isinf(value):
-            raise ValueError(
-                "invalid value '{}' for paramater '{}'.".format(value, name)
-            )
+            raise ValueError(f"invalid value '{value}' for paramater '{name}'.")
 
     @staticmethod
     def __map_dtype_str(dtype: str):
@@ -42,7 +42,7 @@ class MetaAlgorithm:
         elif dtype == "float":
             return "Double"
         else:
-            raise ValueError("dtype '{}' is not supported.".format(dtype))
+            raise ValueError(f"dtype '{dtype}' is not supported.")
 
     @property
     def epsilon(self) -> float:
@@ -50,6 +50,13 @@ class MetaAlgorithm:
         Returns the epsilon set at initialization.
         """
         return self.__algorithm.epsilon
+
+    @property
+    def delta(self) -> float:
+        """
+        Returns the epsilon set at initialization.
+        """
+        return self.__algorithm.delta
 
     @property
     def l0_sensitivity(self) -> float:
@@ -98,7 +105,7 @@ class MetaAlgorithm:
         Runs the algorithm on the input using the epsilon parameter provided in the constructor and returns output.
 
         Consumes 100% of the privacy budget.
-        
+
         Note: It resets the privacy budget first.
         """
         return self.__algorithm.result(data)
@@ -172,6 +179,7 @@ class BoundedAlgorithm(MetaAlgorithm):
     def __init__(
         self,
         epsilon: float = 1.0,
+        delta: float = 0,
         lower_bound: Union[int, float, None] = None,
         upper_bound: Union[int, float, None] = None,
         l0_sensitivity: int = 1,

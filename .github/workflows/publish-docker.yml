@@ -1,0 +1,48 @@
+name: Publish Docker Image
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Build Docker Container
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    env:
+      IMAGE: openmined/pydp
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Show python version and build image name
+        id: build_name
+        run: |
+          python -c "import sys; print(sys.version)"
+          echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
+
+      - name: Build images
+        run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg PYTHON_VERSION=${{matrix.python-version}} -f Dockerfile .
+
+      - name: Log into Docker
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_LOGIN }} --password-stdin
+
+      - name: Tag and Push Image
+        run: |
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
+          docker push $IMAGE:${{ github.event.release.tag_name }}-py${{ matrix.python-version }}
+
+      - name: Tag Python 3.9 as latest
+        if: matrix.python-version == '3.9'
+        run: |
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:${{ github.event.release.tag_name }}
+          docker push $IMAGE:${{ github.event.release.tag_name }}
+          docker tag ${{steps.build_name.outputs.image_name}} $IMAGE:latest
+          docker push $IMAGE:latest

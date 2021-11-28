@@ -1,10 +1,15 @@
-import pydp as dp  # type: ignore
-from pydp.algorithms.laplacian import BoundedSum, Count  # type: ignore
-
+# stdlib
+from collections import defaultdict
 import math
 import statistics as s
-import pandas as pd  # type: ignore
-from collections import defaultdict
+
+# third party
+import pandas as pd
+
+# pydp absolute
+import pydp as dp
+from pydp.algorithms.laplacian import BoundedSum
+from pydp.algorithms.laplacian import Count
 
 # Assumptions:
 
@@ -35,9 +40,9 @@ LN_3 = math.log(3)
 
 class RestaurantStatistics:
     """Class to replicate the restaurant example from Google's DP library.
-       Includes both Count and Sum operations.
-       Original code in java:
-        - https://github.com/google/differential-privacy/tree/main/examples/java"""
+    Includes both Count and Sum operations.
+    Original code in java:
+     - https://github.com/google/differential-privacy/tree/main/examples/java"""
 
     def __init__(self, hours_filename, days_filename, epsilon=LN_3):
 
@@ -228,6 +233,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -235,6 +241,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -269,6 +276,7 @@ class RestaurantStatistics:
         if not epsilon:
             x = BoundedSum(
                 self._epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
@@ -276,6 +284,7 @@ class RestaurantStatistics:
         else:
             x = BoundedSum(
                 epsilon,
+                0,
                 MIN_EUROS_SPENT,
                 MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,

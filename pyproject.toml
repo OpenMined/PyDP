@@ -1,31 +1,40 @@
 [tool.poetry]
-name = "pydp"
-version = "0.1.0"
+name        = "pydp"
+version     = "1.1.0rc1"
 description = ""
-authors = ["Chinmay Shah <chinmayshah3899@gmail.com>"]
-license = "Apache-2.0"
+authors     = [
+    "Chinmay Shah <chinmayshah3899@gmail.com>",
+]
+license     = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
-setuptools = "*"
-bumpversion = "==0.5.3"
-pytest = "*"
-black = {version = "==19.10b0",python = "^3.6"}
-twine = "*"
-sphinx = "*"
+black            = "*"
+black-nb         = "*"
+bumpversion      = "==0.5.3"
+coverage         = "*"
+gcovr            = "*"
+isort            = "*"
+jupyter          = "*"
+matplotlib       = "*"
+mypy             = "*"
+nbqa             = "*"
+pandas           = [{ version = "<0.25.0", python = "<3.8" }, { version = "^1.2.3", python = "^3.8" }]
+pre-commit       = "*"
+pytest           = "*"
+pytest-randomly  = "*"
+pytest-sugar     = "*"
+pytest-xdist     = "*"
+seaborn          = "*"
+setuptools       = "*"
+sklearn          = "*"
+sphinx           = "*"
 sphinx-rtd-theme = "*"
-gcovr = "*"
-coverage = "*"
-mypy = "*"
-jupyter = "*"
-pandas= [
-    {version = "<0.25.0", python = "<3.8"},
-    {version = "^0.25.0", python = "^3.8"}
-]
-matplotlib = "^3.3.4"
+twine            = "*"
+wheel            = "*"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires      = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

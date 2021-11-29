@@ -3,13 +3,10 @@
 
 #include "pybind11/pybind11.h"
 
+#include "proto/data.pb.h"
 #include "proto/summary.pb.h"
 
-using namespace std;
-
 namespace py = pybind11;
-using namespace py::literals;
-
 namespace dp = differential_privacy;
 
 void init_proto(py::module &m) {
@@ -21,11 +18,12 @@ void init_proto(py::module &m) {
       .def(py::init())
       .def("save",
            [](dp::Summary &pythis, std::string &filename) {
-             fstream output(filename, ios::out | ios::trunc | ios::binary);
+             std::fstream output(filename,
+                                 std::ios::out | std::ios::trunc | std::ios::binary);
              pythis.SerializeToOstream(&output);
            })
       .def("load", [](dp::Summary &pythis, std::string &filename) {
-        fstream input(filename, ios::in | ios::binary);
+        std::fstream input(filename, std::ios::in | std::ios::binary);
         pythis.ParseFromIstream(&input);
       });
 }

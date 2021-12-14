@@ -40,6 +40,7 @@ import nbqa
 # # test all notebooks in a given path
 # def test_all_notebooks(path="examples/"):
 #     # get all notebooks under path
+#     print("************** ", path)
 #     notebook_paths = _get_all_notebooks(path)
 
 #     # execute each notebook

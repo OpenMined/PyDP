@@ -72,12 +72,6 @@ class MetaAlgorithm:
         """
         return self._linf_sensitivity
 
-    def privacy_budget_left(self) -> float:
-        """
-        Returns the remaining privacy budget.
-        """
-        return self.__algorithm.privacy_budget_left()
-
     def memory_used(self) -> float:
         """
         Returns the memory currently used by the algorithm in bytes.
@@ -112,29 +106,17 @@ class MetaAlgorithm:
 
     def result(
         self,
-        privacy_budget: Union[float, None] = None,
         noise_interval_level: Union[float, None] = None,
     ) -> Union[int, float]:
         """
         Gets the algorithm result.
 
-        The default call consumes the remaining privacy budget.
-
-        When `privacy_budget` (defined on [0,1]) is set, it consumes only the `privacy_budget` amount of budget.
-
         `noise_interval_level` provides the confidence level of the noise confidence interval, which may be included in the algorithm output.
         """
-        if self.privacy_budget_left() == 0:
-            raise RuntimeError(
-                "Privacy Budget left is already 0, you can't do any more operations"
-            )
-
-        if privacy_budget is None:
+        if noise_interval_level is None:
             return self.__algorithm.partial_result()
-        elif noise_interval_level is None:
-            return self.__algorithm.partial_result(privacy_budget)
         else:
-            return self.__algorithm.partial_result(privacy_budget, noise_interval_level)
+            return self.__algorithm.partial_result(noise_interval_level)
 
     def reset(self) -> None:
         """

@@ -3,7 +3,6 @@
 
 #include "algorithms/distributions.h"
 
-using namespace std;
 namespace py = pybind11;
 namespace dpi = differential_privacy::internal;
 
@@ -73,29 +72,31 @@ class declareGaussianDistributionClass {
 
 class declareGeometricDistributionClass {
  public:
-  std::unique_ptr<dpi::GeometricDistribution> build(double lambda) {
+  std::unique_ptr<dpi::GeometricDistribution> build(double lambda_) {
     dpi::GeometricDistribution::Builder builder;
-    builder.SetLambda(lambda);
+    builder.SetLambda(lambda_);
     return std::move(builder.Build().value());
   };
   void declareGeometricDistribution(py::module &m) {
     py::class_<dpi::GeometricDistribution> geometric_dist(m, "GeometricDistribution");
     geometric_dist.attr("__module__") = "pydp";
     geometric_dist
-        .def(py::init([this](double lambda) { return this->build(lambda); }),
-             py::arg("lambda"),
-             "Constructs a GeometricDistribution, p = 1 - e^-lambda.")
+        .def(py::init([this](double lambda_) { return this->build(lambda_); }),
+             py::arg("lambda_"),
+             "Constructs a GeometricDistribution, p = 1 - e^-lambda_.")
         .def("get_uniform_double", &dpi::GeometricDistribution::GetUniformDouble)
 
         .def("sample", py::overload_cast<double>(&dpi::GeometricDistribution::Sample),
-             py::arg("scale") = 1.0, "Returns a sample from p = 1 - e^-(lambda/scale).")
+             py::arg("scale") = 1.0,
+             "Returns a sample from p = 1 - e^-(lambda_/scale).")
 
-        .def_property_readonly("lambda", &dpi::GeometricDistribution::Lambda,
-                               R"pbdoc(Returns lambda. Where p = 1 - e^-lambda)pbdoc");
+        .def_property_readonly(
+            "lambda_", &dpi::GeometricDistribution::Lambda,
+            R"pbdoc(Returns lambda_. Where p = 1 - e^-lambda_)pbdoc");
     geometric_dist.attr("__doc__") =
         R"pbdoc(Draws samples from the geometric distribution of probability
-               \math{p = 1 - e^{-\lambda}}, i.e. the number of bernoulli trial failures
-     before the first success where the success probability is as defined above. lambda must
+               \math{p = 1 - e^{-\lambda_}}, i.e. the number of bernoulli trial failures
+     before the first success where the success probability is as defined above. lambda_ must
                be positive. If the result would be higher than the maximum int64_t, returns
                the maximum int64_t, which means that users should be careful around the edges
                of their distribution)pbdoc";

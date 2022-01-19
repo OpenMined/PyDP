@@ -26,6 +26,17 @@ Algorithms
    :inherited-members:
 
 
+Numerical Mechanisms
+####################
+.. currentmodule:: pydp.algorithms.numerical_mechanisms
+.. autoclass:: NumericalMechanism
+   :members: 
+.. autoclass:: LaplaceMechanism
+   :members:
+   :show-inheritance:
+.. autoclass:: GaussianMechanism
+   :members:
+   :show-inheritance:
 
 Distributions
 #############
@@ -46,3 +57,10 @@ ML
 .. automodule:: pydp.ml.naive_bayes
 .. autoclass::  GaussianNB
    :members:
+
+Partition Selection
+###################
+.. currentmodule:: pydp.algorithms.partition_selection
+.. autoclass:: PartitionSelectionStrategy
+   :members: 
+.. autofunction:: create_partition_strategy

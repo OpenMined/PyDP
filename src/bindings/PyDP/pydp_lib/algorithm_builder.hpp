@@ -146,7 +146,7 @@ class AlgorithmBuilder {
           py::arg("linf_sensitivity") = 1);
     }
 
-    // // No bounds constructor
+    // No bounds constructor
     pyself.def(py::init([this](double epsilon, double delta, int l0_sensitivity,
                                int linf_sensitivity) {
                  return this->build(epsilon, delta, std::nullopt /*percentile*/,
@@ -160,8 +160,6 @@ class AlgorithmBuilder {
     // Getters
     pyself.def_property_readonly("epsilon", &Algorithm::GetEpsilon);
     pyself.def_property_readonly("delta", &Algorithm::GetDelta);
-
-    pyself.def("privacy_budget_left", &Algorithm::RemainingPrivacyBudget);
 
     pyself.def("memory_used", &Algorithm::MemoryUsed);
 
@@ -203,10 +201,6 @@ class AlgorithmBuilder {
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
-      if (privacy_budget > pythis.RemainingPrivacyBudget()) {
-        throw std::runtime_error("Privacy budget requeted exceeds set privacy budget");
-      }
-
       auto result = pythis.PartialResult(privacy_budget);
 
       if (!result.ok()) {
@@ -221,13 +215,8 @@ class AlgorithmBuilder {
         return dp::GetValue<int64_t>(result.ValueOrDie());
     });
 
-    pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget,
-                                    double noise_interval_level) {
-      if (privacy_budget > pythis.RemainingPrivacyBudget()) {
-        throw std::runtime_error("Privacy budget requeted exceeds set privacy budget");
-      }
-
-      auto result = pythis.PartialResult(privacy_budget, noise_interval_level);
+    pyself.def("partial_result", [](Algorithm& pythis, double noise_interval_level) {
+      auto result = pythis.PartialResult(noise_interval_level);
 
       if (!result.ok()) {
         throw std::runtime_error(result.status().ToString());

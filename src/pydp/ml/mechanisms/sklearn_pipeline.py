@@ -36,6 +36,12 @@ class LaplaceMechanism(BaseEstimator, TransformerMixin):
         cat_feat_idxs : list or None, optional
             List of integers identifying indicies of categorical features.
             
+        cat_feat_idxs : list or None, optional
+            List of integers identifying indicies of categorical features.
+            
+        cat_feat_idxs : list or None, optional
+            List of integers identifying indicies of categorical features.
+            
             
         Attributes
         -------

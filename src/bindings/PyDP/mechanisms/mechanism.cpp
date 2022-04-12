@@ -71,16 +71,15 @@ class NumericalMechanismBinder {
                Quickly determines if `result` with added noise is above certain `threshold`.
              )pbdoc")
         .def("memory_used", &dp::NumericalMechanism::MemoryUsed)
-        .def(
-            "noise_confidence_interval",
-            [](dp::NumericalMechanism& self, double cl, double pb,
-               double nr) -> dp::ConfidenceInterval {
-              auto result = self.NoiseConfidenceInterval(cl, pb, nr);
-              return result.ValueOrDie();
-            },
-            py::arg("confidence_level"), py::arg("privacy_budget"),
-            py::arg("noised_result"),
-            R"pbdoc(
+        .def("noise_confidence_interval",
+             [](dp::NumericalMechanism& self, double cl, double pb,
+                double nr) -> dp::ConfidenceInterval {
+               auto result = self.NoiseConfidenceInterval(cl, pb, nr);
+               return result.ValueOrDie();
+             },
+             py::arg("confidence_level"), py::arg("privacy_budget"),
+             py::arg("noised_result"),
+             R"pbdoc(
               Returns the confidence interval of the specified confidence level of the
               noise that AddNoise() would add with the specified privacy budget.
               If the returned value is <x,y>, then the noise added has a confidence_level
@@ -142,13 +141,13 @@ class GaussianMechanismBinder {
              py::arg("epsilon"), py::arg("delta"), py::arg("sensitivity") = 1.0)
         .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta,
                                "The 𝛿 of the Gaussian mechanism.")
-        .def_property_readonly(
-            "std",
-            [](const dp::GaussianMechanism& self) {
-              return dp::GaussianMechanism::CalculateStddev(
-                  self.GetEpsilon(), self.GetDelta(), self.GetL2Sensitivity());
-            },
-            R"pbdoc( 
+        .def_property_readonly("std",
+                               [](const dp::GaussianMechanism& self) {
+                                 return dp::GaussianMechanism::CalculateStddev(
+                                     self.GetEpsilon(), self.GetDelta(),
+                                     self.GetL2Sensitivity());
+                               },
+                               R"pbdoc( 
               The standard deviation parameter of the 
               Gaussian mechanism underlying distribution. 
             )pbdoc")

@@ -41,7 +41,7 @@ jobs:
       - name: Run clang-format style check for C/C++ programs.
         uses: jidicula/clang-format-action@v3.3.0
         with:
-          clang-format-version: "13"
+          clang-format-version: "12"
           check-path: "/src/bindings/"
           fallback-style: "Google" # optional
 

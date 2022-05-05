@@ -34,15 +34,6 @@ py::class_<dp::NumericalMechanism>& DefPyAddNoise(
                      py::arg("result"));
 }
 
-//template <typename T>
-//py::class_<dp::NumericalMechanism>& DefPyAddNoise(
-//    py::class_<dp::NumericalMechanism>& pyclass) {
-//  using FunctorType = T (dp::NumericalMechanism::*)(T);
-//  return pyclass.def("add_noise",
-//                     static_cast<FunctorType>(&dp::NumericalMechanism::AddNoise),
-//                     py::arg("result"));
-//}
-
 template <typename T, typename U>
 std::unique_ptr<T> downcast_unique_ptr(std::unique_ptr<U> u_ptr) {
   static_assert(std::is_base_of<U, T>::value, "Illegal downcast.");

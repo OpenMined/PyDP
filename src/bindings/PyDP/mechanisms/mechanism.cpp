@@ -35,15 +35,6 @@ py::class_<dp::NumericalMechanism>& DefPyAddNoise(
 }
 
 template <typename T, typename U>
-py::class_<dp::NumericalMechanism>& DefPyAddNoise(
-    py::class_<dp::NumericalMechanism>& pyclass) {
-  using FunctorType = T (dp::NumericalMechanism::*)(T, U);
-  return pyclass.def("add_noise",
-                     static_cast<FunctorType>(&dp::NumericalMechanism::AddNoise),
-                     py::arg("result"), py::arg("privacy_budget"));
-}
-
-template <typename T, typename U>
 std::unique_ptr<T> downcast_unique_ptr(std::unique_ptr<U> u_ptr) {
   static_assert(std::is_base_of<U, T>::value, "Illegal downcast.");
   T* ptr = dynamic_cast<T*>(u_ptr.release());
@@ -58,9 +49,6 @@ class NumericalMechanismBinder {
         Base class for all (Ɛ, 𝛿)-differenially private additive noise numerical mechanisms.
       )pbdoc");
     numerical_mech.attr("__module__") = "pydp";
-    DefPyAddNoise<int, double>(numerical_mech);
-    DefPyAddNoise<int64_t, double>(numerical_mech);
-    DefPyAddNoise<double, double>(numerical_mech);
     DefPyAddNoise<int>(numerical_mech);
     DefPyAddNoise<int64_t>(numerical_mech);
     DefPyAddNoise<double>(numerical_mech);
@@ -73,13 +61,12 @@ class NumericalMechanismBinder {
         .def("memory_used", &dp::NumericalMechanism::MemoryUsed)
         .def(
             "noise_confidence_interval",
-            [](dp::NumericalMechanism& self, double cl, double pb,
+            [](dp::NumericalMechanism& self, double cl,
                double nr) -> dp::ConfidenceInterval {
-              auto result = self.NoiseConfidenceInterval(cl, pb, nr);
+              auto result = self.NoiseConfidenceInterval(cl, nr);
               return result.ValueOrDie();
             },
-            py::arg("confidence_level"), py::arg("privacy_budget"),
-            py::arg("noised_result"),
+            py::arg("confidence_level"), py::arg("noised_result"),
             R"pbdoc(
               Returns the confidence interval of the specified confidence level of the
               noise that AddNoise() would add with the specified privacy budget.

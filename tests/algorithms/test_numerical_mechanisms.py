@@ -47,16 +47,12 @@ def test_laplace_mechanism():
     value = 0
     value = laplace.add_noise(value)
     assert type(value) is int
-    value = laplace.add_noise(value, 0.1)
-    assert type(value) is int
     value = 0.0
     value = laplace.add_noise(value)
     assert type(value) is float
-    value = laplace.add_noise(value, 0.1)
-    assert type(value) is float
     conf_level = 0.5
     priv_budg = 0.1
-    interval = laplace.noise_confidence_interval(0.5, 0.1, value)
+    interval = laplace.noise_confidence_interval(0.5, value)
     assert type(interval) is num_mech.ConfidenceInterval
     bound = laplace.diversity * np.log(1 - conf_level) / priv_budg
     lower_bound, upper_bound = value - bound, value + bound
@@ -71,16 +67,12 @@ def test_gaussian_mechanism():
     value = 0
     value = gaussian.add_noise(value)
     assert type(value) is int
-    value = gaussian.add_noise(value, 0.1)
-    assert type(value) is int
     value = 0.0
     value = gaussian.add_noise(value)
     assert type(value) is float
-    value = gaussian.add_noise(value, 0.1)
-    assert type(value) is float
     conf_level = 0.5
     priv_budg = 0.1
-    interval = gaussian.noise_confidence_interval(0.5, 0.1, value)
+    interval = gaussian.noise_confidence_interval(0.5, value)
     local_gaussian = num_mech.GaussianMechanism(
         priv_budg * epsilon, priv_budg * delta, l2_sensitivity
     )

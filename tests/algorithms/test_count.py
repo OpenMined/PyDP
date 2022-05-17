@@ -62,9 +62,6 @@ class TestCountDataTypes:
         assert isinstance(mem, int)
         par = count.result()
         assert isinstance(par, int)
-        # TODO
-        # par2 = count.partial_result(1.0)
-        # assert isinstance(par2, int)
 
         res = count.quick_result([2])
         assert isinstance(res, int)

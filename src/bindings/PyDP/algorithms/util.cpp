@@ -10,9 +10,6 @@ namespace dp = differential_privacy;
 
 void init_algorithms_util(py::module& m) {
   m.attr("__module__") = "pydp";
-  m.def(
-      "xor_strings", &dp::XorStrings,
-      R"pbdoc(Character-wise XOR of two strings. In case of differing string lengths, operation will be performed by the repeated concatenation of the smaler string till it is of the same length as the longer before the performance of the XOR operation.)pbdoc");
   m.def("default_epsilon", &dp::DefaultEpsilon);  // deprecated, default epsilon value
   m.def(
       "get_next_power_of_two", &dp::GetNextPowerOfTwo,

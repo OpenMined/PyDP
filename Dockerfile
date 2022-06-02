@@ -12,7 +12,7 @@ ARG BAZELISK_DOWNLOAD_URL=https://github.com/bazelbuild/bazelisk/releases/downlo
 ENV HOME=/root
 ENV PROJECT_DIR="${HOME}/PyDP"
 ENV PATH="/root/bin:${PATH}"
-ENV DP_SHA="e224a8635728026fb3aa9409ab3a98b9a3f5566a"
+ENV DP_SHA="5e7cf28bf55ebac52fc65419364388c33ebc01a4"
 
 # Define working directory
 WORKDIR ${HOME}

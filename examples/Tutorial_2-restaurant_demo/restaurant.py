@@ -1,7 +1,6 @@
 # stdlib
 from collections import defaultdict
 import math
-import statistics as s
 
 # third party
 import pandas as pd
@@ -232,18 +231,18 @@ class RestaurantStatistics:
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
             x = BoundedSum(
-                self._epsilon,
-                0,
-                MIN_EUROS_SPENT,
-                MAX_EUROS_SPENT_1,
+                epsilon=self._epsilon,
+                delta=0,
+                lower_bound=MIN_EUROS_SPENT,
+                upper_bound=MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
         else:
             x = BoundedSum(
-                epsilon,
-                0,
-                MIN_EUROS_SPENT,
-                MAX_EUROS_SPENT_1,
+                epsilon=epsilon,
+                delta=0,
+                lower_bound=MIN_EUROS_SPENT,
+                upper_bound=MAX_EUROS_SPENT_1,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
 
@@ -275,18 +274,18 @@ class RestaurantStatistics:
         # Use the default epsilon value if it is not given as an argument
         if not epsilon:
             x = BoundedSum(
-                self._epsilon,
-                0,
-                MIN_EUROS_SPENT,
-                MAX_EUROS_SPENT_2,
+                epsilon=self._epsilon,
+                delta=0,
+                lower_bound=MIN_EUROS_SPENT,
+                upper_bound=MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
         else:
             x = BoundedSum(
-                epsilon,
-                0,
-                MIN_EUROS_SPENT,
-                MAX_EUROS_SPENT_2,
+                epsilon=epsilon,
+                delta=0,
+                lower_bound=MIN_EUROS_SPENT,
+                upper_bound=MAX_EUROS_SPENT_2,
                 l0_sensitivity=SUM_MAX_CONTRIBUTED_DAYS,
             )
 

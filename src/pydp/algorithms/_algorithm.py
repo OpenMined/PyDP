@@ -170,6 +170,7 @@ class BoundedAlgorithm(MetaAlgorithm):
     ):
         super().__init__(
             epsilon=epsilon,
+            delta=delta,
             lower_bound=lower_bound,
             upper_bound=upper_bound,
             l0_sensitivity=l0_sensitivity,

@@ -4,6 +4,7 @@ import pytest
 # pydp absolute
 import pydp._pydp as dp
 import pydp.algorithms.laplacian as py_algos
+import tempfile
 
 
 def test_count_serialization_deserialization():
@@ -41,3 +42,20 @@ def test_summary_serialiazation():
         bytes2 = summary2.to_bytes()
 
         assert bytes1 == bytes2
+
+
+def test_save_load():
+    dp_count1 = py_algos.Count(epsilon=20000.0)  # large epsilon, noise std < 1e-4
+    dp_count1.add_entries([1] * 100)
+
+    assert dp_count1.result() == 100
+    with tempfile.NamedTemporaryFile() as temp_file:
+        dp_count1.serialize().save(temp_file.name)
+
+        summary = dp.Summary()
+        summary.load(temp_file.name)
+        # Create Count algorithm object from summary.
+        dp_count2 = py_algos.Count(epsilon=20000.0)
+        dp_count2.merge(summary)
+        # Check that dp_count2 has the same data as dp_count1.
+        assert dp_count2.result() == 100

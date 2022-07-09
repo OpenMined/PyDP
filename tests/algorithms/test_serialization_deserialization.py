@@ -57,5 +57,15 @@ def test_save_load():
         # Create Count algorithm object from summary.
         dp_count2 = py_algos.Count(epsilon=20000.0)
         dp_count2.merge(summary)
+        print(
+            "********* ",
+            temp_file.name,
+            "\n",
+            dp_count1.serialize().to_bytes(),
+            "\n",
+            summary.to_bytes(),
+            " ",
+            dp_count2.result(),
+        )
         # Check that dp_count2 has the same data as dp_count1.
         assert dp_count2.result() == 100

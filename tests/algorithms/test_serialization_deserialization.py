@@ -4,6 +4,8 @@ import pytest
 # pydp absolute
 import pydp._pydp as dp
 import pydp.algorithms.laplacian as py_algos
+
+import sys
 import tempfile
 
 
@@ -44,6 +46,9 @@ def test_summary_serialiazation():
         assert bytes1 == bytes2
 
 
+@pytest.mark.skipif(
+    sys.platform == "win32", reason="Save/Load() don't work on Windows."
+)
 def test_save_load():
     dp_count1 = py_algos.Count(epsilon=20000.0)  # large epsilon, noise std < 1e-4
     dp_count1.add_entries([1] * 100)
@@ -57,15 +62,6 @@ def test_save_load():
         # Create Count algorithm object from summary.
         dp_count2 = py_algos.Count(epsilon=20000.0)
         dp_count2.merge(summary)
-        print(
-            "********* ",
-            temp_file.name,
-            "\n",
-            dp_count1.serialize().to_bytes(),
-            "\n",
-            summary.to_bytes(),
-            "\n",
-            dp_count1.serialize().to_bytes() == summary.to_bytes()
-        )
+
         # Check that dp_count2 has the same data as dp_count1.
         assert dp_count2.result() == 100

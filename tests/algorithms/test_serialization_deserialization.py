@@ -64,8 +64,8 @@ def test_save_load():
             dp_count1.serialize().to_bytes(),
             "\n",
             summary.to_bytes(),
-            " ",
-            dp_count2.result(),
+            "\n",
+            dp_count1.serialize().to_bytes() == summary.to_bytes()
         )
         # Check that dp_count2 has the same data as dp_count1.
         assert dp_count2.result() == 100

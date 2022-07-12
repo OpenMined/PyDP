@@ -22,8 +22,23 @@ void init_proto(py::module &m) {
                                  std::ios::out | std::ios::trunc | std::ios::binary);
              pythis.SerializeToOstream(&output);
            })
-      .def("load", [](dp::Summary &pythis, std::string &filename) {
-        std::fstream input(filename, std::ios::in | std::ios::binary);
-        pythis.ParseFromIstream(&input);
+      .def("load",
+           [](dp::Summary &pythis, std::string &filename) {
+             std::fstream input(filename, std::ios::in | std::ios::binary);
+             pythis.ParseFromIstream(&input);
+           })
+      .def("to_bytes", [](dp::Summary &pythis) {
+        std::string serialization;
+        pythis.SerializeToString(&serialization);
+        return py::bytes(serialization);
       });
+
+  m.def(
+      "bytes_to_summary",
+      [](const py::bytes &bytes) {
+        dp::Summary result;
+        result.ParseFromString(bytes);
+        return result;
+      },
+      py::arg("bytes"));
 }

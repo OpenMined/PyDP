@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 import numpy as np
 
-class LaplaceMechanism (BaseEstimator, TransformerMixin):
+class LaplaceMechanism(BaseEstimator, TransformerMixin):
     """
         An SKLearn Pipeline operator for applying differentially private noise 
         addition using the laplace mechanism.

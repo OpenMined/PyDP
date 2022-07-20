@@ -2,17 +2,12 @@
 
 #include <string>
 
-#include "../pydp_lib/casting.hpp"  // our caster helper library
-#include "pybind11/operators.h"     // for overloading the operators
+#include "pybind11/operators.h"  // for overloading the operators
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "base/canonical_errors.h"  // the header file associated with status.cc
-#include "base/status.h"            // the header file associated with status.cc
-#include "base/statusor.h"          //header file associated with statusor.cc
-// #include "differential_privacy/proto/data.pb.h"  // for Output type
-
-using namespace std;
+#include "base/status.h"    // the header file associated with status.cc
+#include "base/statusor.h"  //header file associated with statusor.cc
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -20,7 +15,7 @@ namespace dp = differential_privacy;
 namespace dpb = differential_privacy::base;
 
 template <typename T>
-void declareStatusOr(py::module &m, string const &suffix) {
+void declareStatusOr(py::module &m, std::string const &suffix) {
   py::class_<dpb::StatusOr<T>> cls(m, ("StatusOr" + suffix).c_str());
   cls.def(py::init<>());
   cls.def(py::init<T>(), "value"_a);
@@ -31,7 +26,7 @@ void declareStatusOr(py::module &m, string const &suffix) {
 }
 
 template <class Algorithm>
-void declareStatusOr2(py::module &m, string const &suffix) {
+void declareStatusOr2(py::module &m, std::string const &suffix) {
   py::class_<dpb::StatusOr<Algorithm>> cls(m, ("StatusOr" + suffix).c_str());
   cls.def(py::init<>());
   // cls.def(py::init<Algorithm>(), "value"_a);

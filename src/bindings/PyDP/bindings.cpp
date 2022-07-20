@@ -29,6 +29,9 @@ void init_algorithms_rand(py::module &);
 // proto
 void init_proto(py::module &);
 
+// numerical mechanisms
+void init_mechanisms_mechanism(py::module &);
+
 PYBIND11_MODULE(_pydp, m) {
   m.doc() = "Google Differential Privacy python extension";
 
@@ -51,6 +54,9 @@ PYBIND11_MODULE(_pydp, m) {
   auto mutil = m.def_submodule("_util", "Some Utility Functions");
   init_algorithms_rand(mutil);
   init_algorithms_util(mutil);
+
+  auto mnumericalmechanisms = m.def_submodule("_mechanisms", "Numerical Mechanisms.");
+  init_mechanisms_mechanism(mnumericalmechanisms);
 
   // Proto
   // TODO: Delete if it is not necessary (we no longer return StatusOr to the user)

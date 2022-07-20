@@ -2,8 +2,6 @@ name: Tests
 
 on:
   pull_request:
-    branches:
-      - dev
     paths:
       - "*.bazel"
       - "*.cpp"
@@ -12,6 +10,7 @@ on:
       - "*.hpp"
       - "*.h"
       - "*.py"
+      - "*.ipynb"
       - "*.go"
       - "*.mod"
       - "*.toml"
@@ -42,7 +41,7 @@ jobs:
         run: |
           mypy src tests
       - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v3.3.0
+        uses: jidicula/clang-format-action@v4.5.0
         with:
           clang-format-version: "11"
           check-path: "/src/bindings/"

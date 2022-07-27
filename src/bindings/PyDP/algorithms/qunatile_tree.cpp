@@ -49,7 +49,7 @@ dp::QuantileTree<double>::Privatized GetPrivatizeTree(
   auto status_or_result = tree.MakePrivate(dp_params);
   if (!status_or_result.ok()) {
     throw std::runtime_error("Error in computing DP quantiles. Status=" +
-                             result.status_or_result().ToString());
+                             status_or_result.status().ToString());
   }
   return std::move(status_or_result.value());
 }

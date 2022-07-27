@@ -188,7 +188,7 @@ class BudgetAccountant:
         for epsilon, _ in spent_budget:
             epsilon_sum += epsilon
             epsilon_exp_sum += (1 - np.exp(-epsilon)) * epsilon / (1 + np.exp(-epsilon))
-            epsilon_sq_sum += epsilon**2
+            epsilon_sq_sum += epsilon ** 2
 
         total_epsilon_naive = epsilon_sum
         total_delta = self.__total_delta_safe(spent_budget, slack)

@@ -14,6 +14,8 @@ void init_algorithms_count(py::module &);
 
 void init_algorithms_partition_selection_strategies(py::module &);
 
+void init_algorithms_quantile_tree(py::module &m);
+
 // util
 void init_algorithms_util(py::module &);
 
@@ -44,6 +46,7 @@ PYBIND11_MODULE(_pydp, m) {
   init_algorithms_bounded_functions(malgorithms);
   init_algorithms_count(malgorithms);
   init_algorithms_order_statistics(malgorithms);
+  init_algorithms_quantile_tree(malgorithms);
 
   auto mpartitionselections = m.def_submodule("_partition_selection");
   init_algorithms_partition_selection_strategies(mpartitionselections);

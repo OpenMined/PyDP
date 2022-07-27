@@ -195,11 +195,11 @@ class LaplaceTruncated(Laplace, TruncationAndFoldingMixin):
 
         shape = self._sensitivity / self._epsilon
 
-        variance = value ** 2 + shape * (
+        variance = value**2 + shape * (
             self._lower_bound * np.exp((self._lower_bound - value) / shape)
             - self._upper_bound * np.exp((value - self._upper_bound) / shape)
         )
-        variance += (shape ** 2) * (
+        variance += (shape**2) * (
             2
             - np.exp((self._lower_bound - value) / shape)
             - np.exp((value - self._upper_bound) / shape)
@@ -373,17 +373,17 @@ class LaplaceBoundedDomain(LaplaceTruncated):
         if self._scale is None:
             self._scale = self._find_scale()
 
-        variance = value ** 2
+        variance = value**2
         variance -= (
-            np.exp((self._lower_bound - value) / self._scale) * (self._lower_bound ** 2)
+            np.exp((self._lower_bound - value) / self._scale) * (self._lower_bound**2)
             + np.exp((value - self._upper_bound) / self._scale)
-            * (self._upper_bound ** 2)
+            * (self._upper_bound**2)
         ) / 2
         variance += self._scale * (
             self._lower_bound * np.exp((self._lower_bound - value) / self._scale)
             - self._upper_bound * np.exp((value - self._upper_bound) / self._scale)
         )
-        variance += (self._scale ** 2) * (
+        variance += (self._scale**2) * (
             2
             - np.exp((self._lower_bound - value) / self._scale)
             - np.exp((value - self._upper_bound) / self._scale)

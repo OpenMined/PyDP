@@ -4,8 +4,8 @@
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
-#include "third_party/differential_privacy/cpp/algorithms/numerical-mechanisms.h"
-#include "third_party/differential_privacy/cpp/algorithms/quantile-tree.h"
+#include "algorithms/numerical-mechanisms.h"
+#include "algorithms/quantile-tree.h"
 
 namespace py = pybind11;
 namespace dp = differential_privacy;

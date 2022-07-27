@@ -46,13 +46,12 @@ dp::QuantileTree<double>::Privatized GetPrivatizeTree(
     throw py::value_error("noise_type can be 'laplace' or 'gaussian', but it is '" +
                           noise_type + "'./**/");
   }
-  absl::StatusOr<dp::QuantileTree<double>::Privatized> result =
-      tree.MakePrivate(dp_params);
-  if (!result.ok()) {
+  auto status_or_result = tree.MakePrivate(dp_params);
+  if (!status_or_result.ok()) {
     throw std::runtime_error("Error in computing DP quantiles. Status=" +
-                             result.status().ToString());
+                             result.status_or_result().ToString());
   }
-  return std::move(result.value());
+  return std::move(status_or_result.value());
 }
 }  // namespace
 
@@ -127,8 +126,7 @@ void init_algorithms_quantile_tree(py::module& m) {
 
         std::vector<QuantileConfidenceInterval> output;
         for (double quantile : quantiles) {
-          absl::StatusOr<double> status_ok_quantile =
-              privatized_tree.GetQuantile(quantile);
+          auto status_ok_quantile = privatized_tree.GetQuantile(quantile);
           double result_quantile =
               status_ok_quantile.ok() ? status_ok_quantile.value() : std::nan("");
 

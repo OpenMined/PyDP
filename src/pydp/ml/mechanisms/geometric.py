@@ -133,7 +133,7 @@ class Geometric(DPMechanism):
         return (
             2
             * leading_factor
-            * (geom_series + 3 * (geom_series ** 2) + 2 * (geom_series ** 3))
+            * (geom_series + 3 * (geom_series**2) + 2 * (geom_series**3))
         )
 
     def randomise(self, value):

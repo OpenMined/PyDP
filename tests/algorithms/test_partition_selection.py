@@ -2,157 +2,83 @@ import numpy as np
 import pytest
 from pydp.algorithms.partition_selection import create_partition_strategy
 
-# TODO - wait for NumericalMechanism implementation to use those for testing Laplace/Gaussian Partition Selection.
-# from pydp._pydp._mechanisms import LaplaceMechanism, GaussianMechanism
+N_SIMULATIONS = 100000
+ACCURACY_THRESHOLD = 1e-1
 
-k_N_SIMS = 1000000
-k_THRESHOLD = 1e-1
-
-
-def assert_rel_close(val_true, val_pred, thresh):
-    assert np.abs(1 - val_pred / val_true) < thresh
-
-
-def adjust_epsilon(epsilon, max_partitions):
-    return epsilon / max_partitions
-
-
-def adjust_delta(delta, max_partitions):
-    if delta == 1:
-        return 1
-    return -np.expm1(np.log1p(-delta) / max_partitions)
-
-
-class TestTruncatedGeometric:
-    @staticmethod
-    def probability_of_keep(n, adjusted_epsilon, adjusted_delta):
-        if n == 0:
-            return 0
-        crossover1 = 1 + np.floor(
-            np.log1p(np.tanh(adjusted_epsilon / 2) * (1 / adjusted_delta - 1))
-            / adjusted_epsilon
-        )
-
-        if n <= crossover1:
-            return (
-                np.expm1(n * adjusted_epsilon) / np.expm1(adjusted_epsilon)
-            ) * adjusted_delta
-        prob_of_keep_crossover1 = TestTruncatedGeometric.probability_of_keep(
-            crossover1, adjusted_epsilon, adjusted_delta
-        )
-
-        crossover2 = crossover1 + np.floor(
-            (1.0 / adjusted_epsilon)
-            * np.log1p(
-                (np.expm1(adjusted_epsilon) / adjusted_delta)
-                * (1 - prob_of_keep_crossover1)
-            )
-        )
-        if n > crossover2:
-            return 1
-
-        m = n - crossover1
-        return prob_of_keep_crossover1 - (
-            1 - prob_of_keep_crossover1 + (adjusted_delta / np.expm1(adjusted_epsilon))
-        ) * np.expm1(-m * adjusted_epsilon)
+class TestPartitionSelection:
 
     @pytest.mark.parametrize(
-        ["num_users", "epsilon", "delta", "max_partitions_contributed"],
+        ["num_users", "epsilon", "delta", "max_partitions_contributed", "expected_prob"],
         [
-            ([6, 10, 13], 1, 1e-5, 1),
-            ([160, 180, 220], 0.1, 1e-10, 1),
-            ([30, 50, 70], 1, 1e-5, 5),
-            ([1000, 1500, 2000], 0.1, 1e-7, 10),
+            (10, 1, 1e-5, 1, 0.12818308050524607),
+            (700, 0.2, 1e-7, 10, 0.5800625857189882),
         ],
     )
-    def test_theoretic_values(
-        self, num_users, epsilon, delta, max_partitions_contributed
+    def test_truncated_geometric(
+        self, num_users, epsilon, delta, max_partitions_contributed, expected_prob
     ):
-        adjusted_epsilon = adjust_epsilon(epsilon, max_partitions_contributed)
-        adjusted_delta = adjust_delta(delta, max_partitions_contributed)
         partition_selector = create_partition_strategy(
             "truncated_geometric", epsilon, delta, max_partitions_contributed
         )
-        for n in num_users:
-            true_prob_of_keep = TestTruncatedGeometric.probability_of_keep(
-                n, adjusted_epsilon, adjusted_delta
-            )
-            sims = []
-            for _ in range(k_N_SIMS):
-                sims.append(partition_selector.should_keep(n))
-            pred_prob_of_keep = np.mean(sims)
-            assert_rel_close(true_prob_of_keep, pred_prob_of_keep, k_THRESHOLD)
+        assert epsilon == partition_selector.epsilon
+        assert delta == partition_selector.delta
+        assert max_partitions_contributed == partition_selector.max_partitions_contributed
+        prob_of_keep = partition_selector.probability_of_keep(num_users)
+        assert prob_of_keep == pytest.approx(expected_prob)
 
+        sims = [partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)]
+        pred_prob_of_keep = np.mean(sims)
+        assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
 
-class TestLaplace:
-    @staticmethod
-    def probability_of_keep(n, epsilon, l1_sensitivity):
-        # TODO - implement theoretic probability of keep.
-        #   using the python exposed LaplaceMechanism.NoisedValueAboveTreshold
-        return
 
     @pytest.mark.parametrize(
-        ["num_users", "epsilon", "delta", "max_partitions_contributed"],
+        ["num_users", "epsilon", "delta", "max_partitions_contributed", "expected_prob"],
         [
-            ([6, 10, 13], 1, 1e-5, 1),
-            ([160, 180, 220], 0.1, 1e-10, 1),
-            ([30, 50, 70], 1, 1e-5, 5),
-            ([1000, 1500, 2000], 0.1, 1e-7, 10),
+            (10, 1, 1e-5, 1, 0.08103083927575383),
+            (700, 0.2, 1e-7, 10, 0.011787911768969317),
         ],
     )
-    def test_theoretic_values(
-        self, num_users, epsilon, delta, max_partitions_contributed
+    def test_laplace_keep_and_return_noised_value(
+        self, num_users, epsilon, delta, max_partitions_contributed, expected_prob
     ):
-        # TODO - Uncomment when implemented true_prob_of keep
-        # adjusted_epsilon = adjust_epsilon(epsilon, max_partitions_contributed)
-        # adjusted_delta = adjust_delta(delta, max_partitions_contributed)
-        # partition_selector = create_partition_strategy(
-        #     "truncated_geometric", epsilon, delta, max_partitions_contributed
-        # )
-        # for n in num_users:
-        #     true_prob_of_keep = TestLaplace.probability_of_keep(
-        #         n, adjusted_epsilon, adjusted_delta
-        #     )
-        #     sims = []
-        #     for _ in range(k_N_SIMS):
-        #         sims.append(partition_selector.should_keep(n))
-        #     pred_prob_of_keep = np.mean(sims)
-        #     assert_rel_close(true_prob_of_keep, pred_prob_of_keep, k_THRESHOLD)
-        pass
+        partition_selector = create_partition_strategy("laplace", epsilon, delta, max_partitions_contributed)
+        assert epsilon == partition_selector.epsilon
+        assert delta == partition_selector.delta
+        assert max_partitions_contributed == partition_selector.max_partitions_contributed
+        prob_of_keep = partition_selector.probability_of_keep(num_users)
+        assert prob_of_keep == pytest.approx(expected_prob)
 
+        sims = [partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)]
+        pred_prob_of_keep = np.mean(sims)
+        assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
 
-class TestGaussian:
-    @staticmethod
-    def probability_of_keep(n, epsilon, l1_sensitivity):
-        # TODO - implement theoretic probability of keep.
-        #   using GaussianMechanism.NoisedValueAboveTreshold
-        return
+        noised_values = [partition_selector.noised_value_if_should_keep(num_users) for _ in range(N_SIMULATIONS)]
+        noised_values = [v for v in noised_values if v ]
+        assert len(noised_values)/N_SIMULATIONS == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
+        assert all([(v >= partition_selector.threshold) for v in noised_values])
 
     @pytest.mark.parametrize(
-        ["num_users", "epsilon", "delta", "max_partitions_contributed"],
+        ["num_users", "epsilon", "delta", "max_partitions_contributed", "expected_prob"],
         [
-            ([6, 10, 13], 1, 1e-5, 1),
-            ([160, 180, 220], 0.1, 1e-10, 1),
-            ([30, 50, 70], 1, 1e-5, 5),
-            ([1000, 1500, 2000], 0.1, 1e-7, 10),
+            (10, 1, 1e-5, 1, 0.017845473615190732),
+            (1100, 0.2, 1e-7, 10, 0.007884076914531857),
         ],
     )
-    def test_theoretic_values(
-        self, num_users, epsilon, delta, max_partitions_contributed
+    def test_gaussian_keep_and_return_noised_value(
+        self, num_users, epsilon, delta, max_partitions_contributed, expected_prob
     ):
-        # TODO - Uncomment when implemented true_prob_of keep
-        # adjusted_epsilon = adjust_epsilon(epsilon, max_partitions_contributed)
-        # adjusted_delta = adjust_delta(delta, max_partitions_contributed)
-        # partition_selector = create_partition_strategy(
-        #     "truncated_geometric", epsilon, delta, max_partitions_contributed
-        # )
-        # for n in num_users:
-        #     true_prob_of_keep = TestGaussian.probability_of_keep(
-        #         n, adjusted_epsilon, adjusted_delta
-        #     )
-        #     sims = []
-        #     for _ in range(k_N_SIMS):
-        #         sims.append(partition_selector.should_keep(n))
-        #     pred_prob_of_keep = np.mean(sims)
-        #     assert_rel_close(true_prob_of_keep, pred_prob_of_keep, k_THRESHOLD)
-        pass
+        partition_selector = create_partition_strategy("gaussian", epsilon, delta, max_partitions_contributed)
+        assert epsilon == partition_selector.epsilon
+        assert delta == partition_selector.delta
+        assert max_partitions_contributed == partition_selector.max_partitions_contributed
+        prob_of_keep = partition_selector.probability_of_keep(num_users)
+        assert prob_of_keep == pytest.approx(expected_prob)
+
+        sims = [partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)]
+        pred_prob_of_keep = np.mean(sims)
+        assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
+
+        noised_values = [partition_selector.noised_value_if_should_keep(num_users) for _ in range(N_SIMULATIONS)]
+        noised_values = [v for v in noised_values if v ]
+        assert len(noised_values)/N_SIMULATIONS == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
+        assert all([(v >= partition_selector.threshold) for v in noised_values])

@@ -1,6 +1,7 @@
 #ifndef PYDP_LIB_ALGORITHM_H_
 #define PYDP_LIB_ALGORITHM_H_
 
+#include "absl/status/statusor.h"
 #include "algorithms/algorithm.h"
 #include "algorithms/bounded-mean.h"
 #include "algorithms/bounded-standard-deviation.h"
@@ -9,7 +10,7 @@
 #include "algorithms/count.h"
 #include "algorithms/numerical-mechanisms.h"
 #include "algorithms/order-statistics.h"
-#include "absl/status/statusor.h"
+#include "proto/summary.pb.h"
 
 namespace dp = differential_privacy;
 namespace py = pybind11;
@@ -234,7 +235,12 @@ class AlgorithmBuilder {
 
     pyself.def("serialize", &Algorithm::Serialize);
 
-    pyself.def("merge", &Algorithm::Merge);
+    pyself.def("merge", [](Algorithm& pythis, const dp::Summary& summary) {
+      auto status = pythis.Merge(summary);
+      if (!status.ok()) {
+        throw std::runtime_error(status.ToString());
+      }
+    });
 
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
 

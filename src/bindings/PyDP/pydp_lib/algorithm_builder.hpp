@@ -9,7 +9,7 @@
 #include "algorithms/count.h"
 #include "algorithms/numerical-mechanisms.h"
 #include "algorithms/order-statistics.h"
-#include "base/statusor.h"
+#include "absl/status/statusor.h"
 
 namespace dp = differential_privacy;
 namespace py = pybind11;
@@ -84,7 +84,7 @@ class AlgorithmBuilder {
       if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
     }
 
-    base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
+    absl::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
       throw std::runtime_error(obj.status().ToString());
     }

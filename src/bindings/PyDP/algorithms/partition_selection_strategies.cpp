@@ -4,7 +4,7 @@
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
-#include "third_party/differential_privacy/cpp/algorithms/partition-selection.h"
+#include "algorithms/partition-selection.h"
 
 namespace py = pybind11;
 namespace dp = differential_privacy;

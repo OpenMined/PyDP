@@ -25,23 +25,21 @@ std::unique_ptr<dp::PartitionSelectionStrategy> CreatePartitionStrategy(
 }
 
 template <class Strategy>
-py::class_<Strategy> init_partition_selection_strategy(
-    py::module& m, const std::string& strategy_name,
-    const std::string& docstring) {
-  auto py_class = py::class_<Strategy>(m, strategy_name.c_str(),
-                                       R"pbdoc(" + docstring + )pbdoc");
+py::class_<Strategy> init_partition_selection_strategy(py::module& m,
+                                                       const std::string& strategy_name,
+                                                       const std::string& docstring) {
+  auto py_class =
+      py::class_<Strategy>(m, strategy_name.c_str(), R"pbdoc(" + docstring + )pbdoc");
   py_class
       .def("should_keep", &Strategy::ShouldKeep, py::arg("num_users"),
            R"pbdoc(
               Decides whether or not to keep a partition with `num_users` based on differential privacy parameters and strategy.
             )pbdoc")
-      .def("probability_of_keep", &Strategy::ProbabilityOfKeep,
-           py::arg("num_users"),
+      .def("probability_of_keep", &Strategy::ProbabilityOfKeep, py::arg("num_users"),
            R"pbdoc(
               Probability of keeping a partition with `num_users` based on differential privacy parameters and strategy.
             )pbdoc")
-      .def_property_readonly("epsilon",
-                             &dp::PartitionSelectionStrategy::GetEpsilon)
+      .def_property_readonly("epsilon", &dp::PartitionSelectionStrategy::GetEpsilon)
       .def_property_readonly("delta", &dp::PartitionSelectionStrategy::GetDelta)
       .def_property_readonly(
           "max_partitions_contributed",
@@ -53,8 +51,7 @@ py::class_<Strategy> init_partition_selection_strategy(
 template <class Strategy>
 void add_thresholding_specific_methods(py::class_<Strategy>* py_class) {
   py_class
-      ->def("noised_value_if_should_keep",
-            &Strategy::NoiseValueIfShouldKeep,
+      ->def("noised_value_if_should_keep", &Strategy::NoiseValueIfShouldKeep,
             py::arg("num_users"),
             R"pbdoc(
               Decides whether or not to keep a partition with `num_users` and
@@ -86,10 +83,11 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
         &CreatePartitionStrategy<dp::LaplacePartitionSelection>);
 
   // Gaussian Partition selection strategy.
-  auto py_gaussian_strategy_class = init_partition_selection_strategy<dp::GaussianPartitionSelection>(
-      m, "GaussianPartitionSelectionStrategy",
-      "Gaussian (epsilon, delta)-differenially private partition "
-      "selection strategy.");
+  auto py_gaussian_strategy_class =
+      init_partition_selection_strategy<dp::GaussianPartitionSelection>(
+          m, "GaussianPartitionSelectionStrategy",
+          "Gaussian (epsilon, delta)-differenially private partition "
+          "selection strategy.");
 
   add_thresholding_specific_methods<dp::GaussianPartitionSelection>(
       &py_gaussian_strategy_class);

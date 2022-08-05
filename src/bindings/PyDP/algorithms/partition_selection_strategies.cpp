@@ -24,7 +24,7 @@ PyPartitionSelectionStrategy CreatePartitionStrategy(double epsilon, double delt
   if (!obj.ok()) {
     throw std::runtime_error(obj.status().ToString());
   }
-  return std::move(obj.ValueOrDie());
+  return std::move(obj.value());
 }
 
 void init_algorithms_partition_selection_strategies(py::module& m) {

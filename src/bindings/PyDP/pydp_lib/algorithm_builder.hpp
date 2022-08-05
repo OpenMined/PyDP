@@ -89,7 +89,7 @@ class AlgorithmBuilder {
       throw std::runtime_error(obj.status().ToString());
     }
 
-    return std::move(obj.ValueOrDie());
+    return std::move(obj.value());
   }
 
   std::map<std::type_index, std::string> type_to_name = {
@@ -178,11 +178,11 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis) {
@@ -193,11 +193,11 @@ class AlgorithmBuilder {
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
@@ -208,11 +208,11 @@ class AlgorithmBuilder {
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double noise_interval_level) {
@@ -222,11 +222,11 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     // Other methods

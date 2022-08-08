@@ -1,10 +1,10 @@
 // Provides bindings for Partition Selection strategies.
 
+#include "algorithms/partition-selection.h"
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
-#include "algorithms/partition-selection.h"
 
 namespace py = pybind11;
 namespace dp = differential_privacy;
@@ -67,10 +67,11 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
       "Truncated Geometric (epsilon, delta)-differenially private partition "
       "selection strategy.");
   m.def("create_truncated_geometric_partition_strategy",
-        &CreatePartitionStrategy<dp::PreaggPartitionSelection>);
+        &CreatePartitionStrategy<dp::PreaggPartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
 
   // Laplace Partition selection strategy.
-  auto py_laplace_strategy_class =
+  py::class_<dp::LaplacePartitionSelection> py_laplace_strategy_class =
       init_partition_selection_strategy<dp::LaplacePartitionSelection>(
           m, "LaplacePartitionSelectionStrategy",
           "Laplace (epsilon, delta)-differenially private partition "
@@ -80,10 +81,11 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
       &py_laplace_strategy_class);
 
   m.def("create_laplace_partition_strategy",
-        &CreatePartitionStrategy<dp::LaplacePartitionSelection>);
+        &CreatePartitionStrategy<dp::LaplacePartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
 
   // Gaussian Partition selection strategy.
-  auto py_gaussian_strategy_class =
+  py::class_<dp::GaussianPartitionSelection> py_gaussian_strategy_class =
       init_partition_selection_strategy<dp::GaussianPartitionSelection>(
           m, "GaussianPartitionSelectionStrategy",
           "Gaussian (epsilon, delta)-differenially private partition "
@@ -93,5 +95,6 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
       &py_gaussian_strategy_class);
 
   m.def("create_gaussian_partition_strategy",
-        &CreatePartitionStrategy<dp::GaussianPartitionSelection>);
+        &CreatePartitionStrategy<dp::GaussianPartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
 }

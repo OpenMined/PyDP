@@ -21,7 +21,7 @@ std::unique_ptr<dp::PartitionSelectionStrategy> CreatePartitionStrategy(
   if (!obj.ok()) {
     throw std::runtime_error(obj.status().ToString());
   }
-  return std::move(obj.ValueOrDie());
+  return std::move(obj.value());
 }
 
 template <class Strategy>

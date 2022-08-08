@@ -1,6 +1,7 @@
 #ifndef PYDP_LIB_ALGORITHM_H_
 #define PYDP_LIB_ALGORITHM_H_
 
+#include "absl/status/statusor.h"
 #include "algorithms/algorithm.h"
 #include "algorithms/bounded-mean.h"
 #include "algorithms/bounded-standard-deviation.h"
@@ -9,7 +10,7 @@
 #include "algorithms/count.h"
 #include "algorithms/numerical-mechanisms.h"
 #include "algorithms/order-statistics.h"
-#include "base/statusor.h"
+#include "proto/summary.pb.h"
 
 namespace dp = differential_privacy;
 namespace py = pybind11;
@@ -84,12 +85,12 @@ class AlgorithmBuilder {
       if (upper_bound.has_value()) builder.SetUpper(upper_bound.value());
     }
 
-    base::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
+    absl::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
       throw std::runtime_error(obj.status().ToString());
     }
 
-    return std::move(obj.ValueOrDie());
+    return std::move(obj.value());
   }
 
   std::map<std::type_index, std::string> type_to_name = {
@@ -178,11 +179,11 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis) {
@@ -193,11 +194,11 @@ class AlgorithmBuilder {
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double privacy_budget) {
@@ -208,11 +209,11 @@ class AlgorithmBuilder {
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     pyself.def("partial_result", [](Algorithm& pythis, double noise_interval_level) {
@@ -222,11 +223,11 @@ class AlgorithmBuilder {
         throw std::runtime_error(result.status().ToString());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
-        return dp::GetValue<T>(result.ValueOrDie());
+        return dp::GetValue<T>(result.value());
       if constexpr ((should_return_double<T, Algorithm>()))
-        return dp::GetValue<double>(result.ValueOrDie());
+        return dp::GetValue<double>(result.value());
       if constexpr ((should_return_int<T, Algorithm>()))
-        return dp::GetValue<int64_t>(result.ValueOrDie());
+        return dp::GetValue<int64_t>(result.value());
     });
 
     // Other methods
@@ -234,7 +235,12 @@ class AlgorithmBuilder {
 
     pyself.def("serialize", &Algorithm::Serialize);
 
-    pyself.def("merge", &Algorithm::Merge);
+    pyself.def("merge", [](Algorithm& pythis, const dp::Summary& summary) {
+      auto status = pythis.Merge(summary);
+      if (!status.ok()) {
+        throw std::runtime_error(status.ToString());
+      }
+    });
 
     pyself.def("noise_confidence_interval", &Algorithm::NoiseConfidenceInterval);
 

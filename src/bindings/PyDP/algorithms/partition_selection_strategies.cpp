@@ -1,20 +1,17 @@
-// Provides bindings for Bounded Functions
+// Provides bindings for Partition Selection strategies.
 
+#include "algorithms/partition-selection.h"
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "algorithms/partition-selection.h"
-
 namespace py = pybind11;
 namespace dp = differential_privacy;
 
-using PyPartitionSelectionStrategy = std::unique_ptr<dp::PartitionSelectionStrategy>;
-
 template <class Strategy>
-PyPartitionSelectionStrategy CreatePartitionStrategy(double epsilon, double delta,
-                                                     int max_partitions_contributed) {
+std::unique_ptr<dp::PartitionSelectionStrategy> CreatePartitionStrategy(
+    double epsilon, double delta, int max_partitions_contributed) {
   typename Strategy::Builder builder;
   builder.SetEpsilon(epsilon);
   builder.SetDelta(delta);
@@ -24,28 +21,80 @@ PyPartitionSelectionStrategy CreatePartitionStrategy(double epsilon, double delt
   if (!obj.ok()) {
     throw std::runtime_error(obj.status().ToString());
   }
-  return std::move(obj.ValueOrDie());
+  return std::move(obj.value());
 }
 
-void init_algorithms_partition_selection_strategies(py::module& m) {
-  auto pyClass =
-      py::class_<dp::PartitionSelectionStrategy, PyPartitionSelectionStrategy>(
-          m, "PartitionSelectionStrategy",
-          R"pbdoc(
-        Base class for all (Ɛ, 𝛿)-differenially private partition selection strategies.
-      )pbdoc");
-  pyClass
-      .def("should_keep", &dp::PartitionSelectionStrategy::ShouldKeep,
-           py::arg("num_users"),
+template <class Strategy>
+py::class_<Strategy> init_partition_selection_strategy(py::module& m,
+                                                       const std::string& strategy_name,
+                                                       const std::string& docstring) {
+  auto py_class =
+      py::class_<Strategy>(m, strategy_name.c_str(), R"pbdoc(" + docstring + )pbdoc");
+  py_class
+      .def("should_keep", &Strategy::ShouldKeep, py::arg("num_users"),
            R"pbdoc(
               Decides whether or not to keep a partition with `num_users` based on differential privacy parameters and strategy.
             )pbdoc")
+      .def("probability_of_keep", &Strategy::ProbabilityOfKeep, py::arg("num_users"),
+           R"pbdoc(
+              Probability of keeping a partition with `num_users` based on differential privacy parameters and strategy.
+            )pbdoc")
+      .def_property_readonly("epsilon", &dp::PartitionSelectionStrategy::GetEpsilon)
+      .def_property_readonly("delta", &dp::PartitionSelectionStrategy::GetDelta)
+      .def_property_readonly(
+          "max_partitions_contributed",
+          &dp::PartitionSelectionStrategy::GetMaxPartitionsContributed)
       .attr("__module__") = "_partition_selection";
+  return py_class;
+}
 
+template <class Strategy>
+void add_thresholding_specific_methods(py::class_<Strategy>* py_class) {
+  py_class
+      ->def("noised_value_if_should_keep", &Strategy::NoiseValueIfShouldKeep,
+            py::arg("num_users"),
+            R"pbdoc(
+              Decides whether or not to keep a partition with `num_users` and
+              returns `num_users` + noise if the partition should be kept.
+            )pbdoc")
+      .def_property_readonly("threshold", &Strategy::GetThreshold);
+}
+
+void init_algorithms_partition_selection_strategies(py::module& m) {
+  // Truncated Geometric Partition selection strategy.
+  init_partition_selection_strategy<dp::PreaggPartitionSelection>(
+      m, "TruncatedGeometricPartitionSelectionStrategy",
+      "Truncated Geometric (epsilon, delta)-differenially private partition "
+      "selection strategy.");
   m.def("create_truncated_geometric_partition_strategy",
-        &CreatePartitionStrategy<dp::PreaggPartitionSelection>);
+        &CreatePartitionStrategy<dp::PreaggPartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
+
+  // Laplace Partition selection strategy.
+  py::class_<dp::LaplacePartitionSelection> py_laplace_strategy_class =
+      init_partition_selection_strategy<dp::LaplacePartitionSelection>(
+          m, "LaplacePartitionSelectionStrategy",
+          "Laplace (epsilon, delta)-differenially private partition "
+          "selection strategy.");
+
+  add_thresholding_specific_methods<dp::LaplacePartitionSelection>(
+      &py_laplace_strategy_class);
+
   m.def("create_laplace_partition_strategy",
-        &CreatePartitionStrategy<dp::LaplacePartitionSelection>);
+        &CreatePartitionStrategy<dp::LaplacePartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
+
+  // Gaussian Partition selection strategy.
+  py::class_<dp::GaussianPartitionSelection> py_gaussian_strategy_class =
+      init_partition_selection_strategy<dp::GaussianPartitionSelection>(
+          m, "GaussianPartitionSelectionStrategy",
+          "Gaussian (epsilon, delta)-differenially private partition "
+          "selection strategy.");
+
+  add_thresholding_specific_methods<dp::GaussianPartitionSelection>(
+      &py_gaussian_strategy_class);
+
   m.def("create_gaussian_partition_strategy",
-        &CreatePartitionStrategy<dp::GaussianPartitionSelection>);
+        &CreatePartitionStrategy<dp::GaussianPartitionSelection>, py::arg("epsilon"),
+        py::arg("delta"), py::arg("max_partitions_contributed"));
 }

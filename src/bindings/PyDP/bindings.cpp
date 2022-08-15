@@ -5,7 +5,6 @@ using namespace std;
 namespace py = pybind11;
 
 // base
-void init_base_status(py::module &);
 void init_base_logging(py::module &);
 
 // bounded functions
@@ -38,7 +37,6 @@ PYBIND11_MODULE(_pydp, m) {
   m.doc() = "Google Differential Privacy python extension";
 
   // Base
-  init_base_status(m);
   init_base_logging(m);
 
   // Algorithms

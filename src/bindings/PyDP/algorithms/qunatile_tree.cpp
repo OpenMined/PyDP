@@ -1,11 +1,11 @@
 // Bindings for QuantileTree, which allows to compute multiple DP quantiles.
 
+#include "algorithms/numerical-mechanisms.h"
+#include "algorithms/quantile-tree.h"
 #include "pybind11/complex.h"
 #include "pybind11/functional.h"
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
-#include "algorithms/numerical-mechanisms.h"
-#include "algorithms/quantile-tree.h"
 
 namespace py = pybind11;
 namespace dp = differential_privacy;
@@ -25,7 +25,7 @@ std::unique_ptr<dp::QuantileTree<double>> CreateQuantileTree(double lower, doubl
     throw py::value_error("Error in creating QuantileTree. Status=" +
                           obj.status().ToString());
   }
-  return std::move(obj.ValueOrDie());
+  return std::move(obj.value());
 }
 
 dp::QuantileTree<double>::Privatized GetPrivatizeTree(

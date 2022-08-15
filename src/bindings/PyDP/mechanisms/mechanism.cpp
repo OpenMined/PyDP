@@ -64,7 +64,7 @@ class NumericalMechanismBinder {
             [](dp::NumericalMechanism& self, double cl,
                double nr) -> dp::ConfidenceInterval {
               auto result = self.NoiseConfidenceInterval(cl, nr);
-              return result.ValueOrDie();
+              return result.value();
             },
             py::arg("confidence_level"), py::arg("noised_result"),
             R"pbdoc(

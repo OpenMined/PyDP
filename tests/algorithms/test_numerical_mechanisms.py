@@ -77,7 +77,7 @@ def test_gaussian_mechanism():
         priv_budg * epsilon, priv_budg * delta, l2_sensitivity
     )
     assert type(interval) is num_mech.ConfidenceInterval
-    bound = erfinv(-conf_level) * local_gaussian.std * (2 ** 0.5)
+    bound = erfinv(-conf_level) * local_gaussian.std * (2**0.5)
     lower_bound, upper_bound = value - bound, value + bound
     assert_almost_eq(lower_bound, interval.lower_bound)
     assert_almost_eq(upper_bound, interval.upper_bound)

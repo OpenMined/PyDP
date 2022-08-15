@@ -8,7 +8,7 @@ pybind_extension(
         "PyDP/algorithms/*.cpp",
         "PyDP/pydp_lib/*.hpp",
         "PyDP/proto/*.cpp",
-        "PyDP/mechanisms/*.cpp"
+        "PyDP/mechanisms/*.cpp",
     ]),
     visibility = ["//src/python:__pkg__"],
     deps = [
@@ -21,6 +21,7 @@ pybind_extension(
         "@com_google_cc_differential_privacy//algorithms:numerical-mechanisms",
         "@com_google_cc_differential_privacy//algorithms:order-statistics",
         "@com_google_cc_differential_privacy//algorithms:partition-selection",
+        "@com_google_cc_differential_privacy//algorithms:quantile-tree",
         "@com_google_cc_differential_privacy//base:logging",
         "@com_google_cc_differential_privacy//base:percentile",
         "@com_google_cc_differential_privacy//proto:util-lib",

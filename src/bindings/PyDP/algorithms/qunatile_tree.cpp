@@ -36,7 +36,7 @@ dp::QuantileTree<double>::Privatized GetPrivatizeTree(
   dp_params.epsilon = epsilon;
   dp_params.delta = delta;
   dp_params.max_contributions_per_partition = max_contributions_per_partition;
-  dp_params.max_partitions_contributed = max_partitions_contributed;
+  dp_params.max_partitions_contributed_to = max_partitions_contributed;
   // Create DP mechanism.
   if (noise_type == "laplace") {
     dp_params.mechanism_builder = std::make_unique<dp::LaplaceMechanism::Builder>();

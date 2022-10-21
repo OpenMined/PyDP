@@ -13,7 +13,6 @@ echo -e "Running bazel with:\n\tPLATFORM=$PLATFORM\n\tPYTHONHOME=$PYTHONHOME\n\t
 # Compile code
 bazel coverage src/python:pydp \
 --config $PLATFORM \
---subcommands \
 --verbose_failures \
 --action_env=PYTHON_BIN_PATH=$PYTHONHOME \
 --action_env=PYTHON_LIB_PATH=$PYTHONPATH

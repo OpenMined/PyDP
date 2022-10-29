@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "pydp"
-version     = "1.1.0rc1"
+version     = "1.1.3rc2"
 description = ""
 authors     = [
     "Chinmay Shah <chinmayshah3899@gmail.com>",

@@ -30,13 +30,13 @@ std::unique_ptr<dp::QuantileTree<double>> CreateQuantileTree(double lower, doubl
 
 dp::QuantileTree<double>::Privatized GetPrivatizeTree(
     dp::QuantileTree<double>& tree, double epsilon, double delta,
-    int max_partitions_contributed_to, int max_contributions_per_partition,
+    int max_partitions_contributed, int max_contributions_per_partition,
     const std::string& noise_type) {
   dp::QuantileTree<double>::DPParams dp_params;
   dp_params.epsilon = epsilon;
   dp_params.delta = delta;
   dp_params.max_contributions_per_partition = max_contributions_per_partition;
-  dp_params.max_partitions_contributed_to = max_partitions_contributed_to;
+  dp_params.max_partitions_contributed_to = max_partitions_contributed;
   // Create DP mechanism.
   if (noise_type == "laplace") {
     dp_params.mechanism_builder = std::make_unique<dp::LaplaceMechanism::Builder>();
@@ -44,7 +44,7 @@ dp::QuantileTree<double>::Privatized GetPrivatizeTree(
     dp_params.mechanism_builder = std::make_unique<dp::GaussianMechanism::Builder>();
   } else {
     throw py::value_error("noise_type can be 'laplace' or 'gaussian', but it is '" +
-                          noise_type + "'./**/");
+                          noise_type + "'.");
   }
   auto status_or_result = tree.MakePrivate(dp_params);
   if (!status_or_result.ok()) {
@@ -89,15 +89,28 @@ void init_algorithms_quantile_tree(py::module& m) {
     to_return.mutable_data()->PackFrom(obj.Serialize());
     return to_return;
   });
-  py_class.def("merge", &dp::QuantileTree<double>::Merge, py::arg("summary"));
+  py_class.def(
+      "merge",
+      [](dp::QuantileTree<double>& tree, const dp::Summary& summary) {
+        if (!summary.has_data()) {
+          throw std::runtime_error("Cannot merge summary, no data.");
+        }
+
+        dp::BoundedQuantilesSummary quantiles_summary;
+        if (!summary.data().UnpackTo(&quantiles_summary)) {
+          throw std::runtime_error("Fail to upack data");
+        }
+        tree.Merge(quantiles_summary);
+      },
+      py::arg("summary"));
 
   py_class.def(
       "compute_quantiles",
       [](dp::QuantileTree<double>& tree, double epsilon, double delta,
-         int max_partitions_contributed_to, int max_contributions_per_partition,
+         int max_partitions_contributed, int max_contributions_per_partition,
          const std::vector<double>& quantiles, const std::string& noise_type) {
         dp::QuantileTree<double>::Privatized privatized_tree =
-            GetPrivatizeTree(tree, epsilon, delta, max_partitions_contributed_to,
+            GetPrivatizeTree(tree, epsilon, delta, max_partitions_contributed,
                              max_contributions_per_partition, noise_type);
 
         std::vector<double> output;
@@ -110,18 +123,18 @@ void init_algorithms_quantile_tree(py::module& m) {
         }
         return output;
       },
-      py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed_to"),
+      py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed"),
       py::arg("max_contributions_per_partition"), py::arg("quantiles"),
       py::arg("noise_type") = "laplace", "Compute multiple quantiles.");
 
   py_class.def(
       "compute_quantiles_and_confidence_intervals",
       [](dp::QuantileTree<double>& tree, double epsilon, double delta,
-         int max_contributions_per_partition, int max_partitions_contributed_to,
+         int max_contributions_per_partition, int max_partitions_contributed,
          const std::vector<double>& quantiles, double confidence_interval_level,
          const std::string& noise_type) {
         dp::QuantileTree<double>::Privatized privatized_tree =
-            GetPrivatizeTree(tree, epsilon, delta, max_partitions_contributed_to,
+            GetPrivatizeTree(tree, epsilon, delta, max_partitions_contributed,
                              max_contributions_per_partition, noise_type);
 
         std::vector<QuantileConfidenceInterval> output;
@@ -142,7 +155,7 @@ void init_algorithms_quantile_tree(py::module& m) {
         }
         return output;
       },
-      py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed_to"),
+      py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed"),
       py::arg("max_contributions_per_partition"), py::arg("quantiles"),
       py::arg("confidence_interval_level"), py::arg("noise_type") = "laplace",
       "Compute multiple quantiles and confidence intervals for them.");

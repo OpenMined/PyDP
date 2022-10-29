@@ -1,5 +1,6 @@
 import pytest
 
+import pydp._pydp as dp
 from pydp.algorithms.quantile_tree import QuantileTree
 
 
@@ -70,3 +71,33 @@ class TestQuntileTree:
                 <= dp_quantile_ci.upper_bound
             )
             assert dp_quantile_ci.upper_bound - dp_quantile_ci.lower_bound < 0.01
+
+    def test_serialize_deserialize(self):
+        lower, upper = 0, 1000
+        height, branching_factor = 5, 10
+        tree1 = QuantileTree(lower, upper, height, branching_factor)
+
+        # Add elements 0,..1000 to the tree.
+        for i in range(1001):
+            tree1.add_entry(i)
+
+        serialized_tree = tree1.serialize().to_bytes()
+
+        # Deserialize
+        # 1.Create empty tree with the same parameters.
+        tree2 = QuantileTree(lower, upper, height, branching_factor)
+        # 2. Merge serialized_tree to tree2.
+        tree2.merge(dp.bytes_to_summary(serialized_tree))
+
+        # Check that tree2 computes correct quantiles. For this use high
+        # epsilon, which means small noise and close to the real quantiles.
+        eps, delta = 10000, 0
+        quantiles_to_compute = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9, 0.9]
+        dp_quantiles = tree2.compute_quantiles(
+            eps, delta, 1, 1, quantiles_to_compute, "laplace"
+        )
+
+        # Check that DP quantiles are close to expected.
+        for quantile, dp_quantile in zip(quantiles_to_compute, dp_quantiles):
+            expected_quantile = quantile * upper
+            assert abs(expected_quantile - dp_quantile) < 0.1

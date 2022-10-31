@@ -975,7 +975,7 @@ test = ["pytest", "coverage", "requests", "testpath", "nbval", "selenium", "pyte
 
 [[package]]
 name = "numpy"
-version = "1.21.1"
+version = "1.21.2"
 description = "NumPy is the fundamental package for array computing with Python."
 category = "dev"
 optional = false

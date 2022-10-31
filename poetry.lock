@@ -1001,7 +1001,7 @@ optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.dependencies]
-numpy = ">=1.12.0"
+numpy = ">=1.21.2"
 python-dateutil = ">=2.5.0"
 pytz = ">=2015.7"
 
@@ -1492,7 +1492,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 joblib = ">=0.11"
-numpy = ">=1.14.6"
+numpy = ">=1.21.2"
 scipy = ">=1.1.0"
 threadpoolctl = ">=2.0.0"
 
@@ -1511,7 +1511,7 @@ optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-numpy = ">=1.16.5"
+numpy = ">=1.21.2"
 
 [[package]]
 name = "seaborn"
@@ -1523,7 +1523,7 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 matplotlib = ">=2.2"
-numpy = ">=1.15"
+numpy = ">=1.21.2"
 pandas = ">=0.23"
 scipy = ">=1.0"
 
@@ -1537,7 +1537,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 matplotlib = ">=3.1"
-numpy = ">=1.17"
+numpy = ">=1.21.2"
 pandas = ">=0.25"
 typing_extensions = {version = "*", markers = "python_version < \"3.8\""}
 

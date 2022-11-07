@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 import pydp.algorithms.numerical_mechanisms as num_mech
-from scipy.special import erfinv
 
 
 REL_ERR_TOL = 1e-5
@@ -71,13 +70,14 @@ def test_gaussian_mechanism():
     value = gaussian.add_noise(value)
     assert type(value) is float
     conf_level = 0.5
+    erf_inv_conf_level = 0.4769362762044699  # =erfinv(0.5)
     priv_budg = 0.1
     interval = gaussian.noise_confidence_interval(0.5, value)
     local_gaussian = num_mech.GaussianMechanism(
         priv_budg * epsilon, priv_budg * delta, l2_sensitivity
     )
     assert type(interval) is num_mech.ConfidenceInterval
-    bound = erfinv(-conf_level) * local_gaussian.std * (2**0.5)
+    bound = -erf_inv_conf_level * local_gaussian.std * (2**0.5)
     lower_bound, upper_bound = value - bound, value + bound
     assert_almost_eq(lower_bound, interval.lower_bound)
     assert_almost_eq(upper_bound, interval.upper_bound)

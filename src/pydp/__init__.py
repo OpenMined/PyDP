@@ -7,4 +7,4 @@ from pydp import distributions
 from pydp import util
 from pydp import ml
 
-__version__ = "1.1.3rc2"
+__version__ = "1.1.3rc3"

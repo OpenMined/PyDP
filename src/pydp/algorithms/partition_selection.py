@@ -22,7 +22,7 @@ class PartitionSelectionStrategy:
         """
         Decides whether or not to keep a partition with `num_users` based on differential privacy parameters and strategy.
         """
-        ...
+        raise NotImplementedError("PartitionSelectionStrategy is an abstract class.")
 
 
 def create_partition_strategy(

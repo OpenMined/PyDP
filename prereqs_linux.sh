@@ -60,7 +60,7 @@ git submodule update --init --recursive
 
 
 # checkout out to particular commit
-cd third_party/differential-privacy && git checkout d93052f71960cefc533b64c7201a35fce2deeb9e && \
+cd third_party/differential-privacy && git checkout 2a1e55484aeb9ca444a3b34dcf128d454e80f255 && \
 cd -
 # renaming workspace.bazel to workspace
 mv third_party/differential-privacy/cc/WORKSPACE.bazel third_party/differential-privacy/cc/WORKSPACE

@@ -25,14 +25,9 @@ class declareLaplaceDistributionClass {
         .def("get_uniform_double", &dpi::LaplaceDistribution::GetUniformDouble,
              R"pbdoc(Returns a uniform random integer of in range [0, 2^53).)pbdoc")
         .def("sample", py::overload_cast<double>(&dpi::LaplaceDistribution::Sample),
-             py::arg("scale") = 1.0,
              R"pbdoc(
-                         Samples the Laplacian distribution Laplace(u, scale*b).
-
-                         Parameters
-                         ----------
-                         scale
-                              A factor to scale b.
+                         Samples the Laplacian distribution Laplace(u, b).
+                        
                     )pbdoc");
     laplace_dist.def("get_diversity", &dpi::LaplaceDistribution::GetDiversity,
                      R"pbdoc(

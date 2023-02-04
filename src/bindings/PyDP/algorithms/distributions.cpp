@@ -24,7 +24,7 @@ class declareLaplaceDistributionClass {
              py::arg("epsilon") = 0., py::arg("sensitivity"))
         .def("get_uniform_double", &dpi::LaplaceDistribution::GetUniformDouble,
              R"pbdoc(Returns a uniform random integer of in range [0, 2^53).)pbdoc")
-        .def("sample", py::overload_cast<double>(&dpi::LaplaceDistribution::Sample),
+        .def("sample", &dpi::LaplaceDistribution::Sample,
              R"pbdoc(
                          Samples the Laplacian distribution Laplace(u, b).
                         

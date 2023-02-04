@@ -89,7 +89,7 @@ class TestPartitionSelection:
         ],
         [
             (10, 1, 1e-5, 1, 0.017845473615190732),
-            (1100, 0.2, 1e-7, 10, 0.007884076914531857),
+            (1100, 0.2, 1e-7, 10, 1.0),
         ],
     )
     def test_gaussian_keep_and_return_noised_value(

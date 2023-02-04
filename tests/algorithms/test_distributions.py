@@ -63,7 +63,7 @@ class TestLaplaceDistribution:
     def test_check_statistics_for_geo_unit_values(self):
 
         ld = LaplaceDistribution(epsilon=1.0, sensitivity=1.0)
-        samples = [ld.sample(scale=1.0) for _ in range(k_num_geometric_samples)]
+        samples = [ld.sample() for _ in range(k_num_geometric_samples)]
         mean = dp.util.mean(samples)
         var = dp.util.variance(samples)
 
@@ -88,14 +88,9 @@ class TestLaplaceDistributionDatatypes:
         sud = ld.get_uniform_double()
         assert isinstance(sud, float)
         lds = ld.sample()
-        lds1 = ld.sample(4.0)
         assert isinstance(lds, float)
-        assert isinstance(lds1, float)
         ldg = ld.get_diversity()
         assert isinstance(ldg, float)
-        # TODO
-        # lcdf = ld.cdf(2.0, 0.5)
-        # assert isinstance(lcdf, float)
 
 
 class TestGaussianDistributionDataTypes:
@@ -104,9 +99,7 @@ class TestGaussianDistributionDataTypes:
         assert isinstance(gd, GaussianDistribution)
 
         gds = gd.sample()
-        gds1 = gd.sample(1.0)
         assert isinstance(gds, float)
-        assert isinstance(gds1, float)
         gdstd = gd.stddev
         assert isinstance(gdstd, float)
 

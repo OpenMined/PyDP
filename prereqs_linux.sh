@@ -13,17 +13,16 @@ else
     sudo apt-get install g++
 fi
 
-# checking for python 3.6
+# checking for Python 3
 echo "Checking for python3 installation"
 if command -v python3 &>/dev/null; then
     echo "Python 3 already installed"
     elif command python --version | grep -q 'Python 3'; then
     echo "Python 3 already installed"
 else
-    echo "Installing Python 3 is not installed"  
-    sudo add-apt-repository ppa:deadsnakes/ppa
+    echo "Installing Python 3 is not installed"
     sudo apt-get update
-    sudo apt-get install python3.6
+    sudo apt-get install python3
 fi
 
 # checking for poetry

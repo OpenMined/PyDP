@@ -117,7 +117,7 @@ class GaussianMechanismBinder {
     return downcast_unique_ptr<dp::GaussianMechanism, dp::NumericalMechanism>(
         builder.Build().value());
   };
-  
+
   static std::unique_ptr<dp::GaussianMechanism> build_from_std(double std) {
     dp::GaussianMechanism::Builder builder;
     builder.SetStandardDeviation(std);
@@ -134,17 +134,19 @@ class GaussianMechanismBinder {
                return build(epsilon, delta, l2_sensitivity);
              }),
              py::arg("epsilon"), py::arg("delta"), py::arg("sensitivity") = 1.0)
-        .def_static("create_from_standard_deviation", [](double std) {
-               return build_from_std(std);
-             },
-             py::arg("std"),
+        .def_static(
+            "create_from_standard_deviation",
+            [](double std) { return build_from_std(std); }, py::arg("std"),
             R"pbdoc(
               Creates Gaussian mechanism from the given standard deviation.
             )pbdoc")
         .def_property_readonly("delta", &dp::GaussianMechanism::GetDelta,
                                "The 𝛿 of the Gaussian mechanism.")
-         .def_property_readonly(
-            "std", [](dp::GaussianMechanism& mechanism) { return mechanism.CalculateStddev(); },
+        .def_property_readonly(
+            "std",
+            [](dp::GaussianMechanism& mechanism) {
+              return mechanism.CalculateStddev();
+            },
             R"pbdoc( 
               The standard deviation of the Gaussian mechanism underlying 
               distribution. 

@@ -153,6 +153,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          poetry config installer.modern-installation false
           poetry install
 
       - name: Build PyDP macOS

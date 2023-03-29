@@ -12,7 +12,7 @@ python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 black            = "*"
-black-nb         = "*"
+black-nb         = [{ version = "<0.7", python = "<3.8" }, { version = "^0.7", python = "^3.8" }]
 bumpversion      = "==0.5.3"
 coverage         = "*"
 gcovr            = "*"
@@ -29,7 +29,7 @@ pytest-sugar     = "*"
 pytest-xdist     = "*"
 seaborn          = "*"
 setuptools       = "*"
-sklearn          = "*"
+scikit-learn     = [{ version = "<1.2.2", python = "<3.8" }, { version = "^1.2.2", python = "^3.8" }]
 sphinx           = "*"
 sphinx-rtd-theme = "*"
 twine            = "*"

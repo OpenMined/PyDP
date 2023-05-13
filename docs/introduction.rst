@@ -117,7 +117,7 @@ SOME OTHER LIBRARIES FOR DP
 
 * `OpenDp  <https://github.com/opendifferentialprivacy>`_ by Harvard University and Microsoft
 * `Diffprivlib <https://github.com/IBM/differential-privacy-library>`_  by IBM
-* Google’s Differential Privacy `Library <https://github.com/IBM/differential-privacy-library>`_ .
+* Google’s Differential Privacy `Library <https://github.com/google/differential-privacy>`_ .
 
 DIFFERENTIAL PRIVACY IN USE
 

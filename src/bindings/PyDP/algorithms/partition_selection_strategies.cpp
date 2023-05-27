@@ -24,6 +24,24 @@ std::unique_ptr<dp::PartitionSelectionStrategy> CreatePartitionStrategy(
   return std::move(obj.value());
 }
 
+std::unique_ptr<dp::PartitionSelectionStrategy> CreatePreThresholdingStrategy(
+    double epsilon, double delta, int max_partitions_contributed, int pre_threshold,
+    dp::PartitionSelectionStrategyWithPreThresholding::PartitionSelectionStrategyType
+        strategy_type) {
+  typename dp::PartitionSelectionStrategyWithPreThresholding::Builder builder;
+  builder.SetEpsilon(epsilon);
+  builder.SetDelta(delta);
+  builder.SetMaxPartitionsContributed(max_partitions_contributed);
+  builder.SetPreThreshold(pre_threshold);
+  builder.SetPartitionSelectionStrategy(strategy_type);
+
+  auto obj = builder.Build();
+  if (!obj.ok()) {
+    throw std::runtime_error(obj.status().ToString());
+  }
+  return std::move(obj.value());
+}
+
 template <class Strategy>
 py::class_<Strategy> init_partition_selection_strategy(py::module& m,
                                                        const std::string& strategy_name,
@@ -62,13 +80,13 @@ void add_thresholding_specific_methods(py::class_<Strategy>* py_class) {
 
 void init_algorithms_partition_selection_strategies(py::module& m) {
   // Truncated Geometric Partition selection strategy.
-  init_partition_selection_strategy<dp::PreaggPartitionSelection>(
+  init_partition_selection_strategy<dp::NearTruncatedGeometricPartitionSelection>(
       m, "TruncatedGeometricPartitionSelectionStrategy",
       "Truncated Geometric (epsilon, delta)-differenially private partition "
       "selection strategy.");
   m.def("create_truncated_geometric_partition_strategy",
-        &CreatePartitionStrategy<dp::PreaggPartitionSelection>, py::arg("epsilon"),
-        py::arg("delta"), py::arg("max_partitions_contributed"));
+        &CreatePartitionStrategy<dp::NearTruncatedGeometricPartitionSelection>,
+        py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed"));
 
   // Laplace Partition selection strategy.
   py::class_<dp::LaplacePartitionSelection> py_laplace_strategy_class =
@@ -97,4 +115,27 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
   m.def("create_gaussian_partition_strategy",
         &CreatePartitionStrategy<dp::GaussianPartitionSelection>, py::arg("epsilon"),
         py::arg("delta"), py::arg("max_partitions_contributed"));
+
+  // PartitionSelectionStrategyWithPreThresholding(
+  py::class_<dp::PartitionSelectionStrategyWithPreThresholding>
+      py_pre_thresholding_strategy_class = init_partition_selection_strategy<
+          dp::PartitionSelectionStrategyWithPreThresholding>(
+          m, "PreThresholdingPartitionSelectionStrategy",
+          "(epsilon, delta)-differenially private partition selection "
+          "strategy with pre-thresholding.");
+
+  py::enum_<dp::PartitionSelectionStrategyWithPreThresholding::
+                PartitionSelectionStrategyType>(m, "PartitionSelectionStrategyType")
+      .value("NEAR_TRUNCATED_GEOMETRIC",
+             dp::PartitionSelectionStrategyWithPreThresholding::
+                 PartitionSelectionStrategyType::kNearTruncatedGeometric)
+      .value("LAPLACE", dp::PartitionSelectionStrategyWithPreThresholding::
+                            PartitionSelectionStrategyType::kLaplace)
+      .value("GAUSSIAN", dp::PartitionSelectionStrategyWithPreThresholding::
+                             PartitionSelectionStrategyType::kGaussian)
+      .export_values();
+
+  m.def("create_pre_thresholding_partition_strategy", &CreatePreThresholdingStrategy,
+        py::arg("epsilon"), py::arg("delta"), py::arg("max_partitions_contributed"),
+        py::arg("pre_threshold"), py::arg("strategy_type"));
 }

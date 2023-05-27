@@ -89,9 +89,8 @@ def test_gaussian_mechanism_create_from_std():
     gaussian = num_mech.GaussianMechanism.create_from_standard_deviation(std)
     assert gaussian.std == 2
     value = gaussian.add_noise(100)
-    assert 80 <= value <= 120 # in 10*sigma
+    assert 80 <= value <= 120  # in 10*sigma
     assert type(value) is int
     value = gaussian.add_noise(200.0)
     assert type(value) is float
-    assert 180 <= value <= 220 # in 10*sigma
-    
+    assert 180 <= value <= 220  # in 10*sigma

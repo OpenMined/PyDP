@@ -162,13 +162,14 @@ class TestPartitionSelection:
         assert (
             max_partitions_contributed == partition_selector.max_partitions_contributed
         )
+        assert pre_threshold == partition_selector.pre_threshold
 
-        for n, expected_prob in zip(num_users, expected_probs):
-            prob_of_keep = partition_selector.probability_of_keep(n)
+        for n_users, expected_prob in zip(num_users, expected_probs):
+            prob_of_keep = partition_selector.probability_of_keep(n_users)
             assert prob_of_keep == pytest.approx(expected_prob)
 
             sims = [
-                partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)
+                partition_selector.should_keep(n_users) for _ in range(N_SIMULATIONS)
             ]
             if n < pre_threshold:
                 assert sum(sims) == 0

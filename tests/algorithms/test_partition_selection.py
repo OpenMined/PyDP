@@ -128,7 +128,6 @@ class TestPartitionSelection:
             "delta",
             "max_partitions_contributed",
             "pre_threshold",
-            "strategy_type",
             "expected_probs",
         ],
         [
@@ -153,7 +152,7 @@ class TestPartitionSelection:
         delta,
         max_partitions_contributed,
         pre_threshold,
-        expected_probs,
+        expected_probs
     ):
         partition_selector = create_partition_strategy(
             strategy, epsilon, delta, max_partitions_contributed, pre_threshold
@@ -171,5 +170,8 @@ class TestPartitionSelection:
             sims = [
                 partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)
             ]
-            pred_prob_of_keep = np.mean(sims)
-            assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
+            if n < pre_threshold:
+                assert sum(sims) == 0
+            else:
+                pred_prob_of_keep = np.mean(sims)
+                assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)

@@ -54,6 +54,11 @@ def create_partition_strategy(
 
     max_partitions_contributed:
         The maximum amount of partitions contributed by the strategy.
+
+    pre_threshold:
+        The minimum amount of privacy units which require for keeping dataset.
+        More details on pre-thresholding are in
+        https://github.com/google/differential-privacy/blob/main/common_docs/pre_thresholding.md
     """
     if pre_threshold is not None:
         strategy_type = _to_partition_selection_strategy_type(strategy)

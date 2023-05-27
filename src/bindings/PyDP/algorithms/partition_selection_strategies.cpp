@@ -124,6 +124,10 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
           "(epsilon, delta)-differenially private partition selection "
           "strategy with pre-thresholding.");
 
+  py_pre_thresholding_strategy_class.def_property_readonly(
+      "pre_threshold",
+      &dp::PartitionSelectionStrategyWithPreThresholding::GetPreThreshold);
+
   py::enum_<dp::PartitionSelectionStrategyWithPreThresholding::
                 PartitionSelectionStrategyType>(m, "PartitionSelectionStrategyType")
       .value("NEAR_TRUNCATED_GEOMETRIC",

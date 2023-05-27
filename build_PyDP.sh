@@ -11,7 +11,7 @@ PYTHONPATH=$(python -c 'import sys; print([x for x in sys.path if "site-packages
 echo -e "Running bazel with:\n\tPLATFORM=$PLATFORM\n\tPYTHONHOME=$PYTHONHOME\n\tPYTHONPATH=$PYTHONPATH"
 
 # Compile code
-bazel coverage src/python:pydp \
+bazel build src/python:pydp \
 --config $PLATFORM \
 --verbose_failures \
 --action_env=PYTHON_BIN_PATH=$PYTHONHOME \

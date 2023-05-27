@@ -1,7 +1,11 @@
+import typing
+
 from .._pydp._partition_selection import (
     create_truncated_geometric_partition_strategy,  # type: ignore
     create_laplace_partition_strategy,  # type: ignore
     create_gaussian_partition_strategy,  # type: ignore
+    create_pre_thresholding_partition_strategy,  # type: ignore
+    PartitionSelectionStrategyType,  # type: ignore
 )
 
 __all__ = [
@@ -26,7 +30,11 @@ class PartitionSelectionStrategy:
 
 
 def create_partition_strategy(
-    strategy: str, epsilon: float, delta: float, max_partitions_contributed: int
+    strategy: str,
+    epsilon: float,
+    delta: float,
+    max_partitions_contributed: int,
+    pre_threshold: typing.Optional[int] = None,
 ) -> "PartitionSelectionStrategy":
     """
     Creates a :class:`~PartitionSelectionStrategy` instance.
@@ -46,7 +54,17 @@ def create_partition_strategy(
 
     max_partitions_contributed:
         The maximum amount of partitions contributed by the strategy.
+
+    pre_threshold:
+        The minimum amount of privacy units which require for keeping dataset.
+        More details on pre-thresholding are in
+        https://github.com/google/differential-privacy/blob/main/common_docs/pre_thresholding.md
     """
+    if pre_threshold is not None:
+        strategy_type = _to_partition_selection_strategy_type(strategy)
+        return create_pre_thresholding_partition_strategy(
+            epsilon, delta, max_partitions_contributed, pre_threshold, strategy_type
+        )
     if strategy.lower() == "truncated_geometric":
         return create_truncated_geometric_partition_strategy(
             epsilon, delta, max_partitions_contributed
@@ -61,3 +79,13 @@ def create_partition_strategy(
         )
 
     raise ValueError(f"Strategy '{strategy}' is not supported.")
+
+
+def _to_partition_selection_strategy_type(s: str) -> PartitionSelectionStrategyType:
+    if s.lower() == "truncated_geometric":
+        return PartitionSelectionStrategyType.NEAR_TRUNCATED_GEOMETRIC
+    if s.lower() == "laplace":
+        return PartitionSelectionStrategyType.LAPLACE
+    if s.lower() == "gaussian":
+        return PartitionSelectionStrategyType.GAUSSIAN
+    raise ValueError(f"Strategy '{s}' is not supported.")

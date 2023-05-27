@@ -119,3 +119,57 @@ class TestPartitionSelection:
             expected_prob, ACCURACY_THRESHOLD
         )
         assert all([(v >= partition_selector.threshold) for v in noised_values])
+
+    @pytest.mark.parametrize(
+        [
+            "num_users",
+            "strategy",
+            "epsilon",
+            "delta",
+            "max_partitions_contributed",
+            "pre_threshold",
+            "strategy_type",
+            "expected_probs",
+        ],
+        [
+            (
+                [10, 110, 200],
+                "truncated_geometric",
+                1,
+                1e-5,
+                1,
+                100,
+                [0, 0.017845473615190732, 1],
+            ),
+            ([10, 110, 200], "laplace", 1, 1e-5, 1, 100, [0, 0.017845473615190732, 1]),
+            ([10, 110, 200], "gaussian", 1, 1e-5, 1, 100, [0, 0.017845473615190732, 1]),
+        ],
+    )
+    def test_pre_thresholding(
+        self,
+        num_users,
+        strategy,
+        epsilon,
+        delta,
+        max_partitions_contributed,
+        pre_threshold,
+        expected_probs,
+    ):
+        partition_selector = create_partition_strategy(
+            strategy, epsilon, delta, max_partitions_contributed, pre_threshold
+        )
+        assert epsilon == partition_selector.epsilon
+        assert delta == partition_selector.delta
+        assert (
+            max_partitions_contributed == partition_selector.max_partitions_contributed
+        )
+
+        for n, expected_prob in zip(num_users, expected_probs):
+            prob_of_keep = partition_selector.probability_of_keep(n)
+            assert prob_of_keep == pytest.approx(expected_prob)
+
+            sims = [
+                partition_selector.should_keep(num_users) for _ in range(N_SIMULATIONS)
+            ]
+            pred_prob_of_keep = np.mean(sims)
+            assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)

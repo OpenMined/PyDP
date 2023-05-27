@@ -116,7 +116,7 @@ void init_algorithms_partition_selection_strategies(py::module& m) {
         &CreatePartitionStrategy<dp::GaussianPartitionSelection>, py::arg("epsilon"),
         py::arg("delta"), py::arg("max_partitions_contributed"));
 
-  // PartitionSelectionStrategyWithPreThresholding(
+  // Pre-thresholding partition selection strategy.
   py::class_<dp::PartitionSelectionStrategyWithPreThresholding>
       py_pre_thresholding_strategy_class = init_partition_selection_strategy<
           dp::PartitionSelectionStrategyWithPreThresholding>(

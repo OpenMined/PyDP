@@ -132,7 +132,7 @@ class TestPartitionSelection:
         ],
         [
             (
-                [10, 109, 200],
+                [10, 99, 109, 200],
                 "truncated_geometric",
                 1,
                 1e-5,
@@ -140,8 +140,8 @@ class TestPartitionSelection:
                 100,
                 [0, 0.12818308050524607, 1],
             ),
-            ([10, 109, 200], "laplace", 1, 1e-5, 1, 100, [0, 0.08103083927575383, 1]),
-            ([10, 109, 200], "gaussian", 1, 1e-5, 1, 100, [0, 0.017845473615190732, 1]),
+            ([10, 99, 109, 200], "laplace", 1, 1e-5, 1, 100, [0, 0, 0.08103083927575383, 1]),
+            ([10, 99, 109, 200], "gaussian", 1, 1e-5, 1, 100, [0, 0, 0.017845473615190732, 1]),
         ],
     )
     def test_pre_thresholding(
@@ -171,7 +171,7 @@ class TestPartitionSelection:
             sims = [
                 partition_selector.should_keep(n_users) for _ in range(N_SIMULATIONS)
             ]
-            if n < pre_threshold:
+            if n_users < pre_threshold:
                 assert sum(sims) == 0
             else:
                 pred_prob_of_keep = np.mean(sims)

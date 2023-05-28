@@ -140,8 +140,24 @@ class TestPartitionSelection:
                 100,
                 [0, 0, 0.12818308050524607, 1],
             ),
-            ([10, 99, 109, 200], "laplace", 1, 1e-5, 1, 100, [0, 0, 0.08103083927575383, 1]),
-            ([10, 99, 109, 200], "gaussian", 1, 1e-5, 1, 100, [0, 0, 0.017845473615190732, 1]),
+            (
+                [10, 99, 109, 200],
+                "laplace",
+                1,
+                1e-5,
+                1,
+                100,
+                [0, 0, 0.08103083927575383, 1],
+            ),
+            (
+                [10, 99, 109, 200],
+                "gaussian",
+                1,
+                1e-5,
+                1,
+                100,
+                [0, 0, 0.017845473615190732, 1],
+            ),
         ],
     )
     def test_pre_thresholding(
@@ -152,7 +168,7 @@ class TestPartitionSelection:
         delta,
         max_partitions_contributed,
         pre_threshold,
-        expected_probs
+        expected_probs,
     ):
         partition_selector = create_partition_strategy(
             strategy, epsilon, delta, max_partitions_contributed, pre_threshold
@@ -175,4 +191,6 @@ class TestPartitionSelection:
                 assert sum(sims) == 0
             else:
                 pred_prob_of_keep = np.mean(sims)
-                assert pred_prob_of_keep == pytest.approx(expected_prob, ACCURACY_THRESHOLD)
+                assert pred_prob_of_keep == pytest.approx(
+                    expected_prob, ACCURACY_THRESHOLD
+                )

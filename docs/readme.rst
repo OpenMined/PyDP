@@ -61,15 +61,14 @@ Example: calculate the Bounded Mean
     from pydp.algorithms.laplacian import BoundedMean
 
     # Calculate the Bounded Mean
-    # Structure: `BoundedMean(epsilon: double, lower: int, upper: int)`
+    # Basic Structure: `BoundedMean(epsilon: float, lower_bound: Union[int, float, None], upper_bound: Union[int, float, None])`
     # `epsilon`: a Double, between 0 and 1, denoting the privacy threshold,
     #            measures the acceptable loss of privacy (with 0 meaning no loss is acceptable)
-    # `lower` and `upper`: Integers, representing lower and upper bounds, respectively
-    x = BoundedMean(0.6, 1, 10)
+    x = BoundedMean(epsilon=0.6, lower_bound=1, upper_bound=10)
 
     # If the lower and upper bounds are not specified,
     # PyDP automatically calculates these bounds
-    # x = BoundedMean(epsilon: double)
+    # x = BoundedMean(epsilon: float)
     x = BoundedMean(0.6)
 
     # Calculate the result

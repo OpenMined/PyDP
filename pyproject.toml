@@ -8,11 +8,11 @@ authors     = [
 license     = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 
 [tool.poetry.dev-dependencies]
 black            = "*"
-black-nb         = [{ version = "<0.7", python = "<3.8" }, { version = "^0.7", python = "^3.8" }]
+black-nb         = "*"
 bumpversion      = "==0.5.3"
 coverage         = "*"
 gcovr            = "*"
@@ -21,7 +21,7 @@ jupyter          = "*"
 matplotlib       = "*"
 mypy             = "*"
 nbqa             = "*"
-pandas           = [{ version = "<0.25.0", python = "<3.8" }, { version = "^1.2.3", python = "^3.8" }]
+pandas           = "*"
 pre-commit       = "*"
 pytest           = "*"
 pytest-randomly  = "*"
@@ -29,7 +29,7 @@ pytest-sugar     = "*"
 pytest-xdist     = "*"
 seaborn          = "*"
 setuptools       = "*"
-scikit-learn     = [{ version = "<1.2.2", python = "<3.8" }, { version = "^1.2.2", python = "^3.8" }]
+scikit-learn     = "*"
 sphinx           = "*"
 sphinx-rtd-theme = "*"
 twine            = "*"

@@ -12,8 +12,8 @@ http_archive(
 http_archive(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11.BUILD",
-    strip_prefix = "pybind11-2.6.2",
-    urls = ["https://github.com/pybind/pybind11/archive/v2.6.2.zip"],
+    strip_prefix = "pybind11-2.11.1",
+    urls = ["https://github.com/pybind/pybind11/archive/v2.11.1.zip"],
 )
 
 load("@pybind11_bazel//:python_configure.bzl", "python_configure")

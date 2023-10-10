@@ -62,8 +62,20 @@ jobs:
             ./bazel-cache
           key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
-      - name: Build Google DP Unix
-        if: runner.os != 'Windows'
+      - name: Build Google DP and wheel on Linux
+        if: runner.os == 'Linux'
+        timeout-minutes: 20
+        run: |
+          pip install cibuildwheel
+          # Set for which Python version to build. 
+          py_version=${matrix.python-version//.}          
+          EXPORT CIBW_BUILD=cp${py_version}-manylinux_x86_64
+          # Build wheel
+          echo "Building ${CIBW_BUILD} wheel" 
+          python -m cibuildwheel --output-dir dist .      
+
+      - name: Build Google DP Mac
+        if: runner.os == 'macOS'
         timeout-minutes: 20
         run: |
           PYTHONHOME=$(which python)
@@ -114,13 +126,13 @@ jobs:
         run: |
           poetry install
 
-      - name: Build PyDP macOS
+      - name: Build PyDP macOS wheel
         if: runner.os == 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
 
-      - name: Build PyDP Linux / Windows
-        if: runner.os != 'macOS'
+      - name: Build PyDP Windows wheel
+        if: runner.os == 'Windows'
         run: |
           poetry run python setup.py build bdist_wheel
 

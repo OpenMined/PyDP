@@ -2,16 +2,42 @@
 # -*- coding: utf-8 -*-
 
 """The setup script."""
-
-# stdlib
 import os
+import platform
+import sys
 from typing import List
 
-# third party
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.dist import Distribution
+from setuptools.command.build_ext import build_ext
 
+CONDA_PREFIX = os.environ.get("CONDA_PREFIX", None)
+WORKING_DIR = os.getcwd()
+
+
+class Build(build_ext):
+    """Customized setuptools build command - builds protos on build."""
+    def run(self):
+        if platform.system() != "Linux":
+            # For Windows and Mac setup.py is not used for wheel build but the
+            # build is performed from GitHub actions files. The special
+            # treatment for Linux is required because wheel build is performed
+            # inside manylinux Docker images with the help of cibuildwheel
+            # (https://github.com/pypa/cibuildwheel). Building with manylinux
+            # ensures that PyDP can work on old Linux versions.
+            return
+
+        # Build _pydp.so (wrappers for C++).
+        os.system("./build_PyDP_linux.sh")
+
+        # Copy _pydp.so to cibuildwheel directory.
+        pydp_lib = "cp src/pydp/_pydp.so"
+        version_str = f"{sys.version_info.major}{sys.version_info.minor}"
+        destination_dir = f"build/lib.linux-x86_64-cpython-{version_str}/pydp"
+        os.system(f"cp {pydp_lib} {destination_dir}")
+
+        build_ext.run(self)
 
 class BinaryDistribution(Distribution):
     """This class is needed in order to create OS specific wheels."""
@@ -42,6 +68,9 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
+    cmdclass={
+        'build_ext': Build
+    },
     description="Python API for Google's Differential Privacy library",
     distclass=BinaryDistribution,
     install_requires=requirements,

@@ -67,8 +67,9 @@ jobs:
         timeout-minutes: 20
         run: |
           pip install cibuildwheel
+          export CIBW_PLATFORM=linux
           # Set for which Python version to build. 
-          py_version=${matrix.python-version//.}          
+          py_version=${matrix.python-version//.}  # 3.11 -> 311     
           EXPORT CIBW_BUILD=cp${py_version}-manylinux_x86_64
           # Build wheel
           echo "Building ${CIBW_BUILD} wheel" 

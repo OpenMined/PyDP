@@ -33,7 +33,7 @@ class Build(build_ext):
         os.system("./build_PyDP_linux.sh")
 
         # Copy _pydp.so to cibuildwheel directory.
-        pydp_lib = "cp src/pydp/_pydp.so"
+        pydp_lib = "src/pydp/_pydp.so"
         version_str = f"{sys.version_info.major}{sys.version_info.minor}"
         destination_dir = f"build/lib.linux-x86_64-cpython-{version_str}/pydp"
         os.system(f"cp {pydp_lib} {destination_dir}")

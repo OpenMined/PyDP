@@ -18,6 +18,7 @@ WORKING_DIR = os.getcwd()
 
 class Build(build_ext):
     """Customized setuptools build command - builds protos on build."""
+
     def run(self):
         if platform.system() != "Linux":
             # For Windows and Mac setup.py is not used for wheel build but the
@@ -38,6 +39,7 @@ class Build(build_ext):
         os.system(f"cp {pydp_lib} {destination_dir}")
 
         build_ext.run(self)
+
 
 class BinaryDistribution(Distribution):
     """This class is needed in order to create OS specific wheels."""
@@ -68,9 +70,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
     ],
-    cmdclass={
-        'build_ext': Build
-    },
+    cmdclass={"build_ext": Build},
     description="Python API for Google's Differential Privacy library",
     distclass=BinaryDistribution,
     install_requires=requirements,

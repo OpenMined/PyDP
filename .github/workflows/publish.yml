@@ -65,6 +65,7 @@ jobs:
       - name: Build Google DP and wheel on Linux
         if: runner.os == 'Linux'
         timeout-minutes: 20
+        shell: bash
         run: |
           pip install cibuildwheel
           export CIBW_PLATFORM=linux

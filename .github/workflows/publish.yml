@@ -72,7 +72,7 @@ jobs:
           # Set for which Python version to build. 
           system_python_version=${{ matrix.python-version }}
           py_version=${system_python_version//.}  # 3.11 -> 311     
-          EXPORT CIBW_BUILD=cp${py_version}-manylinux_x86_64
+          export CIBW_BUILD=cp${py_version}-manylinux_x86_64
           # Build wheel
           echo "Building ${CIBW_BUILD} wheel" 
           python -m cibuildwheel --output-dir dist .      

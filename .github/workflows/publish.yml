@@ -76,7 +76,16 @@ jobs:
           export CIBW_BUILD_VERBOSITY=1
           # Build wheel
           echo "Building ${CIBW_BUILD} wheel" 
-          python -m cibuildwheel --output-dir dist .      
+          python -m cibuildwheel --output-dir dist .
+      - name: Archive Linux build artifacts
+        # more details https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            dist
+          retention-days: 2
 
       - name: Build Google DP Mac
         if: runner.os == 'macOS'

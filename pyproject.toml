@@ -6,7 +6,7 @@ requires = [
 
 [tool.poetry]
 name        = "pydp"
-version     = "1.1.5.rc3"
+version     = "1.1.5.rc4"
 description = ""
 authors     = [
     "Chinmay Shah <chinmayshah3899@gmail.com>",

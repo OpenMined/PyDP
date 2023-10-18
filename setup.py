@@ -89,6 +89,6 @@ setup(
     python_requires=">=3.8",
     test_suite="tests",
     url="https://github.com/OpenMined/PyDP",
-    version="1.1.5.rc2",
+    version="1.1.5.rc3",
     zip_safe=False,
 )

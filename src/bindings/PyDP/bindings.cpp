@@ -4,9 +4,6 @@ using namespace std;
 
 namespace py = pybind11;
 
-// base
-void init_base_logging(py::module &);
-
 // bounded functions
 void init_algorithms_bounded_functions(py::module &);
 void init_algorithms_count(py::module &);
@@ -35,9 +32,6 @@ void init_mechanisms_mechanism(py::module &);
 
 PYBIND11_MODULE(_pydp, m) {
   m.doc() = "Google Differential Privacy python extension";
-
-  // Base
-  init_base_logging(m);
 
   // Algorithms
   auto malgorithms = m.def_submodule("_algorithms");

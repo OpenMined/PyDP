@@ -85,6 +85,14 @@ x.quick_result(input_data: list)
 Go to [resources](https://github.com/OpenMined/PyDP/blob/dev/resources.md)
 to learn more about differential privacy.
 
+## Attack Model
+
+Please refer to the
+[attack model](https://github.com/google/differential-privacy/blob/main/common_docs/attack_model.md)
+of the underlying Google Differential Privacy Library to learn
+more about our assumptions and requirements for using PyDP in
+a safe way.
+
 ## Support and Community on Slack
 
 If you have questions about the PyDP library, join

@@ -37,7 +37,7 @@ jobs:
       - name: Cache Bazel Unix
         # Not working on Windows: https://github.com/actions/cache/issues/576
         if: runner.os != 'Windows'
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v4
         with:
           path: |
             ./bazel-PyDP
@@ -56,7 +56,7 @@ jobs:
       - name: Cache Bazel Windows
         if: runner.os == 'Windows'
         # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v4
         with:
           path: |
             ./bazel-cache
@@ -128,7 +128,7 @@ jobs:
           echo "::set-output name=dir::$(poetry config cache-dir)"
 
       - name: poetry cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.poetry-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}

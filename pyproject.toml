@@ -1,6 +1,7 @@
 [build-system]
 requires = [
     "cmake",
+    "protobuf-compiler",
     "setuptools",
     "wget"
 ]

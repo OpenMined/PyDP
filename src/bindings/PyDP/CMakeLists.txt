@@ -35,3 +35,5 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::statusor
     absl::strings
 )
+
+target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations)

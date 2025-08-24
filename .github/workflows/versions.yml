@@ -75,18 +75,6 @@ jobs:
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
 
-      - name: Cache Bazel Unix
-        # Not working on Windows: https://github.com/actions/cache/issues/576
-        if: runner.os != 'Windows'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./bazel-PyDP
-            ./bazel-bin
-            ./bazel-cache
-            ./bazel-out
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-
       - name: Update environment variables Windows
         if: runner.os == 'Windows'
         # See:
@@ -107,16 +95,7 @@ jobs:
         if: runner.os != 'Windows'
         timeout-minutes: 20
         run: |
-          PYTHONHOME=$(which python)
-          PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);")
-          BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
-          echo "Running: ${{ matrix.os }}"
-          echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel --output_base ./bazel-cache build src/python:pydp \
-                --config $BAZEL_CONFIG_OS \
-                --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME \
-                --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
+          bash build_PyDP.sh
 
       - name: Build Google DP Windows
         if: runner.os == 'Windows'

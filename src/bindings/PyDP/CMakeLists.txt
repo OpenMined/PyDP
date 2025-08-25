@@ -54,4 +54,6 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::flat_hash_set
 )
 
-target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
+if(NOT WIN32)
+  target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
+endif()

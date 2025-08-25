@@ -23,6 +23,23 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(abseil-cpp)
 
+# Add compiler flags for build optimization
+if (APPLE)
+    message(STATUS "Building on macOS, enabling macOS-specific flags.")
+    # For macOS, use -Oz and dead-code stripping
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Oz")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-dead_strip")
+elseif (UNIX)
+    message(STATUS "Building on Linux, enabling Linux-specific flags.")
+    # For Linux, use -Oz and garbage collection
+    # set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Oz")
+    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections")
+   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Oz -s -flto -Wl,--gc-sections")
+else()
+    message(WARNING "Unsupported platform. No size optimization flags applied.")
+endif()
+
+
 pybind11_add_module(_pydp bindings.cpp algorithms/bounded_functions.cpp 
 algorithms/count.cpp  algorithms/distributions.cpp  algorithms/order_statistics.cpp  
 algorithms/partition_selection_strategies.cpp  algorithms/qunatile_tree.cpp  algorithms/rand.cpp  
@@ -37,4 +54,4 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::flat_hash_set
 )
 
-target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations)
+target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)

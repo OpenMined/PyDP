@@ -74,6 +74,9 @@ jobs:
         if: runner.os == 'macOS'
         run: |
                 brew install protobuf
+      - name: Print architecture # debug
+        run: |
+          uname -m
 
       - name: Setup msbuild Windows
         if: runner.os == 'Windows'

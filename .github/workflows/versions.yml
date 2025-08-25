@@ -65,11 +65,15 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Protobuf Compiler
+      - name: Install Protobuf Compiler Linux
         if: runner.os == 'Linux'
         run: |
                 sudo apt-get update
                 sudo apt-get install -y protobuf-compiler libprotobuf-dev
+      - name: Install Protobuf Compiler Mac
+        if: runner.os == 'Linux'
+        run: |
+                brew install protobuf
 
       - name: Setup msbuild Windows
         if: runner.os == 'Windows'

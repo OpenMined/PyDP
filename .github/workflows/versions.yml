@@ -74,9 +74,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
                 brew install protobuf
-      - name: Install Protobuf Compiler Windows
-        if: runner.os == 'Windows'
-        run: winget install --id Google.Protobuf
+  
       - name: Print architecture # debug
         run: |
           uname -m
@@ -89,9 +87,9 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Setup Winget
-        if: runner.os == 'Windows'
-        uses: actions/setup-winget@v1
+      - name: Install Protobuf using Winget
+        shell: powershell
+        run: winget install --id Google.Protobuf
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

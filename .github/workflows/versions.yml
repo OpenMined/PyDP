@@ -114,13 +114,12 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
-          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
-          echo "PYTHONHOME=$PYTHONHOME"
-          echo "PYTHONPATH=$PYTHONPATH"
           echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          nmake _pydp
+          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
 
       - name: Upgrade pip
         run: |

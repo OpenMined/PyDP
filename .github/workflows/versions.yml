@@ -74,6 +74,19 @@ jobs:
         if: runner.os == 'macOS'
         run: |
                 brew install protobuf
+
+      - name:  Install Protobuf Compiler Windows
+        if: runner.os == 'Windows'
+        run: |
+          $protobufVersion = "32.0"
+          $downloadUrl = "https://github.com/protocolbuffers/protobuf/releases/download/v$protobufVersion/protoc-$protobufVersion-win64.zip"
+          $destinationFolder = "$env:TEMP\protoc"
+
+          Invoke-WebRequest -Uri $downloadUrl -OutFile protoc.zip
+          Expand-Archive -Path protoc.zip -DestinationPath $destinationFolder
+          
+          # Add the protoc directory to the PATH
+          echo "$destinationFolder\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
   
       - name: Print architecture # debug
         run: |
@@ -86,10 +99,6 @@ jobs:
       - name: Setup Visual studio Windows
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Install Protobuf using Winget
-        shell: powershell
-        run: winget install --id Google.Protobuf
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

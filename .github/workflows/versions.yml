@@ -90,6 +90,10 @@ jobs:
 
       - name: Verify protoc installation
         run: protoc --version
+
+      - name: Download proto header Windows
+        if: runner.os == 'Windows'
+        run: vcpkg install protobuf:x64-windows
   
       - name: Print architecture # debug
         run: |

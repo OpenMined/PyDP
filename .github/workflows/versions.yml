@@ -116,7 +116,7 @@ jobs:
           mkdir build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --config Release -j
+          cmake --build . --config Release -j4
           echo %CD%
           dir
           move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd

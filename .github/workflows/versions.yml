@@ -74,6 +74,10 @@ jobs:
         if: runner.os == 'macOS'
         run: |
                 brew install protobuf
+      - name: Install Protobuf Compiler Mac
+        if: runner.os == 'Windows'
+        run: |
+                winget install protobuf
       - name: Print architecture # debug
         run: |
           uname -m
@@ -100,7 +104,7 @@ jobs:
           mkdir build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --config Release -j
+          cmake --build . --config Release -j%NUMBER_OF_PROCESSORS%
           echo %CD%
           dir
           move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd

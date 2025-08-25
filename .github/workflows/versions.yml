@@ -53,10 +53,10 @@ jobs:
       max-parallel: 12
       matrix:
         os: [ubuntu-latest, macos-12, windows-latest]
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        python-version: ["3.10"]  # [3.8, 3.9, "3.10", "3.11"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -80,29 +80,13 @@ jobs:
 
       - name: Setup msbuild Windows
         if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Fix Paths Windows
         # Make sure that tar.exe from Git is used not from Windows
         if: runner.os == 'Windows'
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
-
-      - name: Update environment variables Windows
-        if: runner.os == 'Windows'
-        # See:
-        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        run: |
-          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-
-      - name: Cache Bazel Windows
-        if: runner.os == 'Windows'
-        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./bazel-cache
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

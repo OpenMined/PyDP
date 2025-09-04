@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
   google_dp
   GIT_REPOSITORY https://github.com/google/differential-privacy.git
-  GIT_TAG        main
+  GIT_TAG        v4.0.0 # May 6, 2025
 )
 
 FetchContent_MakeAvailable(google_dp)
@@ -32,8 +32,6 @@ if (APPLE)
 elseif (UNIX)
     message(STATUS "Building on Linux, enabling Linux-specific flags.")
     # For Linux, use -Oz and garbage collection
-    # set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Oz")
-    # set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--gc-sections")
    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Oz -s -flto -Wl,--gc-sections")
 else()
     message(WARNING "Unsupported platform. No size optimization flags applied.")

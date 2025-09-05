@@ -14,10 +14,10 @@ authors     = [
 ]
 license     = "Apache-2.0"
 
-[tool.poetry.dependencies]
+[tool.poetry.group.dependencies]
 python = "^3.8"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black            = "*"
 black-nb         = "*"
 bumpversion      = "==0.5.3"

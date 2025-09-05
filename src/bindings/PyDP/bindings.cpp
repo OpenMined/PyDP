@@ -36,9 +36,6 @@ void init_mechanisms_mechanism(py::module &);
 PYBIND11_MODULE(_pydp, m) {
   m.doc() = "Google Differential Privacy python extension";
 
-  // Base
-  // init_base_logging(m);
-
   // Algorithms
   auto malgorithms = m.def_submodule("_algorithms");
   init_algorithms_bounded_functions(malgorithms);

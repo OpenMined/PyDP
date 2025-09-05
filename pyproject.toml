@@ -17,6 +17,7 @@ license     = "Apache-2.0"
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
+black            = "*"
 isort            = "*"
 numpy            = "*"
 pre-commit       = "*"

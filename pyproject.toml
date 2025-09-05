@@ -19,6 +19,7 @@ python = "^3.9"
 [tool.poetry.dev-dependencies]
 black            = "*"
 isort            = "*"
+mypy             = "*"
 numpy            = "*"
 pre-commit       = "*"
 pytest           = "*"

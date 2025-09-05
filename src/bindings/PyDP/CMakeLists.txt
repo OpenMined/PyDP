@@ -46,8 +46,7 @@ algorithms/util.cpp mechanisms/mechanism.cpp proto/proto.cpp)
 target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::base
     absl::check  
-    absl::hash      
-    absl::raw_logging_internal
+    absl::hash    
     absl::status
     absl::statusor
     absl::strings

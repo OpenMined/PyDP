@@ -14,14 +14,11 @@ authors     = [
 license     = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 
 [tool.poetry.dev-dependencies]
-black            = "*"
-black-nb         = "*"
 isort            = "*"
-mypy             = "*"
-numpy            = ">=2.0"
+numpy            = "*"
 pre-commit       = "*"
 pytest           = "*"
 pytest-randomly  = "*"

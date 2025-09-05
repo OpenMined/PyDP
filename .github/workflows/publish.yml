@@ -10,8 +10,8 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        # macos-13 latest x86. TODO: fix for Apple Silicon and Windows.
-        os: [ubuntu-latest, macos-13]
+        # TODO: fix for Mac and Windows.
+        os: [ubuntu-latest]
         python-version: [3.9, "3.10", "3.11", "3.12", "3.13"]
     runs-on: ${{ matrix.os }}
 

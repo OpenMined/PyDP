@@ -25,7 +25,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Cache Bazel Unix
-        uses: actions/cache@v2.1.5
+        uses: actions/cache@v4
         with:
           path: |
             ./bazel-PyDP
@@ -63,7 +63,7 @@ jobs:
           echo "::set-output name=dir::$(poetry config cache-dir)"
 
       - name: poetry cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.poetry-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}

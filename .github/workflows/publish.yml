@@ -12,7 +12,7 @@ jobs:
       matrix:
         # TODO: fix for Mac and Windows.
         os: [ubuntu-latest]
-        python-version: [3.9, "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", 3.11, 3.12, 3.13, 3.14]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -69,7 +69,7 @@ jobs:
       - name: Archive Linux build artifacts
         # more details https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: |

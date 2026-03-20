@@ -59,10 +59,17 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::log
     absl::log_internal_nullguard
     absl::log_internal_globals
+    absl::raw_hash_set
+    absl::str_format_internal
+    absl::throw_delegate
 )
 
 if(NOT WIN32)
   target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
+endif()
+
+if(APPLE)
+  target_link_libraries(_pydp PRIVATE "-Wl,-all_load")
 endif()
 
 # Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.

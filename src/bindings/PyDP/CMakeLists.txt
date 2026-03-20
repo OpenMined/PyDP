@@ -51,6 +51,10 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::statusor
     absl::strings
     absl::flat_hash_set    
+    absl::raw_logging_internal
+    absl::log_internal_message
+    absl::log_internal_check_op
+    absl::log_globals
 )
 
 if(NOT WIN32)

@@ -104,7 +104,7 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
-       - name: Build Google DP and wheel on Linux # for debug
+      - name: Build Google DP and wheel on Linux # for debug
         if: runner.os == 'Linux'
         timeout-minutes: 20
         shell: bash

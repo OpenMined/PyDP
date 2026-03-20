@@ -46,6 +46,7 @@ algorithms/util.cpp mechanisms/mechanism.cpp proto/proto.cpp)
 set(PYDP_DEPS 
     dp_algorithms dp_protos
     absl::base
+    absl::spinlock_wait
     absl::check  
     absl::hash    
     absl::status
@@ -73,6 +74,14 @@ endif()
 
 # Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.
 # This decisively bypasses the '-undefined dynamic_lookup' flat namespace symbol stripping!
-if(APPLE)
-  set_target_properties(_pydp PROPERTIES LINK_FLAGS "-Wl,-all_load")
-endif()
+# This restricts the force loading behavior exclusively to macOS using generator expressions,
+# keeping the native interface targets mapped without incurring duplicate link evaluations.
+target_link_options(_pydp PRIVATE 
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:dp_algorithms>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:dp_protos>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::strings_internal>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::raw_hash_set>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::str_format_internal>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::throw_delegate>>"
+    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::spinlock_wait>>"
+)

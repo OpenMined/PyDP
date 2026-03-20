@@ -68,7 +68,7 @@ set(PYDP_DEPS
 target_link_libraries(_pydp PUBLIC ${PYDP_DEPS})
 
 if(NOT WIN32)
-  target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
+  target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations)
 endif()
 
 # Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.

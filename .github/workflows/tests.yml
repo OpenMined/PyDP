@@ -1,7 +1,7 @@
 name: Tests
 
 on:
-  pull_request_disabled:
+  pull_request:
     paths:
       - "*.bazel"
       - "*.cpp"
@@ -26,9 +26,9 @@ jobs:
       matrix:
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install python dependencies
@@ -58,12 +58,12 @@ jobs:
         python-version: ["3.10", 3.11, 3.12, 3.13, 3.14]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -91,7 +91,7 @@ jobs:
       - name: Get poetry cache dir
         id: poetry-cache
         run: |
-          echo "::set-output name=dir::$(poetry config cache-dir)"
+          echo "dir=$(poetry config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: poetry cache
         uses: actions/cache@v4

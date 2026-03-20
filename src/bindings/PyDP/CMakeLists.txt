@@ -50,6 +50,7 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::status
     absl::statusor
     absl::strings
+    absl::strings_internal
     absl::flat_hash_set    
     absl::raw_logging_internal
     absl::log_internal_message

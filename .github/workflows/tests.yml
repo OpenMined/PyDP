@@ -82,6 +82,12 @@ jobs:
         run: |
           pip install --upgrade --user pip
 
+      - name: Install Protobuf Compiler Mac
+        if: runner.os == 'macOS'
+        run: |
+          brew install protobuf
+          brew uninstall --ignore-dependencies abseil || true
+
       - name: Install Poetry
         run: |
           pip install poetry

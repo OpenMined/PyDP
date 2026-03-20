@@ -75,6 +75,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
                 brew install protobuf
+                brew uninstall --ignore-dependencies abseil || true
 
       - name:  Install Protobuf Compiler Windows
         if: runner.os == 'Windows'

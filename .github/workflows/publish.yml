@@ -76,23 +76,6 @@ jobs:
             dist
           retention-days: 2
 
-      - name: Build Google DP Mac
-        if: runner.os == 'macOS'
-        timeout-minutes: 20
-        run: |
-          bash build_PyDP.sh
-
-      - name: Build Google DP Windows
-        if: runner.os == 'Windows'
-        timeout-minutes: 20
-        run: |
-          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
-          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
-          echo "PYTHONHOME=$PYTHONHOME"
-          echo "PYTHONPATH=$PYTHONPATH"
-          echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
 
       - name: Upgrade pip
         run: |
@@ -119,14 +102,32 @@ jobs:
         run: |
           poetry install
 
+      - name: Build Google DP Mac
+        if: runner.os == 'macOS'
+        timeout-minutes: 20
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "15.0"
+          ARCHFLAGS: "-arch arm64"
+          _PYTHON_HOST_PLATFORM: "macosx-15.0-arm64"
+        run: |
+          poetry run bash build_PyDP.sh
+
+      - name: Build Google DP Windows
+        if: runner.os == 'Windows'
+        timeout-minutes: 20
+        run: |
+          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
+          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
+          echo "PYTHONHOME=$PYTHONHOME"
+          echo "PYTHONPATH=$PYTHONPATH"
+          echo "Running: ${{ matrix.os }}"
+          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
+          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+
       - name: Build PyDP macOS wheel
         if: runner.os == 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
-        env:
-          MACOSX_DEPLOYMENT_TARGET: "15.0"
-          _PYTHON_HOST_PLATFORM: "macosx-15.0-arm64"
-          ARCHFLAGS: "-arch arm64"
 
 
       - name: Build PyDP Windows wheel

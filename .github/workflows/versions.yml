@@ -104,24 +104,6 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build Google DP Unix
-        if: runner.os != 'Windows'
-        timeout-minutes: 20
-        run: |
-          bash build_PyDP.sh
-
-      - name: Build Google DP Windows
-        if: runner.os == 'Windows'
-        timeout-minutes: 20
-        run: |
-          echo "Running: ${{ matrix.os }}"
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --config Release -j
-          echo %CD%
-          dir
-          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
 
       - name: Upgrade pip
         run: |
@@ -149,14 +131,33 @@ jobs:
           poetry lock
           poetry install
 
+      - name: Build Google DP Unix
+        if: runner.os != 'Windows'
+        timeout-minutes: 20
+        env:
+          MACOSX_DEPLOYMENT_TARGET: ${{ runner.os == 'macOS' && '15.0' || '' }}
+          ARCHFLAGS: ${{ runner.os == 'macOS' && '-arch arm64' || '' }}
+          _PYTHON_HOST_PLATFORM: ${{ runner.os == 'macOS' && 'macosx-15.0-arm64' || '' }}
+        run: |
+          poetry run bash build_PyDP.sh
+
+      - name: Build Google DP Windows
+        if: runner.os == 'Windows'
+        timeout-minutes: 20
+        run: |
+          echo "Running: ${{ matrix.os }}"
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release -j
+          echo %CD%
+          dir
+          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
+
       - name: Build PyDP (macOS)
         if: runner.os == 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
-        env:
-          MACOSX_DEPLOYMENT_TARGET: "15.0"
-          _PYTHON_HOST_PLATFORM: "macosx-15.0-arm64"
-          ARCHFLAGS: "-arch arm64"
 
 
       - name: Build PyDP (Linux/Windows)

@@ -43,7 +43,7 @@ algorithms/count.cpp  algorithms/distributions.cpp  algorithms/order_statistics.
 algorithms/partition_selection_strategies.cpp  algorithms/qunatile_tree.cpp  algorithms/rand.cpp  
 algorithms/util.cpp mechanisms/mechanism.cpp proto/proto.cpp)
 
-target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
+set(PYDP_DEPS dp_algorithms dp_protos
     absl::base
     absl::check  
     absl::hash    
@@ -64,12 +64,23 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
     absl::throw_delegate
 )
 
+target_link_libraries(_pydp PUBLIC ${PYDP_DEPS})
+
 if(NOT WIN32)
   target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
 endif()
 
+# Force the Apple macOS linker to aggressively bake in all static archive symbols
+# by applying Apple's -force_load protocol against the root Google DP static archives.
+# This decisively eradicates the Pybind11 '-undefined dynamic_lookup' flat-namespace linker dropping
+# because the root Google DP archives will actively spawn strong symbol dependencies into Abseil.
 if(APPLE)
-  target_link_libraries(_pydp PRIVATE "-Wl,-all_load")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:dp_algorithms>")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:dp_protos>")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:absl::strings_internal>")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:absl::raw_hash_set>")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:absl::str_format_internal>")
+  target_link_libraries(_pydp PRIVATE "-Wl,-force_load,$<TARGET_FILE:absl::throw_delegate>")
 endif()
 
 # Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.

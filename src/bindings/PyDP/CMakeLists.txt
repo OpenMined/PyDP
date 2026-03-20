@@ -43,16 +43,13 @@ algorithms/count.cpp  algorithms/distributions.cpp  algorithms/order_statistics.
 algorithms/partition_selection_strategies.cpp  algorithms/qunatile_tree.cpp  algorithms/rand.cpp  
 algorithms/util.cpp mechanisms/mechanism.cpp proto/proto.cpp)
 
-set(PYDP_DEPS 
-    dp_algorithms dp_protos
+set(PYDP_DEPS_NORMAL
     absl::base
-    absl::spinlock_wait
     absl::check  
     absl::hash    
     absl::status
     absl::statusor
     absl::strings
-    absl::strings_internal
     absl::flat_hash_set    
     absl::raw_logging_internal
     absl::log_internal_message
@@ -61,27 +58,27 @@ set(PYDP_DEPS
     absl::log
     absl::log_internal_nullguard
     absl::log_internal_globals
+)
+
+set(PYDP_DEPS_FORCE_LOAD
+    dp_algorithms 
+    dp_protos
+    absl::spinlock_wait
+    absl::strings_internal
     absl::raw_hash_set
     absl::str_format_internal
     absl::throw_delegate
 )
 
-target_link_libraries(_pydp PUBLIC ${PYDP_DEPS})
+# Apply CMake's native platform-agnostic WHOLE_ARCHIVE forcing onto the targets
+# that Apple Clang's ld routinely attempts to dead-strip due to weak attributes.
+target_link_libraries(_pydp PUBLIC 
+    "$<LINK_LIBRARY:WHOLE_ARCHIVE,${PYDP_DEPS_FORCE_LOAD}>"
+    ${PYDP_DEPS_NORMAL}
+)
 
 if(NOT WIN32)
   target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
 endif()
 
-# Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.
-# This decisively bypasses the '-undefined dynamic_lookup' flat namespace symbol stripping!
-# This restricts the force loading behavior exclusively to macOS using generator expressions,
-# keeping the native interface targets mapped without incurring duplicate link evaluations.
-target_link_options(_pydp PRIVATE 
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:dp_algorithms>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:dp_protos>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::strings_internal>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::raw_hash_set>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::str_format_internal>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::throw_delegate>>"
-    "$<$<PLATFORM_ID:Darwin>:-Wl,-force_load,$<TARGET_FILE:absl::spinlock_wait>>"
-)
+# Force loading behavior is dynamically managed above statically using modern CMake `<LINK_LIBRARY...>` generator logic.

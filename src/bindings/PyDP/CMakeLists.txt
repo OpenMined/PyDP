@@ -63,3 +63,9 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
 if(NOT WIN32)
   target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
 endif()
+
+# Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.
+# This decisively bypasses the '-undefined dynamic_lookup' flat namespace symbol stripping!
+if(APPLE)
+  target_link_options(_pydp PRIVATE "-Wl,-all_load")
+endif()

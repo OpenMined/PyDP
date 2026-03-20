@@ -12,7 +12,7 @@ jobs:
       matrix:
         # TODO: fix for Mac and Windows.
         os: [ubuntu-latest]
-        python-version: ["3.10", 3.11, 3.12, 3.13, 3.14]
+        python-version: [3.11, 3.12, 3.13, 3.14]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -63,6 +63,7 @@ jobs:
           py_version=${system_python_version//.}  # 3.11 -> 311     
           export CIBW_BUILD=cp${py_version}-manylinux_x86_64
           export CIBW_BUILD_VERBOSITY=1
+          export CIBW_BEFORE_ALL_LINUX="yum install -y openssl-devel || dnf install -y openssl-devel || apt-get install -y libssl-dev"
           # Build wheel
           echo "Building ${CIBW_BUILD} wheel" 
           python -m cibuildwheel --output-dir dist .

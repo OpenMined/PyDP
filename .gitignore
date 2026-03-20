@@ -60,3 +60,4 @@ coverage_report/*
 !coverage_report/index.html
 
 .python-version
+.venv/

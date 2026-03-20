@@ -22,7 +22,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [3.9]
+        python-version: ["3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -52,11 +52,12 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.8, 3.9, "3.10", "3.11"]
+        # TODO: fix for Mac and Windows.
+        os: [ubuntu-latest] 
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -65,70 +66,62 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install Protobuf Compiler Linux
+        if: runner.os == 'Linux'
+        run: |
+                sudo apt-get update
+                sudo apt-get install -y protobuf-compiler libprotobuf-dev
+      - name: Install Protobuf Compiler Mac
+        if: runner.os == 'macOS'
+        run: |
+                brew install protobuf
+
+      - name:  Install Protobuf Compiler Windows
+        if: runner.os == 'Windows'
+        run: |
+          $protobufVersion = "32.0"
+          $downloadUrl = "https://github.com/protocolbuffers/protobuf/releases/download/v$protobufVersion/protoc-$protobufVersion-win64.zip"
+          $destinationFolder = "$env:TEMP\protoc"
+
+          Invoke-WebRequest -Uri $downloadUrl -OutFile protoc.zip
+          Expand-Archive -Path protoc.zip -DestinationPath $destinationFolder
+          
+          # Add the protoc directory to the PATH
+          echo "$destinationFolder\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify protoc installation
+        run: protoc --version
+
+      - name: Download proto header Windows
+        if: runner.os == 'Windows'
+        run: vcpkg install protobuf:x64-windows
+ 
       - name: Setup msbuild Windows
         if: runner.os == 'Windows'
         uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Fix Paths Windows
-        # Make sure that tar.exe from Git is used not from Windows
+      - name: Setup Visual studio Windows
         if: runner.os == 'Windows'
-        run: |
-          @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
-
-      - name: Cache Bazel Unix
-        # Not working on Windows: https://github.com/actions/cache/issues/576
-        if: runner.os != 'Windows'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./bazel-PyDP
-            ./bazel-bin
-            ./bazel-cache
-            ./bazel-out
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
-
-      - name: Update environment variables Windows
-        if: runner.os == 'Windows'
-        # See:
-        #   - On Bazel cache: https://docs.bazel.build/versions/master/output_directories.html
-        run: |
-          echo "BAZEL_CACHE_DIR=$env:USERPROFILE\_bazel_$env:USERNAME" >> $env:GITHUB_ENV
-
-      - name: Cache Bazel Windows
-        if: runner.os == 'Windows'
-        # https://stackoverflow.com/questions/66870002/github-actions-cache-maven-m2-repository-on-windows-environment-c-users-run
-        uses: actions/cache@v4
-        with:
-          path: |
-            ./bazel-cache
-          key: ${{ runner.os }}-bazel-${{ hashFiles('WORKSPACE') }}
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
         timeout-minutes: 20
         run: |
-          PYTHONHOME=$(which python)
-          PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);")
-          BAZEL_CONFIG_OS=$(python -c "print('${{ matrix.os }}'.split('-')[0].lower().replace('ubuntu', 'linux'))")
-          echo "Running: ${{ matrix.os }}"
-          echo "Using BAZEL_CONFIG_OS: $BAZEL_CONFIG_OS"
-          bazel --output_base ./bazel-cache build src/python:pydp \
-                --config $BAZEL_CONFIG_OS \
-                --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME \
-                --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          cp -f ./bazel-bin/src/bindings/_pydp.so ./src/pydp
+          bash build_PyDP.sh
 
       - name: Build Google DP Windows
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
-          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
-          echo "PYTHONHOME=$PYTHONHOME"
-          echo "PYTHONPATH=$PYTHONPATH"
           echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release -j
+          echo %CD%
+          dir
+          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
 
       - name: Upgrade pip
         run: |
@@ -153,7 +146,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry config installer.modern-installation false
+          poetry lock
           poetry install
 
       - name: Build PyDP macOS

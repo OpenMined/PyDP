@@ -1,6 +1,6 @@
 #!/bin/bash
 
 echo "*** Installing libssl"
-apt install libssl-dev
+apt-get install libssl-dev
 echo "**** Finished libssl install"
 ./build_PyDP.sh

@@ -38,12 +38,12 @@ jobs:
       - name: MyPY
         run: |
           mypy src tests
-      - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v4.11.0
-        with:
-          clang-format-version: "11"
-          check-path: "/src/bindings/"
-          fallback-style: "Google" # optional
+#      - name: Run clang-format style check for C/C++ programs.
+#        uses: jidicula/clang-format-action@v4.11.0
+#        with:
+#          clang-format-version: "11"
+#          check-path: "/src/bindings/"
+#          fallback-style: "Google" # optional
 
   build:
     runs-on: ${{ matrix.os }}

@@ -41,7 +41,7 @@ jobs:
         run: |
           mypy src tests
       - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v4.11.0
+        uses: jidicula/clang-format-action@v3.3.0
         with:
           clang-format-version: "11"
           check-path: "/src/bindings/"
@@ -77,43 +77,11 @@ jobs:
         run: |
           @("C:\Program Files\Git\usr\bin") + (Get-Content $env:GITHUB_PATH) | Set-Content $env:GITHUB_PATH -Encoding utf8
 
-
-      - name: Upgrade pip
-        run: |
-          pip install --upgrade --user pip
-
-
-
-      - name: Install Poetry
-        run: |
-          pip install poetry
-
-      - name: Get poetry cache dir
-        id: poetry-cache
-        run: |
-          echo "dir=$(poetry config cache-dir)" >> $GITHUB_OUTPUT
-
-      - name: poetry cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.poetry-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-py${{ matrix.python-version }}-
-
-      - name: Install dependencies
-        run: |
-          poetry install
-
       - name: Build Google DP Unix
         if: runner.os != 'Windows'
         timeout-minutes: 20
-        env:
-          MACOSX_DEPLOYMENT_TARGET: ${{ runner.os == 'macOS' && '15.0' || '' }}
-          ARCHFLAGS: ${{ runner.os == 'macOS' && '-arch arm64' || '' }}
-          _PYTHON_HOST_PLATFORM: ${{ runner.os == 'macOS' && 'macosx-15.0-arm64' || '' }}
         run: |
-          poetry run bash build_PyDP.sh
+         bash build_PyDP.sh
 
       - name: Build Google DP Windows
         if: runner.os == 'Windows'
@@ -126,6 +94,31 @@ jobs:
           echo "Running: ${{ matrix.os }}"
           bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
           copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade --user pip
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Get poetry cache dir
+        id: poetry-cache
+        run: |
+          echo \"dir=$(poetry config cache-dir)\" >> $GITHUB_OUTPUT
+
+      - name: poetry cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.poetry-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-py${{ matrix.python-version }}-${{ hashFiles('**/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-py${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          poetry install
 
       - name: Build PyDP macOS
         if: runner.os == 'macOS'

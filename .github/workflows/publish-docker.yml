@@ -14,11 +14,11 @@ jobs:
       IMAGE: openmined/pydp
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           submodules: true
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -26,7 +26,7 @@ jobs:
         id: build_name
         run: |
           python -c "import sys; print(sys.version)"
-          echo "image_name=${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}" >> $GITHUB_OUTPUT
+          echo "::set-output name=image_name::${IMAGE}-${GITHUB_REF##*/}-${{matrix.python-version}}"
 
       - name: Build images
         run: docker build -t ${{steps.build_name.outputs.image_name}} --build-arg PYTHON_VERSION=${{matrix.python-version}} -f Dockerfile .

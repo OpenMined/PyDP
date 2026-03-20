@@ -53,7 +53,7 @@ jobs:
       max-parallel: 12
       matrix:
         # TODO: fix for Mac and Windows.
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest] 
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
@@ -71,7 +71,6 @@ jobs:
         run: |
                 sudo apt-get update
                 sudo apt-get install -y protobuf-compiler libprotobuf-dev
-
 
       - name:  Install Protobuf Compiler Windows
         if: runner.os == 'Windows'
@@ -102,6 +101,24 @@ jobs:
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Build Google DP Unix
+        if: runner.os != 'Windows'
+        timeout-minutes: 20
+        run: |
+          bash build_PyDP.sh
+
+      - name: Build Google DP Windows
+        if: runner.os == 'Windows'
+        timeout-minutes: 20
+        run: |
+          echo "Running: ${{ matrix.os }}"
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release -j
+          echo %CD%
+          dir
+          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
 
       - name: Upgrade pip
         run: |
@@ -129,36 +146,12 @@ jobs:
           poetry lock
           poetry install
 
-      - name: Build Google DP Unix
-        if: runner.os != 'Windows'
-        timeout-minutes: 20
-        env:
-          MACOSX_DEPLOYMENT_TARGET: ${{ runner.os == 'macOS' && '15.0' || '' }}
-          ARCHFLAGS: ${{ runner.os == 'macOS' && '-arch arm64' || '' }}
-          _PYTHON_HOST_PLATFORM: ${{ runner.os == 'macOS' && 'macosx-15.0-arm64' || '' }}
-        run: |
-          poetry run bash build_PyDP.sh
-
-      - name: Build Google DP Windows
-        if: runner.os == 'Windows'
-        timeout-minutes: 20
-        run: |
-          echo "Running: ${{ matrix.os }}"
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
-          cmake --build . --config Release -j
-          echo %CD%
-          dir
-          move /Y .\src\bindings\PyDP\_pydp.pyd ..\src\pydp\_pydp.pyd
-
-      - name: Build PyDP (macOS)
+      - name: Build PyDP macOS
         if: runner.os == 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
 
-
-      - name: Build PyDP (Linux/Windows)
+      - name: Build PyDP Linux / Windows
         if: runner.os != 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel

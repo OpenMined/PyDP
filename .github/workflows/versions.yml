@@ -149,7 +149,16 @@ jobs:
           poetry lock
           poetry install
 
-      - name: Build PyDP
+      - name: Build PyDP (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          poetry run python setup.py build bdist_wheel
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "14.0"
+          ARCHFLAGS: "-arch arm64"
+
+      - name: Build PyDP (Linux/Windows)
+        if: runner.os != 'macOS'
         run: |
           poetry run python setup.py build bdist_wheel
 

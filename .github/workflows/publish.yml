@@ -122,7 +122,10 @@ jobs:
       - name: Build PyDP macOS wheel
         if: runner.os == 'macOS'
         run: |
-          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
+          poetry run python setup.py build bdist_wheel
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "14.0"
+          ARCHFLAGS: "-arch arm64"
 
       - name: Build PyDP Windows wheel
         if: runner.os == 'Windows'

@@ -68,5 +68,6 @@ endif()
 # Force the Apple macOS linker to bake in all Google DP/Abseil static archive symbols statically.
 # This decisively bypasses the '-undefined dynamic_lookup' flat namespace symbol stripping!
 if(APPLE)
-  target_link_options(_pydp PRIVATE "-Wl,-all_load")
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-all_load")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-all_load")
 endif()

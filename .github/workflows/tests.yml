@@ -87,7 +87,7 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          build_windows.cmd
+          cmd build_windows.cmd
 
       - name: Upgrade pip
         run: |

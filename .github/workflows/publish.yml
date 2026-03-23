@@ -11,17 +11,17 @@ jobs:
       max-parallel: 12
       matrix:
         # TODO: fix for Mac and Windows.
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.11, 3.12, 3.13, 3.14]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -106,7 +106,7 @@ jobs:
       - name: Get poetry cache dir
         id: poetry-cache
         run: |
-          echo "::set-output name=dir::$(poetry config cache-dir)"
+          echo \"dir=$(poetry config cache-dir)\" >> $GITHUB_OUTPUT
 
       - name: poetry cache
         uses: actions/cache@v4
@@ -123,7 +123,7 @@ jobs:
       - name: Build PyDP macOS wheel
         if: runner.os == 'macOS'
         run: |
-          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
+          poetry run python setup.py build bdist_wheel
 
       - name: Build PyDP Windows wheel
         if: runner.os == 'Windows'

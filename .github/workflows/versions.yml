@@ -24,9 +24,9 @@ jobs:
       matrix:
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install python dependencies
@@ -53,8 +53,8 @@ jobs:
       max-parallel: 12
       matrix:
         # TODO: fix for Mac and Windows.
-        os: [ubuntu-latest] 
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        os: [ubuntu-latest, macos-latest] 
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
 
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
           submodules: true
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -71,10 +71,6 @@ jobs:
         run: |
                 sudo apt-get update
                 sudo apt-get install -y protobuf-compiler libprotobuf-dev
-      - name: Install Protobuf Compiler Mac
-        if: runner.os == 'macOS'
-        run: |
-                brew install protobuf
 
       - name:  Install Protobuf Compiler Windows
         if: runner.os == 'Windows'
@@ -90,6 +86,7 @@ jobs:
           echo "$destinationFolder\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Verify protoc installation
+        if: runner.os != 'macOS'
         run: protoc --version
 
       - name: Download proto header Windows
@@ -134,7 +131,7 @@ jobs:
       - name: Get poetry cache dir
         id: poetry-cache
         run: |
-          echo "::set-output name=dir::$(poetry config cache-dir)"
+          echo "dir=$(poetry config cache-dir)" >> $GITHUB_OUTPUT
 
       - name: poetry cache
         uses: actions/cache@v4
@@ -152,7 +149,7 @@ jobs:
       - name: Build PyDP macOS
         if: runner.os == 'macOS'
         run: |
-          poetry run python setup.py build bdist_wheel --plat-name macosx_10_14_x86_64
+          poetry run python setup.py build bdist_wheel
 
       - name: Build PyDP Linux / Windows
         if: runner.os != 'macOS'

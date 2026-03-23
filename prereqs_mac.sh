@@ -36,6 +36,14 @@ else
     brew install clang-format
 fi
 
+# cmake
+if command -v cmake &>/dev/null; then
+    echo "cmake already installed"
+else
+    echo "installing cmake"
+    brew install cmake
+fi
+
 # poetry
 echo "Checking for poetry"
 if python3 -c "import poetry" &> /dev/null; then

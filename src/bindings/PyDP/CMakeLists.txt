@@ -54,5 +54,5 @@ target_link_libraries(_pydp PUBLIC dp_algorithms dp_protos
 )
 
 if(NOT WIN32)
-  target_compile_options(_pydp PRIVATE -Wno-deprecated-declarations -Wdeprecated-declarations)
+  target_compile_options(_pydp PRIVATE -Wdeprecated-declarations)
 endif()

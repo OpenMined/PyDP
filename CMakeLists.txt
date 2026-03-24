@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 project(PyDP LANGUAGES CXX)
 
+# 1. Keep MSVC runtime Dynamic (Python standard)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-# Force Protobuf to build with dynamic runtime (/MD)
-set(protobuf_BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
-set(protobuf_MSVC_STATIC_RUNTIME OFF CACHE BOOL "" FORCE)
+
+# 2. Force third-party libraries to be built statically so they are baked into the wheel
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 
 # Force Abseil to use dynamic runtime if it has a toggle
 set(ABSL_PROPAGATE_CXX_STD ON CACHE BOOL "" FORCE)

@@ -95,7 +95,7 @@ jobs:
         with:
           name: dist-linux-py${{ matrix.python-version }}
           path: |
-            dist
+            build_dir/src
           retention-days: 1
       - name: Upgrade pip
         run: |

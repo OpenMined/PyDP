@@ -2,10 +2,17 @@ cmake_minimum_required(VERSION 3.16)
 project(PyDP LANGUAGES CXX)
 
 # 1. Keep MSVC runtime Dynamic (Python standard)
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+# set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # 2. Force third-party libraries to be built statically so they are baked into the wheel
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+# set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+# 1. Globally tell CMake to prefer static libraries over shared DLLs
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
+
+# 2. Specifically override Protobuf/Abseil if they ignore BUILD_SHARED_LIBS
+set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "Build protobuf as static" FORCE)
+set(protobuf_MSVC_STATIC_RUNTIME ON CACHE BOOL "Use /MT for protobuf" FORCE)
 
 # C++ Standard
 set(CMAKE_CXX_STANDARD 17)

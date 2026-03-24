@@ -93,9 +93,9 @@ jobs:
         # more details https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist-linux-py${{ matrix.python-version }}
+          name: build-py${{ matrix.python-version }}
           path: |
-            build_dir/src
+            src
           retention-days: 1
       - name: Upgrade pip
         run: |

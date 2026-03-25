@@ -9,6 +9,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 # set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 # 1. Globally tell CMake to prefer static libraries over shared DLLs
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
+set(OPENSSL_USE_STATIC_LIBS TRUE)
 
 # 2. Specifically override Protobuf/Abseil if they ignore BUILD_SHARED_LIBS
 set(protobuf_BUILD_SHARED_LIBS OFF CACHE BOOL "Build protobuf as static" FORCE)

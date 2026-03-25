@@ -1,5 +1,5 @@
 git clone https://github.com/Delphier/dumpbin.git
-echo Y | python dumpbin/dumpbin.py
+echo Y| python dumpbin/dumpbin.py
 
 mkdir build_dir
 cd build_dir

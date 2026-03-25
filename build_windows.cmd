@@ -15,3 +15,5 @@ dir "C:\Program Files\OpenSSL\bin"
 copy "C:\Program Files\OpenSSL\libcrypto*.dll" .
 dumpbin.exe /dependents "_pydp.pyd"
 dumpbin.exe /dependents "libcrypto-3-x64.dll"
+
+python -c "import _pydp"

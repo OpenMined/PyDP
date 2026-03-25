@@ -17,7 +17,7 @@ set(protobuf_MSVC_STATIC_RUNTIME ON CACHE BOOL "Use /MT for protobuf" FORCE)
 
 set(ABSL_MSVC_STATIC_RUNTIME ON CACHE BOOL "Force Abseil to use /MT" FORCE)
 set(ABSL_PROPAGATE_CXX_STD ON CACHE BOOL "" FORCE)
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
+#set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries" FORCE)
 
 # C++ Standard
 set(CMAKE_CXX_STANDARD 17)

@@ -10,8 +10,8 @@ cmake --build . --parallel --config Release
 move "src\bindings\PyDP\Release\_pydp.*-win_amd64.pyd" "..\src\pydp\"
 cd ..\src\pydp\
 ren "_pydp.*-win_amd64.pyd" "_pydp.pyd"
-dumpbin.exe /dependents "_pydp.pyd"
-dumpbin.exe /dependents "libcrypto-3-x64.dll"
 dir "C:\Program Files\OpenSSL"
 dir "C:\Program Files\OpenSSL\bin"
 copy "C:\Program Files\OpenSSL\libcrypto*.dll" .
+dumpbin.exe /dependents "_pydp.pyd"
+dumpbin.exe /dependents "libcrypto-3-x64.dll"

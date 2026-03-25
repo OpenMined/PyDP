@@ -67,9 +67,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Setup msbuild Windows
-        if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Set up MSVC environment # for debug
+        uses: ilammy/msvc-dev-cmd@v1
+
+#      - name: Setup msbuild Windows
+#        if: runner.os == 'Windows'
+#        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Fix Paths Windows
         # Make sure that tar.exe from Git is used not from Windows

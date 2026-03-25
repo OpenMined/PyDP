@@ -1,6 +1,6 @@
-git clone https://github.com/Delphier/dumpbin.git
-echo Y| python dumpbin/dumpbin.py
-dumpbin.exe /exports *.dll
+@REM git clone https://github.com/Delphier/dumpbin.git
+@REM echo Y| python dumpbin/dumpbin.py
+@REM dumpbin.exe /exports *.dll
 
 mkdir build_dir
 cd build_dir

@@ -58,8 +58,6 @@ jobs:
         python-version: [3.11, 3.12, 3.13, 3.14]
 
     steps:
-      - name: Install Dumpbin for debug
-        uses: lorenalexm/install-dumpbin-action@main
       - uses: actions/checkout@v2
         with:
           submodules: true

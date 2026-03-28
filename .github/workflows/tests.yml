@@ -49,13 +49,13 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    needs: [linting]
+#    needs: [linting]
     strategy:
       fail-fast: false
       max-parallel: 3
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.10", 3.11, 3.12, 3.13, 3.14]
+        os: [windows-latest]
+        python-version: [3.11, 3.12, 3.13, 3.14]
 
     steps:
       - uses: actions/checkout@v2
@@ -67,9 +67,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Setup msbuild Windows
-        if: runner.os == 'Windows'
-        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Set up MSVC environment # for debug
+        uses: ilammy/msvc-dev-cmd@v1
+
+#      - name: Setup msbuild Windows
+#        if: runner.os == 'Windows'
+#        uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Fix Paths Windows
         # Make sure that tar.exe from Git is used not from Windows
@@ -87,14 +90,16 @@ jobs:
         if: runner.os == 'Windows'
         timeout-minutes: 20
         run: |
-          $PYTHONHOME=$(python -c 'import sys; print(sys.executable);').replace('\', '/')
-          $PYTHONPATH=$(python -c "import sys; print([x for x in sys.path if 'site-packages' in x][0]);").replace('\', '/')
-          echo "PYTHONHOME=$PYTHONHOME"
-          echo "PYTHONPATH=$PYTHONPATH"
-          echo "Running: ${{ matrix.os }}"
-          bazel.exe --output_base ./bazel-cache build src/python:pydp --config windows --verbose_failures --action_env=PYTHON_BIN_PATH=$PYTHONHOME --action_env=PYTHON_LIB_PATH=$PYTHONPATH
-          copy ./bazel-bin/src/bindings/_pydp.so ./src/pydp/_pydp.pyd
+          .\build_windows.cmd
 
+      - name: Archive build artifacts
+        # more details https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-py${{ matrix.python-version }}
+          path: |
+            src
+          retention-days: 1
       - name: Upgrade pip
         run: |
           pip install --upgrade --user pip

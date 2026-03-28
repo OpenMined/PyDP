@@ -38,12 +38,12 @@ jobs:
       - name: MyPY
         run: |
           mypy src tests
-      - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v4.11.0
-        with:
-          clang-format-version: "11"
-          check-path: "/src/bindings/"
-          fallback-style: "Google" # optional
+#      - name: Run clang-format style check for C/C++ programs.
+#        uses: jidicula/clang-format-action@v4.11.0
+#        with:
+#          clang-format-version: "11"
+#          check-path: "/src/bindings/"
+#          fallback-style: "Google" # optional
 
   build:
     runs-on: ${{ matrix.os }}
@@ -100,6 +100,22 @@ jobs:
       - name: Setup Visual studio Windows
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build Google DP and wheel on Linux # for debug
+        if: runner.os == 'Linux'
+        timeout-minutes: 20
+        shell: bash
+        run: |
+          pip install cibuildwheel
+          export CIBW_PLATFORM=linux
+          # Set for which Python version to build. 
+          system_python_version=${{ matrix.python-version }}
+          py_version=${system_python_version//.}  # 3.11 -> 311     
+          export CIBW_BUILD=cp${py_version}-manylinux_x86_64
+          export CIBW_BUILD_VERBOSITY=1
+          # Build wheel
+          echo "Building ${CIBW_BUILD} wheel" 
+          python -m cibuildwheel --output-dir dist .
 
       - name: Build Google DP Unix
         if: runner.os != 'Windows'

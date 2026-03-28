@@ -30,7 +30,7 @@ class Build(build_ext):
             return
 
         # Build _pydp.so (wrappers for C++).
-        os.system("./build_PyDP.sh")
+        os.system("./build_PyDP_linux.sh")
 
         # Copy _pydp.so to cibuildwheel directory.
         pydp_lib = "src/pydp/_pydp.so"

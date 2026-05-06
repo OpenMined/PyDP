@@ -24,7 +24,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.11"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -41,7 +41,7 @@ jobs:
         run: |
           mypy src tests
       - name: Run clang-format style check for C/C++ programs.
-        uses: jidicula/clang-format-action@v3.3.0
+        uses: jidicula/clang-format-action@v4.11.0
         with:
           clang-format-version: "11"
           check-path: "/src/bindings/"

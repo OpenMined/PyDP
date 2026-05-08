@@ -47,7 +47,7 @@ jobs:
 
   build:
     runs-on: ${{ matrix.os }}
-    # needs: [linting]  # don't require linting to pass
+    needs: [linting]  # don't require linting to pass
     strategy:
       fail-fast: false
       max-parallel: 12

@@ -19,7 +19,7 @@ FetchContent_MakeAvailable(pybind11)
 FetchContent_Declare(
   abseil-cpp
   GIT_REPOSITORY https://github.com/abseil/abseil-cpp.git
-  GIT_TAG         20250512.1
+  GIT_TAG         20260107.1
 )
 FetchContent_MakeAvailable(abseil-cpp)
 

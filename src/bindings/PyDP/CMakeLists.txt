@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
   google_dp
   GIT_REPOSITORY https://github.com/google/differential-privacy.git
-  GIT_TAG        8c7aac224465468407b4f9e11d3fb5ce90a15d58 # Sep 5, 2025
+  GIT_TAG        12e32c6156d0b8b8dbeb0f63a9b8b3f87b521352 # May 5, 2026
 )
 
 FetchContent_MakeAvailable(google_dp)

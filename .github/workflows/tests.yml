@@ -19,6 +19,7 @@ on:
       - "*.txt"
       - "setup.cfg"
       - ".github/workflows/*.yml"
+      - "CMakeLists.txt"
 
 jobs:
   linting:

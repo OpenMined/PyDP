@@ -86,10 +86,14 @@ def test_serialize_merge():
 
 
 def test_result_crash():
+    # Calling result()/partial_result() a second time trips the DP library's
+    # "InvalidArgument" check (an algorithm can only produce results once for
+    # a given epsilon/delta budget), which the bindings now surface as a
+    # ValueError instead of a generic RuntimeError. See #413.
     bm1 = BoundedMean(1, 0, 1, 10)
     bm1.add_entries([1 for i in range(100)])
     bm1.result()
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ValueError):
         bm1.result()
 
 

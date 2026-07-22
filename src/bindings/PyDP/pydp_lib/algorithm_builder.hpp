@@ -11,6 +11,7 @@
 #include "algorithms/numerical-mechanisms.h"
 #include "algorithms/order-statistics.h"
 #include "proto/summary.pb.h"
+#include "status_errors.hpp"
 
 namespace dp = differential_privacy;
 namespace py = pybind11;
@@ -87,7 +88,7 @@ class AlgorithmBuilder {
 
     absl::StatusOr<std::unique_ptr<Algorithm>> obj = builder.Build();
     if (!obj.ok()) {
-      throw std::runtime_error(obj.status().ToString());
+      ThrowFromStatus(obj.status());
     }
 
     return std::move(obj.value());
@@ -176,7 +177,7 @@ class AlgorithmBuilder {
       auto result = pythis.Result(v.begin(), v.end());
 
       if (!result.ok()) {
-        throw std::runtime_error(result.status().ToString());
+        ThrowFromStatus(result.status());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
         return dp::GetValue<T>(result.value());
@@ -190,7 +191,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult();
 
       if (!result.ok()) {
-        throw std::runtime_error(result.status().ToString());
+        ThrowFromStatus(result.status());
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
@@ -205,7 +206,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult(privacy_budget);
 
       if (!result.ok()) {
-        throw std::runtime_error(result.status().ToString());
+        ThrowFromStatus(result.status());
       }
 
       if constexpr ((should_return_T<T, Algorithm>()))
@@ -220,7 +221,7 @@ class AlgorithmBuilder {
       auto result = pythis.PartialResult(noise_interval_level);
 
       if (!result.ok()) {
-        throw std::runtime_error(result.status().ToString());
+        ThrowFromStatus(result.status());
       }
       if constexpr ((should_return_T<T, Algorithm>()))
         return dp::GetValue<T>(result.value());
@@ -238,7 +239,7 @@ class AlgorithmBuilder {
     pyself.def("merge", [](Algorithm& pythis, const dp::Summary& summary) {
       auto status = pythis.Merge(summary);
       if (!status.ok()) {
-        throw std::runtime_error(status.ToString());
+        ThrowFromStatus(status);
       }
     });
 

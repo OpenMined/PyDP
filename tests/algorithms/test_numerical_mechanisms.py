@@ -60,6 +60,14 @@ def test_laplace_mechanism():
     assert conf_level == interval.confidence_level
 
 
+def test_laplace_mechanism_accepts_numpy_float32():
+    laplace = num_mech.LaplaceMechanism(epsilon=1.0, sensitivity=0.1)
+
+    value = laplace.add_noise(np.float32(0.95))
+
+    assert type(value) is float
+
+
 def test_gaussian_mechanism():
     epsilon, delta, l2_sensitivity = 1, 1e-5, 3.0
     gaussian = num_mech.GaussianMechanism(epsilon, delta, l2_sensitivity)

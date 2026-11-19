@@ -49,8 +49,8 @@ class NumericalMechanismBinder {
         Base class for all (Ɛ, 𝛿)-differenially private additive noise numerical mechanisms.
       )pbdoc");
     numerical_mech.attr("__module__") = "pydp";
-    DefPyAddNoise<int64_t>(numerical_mech);
     DefPyAddNoise<double>(numerical_mech);
+    DefPyAddNoise<int64_t>(numerical_mech);
     numerical_mech
         .def("noised_value_above_threshold",
              &dp::NumericalMechanism::NoisedValueAboveThreshold,
